@@ -9,7 +9,7 @@ import java.util.logging.Logger
 class ParseConnection {
 
     companion object {
-        private var logger: Logger = Logger.getLogger(this::class.toString())
+        private val log = Logger.getLogger(this::class.java.simpleName)
         private var parseManager: ParseManager? = null
 
         fun initialize(context: Context) : ParseManager? {

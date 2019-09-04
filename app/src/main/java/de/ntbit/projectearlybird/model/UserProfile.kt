@@ -3,9 +3,12 @@ package de.ntbit.projectearlybird.model
 import com.parse.ParseUser
 
 import java.util.Date
+import java.util.logging.Logger
 import kotlin.collections.ArrayList
 
 class UserProfile {
+    private val log = Logger.getLogger(this::class.java.simpleName)
+
     var userId: String
         private set
     var objectId: String

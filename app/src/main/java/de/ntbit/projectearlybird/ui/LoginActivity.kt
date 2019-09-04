@@ -12,7 +12,7 @@ import java.util.logging.Logger
 
 
 class LoginActivity : AppCompatActivity() {
-    private val logger : Logger = Logger.getLogger(this::class.toString())
+    private val log = Logger.getLogger(this::class.java.simpleName)
     private var parseManager: ParseManager? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,9 +27,14 @@ class LoginActivity : AppCompatActivity() {
         parseManager = ParseConnection.getParseManager()
 
         actLoginBtnLogin.setOnClickListener{
-            if(actLoginEditTextUsername.text.toString() != "" && actLoginEditTextPassword.text.toString() != "")
-                parseManager?.loginUser(actLoginEditTextUsername.text.toString(),
-                    actLoginEditTextPassword.text.toString(), this)
+            if(actLoginEditTextUsername.text.toString() != "" &&
+                actLoginEditTextPassword.text.toString() != "") {
+                parseManager?.loginUser(
+                    actLoginEditTextUsername.text.toString(),
+                    actLoginEditTextPassword.text.toString(), this
+                )
+                log.fine("User " + actLoginEditTextUsername.text + " successfully logged in")
+            }
         }
 
         actLoginBtnRegister.setOnClickListener{

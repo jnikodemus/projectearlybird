@@ -12,7 +12,7 @@ import java.util.*
 import java.util.logging.Logger
 
 class ParseManager {
-    private val logger: Logger = Logger.getLogger(this::class.toString())
+    private val log = Logger.getLogger(this::class.java.simpleName)
     private var currentParseUser: ParseUser? = null
 
     fun registerUser(username: String, email: String, uHashedPassword: String) {
@@ -31,7 +31,7 @@ class ParseManager {
                 createUserProfile(UserProfile(ParseUser.getCurrentUser()))
             } else {
                 Toast.makeText(getApplicationContext(), e.message, Toast.LENGTH_SHORT).show()
-                logger.fine(e.message)
+                log.fine(e.message)
             }
         }
     }
@@ -111,7 +111,7 @@ class ParseManager {
         // Notice that the SaveCallback is totally optional!
         newUserProfile.saveInBackground { e ->
             if (e != null)
-                logger.fine(e.message)
+                log.fine(e.message)
             else
                 updateUserUnique("userProfileId", newUserProfile.objectId)
         }
