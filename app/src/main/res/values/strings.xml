@@ -5,4 +5,5 @@
     <string name="app_password">Password</string>
     <string name="app_login">Login</string>
     <string name="app_register">Register</string>
+    <string name="app_check_input">Check your input!</string>
 </resources>

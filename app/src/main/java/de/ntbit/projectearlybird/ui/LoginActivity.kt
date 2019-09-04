@@ -19,21 +19,23 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         initialize()
+        parseManager?.logOut()
     }
 
     private fun initialize() {
         ParseConnection.initialize(this)
+        parseManager = ParseConnection.getParseManager()
 
         actLoginBtnLogin.setOnClickListener{
-            parseManager!!.loginUser(actLoginEditTextEmail.text.toString(), actLoginEditTextPassword.text.toString(), this)
-            if(parseManager!!.userIsLoggedIn())
-                startActivity(Intent(this, HomeActivity::class.java))
+            if(actLoginEditTextEmail.text.toString() != "" && actLoginEditTextPassword.text.toString() != "")
+                parseManager?.loginUser(actLoginEditTextEmail.text.toString(),
+                    actLoginEditTextPassword.text.toString(), this)
         }
 
         actLoginBtnRegister.setOnClickListener{
             startActivity(Intent(this, RegisterActivity::class.java))
         }
 
-        parseManager = ParseConnection.getParseManager()
+
     }
 }
