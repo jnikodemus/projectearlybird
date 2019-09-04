@@ -27,8 +27,8 @@ class LoginActivity : AppCompatActivity() {
         parseManager = ParseConnection.getParseManager()
 
         actLoginBtnLogin.setOnClickListener{
-            if(actLoginEditTextEmail.text.toString() != "" && actLoginEditTextPassword.text.toString() != "")
-                parseManager?.loginUser(actLoginEditTextEmail.text.toString(),
+            if(actLoginEditTextUsername.text.toString() != "" && actLoginEditTextPassword.text.toString() != "")
+                parseManager?.loginUser(actLoginEditTextUsername.text.toString(),
                     actLoginEditTextPassword.text.toString(), this)
         }
 
