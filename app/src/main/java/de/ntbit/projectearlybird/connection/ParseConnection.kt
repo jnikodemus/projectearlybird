@@ -1,15 +1,18 @@
 package de.ntbit.projectearlybird.connection
 
 import android.content.Context
-import android.util.Log
 import de.ntbit.projectearlybird.manager.ParseManager
 import com.parse.Parse
 import java.util.logging.Logger
 
 
 class ParseConnection {
+
     companion object {
-        fun initialize(context: Context) : Unit {
+        private var logger: Logger = Logger.getLogger(this::class.toString())
+        private var parseManager: ParseManager? = null
+
+        fun initialize(context: Context) : ParseManager? {
             Parse.initialize(
                 Parse.Configuration.Builder(context)
                     .applicationId("pYIuK6xeAMNkL2IYpOEWIiAoacyr8jEyTja8LqxV")
@@ -17,10 +20,14 @@ class ParseConnection {
                     .server("https://parseapi.back4app.com")
                     .build()
             )
+            parseManager = ParseManager()
+            //logger.fine("parseManager isNull: " + (parseManager == null))
+            println("ParseManager is null: " + (parseManager == null))
+            return parseManager
         }
 
-        fun getParseManager(x: Any, y: Any): Unit {
-
+        fun getParseManager() : ParseManager? {
+            return parseManager
         }
     }
 }

@@ -11,7 +11,7 @@ class ParseManager {
     private val logger: Logger = Logger.getLogger(this::class.toString())
     private var currentParseUser: ParseUser? = null
 
-    public fun registerUser(username: String, email: String, uHashedPassword: String) : Unit {
+    public fun registerUser(username: String, email: String, uHashedPassword: String) {
         val user = ParseUser()
         user.username = username
         user.email = email
