@@ -6,9 +6,11 @@ import de.ntbit.projectearlybird.R
 import de.ntbit.projectearlybird.connection.ParseConnection
 import de.ntbit.projectearlybird.manager.ParseManager
 import kotlinx.android.synthetic.main.activity_register.*
+import java.util.logging.Logger
 
 class RegisterActivity : AppCompatActivity() {
 
+    private val log = Logger.getLogger(this::class.java.simpleName)
     private var parseManager: ParseManager? = null
     private val emailRegex : String = "(?:[a-z0-9!#\$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#\$%&'*+/=" +
             "?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]" +
