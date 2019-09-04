@@ -8,7 +8,6 @@ import java.util.logging.Logger
 
 
 class ParseConnection {
-
     companion object {
         fun initialize(context: Context) : Unit {
             Parse.initialize(
