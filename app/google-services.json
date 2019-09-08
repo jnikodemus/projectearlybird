@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "474988434121-c2hmnosb0u5pb6ar02johevdkni09fdh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "de.ntbit.projectearlybird",
+            "certificate_hash": "f72125222671e3bbf81c6d61a47ada7aa48b1612"
+          }
+        },
+        {
           "client_id": "474988434121-1m1c1igcdktg661q41pna3r6uctco9ug.apps.googleusercontent.com",
           "client_type": 3
         }
