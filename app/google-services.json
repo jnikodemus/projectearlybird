@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "474988434121",
+    "firebase_url": "https://projectearlybird-d6df2.firebaseio.com",
+    "project_id": "projectearlybird-d6df2",
+    "storage_bucket": "projectearlybird-d6df2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:474988434121:android:47abd27fe9138ce9553318",
+        "android_client_info": {
+          "package_name": "de.ntbit.projectearlybird"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "474988434121-1m1c1igcdktg661q41pna3r6uctco9ug.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAcBU3mrsQm9CsWxukWG1rfvsVphgGVLDU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "474988434121-1m1c1igcdktg661q41pna3r6uctco9ug.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
