@@ -4,20 +4,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
+    android:background="@color/colorPrimaryLight"
     tools:context=".ui.RegisterActivity">
+
+    <include layout="@layout/titlebar"/>
 
     <EditText
         android:id="@+id/actRegisterEditTxtUsername"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="60dp"
         android:ems="15"
         android:hint="@string/app_username"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/titlebar" />
 
     <EditText
         android:id="@+id/actRegisterEditTxtEmail"

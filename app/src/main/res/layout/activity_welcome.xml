@@ -6,6 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".ui.WelcomeActivity">
 
+    <include layout="@layout/titlebar"/>
+
     <TextView
         android:id="@+id/actWelcomeTxtVHello"
         android:layout_width="wrap_content"
