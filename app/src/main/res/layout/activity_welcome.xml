@@ -10,7 +10,7 @@
         android:id="@+id/actWelcomeTxtVHello"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/welcome"
+        android:text="@string/app_welcome"
         android:textColor="@color/colorPrimaryText"
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"

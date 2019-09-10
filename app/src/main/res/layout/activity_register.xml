@@ -4,6 +4,68 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
     tools:context=".ui.RegisterActivity">
+
+    <EditText
+        android:id="@+id/actRegisterEditTxtUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:ems="15"
+        android:hint="@string/app_username"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/actRegisterEditTxtEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:ems="15"
+        android:hint="@string/app_email"
+        android:inputType="textEmailAddress"
+        app:layout_constraintEnd_toEndOf="@+id/actRegisterEditTxtUsername"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/actRegisterEditTxtUsername"
+        app:layout_constraintTop_toBottomOf="@+id/actRegisterEditTxtUsername" />
+
+    <EditText
+        android:id="@+id/actRegisterEditTxtPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:ems="15"
+        android:hint="@string/app_password"
+        android:inputType="textPassword"
+        app:layout_constraintEnd_toEndOf="@+id/actRegisterEditTxtEmail"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/actRegisterEditTxtEmail"
+        app:layout_constraintTop_toBottomOf="@+id/actRegisterEditTxtEmail" />
+
+    <EditText
+        android:id="@+id/actRegisterEditTxtPasswordRetry"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:ems="15"
+        android:hint="@string/app_passwordRetry"
+        android:inputType="textPassword"
+        app:layout_constraintEnd_toEndOf="@+id/actRegisterEditTxtPassword"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/actRegisterEditTxtPassword"
+        app:layout_constraintTop_toBottomOf="@+id/actRegisterEditTxtPassword" />
+
+    <Button
+        android:id="@+id/actRegisterBtnRegister"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="45dp"
+        android:text="@string/app_register"
+        app:layout_constraintEnd_toEndOf="@+id/actRegisterEditTxtPasswordRetry"
+        app:layout_constraintStart_toStartOf="@+id/actRegisterEditTxtPasswordRetry"
+        app:layout_constraintTop_toBottomOf="@+id/actRegisterEditTxtPasswordRetry" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

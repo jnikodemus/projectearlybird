@@ -1,4 +1,11 @@
 <resources>
     <string name="app_name">ProjectEarlyBird</string>
-    <string name="welcome">Welcome!</string>
+    <string name="app_welcome">Welcome!</string>
+    <string name="app_email">Email</string>
+    <string name="app_username">Username</string>
+    <string name="app_password">Password</string>
+    <string name="app_passwordRetry">Retype Password</string>
+    <string name="app_login">Login</string>
+    <string name="app_register">Register</string>
+    <string name="app_check_input">Check your input!</string>
 </resources>
