@@ -3,6 +3,7 @@ package de.ntbit.projectearlybird.ui
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.google.firebase.analytics.FirebaseAnalytics
 import de.ntbit.projectearlybird.R
 
 import de.ntbit.projectearlybird.connection.ParseConnection
@@ -10,8 +11,8 @@ import de.ntbit.projectearlybird.manager.ParseManager
 import kotlinx.android.synthetic.main.activity_login.*
 import java.util.logging.Logger
 
-
 class LoginActivity : AppCompatActivity() {
+    private var mFirebaseAnalytics: FirebaseAnalytics? = null
     private val log = Logger.getLogger(this::class.java.simpleName)
     private var parseManager: ParseManager? = null
 
@@ -23,6 +24,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun initialize() {
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
         ParseConnection.initialize(this)
         parseManager = ParseConnection.getParseManager()
 
