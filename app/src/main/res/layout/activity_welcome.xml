@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".ui.WelcomeActivity">
 
-    <include layout="@layout/titlebar"/>
+    <include layout="@layout/toolbar" />
 
     <TextView
         android:id="@+id/actWelcomeTxtVHello"
@@ -19,4 +19,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".ui.LoginActivity">
 
-    <include layout="@layout/titlebar"/>
+    <include layout="@layout/toolbar"/>
 
     <EditText
         android:id="@+id/actLoginEditTextUsername"
@@ -20,7 +20,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.021"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titlebar" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
     <EditText
         android:id="@+id/actLoginEditTextPassword"
