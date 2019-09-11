@@ -40,9 +40,6 @@ class ParseManager {
         ParseUser.logInInBackground(username, password) { user, _ ->
             if (user != null) {
                 currentParseUser = user
-                println("UserProfile logged in: " + userIsLoggedIn())
-                Toast.makeText(getApplicationContext(), "Login successful", Toast.LENGTH_SHORT)
-                    .show()
 
                 updateUserProfile()
 
