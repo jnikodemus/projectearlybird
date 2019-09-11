@@ -3,12 +3,14 @@ package de.ntbit.projectearlybird.ui
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.widget.Toolbar
 import com.google.firebase.analytics.FirebaseAnalytics
 import de.ntbit.projectearlybird.R
 
 import de.ntbit.projectearlybird.connection.ParseConnection
 import de.ntbit.projectearlybird.manager.ParseManager
 import kotlinx.android.synthetic.main.activity_login.*
+import kotlinx.android.synthetic.main.toolbar.*
 import java.util.logging.Logger
 
 class LoginActivity : AppCompatActivity() {
@@ -24,6 +26,8 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun initialize() {
+        val toolbar: Toolbar = toolbar
+        setSupportActionBar(toolbar)
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
         ParseConnection.initialize(this)
         parseManager = ParseConnection.getParseManager()

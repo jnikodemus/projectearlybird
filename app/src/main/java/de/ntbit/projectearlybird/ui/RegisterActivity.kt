@@ -2,10 +2,12 @@ package de.ntbit.projectearlybird.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.widget.Toolbar
 import de.ntbit.projectearlybird.R
 import de.ntbit.projectearlybird.connection.ParseConnection
 import de.ntbit.projectearlybird.manager.ParseManager
 import kotlinx.android.synthetic.main.activity_register.*
+import kotlinx.android.synthetic.main.toolbar.*
 import java.util.logging.Logger
 
 class RegisterActivity : AppCompatActivity() {
@@ -27,6 +29,8 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun initialize() {
+        val toolbar: Toolbar = toolbar
+        setSupportActionBar(toolbar)
         parseManager = ParseConnection.getParseManager()
         actRegisterBtnRegister.setOnClickListener{
             if(inputIsOK()) {

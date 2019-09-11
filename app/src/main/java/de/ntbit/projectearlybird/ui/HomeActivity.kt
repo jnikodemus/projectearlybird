@@ -1,22 +1,23 @@
 package de.ntbit.projectearlybird.ui
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 
 import android.os.Bundle
-import android.view.View
-import android.widget.Toast
-import androidx.navigation.NavController
-import androidx.navigation.ui.AppBarConfiguration
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.widget.Toolbar
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 
 import de.ntbit.projectearlybird.R
+import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.toolbar.*
 import java.util.logging.Logger
 
 class HomeActivity : AppCompatActivity() {
 
     private val log = Logger.getLogger(this::class.java.simpleName)
-    private val navController : NavController = NavController(this)
+    private var drawer: DrawerLayout? = null
+    //private val navController : NavController = NavController(this)
     //private val appBarConfiguration = AppBarConfiguration(navController.graph)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,9 +27,17 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun initialize() {
-        toolbar.setOnClickListener {
-            Toast.makeText(applicationContext, "Toolbar clicked", Toast.LENGTH_SHORT).show()
-        }
+        val toolbar: Toolbar = toolbar
+        setSupportActionBar(toolbar)
+        drawer = drawer_layout
+        log.info("drawer is null? " + (drawer == null))
+        val toggle = ActionBarDrawerToggle(
+            this, drawer, toolbar,
+            R.string.menu_drawer_open,
+            R.string.menu_drawer_close)
+        drawer?.addDrawerListener(toggle)
+        toggle.syncState()
+
         /*
         navController.addOnDestinationChangedListener { _, destination, _ ->
             if(destination.id == R.id.full_screen_destination) {
@@ -40,6 +49,11 @@ class HomeActivity : AppCompatActivity() {
             }
         }
         */
+    }
 
+    override fun onBackPressed() {
+        if(drawer?.isDrawerOpen(GravityCompat.START)!!)
+            drawer?.closeDrawer(GravityCompat.START)
+        else super.onBackPressed()
     }
 }
