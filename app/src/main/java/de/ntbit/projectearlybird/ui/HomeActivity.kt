@@ -1,5 +1,6 @@
 package de.ntbit.projectearlybird.ui
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 
 import android.os.Bundle
@@ -17,6 +18,7 @@ import de.ntbit.projectearlybird.R
 import com.google.android.material.navigation.NavigationView
 import de.ntbit.projectearlybird.connection.ParseConnection
 import de.ntbit.projectearlybird.manager.ParseManager
+import de.ntbit.projectearlybird.model.UserProfile
 import java.util.logging.Logger
 
 
@@ -24,6 +26,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private val log = Logger.getLogger(this::class.java.simpleName)
     private val parseManager: ParseManager? = ParseConnection.getParseManager()
+    private var userProfile: UserProfile? = null
     private lateinit var drawer: DrawerLayout
     private lateinit var toggle: ActionBarDrawerToggle
 
@@ -36,15 +39,20 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun initialize() {
         /* Set toolbar */
         setToolbar()
-        /* Get profile of currentUser and place it in the application */
-        placeProfile()
         /* Assemble and set Navigation Drawer */
         buildNavigation()
+        /* Get profile of currentUser and place it in the application */
+        placeProfile()
+        /* Select and inflate specific Fragment */
+        selectMenuItem(0)
     }
 
     private fun setToolbar() {
         val toolbar = toolbar
         setSupportActionBar(toolbar)
+        toolbar.setOnClickListener{
+            placeProfile()
+        }
     }
 
     private fun buildNavigation() {
@@ -60,13 +68,22 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun placeProfile() {
+        userProfile = parseManager?.getUserProfile()
         val navigationHeader = navigation_menu_view.getHeaderView(0)
-        navigationHeader.navigation_username.text = parseManager?.getCurrentUser()?.username
-        navigationHeader.navigation_email.text = parseManager?.getCurrentUser()?.email
+        //navigationHeader.navigation_username.text = userProfile?.username
+        //navigationHeader.navigation_email.text = userProfile?.email
+    }
+
+    private fun selectMenuItem(itemIndex: Int) {
+        onNavigationItemSelected(navigation_menu_view.menu.getItem(itemIndex).setChecked(true))
     }
 
     override fun onNavigationItemSelected(p0: MenuItem): Boolean {
         when(p0.itemId) {
+            R.id.nav_groups -> supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, GroupsFragment()).commit()
+            R.id.nav_messages -> supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, MessagesFragment()).commit()
             R.id.nav_profile -> supportFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, ProfileFragment()).commit()
             R.id.nav_settings -> supportFragmentManager.beginTransaction()

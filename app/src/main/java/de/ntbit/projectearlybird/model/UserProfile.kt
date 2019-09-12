@@ -1,5 +1,6 @@
 package de.ntbit.projectearlybird.model
 
+import com.parse.ParseObject
 import com.parse.ParseUser
 
 import java.util.Date
@@ -24,6 +25,19 @@ class UserProfile {
     var groups: Collection<Group> = ArrayList()
         private set
 
+    constructor() : super() {
+        this.userId = ""
+        this.objectId = ""
+        this.username = ""
+        this.email = ""
+        this.firstName = ""
+        this.lastName = ""
+        this.birthday = 0
+        this.sex = ""
+        this.lastLogin = Date(0)
+        groups = ArrayList()
+    }
+
     constructor(user: ParseUser) : super() {
         this.userId = user.objectId
         this.objectId = ""
@@ -33,6 +47,19 @@ class UserProfile {
         this.lastName = "not set"
         this.birthday = 0
         this.sex = "undefined"
+        this.lastLogin = Date(System.currentTimeMillis())
+        groups = ArrayList()
+    }
+
+    constructor(parseObject: ParseObject, email: String) : super() {
+        this.userId = parseObject.get("userId").toString()
+        this.objectId = parseObject.objectId
+        this.username = parseObject.get("username").toString()
+        this.email = email
+        this.firstName = parseObject.get("firstName").toString()
+        this.lastName = parseObject.get("lastName").toString()
+        this.birthday =  parseObject.get("birthday").toString().toLong()
+        this.sex = parseObject.get("sex").toString()
         this.lastLogin = Date(System.currentTimeMillis())
         groups = ArrayList()
     }

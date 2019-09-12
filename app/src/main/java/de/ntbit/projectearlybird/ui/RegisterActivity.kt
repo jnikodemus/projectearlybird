@@ -1,5 +1,6 @@
 package de.ntbit.projectearlybird.ui
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.appcompat.widget.Toolbar
@@ -34,12 +35,17 @@ class RegisterActivity : AppCompatActivity() {
         parseManager = ParseConnection.getParseManager()
         actRegisterBtnRegister.setOnClickListener{
             if(inputIsOK()) {
-                parseManager?.registerUser(
+                if(parseManager!!.registerUser(
                     actRegisterEditTxtUsername.text.toString(),
                     actRegisterEditTxtEmail.text.toString(),
                     actRegisterEditTxtPassword.text.toString()
-                )
-                finish()
+                )) {
+                    log.fine("User successfully registered ")
+                    finish()
+                    // TODO activate automatic login after successful registration
+                    //startActivity(Intent(this, HomeActivity::class.java))
+                }
+                else log.fine("User not registered")
             }
         }
     }

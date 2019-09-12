@@ -8,15 +8,21 @@ import com.parse.*
 import com.parse.Parse.getApplicationContext
 import de.ntbit.projectearlybird.model.UserProfile
 import de.ntbit.projectearlybird.ui.HomeActivity
+import de.ntbit.projectearlybird.ui.RegisterActivity
 import java.util.*
 import java.util.logging.Logger
+import com.parse.ParseObject
+import com.parse.GetCallback
+import com.parse.ParseQuery
 
 class ParseManager {
     private val log = Logger.getLogger(this::class.java.simpleName)
     private var currentParseUser: ParseUser? = null
+    private var currentUserProfile: UserProfile? = null
 
-    fun registerUser(username: String, email: String, uHashedPassword: String) {
+    fun registerUser(username: String, email: String, uHashedPassword: String) : Boolean {
         val user = ParseUser()
+        var success = true
         user.username = username
         user.email = email
         user.setPassword(uHashedPassword)
@@ -29,9 +35,28 @@ class ParseManager {
                     Toast.LENGTH_SHORT
                 ).show()
                 createUserProfile(UserProfile(ParseUser.getCurrentUser()))
+                // TODO activate automatic login after successful registration
+                //loginUser(username, uHashedPassword)
             } else {
                 Toast.makeText(getApplicationContext(), e.message, Toast.LENGTH_SHORT).show()
                 log.fine(e.message)
+                success = false
+            }
+        }
+        return success
+    }
+
+    fun loginUser(username: String, password: String) {
+        ParseUser.logInInBackground(username, password) { user, _ ->
+            if (user != null) {
+                currentParseUser = user
+                updateUserProfile()
+            } else {
+                Toast.makeText(
+                    getApplicationContext(),
+                    "Wrong username/password",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
@@ -40,9 +65,7 @@ class ParseManager {
         ParseUser.logInInBackground(username, password) { user, _ ->
             if (user != null) {
                 currentParseUser = user
-
                 updateUserProfile()
-
                 val intent = Intent(activity.applicationContext, HomeActivity::class.java)
                 activity.startActivity(intent)
             } else {
@@ -82,7 +105,9 @@ class ParseManager {
     }
 
     fun logOut() {
+        log.fine("logging out")
         currentParseUser = null
+        currentUserProfile = null
         ParseUser.logOut()
     }
 
@@ -92,6 +117,25 @@ class ParseManager {
 
     fun userIsLoggedIn(): Boolean {
         return currentParseUser != null
+    }
+
+    fun getUserProfile() : UserProfile? {
+        if(currentUserProfile == null)
+            retrieveUserProfile()
+        log.info("User:\n" + currentUserProfile.toString())
+        return currentUserProfile
+    }
+
+    fun retrieveUserProfile() {
+        val query = ParseQuery.getQuery<ParseObject>("UserProfile")
+        query.getInBackground((currentParseUser?.getJSONArray("userProfileId")?.
+            get(0)).toString()) { result, e -> if (e == null) {
+                currentUserProfile = UserProfile(result, currentParseUser!!.email)
+                log.info("User:\n" + currentUserProfile.toString())
+            } else {
+                log.info("Something went terribly wrong")
+            }
+        }
     }
 
     fun createUserProfile(userProfile: UserProfile) {
