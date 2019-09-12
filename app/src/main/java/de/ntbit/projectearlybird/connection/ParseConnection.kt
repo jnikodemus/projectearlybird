@@ -21,7 +21,6 @@ class ParseConnection {
                     .build()
             )
             parseManager = ParseManager()
-            println("ParseManager is null: " + (parseManager == null))
             return parseManager
         }
 
