@@ -34,7 +34,8 @@ class ParseManager {
                     "Registration successful. Please verify your Email",
                     Toast.LENGTH_SHORT
                 ).show()
-                createUserProfile(UserProfile(ParseUser.getCurrentUser()))
+                saveUserProfile(UserProfile(user))
+                //createUserProfile(UserProfile(ParseUser.getCurrentUser()))
                 // TODO activate automatic login after successful registration
                 //loginUser(username, uHashedPassword)
             } else {
@@ -140,16 +141,25 @@ class ParseManager {
     */
 
     // TODO change to getInBackground
+    /*
     fun getUserProfile(): UserProfile? {
         if (currentUserProfile == null) {
             val query = ParseQuery.getQuery<ParseObject>("UserProfile")
             return UserProfile(
-                query.get((currentParseUser?.getJSONArray("userProfileId")?.get(0) as String?)),
-                currentParseUser!!.email
+                query.get((currentParseUser?.getJSONArray("userProfileId")?.get(0) as String?))
             )
         } else return currentUserProfile
     }
+     */
 
+    private fun saveUserProfile(userProfile: UserProfile) {
+        userProfile.saveInBackground { e ->
+            if(e != null)
+                log.fine(e.message)
+            else updateUserUnique("userProfileId", userProfile.objectId)
+        }
+    }
+    /*
     fun createUserProfile(userProfile: UserProfile) {
         val newUserProfile = ParseObject("UserProfile")
         newUserProfile.addUnique("userId", userProfile.userId)
@@ -169,6 +179,8 @@ class ParseManager {
                 updateUserUnique("userProfileId", newUserProfile.objectId)
         }
     }
+    */
+
 
     private fun updateUserUnique(column: String, userProfileId: String) {
         val currentUser = ParseUser.getCurrentUser()
