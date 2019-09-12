@@ -19,6 +19,7 @@ import com.google.android.material.navigation.NavigationView
 import de.ntbit.projectearlybird.connection.ParseConnection
 import de.ntbit.projectearlybird.manager.ParseManager
 import de.ntbit.projectearlybird.model.UserProfile
+import kotlinx.android.synthetic.main.fragment_profile.*
 import java.util.logging.Logger
 
 
@@ -68,10 +69,11 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun placeProfile() {
-        userProfile = parseManager?.getUserProfile()
+        val userProfile = parseManager?.getUserProfile()
         val navigationHeader = navigation_menu_view.getHeaderView(0)
-        //navigationHeader.navigation_username.text = userProfile?.username
-        //navigationHeader.navigation_email.text = userProfile?.email
+        navigationHeader.navigation_username.text = userProfile?.username
+        navigationHeader.navigation_email.text = userProfile?.email
+
     }
 
     private fun selectMenuItem(itemIndex: Int) {

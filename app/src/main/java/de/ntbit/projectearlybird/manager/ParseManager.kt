@@ -20,7 +20,7 @@ class ParseManager {
     private var currentParseUser: ParseUser? = null
     private var currentUserProfile: UserProfile? = null
 
-    fun registerUser(username: String, email: String, uHashedPassword: String) : Boolean {
+    fun registerUser(username: String, email: String, uHashedPassword: String): Boolean {
         val user = ParseUser()
         var success = true
         user.username = username
@@ -118,7 +118,7 @@ class ParseManager {
     fun userIsLoggedIn(): Boolean {
         return currentParseUser != null
     }
-
+/*
     fun getUserProfile() : UserProfile? {
         if(currentUserProfile == null)
             retrieveUserProfile()
@@ -136,6 +136,18 @@ class ParseManager {
                 log.info("Something went terribly wrong")
             }
         }
+    }
+    */
+
+    // TODO change to getInBackground
+    fun getUserProfile(): UserProfile? {
+        if (currentUserProfile == null) {
+            val query = ParseQuery.getQuery<ParseObject>("UserProfile")
+            return UserProfile(
+                query.get((currentParseUser?.getJSONArray("userProfileId")?.get(0) as String?)),
+                currentParseUser!!.email
+            )
+        } else return currentUserProfile
     }
 
     fun createUserProfile(userProfile: UserProfile) {

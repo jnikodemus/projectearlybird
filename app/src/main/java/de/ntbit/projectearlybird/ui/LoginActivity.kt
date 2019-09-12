@@ -33,20 +33,21 @@ class LoginActivity : AppCompatActivity() {
         parseManager = ParseConnection.getParseManager()
 
         actLoginBtnLogin.setOnClickListener{
-            if(actLoginEditTextUsername.text.toString() != "" &&
-                actLoginEditTextPassword.text.toString() != "") {
-                parseManager?.loginUser(
-                    actLoginEditTextUsername.text.toString(),
-                    actLoginEditTextPassword.text.toString(), this
-                )
-                log.fine("User " + actLoginEditTextUsername.text + " successfully logged in")
-            }
+            if(parseManager?.userIsLoggedIn()!!)
+                startActivity(Intent(this, HomeActivity::class.java))
+            else
+                if(actLoginEditTextUsername.text.toString() != "" &&
+                    actLoginEditTextPassword.text.toString() != "") {
+                    parseManager?.loginUser(
+                        actLoginEditTextUsername.text.toString(),
+                        actLoginEditTextPassword.text.toString(), this
+                    )
+                    log.fine("User " + actLoginEditTextUsername.text + " successfully logged in")
+                }
         }
 
         actLoginBtnRegister.setOnClickListener{
             startActivity(Intent(this, RegisterActivity::class.java))
         }
-
-
     }
 }

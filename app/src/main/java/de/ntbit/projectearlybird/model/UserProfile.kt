@@ -7,6 +7,7 @@ import java.util.Date
 import java.util.logging.Logger
 import kotlin.collections.ArrayList
 
+// TODO change to extend ParseObject as in https://guides.codepath.com/android/Building-Data-driven-Apps-with-Parse
 class UserProfile {
     private val log = Logger.getLogger(this::class.java.simpleName)
 
