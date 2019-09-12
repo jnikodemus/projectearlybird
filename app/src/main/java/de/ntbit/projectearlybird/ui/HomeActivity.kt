@@ -4,20 +4,26 @@ import androidx.appcompat.app.AppCompatActivity
 
 import android.os.Bundle
 import android.view.MenuItem
-import androidx.annotation.ContentView
+
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import com.google.android.material.navigation.NavigationView
+
+import kotlinx.android.synthetic.main.activity_home.*
+import kotlinx.android.synthetic.main.navigation_header.view.*
+import kotlinx.android.synthetic.main.toolbar.*
 
 import de.ntbit.projectearlybird.R
-import kotlinx.android.synthetic.main.activity_home.*
-import kotlinx.android.synthetic.main.toolbar.*
+import com.google.android.material.navigation.NavigationView
+import de.ntbit.projectearlybird.connection.ParseConnection
+import de.ntbit.projectearlybird.manager.ParseManager
 import java.util.logging.Logger
+
 
 class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private val log = Logger.getLogger(this::class.java.simpleName)
+    private val parseManager: ParseManager? = ParseConnection.getParseManager()
     private lateinit var drawer: DrawerLayout
     private lateinit var toggle: ActionBarDrawerToggle
 
@@ -29,13 +35,21 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun initialize() {
         /* Set toolbar */
+        setToolbar()
+        /* Get profile of currentUser and place it in the application */
+        placeProfile()
+        /* Assemble and set Navigation Drawer */
+        buildNavigation()
+    }
+
+    private fun setToolbar() {
         val toolbar = toolbar
         setSupportActionBar(toolbar)
+    }
 
-        /* Set Navigation Drawer */
-        drawer = drawer_layout
-        var navigatioView: NavigationView = navigation_view
-        navigatioView.setNavigationItemSelectedListener(this)
+    private fun buildNavigation() {
+        drawer = navigation_drawer_layout
+        navigation_menu_view.setNavigationItemSelectedListener(this)
         toggle = ActionBarDrawerToggle(
             this, drawer, toolbar,
             R.string.menu_drawer_open,
@@ -43,6 +57,12 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         )
         drawer.addDrawerListener(toggle)
         toggle.syncState()
+    }
+
+    private fun placeProfile() {
+        val navigationHeader = navigation_menu_view.getHeaderView(0)
+        navigationHeader.navigation_username.text = parseManager?.getCurrentUser()?.username
+        navigationHeader.navigation_email.text = parseManager?.getCurrentUser()?.email
     }
 
     override fun onNavigationItemSelected(p0: MenuItem): Boolean {
