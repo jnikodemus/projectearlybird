@@ -1,11 +1,14 @@
 package de.ntbit.projectearlybird.ui
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.widget.Toolbar
 import de.ntbit.projectearlybird.R
 import de.ntbit.projectearlybird.connection.ParseConnection
 import de.ntbit.projectearlybird.manager.ParseManager
 import kotlinx.android.synthetic.main.activity_register.*
+import kotlinx.android.synthetic.main.toolbar.*
 import java.util.logging.Logger
 
 class RegisterActivity : AppCompatActivity() {
@@ -27,15 +30,22 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun initialize() {
+        val toolbar: Toolbar = toolbar
+        setSupportActionBar(toolbar)
         parseManager = ParseConnection.getParseManager()
         actRegisterBtnRegister.setOnClickListener{
             if(inputIsOK()) {
-                parseManager?.registerUser(
+                if(parseManager!!.registerUser(
                     actRegisterEditTxtUsername.text.toString(),
                     actRegisterEditTxtEmail.text.toString(),
                     actRegisterEditTxtPassword.text.toString()
-                )
-                finish()
+                )) {
+                    log.fine("User successfully registered ")
+                    finish()
+                    // TODO activate automatic login after successful registration
+                    //startActivity(Intent(this, HomeActivity::class.java))
+                }
+                else log.fine("User not registered")
             }
         }
     }

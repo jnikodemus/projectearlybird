@@ -4,6 +4,8 @@ import android.content.Context
 import de.ntbit.projectearlybird.manager.ParseManager
 import com.parse.Parse
 import java.util.logging.Logger
+import com.parse.ParseObject
+import de.ntbit.projectearlybird.model.UserProfile
 
 
 class ParseConnection {
@@ -13,6 +15,7 @@ class ParseConnection {
         private var parseManager: ParseManager? = null
 
         fun initialize(context: Context) : ParseManager? {
+            ParseObject.registerSubclass(UserProfile::class.java)
             Parse.initialize(
                 Parse.Configuration.Builder(context)
                     .applicationId("pYIuK6xeAMNkL2IYpOEWIiAoacyr8jEyTja8LqxV")
@@ -21,7 +24,6 @@ class ParseConnection {
                     .build()
             )
             parseManager = ParseManager()
-            println("ParseManager is null: " + (parseManager == null))
             return parseManager
         }
 

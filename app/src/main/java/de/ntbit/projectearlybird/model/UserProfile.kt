@@ -1,64 +1,122 @@
 package de.ntbit.projectearlybird.model
 
+import com.parse.ParseClassName
+import com.parse.ParseObject
 import com.parse.ParseUser
 
 import java.util.Date
 import java.util.logging.Logger
-import kotlin.collections.ArrayList
 
-class UserProfile {
+// TODO change to extend ParseObject as in https://guides.codepath.com/android/Building-Data-driven-Apps-with-Parse
+
+@ParseClassName("UserProfile")
+class UserProfile : ParseObject {
     private val log = Logger.getLogger(this::class.java.simpleName)
 
-    var userId: String
-        private set
-    var objectId: String
+    var userFk: String
+        get() = getString("userFk")!!
+        private set(userFk) {
+            addUnique("userFk", userFk)
+        }
     var username: String
-        private set
-    var firstName: String = "not set"
-    var lastName: String = "not set"
+        get() = getString("username")!!
+        private set(username) {
+            put("username", username)
+        }
+    var firstName: String
+        get() = getString("firstName")!!
+        set(firstName) {
+            put("firstName", firstName)
+        }
+    var lastName: String
+        get() = getString("lastName")!!
+        set(lastName) {
+            put("lastName", lastName)
+        }
     var email: String
-        private set
-    var birthday: Long = 0
-    var sex: String = "undefined"
+        get() = getString("email")!!
+        private set(email) {
+            put("email", email)
+        }
+    var birthday: Long
+        get() = getLong("birthday")
+        set(birthday) {
+            put("birthday", birthday)
+        }
+    var sex: String
+        get() = getString("sex")!!
+        set(sex) {
+            put("sex", sex)
+        }
     var lastLogin: Date
+        get() = getDate("lastLogin")!!
+        set(lastLogin) {
+            put("lastLogin", lastLogin)
+        }
+
+    /* TODO add groups
     var groups: Collection<Group> = ArrayList()
         private set
+     */
 
-    constructor(user: ParseUser) : super() {
-        this.userId = user.objectId
-        this.objectId = ""
-        this.username = user.username
-        this.email = user.email
-        this.firstName = "not set"
-        this.lastName = "not set"
+    constructor() : super() {
+        this.userFk = ""
+        this.username = ""
+        this.email = ""
+        this.firstName = ""
+        this.lastName = ""
         this.birthday = 0
-        this.sex = "undefined"
-        this.lastLogin = Date(System.currentTimeMillis())
-        groups = ArrayList()
+        this.sex = ""
+        this.lastLogin = Date(0)
+        //groups = ArrayList()
     }
 
+    constructor(user: ParseUser) : super() {
+        this.userFk = user.objectId
+        this.username = user.username
+        this.email = user.email
+        this.firstName = ""
+        this.lastName = ""
+        this.birthday = 0
+        this.sex = ""
+        this.lastLogin = Date(System.currentTimeMillis())
+        //groups = ArrayList()
+    }
+
+    /*
+    constructor(parseObject: ParseObject, email: String) : super() {
+        this.userId = parseObject.get("userId").toString()
+        //this.username = parseObject.get("username").toString()
+        //this.email = email
+        this.firstName = parseObject.get("firstName").toString()
+        this.lastName = parseObject.get("lastName").toString()
+        this.birthday = parseObject.get("birthday").toString().toLong()
+        this.sex = parseObject.get("sex").toString()
+        this.lastLogin = Date(System.currentTimeMillis())
+        //groups = ArrayList()
+    }
+    */
+
     constructor(other: UserProfile) : super() {
-        this.userId = other.userId
-        this.objectId = other.objectId
+        this.userFk = other.userFk
         this.username = other.username
+        this.email = other.email
         this.firstName = other.firstName
         this.lastName = other.lastName
-        this.email = other.email
         this.birthday = other.birthday
         this.sex = other.sex
         this.lastLogin = other.lastLogin
-        this.groups = other.groups
+        //this.groups = other.groups
     }
 
     override fun toString(): String {
-        return ("ID: " + this.userId
-                + "\nObjectID: " + this.objectId
+        return ("ID: " + this.userFk
                 + "\nUsername: " + this.username
-                + "\nName: " + this.firstName + " " + this.lastName
                 + "\nEmail: " + this.email
+                + "\nName: " + this.firstName + " " + this.lastName
                 + "\nDay of birth: " + this.birthday
                 + "\nSex: " + this.sex
-                + "\nLast login: " + this.lastLogin.toString()
-                + "\nGroups: " + this.groups)
+                + "\nLast login: " + this.lastLogin.toString())
+        //+ "\nGroups: " + this.groups)
     }
 }
