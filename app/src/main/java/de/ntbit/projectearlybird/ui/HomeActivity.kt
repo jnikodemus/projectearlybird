@@ -1,6 +1,5 @@
 package de.ntbit.projectearlybird.ui
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 
 import android.os.Bundle
@@ -19,8 +18,6 @@ import com.google.android.material.navigation.NavigationView
 import de.ntbit.projectearlybird.connection.ParseConnection
 import de.ntbit.projectearlybird.manager.ParseManager
 import de.ntbit.projectearlybird.model.UserProfile
-import kotlinx.android.synthetic.main.fragment_info.*
-import kotlinx.android.synthetic.main.fragment_profile.*
 import java.util.logging.Logger
 
 
@@ -40,23 +37,20 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun initialize() {
         /* Set toolbar */
-        setToolbar()
+        placeToolbar()
         /* Assemble and set Navigation Drawer */
         buildNavigation()
         /* Get profile of currentUser and place it in the application */
         placeProfile()
-        /* Set informations about app */
+        /* Place information about app */
         placeInformation()
         /* Select and inflate specific Fragment */
         selectMenuItem(0)
     }
 
-    private fun setToolbar() {
+    private fun placeToolbar() {
         val toolbar = toolbar
         setSupportActionBar(toolbar)
-        toolbar.setOnClickListener{
-            placeProfile()
-        }
     }
 
     private fun buildNavigation() {
