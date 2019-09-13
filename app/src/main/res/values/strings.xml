@@ -1,6 +1,9 @@
 <resources>
+    <string name="app_major_version">0</string>
+    <string name="app_sub_version">1</string>
+    <string name="app_version">Version</string>
     <string name="app_name">ProjectEarlyBird</string>
-    <string name="app_welcome">Welcome!</string>
+    <string name="app_welcome">Welcome</string>
     <string name="app_email">Email</string>
     <string name="app_username">Username</string>
     <string name="app_password">Password</string>

@@ -5,9 +5,10 @@
     android:background="@android:color/holo_green_light">
     
     <TextView
+        android:id="@+id/frgmInfoTxtViewVersion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Information Fragment"
+        android:text="@string/app_version"
         android:textSize="30sp"
         android:layout_centerInParent="true" />
 

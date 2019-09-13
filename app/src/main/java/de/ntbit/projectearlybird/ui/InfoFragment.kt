@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import de.ntbit.projectearlybird.R
+import kotlinx.android.synthetic.main.fragment_info.*
 
 class InfoFragment : Fragment() {
 

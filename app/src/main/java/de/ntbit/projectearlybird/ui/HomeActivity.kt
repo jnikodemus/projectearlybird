@@ -19,6 +19,7 @@ import com.google.android.material.navigation.NavigationView
 import de.ntbit.projectearlybird.connection.ParseConnection
 import de.ntbit.projectearlybird.manager.ParseManager
 import de.ntbit.projectearlybird.model.UserProfile
+import kotlinx.android.synthetic.main.fragment_info.*
 import kotlinx.android.synthetic.main.fragment_profile.*
 import java.util.logging.Logger
 
@@ -44,6 +45,8 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         buildNavigation()
         /* Get profile of currentUser and place it in the application */
         placeProfile()
+        /* Set informations about app */
+        placeInformation()
         /* Select and inflate specific Fragment */
         selectMenuItem(0)
     }
@@ -73,7 +76,9 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         //val userProfile = parseManager?.getUserProfile()
         navigationHeader.navigation_username.text = parseManager?.getCurrentUser()?.username
         navigationHeader.navigation_email.text = parseManager?.getCurrentUser()?.email
+    }
 
+    private fun placeInformation() {
     }
 
     private fun selectMenuItem(itemIndex: Int) {
