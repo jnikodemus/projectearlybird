@@ -13,22 +13,11 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity
-            android:name=".ui.ProfileActivity"
-            android:label="@string/title_activity_profile"
-            android:parentActivityName=".ui.HomeActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="de.ntbit.projectearlybird.ui.HomeActivity" />
-        </activity>
         <activity android:name=".ui.HomeActivity" />
         <activity android:name=".ui.RegisterActivity" />
-        <activity android:name=".ui.WelcomeActivity" />
         <activity android:name=".ui.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

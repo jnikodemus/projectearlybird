@@ -1,23 +1,22 @@
 package de.ntbit.projectearlybird.ui
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 
 import android.os.Bundle
-import android.view.View
-import android.widget.Toast
-import androidx.navigation.NavController
-import androidx.navigation.ui.AppBarConfiguration
+import kotlinx.android.synthetic.main.toolbar.*
 
 import de.ntbit.projectearlybird.R
-import kotlinx.android.synthetic.main.toolbar.*
+import de.ntbit.projectearlybird.connection.ParseConnection
+import de.ntbit.projectearlybird.manager.ParseManager
+import de.ntbit.projectearlybird.model.UserProfile
 import java.util.logging.Logger
+
 
 class HomeActivity : AppCompatActivity() {
 
     private val log = Logger.getLogger(this::class.java.simpleName)
-    private val navController : NavController = NavController(this)
-    //private val appBarConfiguration = AppBarConfiguration(navController.graph)
+    private val parseManager: ParseManager? = ParseConnection.getParseManager()
+    private var userProfile: UserProfile? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,20 +25,12 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun initialize() {
-        toolbar.setOnClickListener {
-            Toast.makeText(applicationContext, "Toolbar clicked", Toast.LENGTH_SHORT).show()
-        }
-        /*
-        navController.addOnDestinationChangedListener { _, destination, _ ->
-            if(destination.id == R.id.full_screen_destination) {
-                toolbar.visibility = View.GONE
-                bottomNavigationView.visibility = View.GONE
-            } else {
-                toolbar.visibility = View.VISIBLE
-                bottomNavigationView.visibility = View.VISIBLE
-            }
-        }
-        */
+        /* Set toolbar */
+        setToolbar()
+    }
 
+    private fun setToolbar() {
+        val toolbar = toolbar
+        setSupportActionBar(toolbar)
     }
 }
