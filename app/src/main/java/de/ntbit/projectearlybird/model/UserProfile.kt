@@ -13,16 +13,16 @@ import java.util.logging.Logger
 class UserProfile : ParseObject {
     private val log = Logger.getLogger(this::class.java.simpleName)
 
-    var userId: String
-        get() = getString("userId")!!
-        set(userId) {
-            addUnique("userId", userId)
+    var userFk: String
+        get() = getString("userFk")!!
+        private set(userFk) {
+            addUnique("userFk", userFk)
         }
-    /*
     var username: String
         get() = getString("username")!!
-        private set
-     */
+        private set(username) {
+            put("username", username)
+        }
     var firstName: String
         get() = getString("firstName")!!
         set(firstName) {
@@ -33,11 +33,11 @@ class UserProfile : ParseObject {
         set(lastName) {
             put("lastName", lastName)
         }
-    /*
     var email: String
         get() = getString("email")!!
-        private set
-     */
+        private set(email) {
+            put("email", email)
+        }
     var birthday: Long
         get() = getLong("birthday")
         set(birthday) {
@@ -60,9 +60,9 @@ class UserProfile : ParseObject {
      */
 
     constructor() : super() {
-        this.userId = ""
-        //this.username = ""
-        //this.email = ""
+        this.userFk = ""
+        this.username = ""
+        this.email = ""
         this.firstName = ""
         this.lastName = ""
         this.birthday = 0
@@ -72,9 +72,9 @@ class UserProfile : ParseObject {
     }
 
     constructor(user: ParseUser) : super() {
-        this.userId = user.objectId
-        //this.username = user.username
-        //this.email = user.email
+        this.userFk = user.objectId
+        this.username = user.username
+        this.email = user.email
         this.firstName = ""
         this.lastName = ""
         this.birthday = 0
@@ -98,11 +98,11 @@ class UserProfile : ParseObject {
     */
 
     constructor(other: UserProfile) : super() {
-        this.userId = other.userId
-        //this.username = other.username
+        this.userFk = other.userFk
+        this.username = other.username
+        this.email = other.email
         this.firstName = other.firstName
         this.lastName = other.lastName
-        //this.email = other.email
         this.birthday = other.birthday
         this.sex = other.sex
         this.lastLogin = other.lastLogin
@@ -110,10 +110,10 @@ class UserProfile : ParseObject {
     }
 
     override fun toString(): String {
-        return ("ID: " + this.userId
-                //+ "\nUsername: " + this.username
+        return ("ID: " + this.userFk
+                + "\nUsername: " + this.username
+                + "\nEmail: " + this.email
                 + "\nName: " + this.firstName + " " + this.lastName
-                //+ "\nEmail: " + this.email
                 + "\nDay of birth: " + this.birthday
                 + "\nSex: " + this.sex
                 + "\nLast login: " + this.lastLogin.toString())

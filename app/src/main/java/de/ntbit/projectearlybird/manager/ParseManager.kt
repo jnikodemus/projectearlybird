@@ -8,11 +8,9 @@ import com.parse.*
 import com.parse.Parse.getApplicationContext
 import de.ntbit.projectearlybird.model.UserProfile
 import de.ntbit.projectearlybird.ui.HomeActivity
-import de.ntbit.projectearlybird.ui.RegisterActivity
 import java.util.*
 import java.util.logging.Logger
 import com.parse.ParseObject
-import com.parse.GetCallback
 import com.parse.ParseQuery
 
 class ParseManager {
@@ -88,21 +86,20 @@ class ParseManager {
             val query = ParseQuery.getQuery<ParseObject>("UserProfile")
 
             // Retrieve the object by id
-            val profileUserId = ParseUser.getCurrentUser().get("userProfileId")!!.toString()
+            val profileUserId = ParseUser.getCurrentUser().get("userProfileFk")!!.toString()
             query.getInBackground(
-                profileUserId.substring(1, profileUserId.length - 1)
-            ) { entity, e ->
-                if (e == null) {
-                    // Update the fields we want to
-                    entity.put(column, Date(System.currentTimeMillis()))
+                profileUserId.substring(1, profileUserId.length - 1)) {
+                    entity, e -> if (e == null) {
+                        // Update the fields we want to
+                        entity.put(column, Date(System.currentTimeMillis()))
 
-                    // All other fields will remain the same
-                    entity.saveInBackground()
-                } else {
-                    Log.d("CustomLog", e.message)
+                        // All other fields will remain the same
+                        entity.saveInBackground()
+                    } else {
+                        log.fine(e.message)
+                    }
                 }
             }
-        }
     }
 
     fun logOut() {
@@ -155,8 +152,8 @@ class ParseManager {
     private fun saveUserProfile(userProfile: UserProfile) {
         userProfile.saveInBackground { e ->
             if(e != null)
-                log.fine(e.message)
-            else updateUserUnique("userProfileId", userProfile.objectId)
+                e.printStackTrace()
+            else updateUserUnique("userProfileFk", userProfile.objectId)
         }
     }
     /*
