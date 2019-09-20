@@ -19,7 +19,6 @@ class ParseManager {
     private var currentUserProfile: UserProfile? = null
 
     fun registerUser(username: String, email: String, uHashedPassword: String): Boolean {
-        log.info("Register: $username $uHashedPassword")
         val user = ParseUser()
         var success = true
         user.username = username
@@ -54,15 +53,15 @@ class ParseManager {
             } else {
                 Toast.makeText(
                     getApplicationContext(),
-                    "Wrong username/password",
+                    "Invalid username/password",
                     Toast.LENGTH_SHORT
                 ).show()
             }
         }
     }
 
+    //TODO check why login is impossible with userProfileRel not null
     fun loginUser(username: String, password: String, activity: Activity) {
-        log.info("Login: $username $password")
         ParseUser.logInInBackground(username, password) { user, _ ->
             if (user != null) {
                 currentParseUser = user
@@ -72,7 +71,7 @@ class ParseManager {
             } else {
                 Toast.makeText(
                     getApplicationContext(),
-                    "Wrong username/password",
+                    "Invalid username/password",
                     Toast.LENGTH_SHORT
                 ).show()
             }
@@ -88,9 +87,7 @@ class ParseManager {
         // Retrieve the object by id
         //val profileUserId: String = ParseUser.getCurrentUser().get("userProfileFk")!!.toString()
         val profileUserId: String = ParseUser.getCurrentUser().get("userProfileRel").toString()
-
-        log.info(profileUserId)
-        /*query.getInBackground(profileUserId) {
+        query.getInBackground(profileUserId) {
                 entity, e -> if (e == null) {
                     // Update the fields we want to
                     entity.put(column, Date(System.currentTimeMillis()))
@@ -99,8 +96,7 @@ class ParseManager {
                 } else {
                     log.fine(e.message)
                 }
-            }
-            */
+        }
     }
 
     fun logOut() {
@@ -199,6 +195,7 @@ class ParseManager {
         val currentUser = ParseUser.getCurrentUser()
         if(currentUser != null) {
             currentUser.put("userProfileRel", userProfile)
+            currentUser.put("userProfileFk", userProfile.objectId)
             currentUser.saveInBackground()
         }
     }
