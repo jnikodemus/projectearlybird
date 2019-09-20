@@ -67,7 +67,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun placeProfile() {
         val navigationHeader = navigation_menu_view.getHeaderView(0)
-        //val userProfile = parseManager?.getUserProfile()
+        userProfile = parseManager?.getUserProfile()
         navigationHeader.navigation_username.text = parseManager?.getCurrentUser()?.username
         navigationHeader.navigation_email.text = parseManager?.getCurrentUser()?.email
     }

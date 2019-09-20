@@ -2,7 +2,6 @@ package de.ntbit.projectearlybird.manager
 
 import android.app.Activity
 import android.content.Intent
-import android.util.Log
 import android.widget.Toast
 import com.parse.*
 import com.parse.Parse.getApplicationContext
@@ -13,12 +12,14 @@ import java.util.logging.Logger
 import com.parse.ParseObject
 import com.parse.ParseQuery
 
+
 class ParseManager {
     private val log = Logger.getLogger(this::class.java.simpleName)
     private var currentParseUser: ParseUser? = null
     private var currentUserProfile: UserProfile? = null
 
     fun registerUser(username: String, email: String, uHashedPassword: String): Boolean {
+        log.info("Register: $username $uHashedPassword")
         val user = ParseUser()
         var success = true
         user.username = username
@@ -61,6 +62,7 @@ class ParseManager {
     }
 
     fun loginUser(username: String, password: String, activity: Activity) {
+        log.info("Login: $username $password")
         ParseUser.logInInBackground(username, password) { user, _ ->
             if (user != null) {
                 currentParseUser = user
@@ -78,28 +80,27 @@ class ParseManager {
     }
 
     fun updateUserProfile() {
-        updateUserProfile("lastLogin", null)
+        updateUserProfile("lastLogin")
     }
 
-    fun updateUserProfile(column: String, value: String?) {
-        if (value == null) {
-            val query = ParseQuery.getQuery<ParseObject>("UserProfile")
+    fun updateUserProfile(column: String) {
+        val query = ParseQuery.getQuery<ParseObject>("UserProfile")
+        // Retrieve the object by id
+        //val profileUserId: String = ParseUser.getCurrentUser().get("userProfileFk")!!.toString()
+        val profileUserId: String = ParseUser.getCurrentUser().get("userProfileRel").toString()
 
-            // Retrieve the object by id
-            val profileUserId = ParseUser.getCurrentUser().get("userProfileFk")!!.toString()
-            query.getInBackground(
-                profileUserId.substring(1, profileUserId.length - 1)) {
-                    entity, e -> if (e == null) {
-                        // Update the fields we want to
-                        entity.put(column, Date(System.currentTimeMillis()))
-
-                        // All other fields will remain the same
-                        entity.saveInBackground()
-                    } else {
-                        log.fine(e.message)
-                    }
+        log.info(profileUserId)
+        /*query.getInBackground(profileUserId) {
+                entity, e -> if (e == null) {
+                    // Update the fields we want to
+                    entity.put(column, Date(System.currentTimeMillis()))
+                    // All other fields will remain the same
+                    entity.saveInBackground()
+                } else {
+                    log.fine(e.message)
                 }
             }
+            */
     }
 
     fun logOut() {
@@ -137,8 +138,21 @@ class ParseManager {
     }
     */
 
+    fun getUserProfile(): UserProfile? {
+        val query = ParseQuery.getQuery<ParseObject>("UserProfile")
+        query.getInBackground(
+            this.currentParseUser?.getString("userProfileFk")
+        ) { result, e ->
+            if (e == null) {
+                log.info(result.toString())
+            } else {
+                log.fine(e.message)
+            }
+        }
+        return null
+    }
+/*
     // TODO change to getInBackground
-    /*
     fun getUserProfile(): UserProfile? {
         if (currentUserProfile == null) {
             val query = ParseQuery.getQuery<ParseObject>("UserProfile")
@@ -147,13 +161,16 @@ class ParseManager {
             )
         } else return currentUserProfile
     }
-     */
-
+*/
     private fun saveUserProfile(userProfile: UserProfile) {
         userProfile.saveInBackground { e ->
             if(e != null)
                 e.printStackTrace()
-            else updateUserUnique("userProfileFk", userProfile.objectId)
+            else {
+                addUserToProfileRelation(userProfile)
+                //updateUser("userProfileFk", userProfile.objectId)
+            }
+            //else currentParseUser!!.put("userProfileFk", userProfile.objectId)
         }
     }
     /*
@@ -178,12 +195,20 @@ class ParseManager {
     }
     */
 
+    private fun addUserToProfileRelation(userProfile: UserProfile){
+        val currentUser = ParseUser.getCurrentUser()
+        if(currentUser != null) {
+            currentUser.put("userProfileRel", userProfile)
+            currentUser.saveInBackground()
+        }
+    }
 
-    private fun updateUserUnique(column: String, userProfileId: String) {
+    @Deprecated(message = "Use addUserToProfileRelation method to create a Relation")
+     private fun updateUser(column: String, userProfileId: String) {
         val currentUser = ParseUser.getCurrentUser()
         if (currentUser != null) {
             // Other attributes than "email" will remain unchanged!
-            currentUser.addUnique(column, userProfileId)
+            currentUser.put(column, userProfileId)
 
             // Saves the object.
             // Notice that the SaveCallback is totally optional!

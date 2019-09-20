@@ -16,7 +16,7 @@ class UserProfile : ParseObject {
     var userFk: String
         get() = getString("userFk")!!
         private set(userFk) {
-            addUnique("userFk", userFk)
+            put("userFk", userFk)
         }
     var username: String
         get() = getString("username")!!
@@ -83,9 +83,8 @@ class UserProfile : ParseObject {
         //groups = ArrayList()
     }
 
-    /*
-    constructor(parseObject: ParseObject, email: String) : super() {
-        this.userId = parseObject.get("userId").toString()
+    constructor(parseObject: ParseObject) : super() {
+        this.userFk = parseObject.get("userId").toString()
         //this.username = parseObject.get("username").toString()
         //this.email = email
         this.firstName = parseObject.get("firstName").toString()
@@ -95,7 +94,6 @@ class UserProfile : ParseObject {
         this.lastLogin = Date(System.currentTimeMillis())
         //groups = ArrayList()
     }
-    */
 
     constructor(other: UserProfile) : super() {
         this.userFk = other.userFk
