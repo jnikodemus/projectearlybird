@@ -2,6 +2,7 @@ package de.ntbit.projectearlybird.manager
 
 import android.app.Activity
 import android.content.Intent
+import android.util.Log
 import android.widget.Toast
 import com.parse.*
 import com.parse.Parse.getApplicationContext
@@ -27,17 +28,12 @@ class ParseManager {
 
         user.signUpInBackground { e ->
             if (e == null) {
-                Toast.makeText(
-                    getApplicationContext(),
-                    "Registration successful. Please verify your Email",
-                    Toast.LENGTH_SHORT
-                ).show()
-                saveUserProfile(UserProfile(user))
-                //createUserProfile(UserProfile(ParseUser.getCurrentUser()))
+                val userProfile = UserProfile()
+                userProfile.fillUnset()
+                saveUserProfile(userProfile)
+                showToast("Registration successful. Please verify your Email")
                 // TODO activate automatic login after successful registration
-                //loginUser(username, uHashedPassword)
             } else {
-                Toast.makeText(getApplicationContext(), e.message, Toast.LENGTH_SHORT).show()
                 log.fine(e.message)
                 success = false
             }
@@ -45,94 +41,34 @@ class ParseManager {
         return success
     }
 
-    fun loginUser(username: String, password: String) {
-        ParseUser.logInInBackground(username, password) { user, _ ->
-            if (user != null) {
-                currentParseUser = user
-                updateUserProfile()
-            } else {
-                Toast.makeText(
-                    getApplicationContext(),
-                    "Invalid username/password",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        }
-    }
-
-    //TODO check why login is impossible with userProfileRel not null
     fun loginUser(username: String, password: String, activity: Activity) {
-        ParseUser.logInInBackground(username, password) { user, _ ->
+        ParseUser.logInInBackground(username, password) { user, e ->
             if (user != null) {
                 currentParseUser = user
-                updateUserProfile()
+                updateLastLogin()
                 val intent = Intent(activity.applicationContext, HomeActivity::class.java)
                 activity.startActivity(intent)
             } else {
-                Toast.makeText(
-                    getApplicationContext(),
-                    "Invalid username/password",
-                    Toast.LENGTH_SHORT
-                ).show()
+                log.info(e.message)
+                showToast("Invalid username/password")
             }
         }
     }
 
-    fun updateUserProfile() {
-        updateUserProfile("lastLogin")
-    }
-
-    fun updateUserProfile(column: String) {
-        val query = ParseQuery.getQuery<ParseObject>("UserProfile")
-        // Retrieve the object by id
-        //val profileUserId: String = ParseUser.getCurrentUser().get("userProfileFk")!!.toString()
-        val profileUserId: String = ParseUser.getCurrentUser().get("userProfileRel").toString()
-        query.getInBackground(profileUserId) {
+    private fun updateLastLogin() {
+        val query = ParseQuery.getQuery<UserProfile>("UserProfile")
+        val userProfileIdAsString: String = ParseUser.getCurrentUser()
+            .get("userProfileFk")
+            .toString()
+        query.getInBackground(userProfileIdAsString) {
                 entity, e -> if (e == null) {
-                    // Update the fields we want to
-                    entity.put(column, Date(System.currentTimeMillis()))
-                    // All other fields will remain the same
+                    entity.put("lastLogin", Date(System.currentTimeMillis()))
                     entity.saveInBackground()
                 } else {
                     log.fine(e.message)
                 }
         }
     }
-
-    fun logOut() {
-        log.fine("logging out")
-        currentParseUser = null
-        currentUserProfile = null
-        ParseUser.logOut()
-    }
-
-    fun getCurrentUser(): ParseUser? {
-        return currentParseUser
-    }
-
-    fun userIsLoggedIn(): Boolean {
-        return currentParseUser != null
-    }
-/*
-    fun getUserProfile() : UserProfile? {
-        if(currentUserProfile == null)
-            retrieveUserProfile()
-        log.info("User:\n" + currentUserProfile.toString())
-        return currentUserProfile
-    }
-
-    fun retrieveUserProfile() {
-        val query = ParseQuery.getQuery<ParseObject>("UserProfile")
-        query.getInBackground((currentParseUser?.getJSONArray("userProfileId")?.
-            get(0)).toString()) { result, e -> if (e == null) {
-                currentUserProfile = UserProfile(result, currentParseUser!!.email)
-                log.info("User:\n" + currentUserProfile.toString())
-            } else {
-                log.info("Something went terribly wrong")
-            }
-        }
-    }
-    */
 
     fun getUserProfile(): UserProfile? {
         val query = ParseQuery.getQuery<ParseObject>("UserProfile")
@@ -147,70 +83,47 @@ class ParseManager {
         }
         return null
     }
-/*
-    // TODO change to getInBackground
-    fun getUserProfile(): UserProfile? {
-        if (currentUserProfile == null) {
-            val query = ParseQuery.getQuery<ParseObject>("UserProfile")
-            return UserProfile(
-                query.get((currentParseUser?.getJSONArray("userProfileId")?.get(0) as String?))
-            )
-        } else return currentUserProfile
-    }
-*/
+
     private fun saveUserProfile(userProfile: UserProfile) {
         userProfile.saveInBackground { e ->
             if(e != null)
                 e.printStackTrace()
             else {
-                addUserToProfileRelation(userProfile)
-                //updateUser("userProfileFk", userProfile.objectId)
+                setUserToProfileRelation(userProfile)
             }
-            //else currentParseUser!!.put("userProfileFk", userProfile.objectId)
         }
     }
-    /*
-    fun createUserProfile(userProfile: UserProfile) {
-        val newUserProfile = ParseObject("UserProfile")
-        newUserProfile.addUnique("userId", userProfile.userId)
-        newUserProfile.put("username", userProfile.username)
-        newUserProfile.put("firstName", userProfile.firstName)
-        newUserProfile.put("lastName", userProfile.lastName)
-        newUserProfile.put("birthday", userProfile.birthday)
-        newUserProfile.put("sex", userProfile.sex)
-        newUserProfile.put("lastLogin", userProfile.lastLogin)
-        newUserProfile.put("groups", userProfile.groups)
-        // Saves the new object.
-        // Notice that the SaveCallback is totally optional!
-        newUserProfile.saveInBackground { e ->
-            if (e != null)
-                log.fine(e.message)
-            else
-                updateUserUnique("userProfileId", newUserProfile.objectId)
-        }
-    }
-    */
 
-    private fun addUserToProfileRelation(userProfile: UserProfile){
+    private fun setUserToProfileRelation(userProfile: UserProfile){
         val currentUser = ParseUser.getCurrentUser()
         if(currentUser != null) {
-            currentUser.put("userProfileRel", userProfile)
-            currentUser.put("userProfileFk", userProfile.objectId)
+            currentUser.put("userProfileFk", userProfile)
             currentUser.saveInBackground()
         }
+        else log.info("currentUser is NULL")
     }
 
-    @Deprecated(message = "Use addUserToProfileRelation method to create a Relation")
-     private fun updateUser(column: String, userProfileId: String) {
-        val currentUser = ParseUser.getCurrentUser()
-        if (currentUser != null) {
-            // Other attributes than "email" will remain unchanged!
-            currentUser.put(column, userProfileId)
+    fun logOut() {
+        log.fine("logging out")
+        Log.d("CUSTOMLOG", "loggedOut")
+        currentParseUser = null
+        currentUserProfile = null
+        ParseUser.logOut()
+    }
 
-            // Saves the object.
-            // Notice that the SaveCallback is totally optional!
-            currentUser.saveInBackground {
-            }
-        }
+    fun getCurrentUser(): ParseUser? {
+        return currentParseUser
+    }
+
+    fun userIsLoggedIn(): Boolean {
+        return currentParseUser != null
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(
+            getApplicationContext(),
+            message,
+            Toast.LENGTH_SHORT
+        ).show()
     }
 }

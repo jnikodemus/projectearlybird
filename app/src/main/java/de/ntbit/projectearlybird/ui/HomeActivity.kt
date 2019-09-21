@@ -41,9 +41,9 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         /* Assemble and set Navigation Drawer */
         buildNavigation()
         /* Get profile of currentUser and place it in the application */
-        placeProfile()
+        placeUserInformation()
         /* Place information about app */
-        placeInformation()
+        placeAppInformation()
         /* Select and inflate specific Fragment */
         selectMenuItem(0)
     }
@@ -65,14 +65,14 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         toggle.syncState()
     }
 
-    private fun placeProfile() {
+    private fun placeUserInformation() {
         val navigationHeader = navigation_menu_view.getHeaderView(0)
         userProfile = parseManager?.getUserProfile()
         navigationHeader.navigation_username.text = parseManager?.getCurrentUser()?.username
         navigationHeader.navigation_email.text = parseManager?.getCurrentUser()?.email
     }
 
-    private fun placeInformation() {
+    private fun placeAppInformation() {
     }
 
     private fun selectMenuItem(itemIndex: Int) {
