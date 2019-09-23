@@ -17,7 +17,7 @@ import com.parse.ParseQuery
 class ParseManager {
     private val log = Logger.getLogger(this::class.java.simpleName)
     private var currentParseUser: ParseUser? = null
-    private var currentUserProfile: UserProfile? = null
+    //private var currentUserProfile: UserProfile? = null
 
     fun registerUser(username: String, email: String, uHashedPassword: String): Boolean {
         val user = ParseUser()
@@ -56,31 +56,45 @@ class ParseManager {
     }
 
     private fun updateLastLogin() {
+        /*
+       val userProfile: UserProfile = (ParseUser.getCurrentUser().get("userProfileFk") as UserProfile).fetch()
+        userProfile.lastLogin = Date(System.currentTimeMillis())
+        Log.d("CUSTOMLOG", userProfile.lastLogin.toString())
+        userProfile.saveInBackground()
+        */
+        /*
+        val userProfile: UserProfile = ParseUser
+            .getCurrentUser()
+            .getParseObject("userProfile") as UserProfile
+        userProfile.firstName = "testName"
+        userProfile.saveInBackground()
+        */
+        /*
         val query = ParseQuery.getQuery<UserProfile>("UserProfile")
         val userProfileIdAsString: String = ParseUser.getCurrentUser()
             .get("userProfileFk")
             .toString()
         query.getInBackground(userProfileIdAsString) {
-                entity, e -> if (e == null) {
-                    entity.put("lastLogin", Date(System.currentTimeMillis()))
-                    entity.saveInBackground()
+                userProfile, e -> if (e == null) {
+                    userProfile.firstName = "testName"
+                    userProfile.lastLogin = Date(System.currentTimeMillis())
+                    userProfile.saveInBackground()
                 } else {
-                    log.fine(e.message)
                 }
         }
+        */
     }
 
     fun getUserProfile(): UserProfile? {
         val query = ParseQuery.getQuery<ParseObject>("UserProfile")
         query.getInBackground(
-            this.currentParseUser?.getString("userProfileFk")
-        ) { result, e ->
-            if (e == null) {
-                log.info(result.toString())
-            } else {
-                log.fine(e.message)
+            this.currentParseUser?.getString("userProfileFk")) {
+                result, e -> if (e == null) {
+                    log.info(result.toString())
+                } else {
+                    log.fine(e.message)
+                }
             }
-        }
         return null
     }
 
@@ -105,9 +119,8 @@ class ParseManager {
 
     fun logOut() {
         log.fine("logging out")
-        Log.d("CUSTOMLOG", "loggedOut")
         currentParseUser = null
-        currentUserProfile = null
+        //currentUserProfile = null
         ParseUser.logOut()
     }
 
