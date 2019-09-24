@@ -29,12 +29,11 @@ class ParseManager {
         user.signUpInBackground { e ->
             if (e == null) {
                 val userProfile = UserProfile()
-                userProfile.fillUnset()
+                userProfile.fillUnset(user)
                 saveUserProfile(userProfile)
                 showToast("Registration successful. Please verify your Email")
                 // TODO activate automatic login after successful registration
             } else {
-                Log.d("CUSTOMLOG", e.message)
                 log.fine(e.message)
                 success = false
             }
@@ -50,7 +49,7 @@ class ParseManager {
                 val intent = Intent(activity.applicationContext, HomeActivity::class.java)
                 activity.startActivity(intent)
             } else {
-                log.info(e.message)
+                log.fine(e.message)
                 showToast("Invalid username/password")
             }
         }
@@ -69,7 +68,7 @@ class ParseManager {
         query.getInBackground(
             this.currentParseUser?.getString("userProfileFk")) {
                 result, e -> if (e == null) {
-                    log.info(result.toString())
+                    log.fine(result.toString())
                 } else {
                     log.fine(e.message)
                 }
