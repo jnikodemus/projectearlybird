@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.appcompat.widget.Toolbar
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.parse.ParseUser
 import de.ntbit.projectearlybird.R
 
 import de.ntbit.projectearlybird.connection.ParseConnection
@@ -23,6 +24,7 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         initialize()
+        ParseUser.logOut()
     }
 
     private fun initialize() {

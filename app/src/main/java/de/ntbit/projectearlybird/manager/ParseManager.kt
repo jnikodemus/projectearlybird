@@ -34,6 +34,7 @@ class ParseManager {
                 showToast("Registration successful. Please verify your Email")
                 // TODO activate automatic login after successful registration
             } else {
+                Log.d("CUSTOMLOG", e.message)
                 log.fine(e.message)
                 success = false
             }
@@ -56,33 +57,11 @@ class ParseManager {
     }
 
     private fun updateLastLogin() {
-        /*
-       val userProfile: UserProfile = (ParseUser.getCurrentUser().get("userProfileFk") as UserProfile).fetch()
+        val userProfile: UserProfile = (ParseUser.getCurrentUser()
+            .get("userProfilePtr") as UserProfile)
+            .fetch()
         userProfile.lastLogin = Date(System.currentTimeMillis())
-        Log.d("CUSTOMLOG", userProfile.lastLogin.toString())
         userProfile.saveInBackground()
-        */
-        /*
-        val userProfile: UserProfile = ParseUser
-            .getCurrentUser()
-            .getParseObject("userProfile") as UserProfile
-        userProfile.firstName = "testName"
-        userProfile.saveInBackground()
-        */
-        /*
-        val query = ParseQuery.getQuery<UserProfile>("UserProfile")
-        val userProfileIdAsString: String = ParseUser.getCurrentUser()
-            .get("userProfileFk")
-            .toString()
-        query.getInBackground(userProfileIdAsString) {
-                userProfile, e -> if (e == null) {
-                    userProfile.firstName = "testName"
-                    userProfile.lastLogin = Date(System.currentTimeMillis())
-                    userProfile.saveInBackground()
-                } else {
-                }
-        }
-        */
     }
 
     fun getUserProfile(): UserProfile? {
@@ -111,7 +90,8 @@ class ParseManager {
     private fun setUserToProfileRelation(userProfile: UserProfile){
         val currentUser = ParseUser.getCurrentUser()
         if(currentUser != null) {
-            currentUser.put("userProfileFk", userProfile)
+            currentUser.put("userProfileFk", userProfile.objectId)
+            currentUser.put("userProfilePtr", userProfile)
             currentUser.saveInBackground()
         }
         else log.info("currentUser is NULL")
