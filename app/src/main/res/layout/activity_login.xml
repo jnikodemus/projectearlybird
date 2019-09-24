@@ -10,9 +10,10 @@
 
     <EditText
         android:id="@+id/actLoginEditTextUsername"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="44dp"
+        android:layout_marginStart="70dp"
+        android:layout_marginEnd="70dp"
         android:layout_marginTop="60dp"
         android:ems="15"
         android:hint="@string/app_username"
@@ -24,7 +25,7 @@
 
     <EditText
         android:id="@+id/actLoginEditTextPassword"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:ems="15"
