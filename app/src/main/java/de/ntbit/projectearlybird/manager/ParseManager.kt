@@ -13,10 +13,11 @@ import java.util.logging.Logger
 import com.parse.ParseObject
 import com.parse.ParseQuery
 
+
 class ParseManager {
     private val log = Logger.getLogger(this::class.java.simpleName)
     private var currentParseUser: ParseUser? = null
-    private var currentUserProfile: UserProfile? = null
+    //private var currentUserProfile: UserProfile? = null
 
     fun registerUser(username: String, email: String, uHashedPassword: String): Boolean {
         val user = ParseUser()
@@ -27,17 +28,13 @@ class ParseManager {
 
         user.signUpInBackground { e ->
             if (e == null) {
-                Toast.makeText(
-                    getApplicationContext(),
-                    "Registration successful. Please verify your Email",
-                    Toast.LENGTH_SHORT
-                ).show()
-                saveUserProfile(UserProfile(user))
-                //createUserProfile(UserProfile(ParseUser.getCurrentUser()))
+                val userProfile = UserProfile()
+                userProfile.fillUnset()
+                saveUserProfile(userProfile)
+                showToast("Registration successful. Please verify your Email")
                 // TODO activate automatic login after successful registration
-                //loginUser(username, uHashedPassword)
             } else {
-                Toast.makeText(getApplicationContext(), e.message, Toast.LENGTH_SHORT).show()
+                Log.d("CUSTOMLOG", e.message)
                 log.fine(e.message)
                 success = false
             }
@@ -45,67 +42,65 @@ class ParseManager {
         return success
     }
 
-    fun loginUser(username: String, password: String) {
-        ParseUser.logInInBackground(username, password) { user, _ ->
-            if (user != null) {
-                currentParseUser = user
-                updateUserProfile()
-            } else {
-                Toast.makeText(
-                    getApplicationContext(),
-                    "Wrong username/password",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        }
-    }
-
     fun loginUser(username: String, password: String, activity: Activity) {
-        ParseUser.logInInBackground(username, password) { user, _ ->
+        ParseUser.logInInBackground(username, password) { user, e ->
             if (user != null) {
                 currentParseUser = user
-                updateUserProfile()
+                updateLastLogin()
                 val intent = Intent(activity.applicationContext, HomeActivity::class.java)
                 activity.startActivity(intent)
             } else {
-                Toast.makeText(
-                    getApplicationContext(),
-                    "Wrong username/password",
-                    Toast.LENGTH_SHORT
-                ).show()
+                log.info(e.message)
+                showToast("Invalid username/password")
             }
         }
     }
 
-    fun updateUserProfile() {
-        updateUserProfile("lastLogin", null)
+    private fun updateLastLogin() {
+        val userProfile: UserProfile = (ParseUser.getCurrentUser()
+            .get("userProfilePtr") as UserProfile)
+            .fetch()
+        userProfile.lastLogin = Date(System.currentTimeMillis())
+        userProfile.saveInBackground()
     }
 
-    fun updateUserProfile(column: String, value: String?) {
-        if (value == null) {
-            val query = ParseQuery.getQuery<ParseObject>("UserProfile")
-
-            // Retrieve the object by id
-            val profileUserId = ParseUser.getCurrentUser().get("userProfileFk")!!.toString()
-            query.getInBackground(
-                profileUserId.substring(1, profileUserId.length - 1)) {
-                    entity, e -> if (e == null) {
-                        // Update the fields we want to
-                        entity.put(column, Date(System.currentTimeMillis()))
-
-                        // All other fields will remain the same
-                        entity.saveInBackground()
-                    } else {
-                        log.fine(e.message)
-                    }
+    fun getUserProfile(): UserProfile? {
+        val query = ParseQuery.getQuery<ParseObject>("UserProfile")
+        query.getInBackground(
+            this.currentParseUser?.getString("userProfileFk")) {
+                result, e -> if (e == null) {
+                    log.info(result.toString())
+                } else {
+                    log.fine(e.message)
                 }
             }
+        return null
+    }
+
+    private fun saveUserProfile(userProfile: UserProfile) {
+        userProfile.saveInBackground { e ->
+            if(e != null)
+                e.printStackTrace()
+            else {
+                setUserToProfileRelation(userProfile)
+            }
+        }
+    }
+
+    private fun setUserToProfileRelation(userProfile: UserProfile){
+        val currentUser = ParseUser.getCurrentUser()
+        if(currentUser != null) {
+            currentUser.put("userProfileFk", userProfile.objectId)
+            currentUser.put("userProfilePtr", userProfile)
+            currentUser.saveInBackground()
+        }
+        else log.info("currentUser is NULL")
     }
 
     fun logOut() {
         log.fine("logging out")
         currentParseUser = null
-        currentUserProfile = null
+        //currentUserProfile = null
         ParseUser.logOut()
     }
 
@@ -116,79 +111,12 @@ class ParseManager {
     fun userIsLoggedIn(): Boolean {
         return currentParseUser != null
     }
-/*
-    fun getUserProfile() : UserProfile? {
-        if(currentUserProfile == null)
-            retrieveUserProfile()
-        log.info("User:\n" + currentUserProfile.toString())
-        return currentUserProfile
-    }
 
-    fun retrieveUserProfile() {
-        val query = ParseQuery.getQuery<ParseObject>("UserProfile")
-        query.getInBackground((currentParseUser?.getJSONArray("userProfileId")?.
-            get(0)).toString()) { result, e -> if (e == null) {
-                currentUserProfile = UserProfile(result, currentParseUser!!.email)
-                log.info("User:\n" + currentUserProfile.toString())
-            } else {
-                log.info("Something went terribly wrong")
-            }
-        }
-    }
-    */
-
-    // TODO change to getInBackground
-    /*
-    fun getUserProfile(): UserProfile? {
-        if (currentUserProfile == null) {
-            val query = ParseQuery.getQuery<ParseObject>("UserProfile")
-            return UserProfile(
-                query.get((currentParseUser?.getJSONArray("userProfileId")?.get(0) as String?))
-            )
-        } else return currentUserProfile
-    }
-     */
-
-    private fun saveUserProfile(userProfile: UserProfile) {
-        userProfile.saveInBackground { e ->
-            if(e != null)
-                e.printStackTrace()
-            else updateUserUnique("userProfileFk", userProfile.objectId)
-        }
-    }
-    /*
-    fun createUserProfile(userProfile: UserProfile) {
-        val newUserProfile = ParseObject("UserProfile")
-        newUserProfile.addUnique("userId", userProfile.userId)
-        newUserProfile.put("username", userProfile.username)
-        newUserProfile.put("firstName", userProfile.firstName)
-        newUserProfile.put("lastName", userProfile.lastName)
-        newUserProfile.put("birthday", userProfile.birthday)
-        newUserProfile.put("sex", userProfile.sex)
-        newUserProfile.put("lastLogin", userProfile.lastLogin)
-        newUserProfile.put("groups", userProfile.groups)
-        // Saves the new object.
-        // Notice that the SaveCallback is totally optional!
-        newUserProfile.saveInBackground { e ->
-            if (e != null)
-                log.fine(e.message)
-            else
-                updateUserUnique("userProfileId", newUserProfile.objectId)
-        }
-    }
-    */
-
-
-    private fun updateUserUnique(column: String, userProfileId: String) {
-        val currentUser = ParseUser.getCurrentUser()
-        if (currentUser != null) {
-            // Other attributes than "email" will remain unchanged!
-            currentUser.addUnique(column, userProfileId)
-
-            // Saves the object.
-            // Notice that the SaveCallback is totally optional!
-            currentUser.saveInBackground {
-            }
-        }
+    private fun showToast(message: String) {
+        Toast.makeText(
+            getApplicationContext(),
+            message,
+            Toast.LENGTH_SHORT
+        ).show()
     }
 }

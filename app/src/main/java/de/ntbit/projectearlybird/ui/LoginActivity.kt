@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.appcompat.widget.Toolbar
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.parse.ParseUser
 import de.ntbit.projectearlybird.R
 
 import de.ntbit.projectearlybird.connection.ParseConnection
@@ -14,15 +15,16 @@ import kotlinx.android.synthetic.main.toolbar.*
 import java.util.logging.Logger
 
 class LoginActivity : AppCompatActivity() {
-    private var mFirebaseAnalytics: FirebaseAnalytics? = null
+
     private val log = Logger.getLogger(this::class.java.simpleName)
+    private var mFirebaseAnalytics: FirebaseAnalytics? = null
     private var parseManager: ParseManager? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         initialize()
-        parseManager?.logOut()
+        ParseUser.logOut()
     }
 
     private fun initialize() {
@@ -33,21 +35,23 @@ class LoginActivity : AppCompatActivity() {
         parseManager = ParseConnection.getParseManager()
 
         actLoginBtnLogin.setOnClickListener{
-            if(parseManager?.userIsLoggedIn()!!)
-                startActivity(Intent(this, HomeActivity::class.java))
-            else
-                if(actLoginEditTextUsername.text.toString() != "" &&
-                    actLoginEditTextPassword.text.toString() != "") {
-                    parseManager?.loginUser(
-                        actLoginEditTextUsername.text.toString(),
-                        actLoginEditTextPassword.text.toString(), this
-                    )
-                    log.fine("User " + actLoginEditTextUsername.text + " successfully logged in")
-                }
+            if(actLoginEditTextUsername.text.isNotBlank() &&
+                actLoginEditTextPassword.text.isNotBlank()) {
+                parseManager?.loginUser(
+                    actLoginEditTextUsername.text.toString(),
+                    actLoginEditTextPassword.text.toString(), this
+                )
+                log.fine("User " + actLoginEditTextUsername.text + " successfully logged in")
+            }
         }
 
         actLoginBtnRegister.setOnClickListener{
             startActivity(Intent(this, RegisterActivity::class.java))
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        parseManager?.logOut()
     }
 }
