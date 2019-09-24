@@ -41,6 +41,16 @@ class UserProfile : ParseObject() {
         set(lastLogin) {
             put("lastLogin", lastLogin)
         }
+    var messages: List<Message>
+        get() = getList<Message>("messages")!!
+        set(messages) {
+            put("messages", messages)
+        }
+    var groups: List<Group>
+        get() = getList<Group>("groups")!!
+        set(groups) {
+            put("groups", groups)
+        }
     var userPtr: ParseUser
         get() = getParseUser("userPtr")!!
         set(userPtr) {
@@ -57,6 +67,8 @@ class UserProfile : ParseObject() {
         this.lastName = "unset"
         this.birthday = Date(0)
         this.sex = "unset"
+        this.messages = ArrayList()
+        this.groups = ArrayList()
         this.lastLogin = Date(System.currentTimeMillis())
         this.userPtr = userPtr
     }

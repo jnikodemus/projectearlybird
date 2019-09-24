@@ -11,9 +11,11 @@
 
     <EditText
         android:id="@+id/actRegisterEditTxtUsername"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="60dp"
+        android:layout_marginStart="70dp"
+        android:layout_marginEnd="70dp"
         android:ems="15"
         android:hint="@string/app_username"
         android:inputType="textPersonName"
@@ -23,7 +25,7 @@
 
     <EditText
         android:id="@+id/actRegisterEditTxtEmail"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:ems="15"
@@ -36,7 +38,7 @@
 
     <EditText
         android:id="@+id/actRegisterEditTxtPassword"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:ems="15"
@@ -49,7 +51,7 @@
 
     <EditText
         android:id="@+id/actRegisterEditTxtPasswordRetry"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:ems="15"
