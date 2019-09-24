@@ -17,7 +17,7 @@ import com.parse.ParseQuery
 class ParseManager {
     private val log = Logger.getLogger(this::class.java.simpleName)
     private var currentParseUser: ParseUser? = null
-    //private var currentUserProfile: UserProfile? = null
+    private var currentUserProfile: UserProfile? = null
 
     fun registerUser(username: String, email: String, uHashedPassword: String): Boolean {
         val user = ParseUser()
@@ -56,11 +56,11 @@ class ParseManager {
     }
 
     private fun updateLastLogin() {
-        val userProfile: UserProfile = (ParseUser.getCurrentUser()
+        currentUserProfile = (ParseUser.getCurrentUser()
             .get("userProfilePtr") as UserProfile)
             .fetch()
-        userProfile.lastLogin = Date(System.currentTimeMillis())
-        userProfile.saveInBackground()
+        currentUserProfile?.lastLogin = Date(System.currentTimeMillis())
+        currentUserProfile?.saveInBackground()
     }
 
     fun getUserProfile(): UserProfile? {
@@ -96,19 +96,23 @@ class ParseManager {
         else log.info("currentUser is NULL")
     }
 
-    fun logOut() {
-        log.fine("logging out")
-        currentParseUser = null
-        //currentUserProfile = null
-        ParseUser.logOut()
-    }
-
     fun getCurrentUser(): ParseUser? {
         return currentParseUser
     }
 
+    fun getCurrentUserProfile(): UserProfile? {
+        return currentUserProfile
+    }
+
     fun userIsLoggedIn(): Boolean {
         return currentParseUser != null
+    }
+
+    fun logOut() {
+        log.fine("logging out")
+        currentParseUser = null
+        currentUserProfile = null
+        ParseUser.logOut()
     }
 
     private fun showToast(message: String) {
