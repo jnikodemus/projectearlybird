@@ -13,7 +13,7 @@
     <string name="app_check_input">Check your input!</string>
 
     <string name="menu_groups">Groups</string>
-    <string name="menu_messages">Messages</string>
+    <string name="menu_conversations">Conversations</string>
     <string name="menu_profile">Profile</string>
     <string name="menu_settings">Settings</string>
     <string name="menu_info">Information</string>
