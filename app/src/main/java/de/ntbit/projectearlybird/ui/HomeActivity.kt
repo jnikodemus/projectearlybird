@@ -83,6 +83,8 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         when(p0.itemId) {
             R.id.nav_groups -> supportFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, GroupsFragment()).commit()
+            R.id.nav_contacts -> supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, GroupsFragment()).commit()
             R.id.nav_messages -> supportFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, ConversationsFragment()).commit()
             R.id.nav_profile -> supportFragmentManager.beginTransaction()
