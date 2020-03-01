@@ -2,22 +2,24 @@ package de.ntbit.projectearlybird.manager
 
 import android.app.Activity
 import android.content.Intent
-import android.util.Log
 import android.widget.Toast
-import com.parse.*
+import com.parse.FindCallback
 import com.parse.Parse.getApplicationContext
+import com.parse.ParseException
+import com.parse.ParseObject
+import com.parse.ParseQuery
+import com.parse.ParseUser
 import de.ntbit.projectearlybird.model.UserProfile
 import de.ntbit.projectearlybird.ui.HomeActivity
 import java.util.*
 import java.util.logging.Logger
-import com.parse.ParseObject
-import com.parse.ParseQuery
 
 
 class ParseManager {
     private val log = Logger.getLogger(this::class.java.simpleName)
     private var currentParseUser: ParseUser? = null
     private var currentUserProfile: UserProfile? = null
+    private val allUsers: ArrayList<String> = ArrayList()
 
     fun registerUser(username: String, email: String, uHashedPassword: String): Boolean {
         val user = ParseUser()
@@ -48,6 +50,7 @@ class ParseManager {
                 updateLastLogin()
                 val intent = Intent(activity.applicationContext, HomeActivity::class.java)
                 activity.startActivity(intent)
+                initAllUserNames()
             } else {
                 log.fine(e.message)
                 showToast("Invalid username/password")
@@ -98,6 +101,32 @@ class ParseManager {
 
     fun getCurrentUser(): ParseUser? {
         return currentParseUser
+    }
+
+    /**
+     * Returns all registered usernames
+     *     @return ArrayList<String>
+     */
+    // TODO: Make observable?
+    private fun initAllUserNames() {
+        allUsers.clear()
+        val query = ParseUser.getQuery()
+        query.findInBackground { users, e ->
+            if (e == null) {
+                for (user in users) {
+                    log.fine("CUSTOMDEBUG " + user.username)
+                    if(!user.username.equals(currentParseUser?.username))
+                        allUsers.add(user.username)
+                }
+            } else {
+                log.fine("Error")
+            }
+        }
+    }
+
+    // TODO: merge into initAllUserNames()?
+    fun getAllUserNames(): ArrayList<String> {
+        return allUsers
     }
 
     fun getCurrentUserProfile(): UserProfile? {

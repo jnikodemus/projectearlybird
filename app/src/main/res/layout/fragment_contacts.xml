@@ -16,10 +16,11 @@
         android:focusable="true"
         android:src="@drawable/ic_add_black_foreground" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewContacts"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scrollbars="vertical" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewContacts"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical" />
+
 
 </RelativeLayout>
