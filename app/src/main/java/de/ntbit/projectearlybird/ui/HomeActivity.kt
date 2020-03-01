@@ -8,6 +8,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.recyclerview.widget.LinearLayoutManager
 
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.navigation_header.view.*
@@ -18,6 +19,7 @@ import com.google.android.material.navigation.NavigationView
 import de.ntbit.projectearlybird.connection.ParseConnection
 import de.ntbit.projectearlybird.manager.ParseManager
 import de.ntbit.projectearlybird.model.UserProfile
+import kotlinx.android.synthetic.main.fragment_contacts.*
 import java.util.logging.Logger
 
 
@@ -84,7 +86,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.nav_groups -> supportFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, GroupsFragment()).commit()
             R.id.nav_contacts -> supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, GroupsFragment()).commit()
+                .replace(R.id.fragment_container, ContactsFragment()).commit()
             R.id.nav_messages -> supportFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, ConversationsFragment()).commit()
             R.id.nav_profile -> supportFragmentManager.beginTransaction()

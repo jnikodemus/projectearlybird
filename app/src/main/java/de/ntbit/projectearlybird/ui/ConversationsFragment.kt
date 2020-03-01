@@ -20,10 +20,13 @@ class ConversationsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val constraintLayout = inflater.inflate(R.layout.fragment_conversations, container, false)
+        /* TODO: Inflate RecyclerView inside of constraintLayout?
+        Log.d("CUSTOMDEBUG", "" + frmtConversationsRecyclerView)
         val recyclerView = frmtConversationsRecyclerView
         linearLayoutManager = LinearLayoutManager(this.context)
         recyclerView.layoutManager = linearLayoutManager
         Log.d("CUSTOMDEBUG", "" + (recyclerView == null))
+         */
         return constraintLayout
     }
 }
