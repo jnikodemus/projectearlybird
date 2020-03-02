@@ -1,8 +1,11 @@
 package de.ntbit.projectearlybird.model
 
 import com.parse.ParseClassName
+import com.parse.ParseFile
 import com.parse.ParseObject
 import com.parse.ParseUser
+import de.ntbit.projectearlybird.R
+import java.io.File
 
 import java.util.Date
 import java.util.logging.Logger
@@ -56,6 +59,11 @@ class UserProfile : ParseObject() {
         set(userPtr) {
             put("userPtr", userPtr)
         }
+    var avatar: ParseFile
+        get() = getParseFile("avatar")!!
+        set(avatar) {
+            put("avatar", avatar)
+        }
 
     /* TODO add groups
     var groups: Collection<Group> = ArrayList()
@@ -71,6 +79,7 @@ class UserProfile : ParseObject() {
         this.groups = ArrayList()
         this.lastLogin = Date(System.currentTimeMillis())
         this.userPtr = userPtr
+        //this.avatar = ParseFile(File(R.drawable.ic_launcher_foreground.toString()))
     }
 
     /* TODO fetchIfNeeded()
