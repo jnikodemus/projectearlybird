@@ -1,9 +1,7 @@
 package de.ntbit.projectearlybird.helper
 
-import android.content.res.Resources
 import android.text.TextUtils
 import android.widget.EditText
-import de.ntbit.projectearlybird.R
 import java.util.logging.Logger
 
 class InputValidator {
@@ -19,6 +17,9 @@ class InputValidator {
             "[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-" +
             "\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])"
 
+    /**
+     * Gibt zurueck ob der Inhalt des uebergebenen [actRegisterEditTxtEmail] eine valide Email ist.
+     */
     fun isValidEmail(actRegisterEditTxtEmail: EditText) : Boolean {
         if(actRegisterEditTxtEmail.text.isNotBlank()
                 && !TextUtils.isEmpty(actRegisterEditTxtEmail.text.toString())
@@ -28,6 +29,10 @@ class InputValidator {
         return false
     }
 
+    /**
+     * Gibt zurueck ob der Inhalt des uebergebenen [actRegisterEditTxtUsername] mehr als 3 Zeichen
+     * und nicht leer (blank) ist.
+     */
     fun isValidUsername(actRegisterEditTxtUsername: EditText) : Boolean {
         if(actRegisterEditTxtUsername.text.isNotBlank() && actRegisterEditTxtUsername.text.length >= 4)
             return true
@@ -35,6 +40,10 @@ class InputValidator {
         return false
     }
 
+    /**
+     * Gibt zurueck ob der Inhalt des uebergebenen [actRegisterEditTxtPassword] dem [actRegisterEditTxtPasswordRetry]
+     * entspricht und nicht leer (blank) ist.
+     */
     fun isValidPassword(actRegisterEditTxtPassword: EditText, actRegisterEditTxtPasswordRetry: EditText) : Boolean {
         if(actRegisterEditTxtPassword.text.isNotBlank()
             && actRegisterEditTxtPassword.text.toString()

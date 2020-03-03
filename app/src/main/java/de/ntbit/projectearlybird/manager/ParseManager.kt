@@ -1,7 +1,9 @@
 package de.ntbit.projectearlybird.manager
 
 import android.app.Activity
+import android.content.ContentValues
 import android.content.Intent
+import android.database.sqlite.SQLiteOpenHelper
 import android.widget.Toast
 import com.parse.FindCallback
 import com.parse.Parse.getApplicationContext
@@ -9,6 +11,8 @@ import com.parse.ParseException
 import com.parse.ParseObject
 import com.parse.ParseQuery
 import com.parse.ParseUser
+import de.ntbit.projectearlybird.data.PebContract
+import de.ntbit.projectearlybird.data.PebDbHelper
 import de.ntbit.projectearlybird.model.UserProfile
 import de.ntbit.projectearlybird.ui.HomeActivity
 import java.util.*
@@ -21,7 +25,7 @@ class ParseManager {
     private var currentUserProfile: UserProfile? = null
     private val allUsers: ArrayList<String> = ArrayList()
 
-    fun registerUser(username: String, email: String, uHashedPassword: String): Boolean {
+    fun registerUser(username: String, email: String, uHashedPassword: String, dbHelper: PebDbHelper): Boolean {
         val user = ParseUser()
         var success = true
         user.username = username
@@ -33,6 +37,7 @@ class ParseManager {
                 val userProfile = UserProfile()
                 userProfile.fillUnset(user)
                 saveUserProfile(userProfile)
+                saveNewUserLocal(username, email, ParseUser.getCurrentUser().objectId, dbHelper)
                 showToast("Registration successful. Please verify your Email")
                 // TODO activate automatic login after successful registration
             } else {
@@ -41,6 +46,23 @@ class ParseManager {
             }
         }
         return success
+    }
+
+    /**
+     * Speichert den erfolgreich registrierten Benutzer mit notwendigen Daten in die lokale SQLite Datenbank.
+     * @param username der registrierte Benutzername
+     * @param email die angegebene Email-Adresse
+     * @param parseUserPtr der Pointer auf den entstandenen [ParseUser]
+     * @param dbHelper mitgegebene Instanz des [PebDbHelper]
+     */
+    private fun saveNewUserLocal(username: String, email: String, parseUserPtr: String, dbHelper: PebDbHelper) {
+        val db = dbHelper.writableDatabase
+        val values = ContentValues()
+        values.put(PebContract.UserEntry.COLUMN_USER_USERNAME, username)
+        values.put(PebContract.UserEntry.COLUMN_USER_EMAIL, email)
+        values.put(PebContract.UserEntry.COLUMN_USER_PARSE_USER, parseUserPtr)
+        values.put(PebContract.UserEntry.COLUMN_USER_CREATED_AT, System.currentTimeMillis())
+        db.insert(PebContract.UserEntry.TABLE_NAME, null, values)
     }
 
     fun loginUser(username: String, password: String, activity: Activity) {
