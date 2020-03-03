@@ -1,10 +1,15 @@
 package de.ntbit.projectearlybird.ui
 
+import android.content.ContentValues
+import android.database.sqlite.SQLiteDatabase
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.appcompat.widget.Toolbar
+import com.parse.ParseUser
 import de.ntbit.projectearlybird.R
 import de.ntbit.projectearlybird.connection.ParseConnection
+import de.ntbit.projectearlybird.data.PebContract
+import de.ntbit.projectearlybird.data.PebDbHelper
 import de.ntbit.projectearlybird.helper.InputValidator
 import de.ntbit.projectearlybird.manager.ParseManager
 import kotlinx.android.synthetic.main.activity_register.*
@@ -15,6 +20,7 @@ class RegisterActivity : AppCompatActivity() {
 
     private val log = Logger.getLogger(this::class.java.simpleName)
     private var parseManager: ParseManager? = null
+    private lateinit var mDbHelper: PebDbHelper
     private val inputValidator = InputValidator()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,11 +34,14 @@ class RegisterActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         parseManager = ParseConnection.getParseManager()
         actRegisterBtnRegister.setOnClickListener{
+            var username: String
+            var email: String
+            var password: String
             if(inputIsOK()) {
-                if(parseManager!!.registerUser(
-                    actRegisterEditTxtUsername.text.toString(),
-                    actRegisterEditTxtEmail.text.toString(),
-                    actRegisterEditTxtPassword.text.toString())) {
+                username = actRegisterEditTxtUsername.text.toString()
+                email = actRegisterEditTxtEmail.text.toString()
+                password = actRegisterEditTxtPassword.text.toString()
+                if(parseManager!!.registerUser(username, email, password, PebDbHelper(this))) {
                     log.fine("User successfully registered ")
                     finish()
                     // TODO activate automatic login after successful registration

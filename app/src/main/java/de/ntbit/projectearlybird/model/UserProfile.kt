@@ -4,8 +4,6 @@ import com.parse.ParseClassName
 import com.parse.ParseFile
 import com.parse.ParseObject
 import com.parse.ParseUser
-import de.ntbit.projectearlybird.R
-import java.io.File
 
 import java.util.Date
 import java.util.logging.Logger
@@ -34,10 +32,10 @@ class UserProfile : ParseObject() {
         set(birthday) {
             put("birthday", birthday)
         }
-    var sex: String
-        get() = getString("sex")!!
-        set(sex) {
-            put("sex", sex)
+    var gender: Int
+        get() = getInt("gender")!!
+        set(gender) {
+            put("gender", gender)
         }
     var lastLogin: Date
         get() = getDate("lastLogin")!!
@@ -74,7 +72,7 @@ class UserProfile : ParseObject() {
         this.firstName = "unset"
         this.lastName = "unset"
         this.birthday = Date(0)
-        this.sex = "unset"
+        this.gender = 2
         this.messages = ArrayList()
         this.groups = ArrayList()
         this.lastLogin = Date(System.currentTimeMillis())
@@ -87,7 +85,7 @@ class UserProfile : ParseObject() {
         return ("ID: " + this.objectId
                 + "\nName: " + this.firstName + " " + this.lastName
                 + "\nDay of birth: " + this.birthday
-                + "\nSex: " + this.sex
+                + "\nGender: " + this.gender
                 + "\nLast login: " + this.lastLogin.toString())
         //+ "\nGroups: " + this.groups)
     }
