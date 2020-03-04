@@ -3,11 +3,8 @@ package de.ntbit.projectearlybird.manager
 import android.app.Activity
 import android.content.ContentValues
 import android.content.Intent
-import android.database.sqlite.SQLiteOpenHelper
 import android.widget.Toast
-import com.parse.FindCallback
 import com.parse.Parse.getApplicationContext
-import com.parse.ParseException
 import com.parse.ParseObject
 import com.parse.ParseQuery
 import com.parse.ParseUser
@@ -21,8 +18,8 @@ import java.util.logging.Logger
 
 class ParseManager {
     private val log = Logger.getLogger(this::class.java.simpleName)
-    private var currentParseUser: ParseUser? = null
-    private var currentUserProfile: UserProfile? = null
+    private var mCurrentParseUser: ParseUser? = null
+    private var mCurrentUserProfile: UserProfile? = null
     private val allUsers: ArrayList<String> = ArrayList()
 
     fun registerUser(username: String, email: String, uHashedPassword: String, dbHelper: PebDbHelper): Boolean {
@@ -68,7 +65,7 @@ class ParseManager {
     fun loginUser(username: String, password: String, activity: Activity) {
         ParseUser.logInInBackground(username, password) { user, e ->
             if (user != null) {
-                currentParseUser = user
+                mCurrentParseUser = user
                 updateLastLogin()
                 val intent = Intent(activity.applicationContext, HomeActivity::class.java)
                 activity.startActivity(intent)
@@ -81,17 +78,17 @@ class ParseManager {
     }
 
     private fun updateLastLogin() {
-        currentUserProfile = (ParseUser.getCurrentUser()
+        mCurrentUserProfile = (ParseUser.getCurrentUser()
             .get("userProfilePtr") as UserProfile)
             .fetch()
-        currentUserProfile?.lastLogin = Date(System.currentTimeMillis())
-        currentUserProfile?.saveInBackground()
+        mCurrentUserProfile?.lastLogin = Date(System.currentTimeMillis())
+        mCurrentUserProfile?.saveInBackground()
     }
 
     fun getUserProfile(): UserProfile? {
         val query = ParseQuery.getQuery<ParseObject>("UserProfile")
         query.getInBackground(
-            this.currentParseUser?.getString("userProfileFk")) {
+            this.mCurrentParseUser?.getString("userProfileFk")) {
                 result, e -> if (e == null) {
                     log.fine(result.toString())
                 } else {
@@ -122,7 +119,7 @@ class ParseManager {
     }
 
     fun getCurrentUser(): ParseUser? {
-        return currentParseUser
+        return mCurrentParseUser
     }
 
     /**
@@ -137,7 +134,7 @@ class ParseManager {
             if (e == null) {
                 for (user in users) {
                     log.fine("CUSTOMDEBUG " + user.username)
-                    if(!user.username.equals(currentParseUser?.username))
+                    if(!user.username.equals(mCurrentParseUser?.username))
                         allUsers.add(user.username)
                 }
             } else {
@@ -152,17 +149,17 @@ class ParseManager {
     }
 
     fun getCurrentUserProfile(): UserProfile? {
-        return currentUserProfile
+        return mCurrentUserProfile
     }
 
     fun userIsLoggedIn(): Boolean {
-        return currentParseUser != null
+        return mCurrentParseUser != null
     }
 
     fun logOut() {
         log.fine("logging out")
-        currentParseUser = null
-        currentUserProfile = null
+        mCurrentParseUser = null
+        mCurrentUserProfile = null
         ParseUser.logOut()
     }
 
