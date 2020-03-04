@@ -33,7 +33,7 @@ class UserProfile : ParseObject() {
             put("birthday", birthday)
         }
     var gender: Int
-        get() = getInt("gender")!!
+        get() = getInt("gender")
         set(gender) {
             put("gender", gender)
         }

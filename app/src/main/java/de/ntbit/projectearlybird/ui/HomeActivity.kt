@@ -3,19 +3,15 @@ package de.ntbit.projectearlybird.ui
 import androidx.appcompat.app.AppCompatActivity
 
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuItem
 
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.navigation_header.view.*
 import kotlinx.android.synthetic.main.toolbar.*
-import kotlinx.android.synthetic.main.fragment_contacts.*
 
 import com.google.android.material.navigation.NavigationView
 
@@ -23,7 +19,6 @@ import de.ntbit.projectearlybird.R
 import de.ntbit.projectearlybird.connection.ParseConnection
 import de.ntbit.projectearlybird.manager.ParseManager
 import de.ntbit.projectearlybird.model.UserProfile
-import de.ntbit.projectearlybird.adapter.ContactAdapter
 
 import java.util.logging.Logger
 
@@ -31,8 +26,8 @@ import java.util.logging.Logger
 class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private val log = Logger.getLogger(this::class.java.simpleName)
-    private val parseManager: ParseManager? = ParseConnection.getParseManager()
-    private var userProfile: UserProfile? = null
+    private val mParseManager: ParseManager? = ParseConnection.getParseManager()
+    private var mUserProfile: UserProfile? = null
     private lateinit var drawer: DrawerLayout
     private lateinit var toggle: ActionBarDrawerToggle
 
@@ -75,9 +70,9 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun placeUserInformation() {
         val navigationHeader = navigation_menu_view.getHeaderView(0)
-        userProfile = parseManager?.getUserProfile()
-        navigationHeader.navigation_username.text = parseManager?.getCurrentUser()?.username
-        navigationHeader.navigation_email.text = parseManager?.getCurrentUser()?.email
+        mUserProfile = mParseManager?.getUserProfile()
+        navigationHeader.navigation_username.text = mParseManager?.getCurrentUser()?.username
+        navigationHeader.navigation_email.text = mParseManager?.getCurrentUser()?.email
     }
 
     private fun placeAppInformation() {

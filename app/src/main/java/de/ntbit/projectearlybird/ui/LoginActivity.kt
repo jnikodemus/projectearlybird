@@ -18,7 +18,7 @@ class LoginActivity : AppCompatActivity() {
 
     private val log = Logger.getLogger(this::class.java.simpleName)
     private var mFirebaseAnalytics: FirebaseAnalytics? = null
-    private var parseManager: ParseManager? = null
+    private var mParseManager: ParseManager? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,12 +32,12 @@ class LoginActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
         ParseConnection.initialize(this)
-        parseManager = ParseConnection.getParseManager()
+        mParseManager = ParseConnection.getParseManager()
 
         actLoginBtnLogin.setOnClickListener{
             if(actLoginEditTextUsername.text.isNotBlank() &&
                 actLoginEditTextPassword.text.isNotBlank()) {
-                parseManager?.loginUser(
+                mParseManager?.loginUser(
                     actLoginEditTextUsername.text.toString(),
                     actLoginEditTextPassword.text.toString(), this
                 )
@@ -52,6 +52,6 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        parseManager?.logOut()
+        mParseManager?.logOut()
     }
 }
