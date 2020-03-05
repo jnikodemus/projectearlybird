@@ -16,7 +16,7 @@ class ParseConnection {
         private var mParseManager: ParseManager? = null
 
         fun initialize(context: Context) : ParseManager? {
-            ParseObject.registerSubclass(UserProfile::class.java)
+            //ParseObject.registerSubclass(UserProfile::class.java)
             ParseObject.registerSubclass(Message::class.java)
             Parse.initialize(
                 Parse.Configuration.Builder(context)

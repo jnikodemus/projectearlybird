@@ -41,6 +41,7 @@ class LoginActivity : AppCompatActivity() {
                     actLoginEditTextUsername.text.toString(),
                     actLoginEditTextPassword.text.toString(), this
                 )
+                
                 log.fine("User " + actLoginEditTextUsername.text + " successfully logged in")
             }
         }

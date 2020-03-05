@@ -28,7 +28,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private val log = Logger.getLogger(this::class.java.simpleName)
     private val mParseManager: ParseManager? = ParseConnection.getParseManager()
-    private var mUserProfile: UserProfile? = null
+    //private var mUserProfile: UserProfile? = null
     private lateinit var drawer: DrawerLayout
     private lateinit var toggle: ActionBarDrawerToggle
 
@@ -71,11 +71,11 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun placeUserInformation() {
         val navigationHeader = navigation_menu_view.getHeaderView(0)
-        mUserProfile = mParseManager?.getUserProfile()
+        //mUserProfile = mParseManager?.getUserProfile()
         navigationHeader.navigation_username.text = mParseManager?.getCurrentUser()?.username
         navigationHeader.navigation_email.text = mParseManager?.getCurrentUser()?.email
-        var localUserManager = LocalUserManager()
-        localUserManager.getCurrentUser(this)
+        val localUserManager = LocalUserManager()
+        val currentUser = localUserManager.getCurrentUser(this)
     }
 
     private fun placeAppInformation() {

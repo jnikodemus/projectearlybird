@@ -36,7 +36,7 @@ class RegisterActivity : AppCompatActivity() {
                 username = actRegisterEditTxtUsername.text.toString()
                 email = actRegisterEditTxtEmail.text.toString()
                 password = actRegisterEditTxtPassword.text.toString()
-                if(mParseManager!!.registerUser(username, email, password, PebDbHelper(this))) {
+                if(mParseManager!!.registerUser(username, email, password, this)) {
                     log.fine("User successfully registered ")
                     finish()
                     // TODO activate automatic login after successful registration
