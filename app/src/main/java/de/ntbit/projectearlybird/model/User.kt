@@ -12,25 +12,40 @@ import java.util.logging.Logger
     https://guides.codepath.com/android/Building-Data-driven-Apps-with-Parse
  */
 
-@ParseClassName("UserProfile")
-class UserProfile : ParseObject() {
+@ParseClassName("User")
+class User : ParseUser() {
 
     private val log = Logger.getLogger(this::class.java.simpleName)
 
-    var firstName: String
-        get() = getString("firstName")!!
+    var firstName: String?
+        get() = getString("firstName")
         set(firstName) {
-            put("firstName", firstName)
+            if (firstName != null) {
+                put("firstName", firstName)
+            }
         }
-    var lastName: String
-        get() = getString("lastName")!!
+
+    var emailVerified: Boolean?
+        get() = getBoolean("emailVerified")
+        set(emailVerified) {
+            if (emailVerified != null) {
+                put("emailVerified", emailVerified)
+            }
+        }
+
+    var lastName: String?
+        get() = getString("lastName")
         set(lastName) {
-            put("lastName", lastName)
+            if (lastName != null) {
+                put("lastName", lastName)
+            }
         }
-    var birthday: Date
-        get() = getDate("birthday")!!
+    var birthday: Date?
+        get() = getDate("birthday")
         set(birthday) {
-            put("birthday", birthday)
+            if (birthday != null) {
+                put("birthday", birthday)
+            }
         }
     var gender: Int
         get() = getInt("gender")
@@ -42,25 +57,25 @@ class UserProfile : ParseObject() {
         set(lastLogin) {
             put("lastLogin", lastLogin)
         }
+    /*
     var messages: List<Message>
         get() = getList<Message>("messages")!!
         set(messages) {
             put("messages", messages)
         }
+     */
     var groups: List<Group>
         get() = getList<Group>("groups")!!
         set(groups) {
             put("groups", groups)
         }
-    var userPtr: ParseUser
-        get() = getParseUser("userPtr")!!
-        set(userPtr) {
-            put("userPtr", userPtr)
-        }
-    var avatar: ParseFile
-        get() = getParseFile("avatar")!!
+
+    var avatar: ParseFile?
+        get() = getParseFile("avatar")
         set(avatar) {
-            put("avatar", avatar)
+            if (avatar != null) {
+                put("avatar", avatar)
+            }
         }
 
     /* TODO add groups
@@ -68,15 +83,14 @@ class UserProfile : ParseObject() {
         private set
      */
 
-    fun fillUnset(userPtr: ParseUser) {
+    fun fillUnset() {
         this.firstName = "unset"
         this.lastName = "unset"
         this.birthday = Date(0)
         this.gender = 2
-        this.messages = ArrayList()
+        //this.messages = ArrayList()
         this.groups = ArrayList()
         this.lastLogin = Date(System.currentTimeMillis())
-        this.userPtr = userPtr
         //this.avatar = ParseFile(File(R.drawable.ic_launcher_foreground.toString()))
     }
 

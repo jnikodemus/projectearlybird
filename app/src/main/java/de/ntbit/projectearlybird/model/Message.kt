@@ -1,30 +1,39 @@
 package de.ntbit.projectearlybird.model
 
+import com.parse.ParseACL
 import com.parse.ParseClassName
 import com.parse.ParseObject
-import java.util.*
+import java.util.Date
 
 @ParseClassName("Message")
-class Message : ParseObject() {
+class Message : ParseObject {
+    private var sender: String? = null
+    private var recipient: String? = null
+    private var threadId: String? = null
+    private var body: String? = null
+    private var timestamp: Date? = null
+    private lateinit var parseACL: ParseACL
 
-    var sender: UserProfile
-        get() = getParseObject("sender") as UserProfile
-        set(sender) {
-            put("sender", sender)
-        }
-    var receiver: UserProfile
-        get() = getParseObject("receiver") as UserProfile
-        set(receiver) {
-            put("receiver", receiver)
-        }
-    var content: String
-        get() = getString("content")!!
-        set(content) {
-            put("content", content)
-        }
-    var timeStamp: Date
-        get() = getDate("timeStamp")!!
-        set(timeStamp) {
-            put("timeStamp", timeStamp)
-        }
+    internal constructor() : super() {}
+    internal constructor(
+        sender: String?,
+        recipient: String?,
+        threadId: String?,
+        body: String?,
+        timestamp: Date?
+    ) {
+        this.sender = sender
+        this.recipient = recipient
+        this.threadId = threadId
+        this.body = body
+        this.timestamp = timestamp
+        this.parseACL = ParseACL()
+        this.parseACL.setReadAccess(recipient, true)
+        this.parseACL.setWriteAccess(sender, true)
+    }
+
+    fun print() {
+        println("Sender: $sender Recipient: $recipient Thread: $threadId " +
+                "Timestamp: $timestamp ACL: $parseACL Body: $body")
+    }
 }

@@ -1,25 +1,21 @@
 package de.ntbit.projectearlybird.ui
 
-import androidx.appcompat.app.AppCompatActivity
-
 import android.os.Bundle
 import android.view.MenuItem
-
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-
-import kotlinx.android.synthetic.main.activity_home.*
-import kotlinx.android.synthetic.main.navigation_header.view.*
-import kotlinx.android.synthetic.main.toolbar.*
-
 import com.google.android.material.navigation.NavigationView
-
+import com.parse.ParseObject
 import de.ntbit.projectearlybird.R
 import de.ntbit.projectearlybird.connection.ParseConnection
 import de.ntbit.projectearlybird.manager.ParseManager
-import de.ntbit.projectearlybird.model.UserProfile
-
+import de.ntbit.projectearlybird.model.Message
+import kotlinx.android.synthetic.main.activity_home.*
+import kotlinx.android.synthetic.main.navigation_header.view.*
+import kotlinx.android.synthetic.main.toolbar.*
+import java.util.*
 import java.util.logging.Logger
 
 
@@ -27,7 +23,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private val log = Logger.getLogger(this::class.java.simpleName)
     private val mParseManager: ParseManager? = ParseConnection.getParseManager()
-    private var mUserProfile: UserProfile? = null
+    //private var mUserProfile: UserProfile? = null
     private lateinit var drawer: DrawerLayout
     private lateinit var toggle: ActionBarDrawerToggle
 
@@ -48,7 +44,6 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         placeAppInformation()
         /* Select and inflate specific Fragment */
         selectMenuItem(0)
-
     }
 
     private fun placeToolbar() {
@@ -70,7 +65,6 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun placeUserInformation() {
         val navigationHeader = navigation_menu_view.getHeaderView(0)
-        mUserProfile = mParseManager?.getUserProfile()
         navigationHeader.navigation_username.text = mParseManager?.getCurrentUser()?.username
         navigationHeader.navigation_email.text = mParseManager?.getCurrentUser()?.email
     }
@@ -106,4 +100,5 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             drawer.closeDrawer(GravityCompat.START)
         else super.onBackPressed()
     }
+
 }
