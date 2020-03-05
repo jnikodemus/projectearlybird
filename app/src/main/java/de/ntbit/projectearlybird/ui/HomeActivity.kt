@@ -3,6 +3,7 @@ package de.ntbit.projectearlybird.ui
 import androidx.appcompat.app.AppCompatActivity
 
 import android.os.Bundle
+import android.view.Menu
 import android.view.MenuItem
 
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -107,4 +108,14 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             drawer.closeDrawer(GravityCompat.START)
         else super.onBackPressed()
     }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        return super.onOptionsItemSelected(item)
+    }//todo
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.top_right_menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
 }
