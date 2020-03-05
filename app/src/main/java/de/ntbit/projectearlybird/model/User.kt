@@ -57,11 +57,13 @@ class User : ParseUser() {
         set(lastLogin) {
             put("lastLogin", lastLogin)
         }
+    /*
     var messages: List<Message>
         get() = getList<Message>("messages")!!
         set(messages) {
             put("messages", messages)
         }
+     */
     var groups: List<Group>
         get() = getList<Group>("groups")!!
         set(groups) {
@@ -86,7 +88,7 @@ class User : ParseUser() {
         this.lastName = "unset"
         this.birthday = Date(0)
         this.gender = 2
-        this.messages = ArrayList()
+        //this.messages = ArrayList()
         this.groups = ArrayList()
         this.lastLogin = Date(System.currentTimeMillis())
         //this.avatar = ParseFile(File(R.drawable.ic_launcher_foreground.toString()))
