@@ -5,7 +5,6 @@ import de.ntbit.projectearlybird.manager.ParseManager
 import com.parse.Parse
 import java.util.logging.Logger
 import com.parse.ParseObject
-import de.ntbit.projectearlybird.model.Message
 
 
 class ParseConnection {
@@ -16,7 +15,7 @@ class ParseConnection {
 
         fun initialize(context: Context) : ParseManager? {
             //ParseObject.registerSubclass(UserProfile::class.java)
-            ParseObject.registerSubclass(Message::class.java)
+            //ParseObject.registerSubclass(Message::class.java)
             Parse.initialize(
                 Parse.Configuration.Builder(context)
                     .applicationId("pYIuK6xeAMNkL2IYpOEWIiAoacyr8jEyTja8LqxV")
