@@ -86,8 +86,7 @@ class ParseManager {
         val valuesToInsert = ContentValues()
         valuesToInsert.put(PebContract.UserEntry.COLUMN_USER_IS_ONLINE, 1)
         userDatabase.update(PebContract.UserEntry.TABLE_NAME, valuesToInsert,
-            "username = $username", null
-        )
+            "username = $username", null)
     }
 
     private fun updateLastLogin() {
