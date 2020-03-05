@@ -13,10 +13,10 @@ class ParseConnection {
 
     companion object {
         private val log = Logger.getLogger(this::class.java.simpleName)
-        private var parseManager: ParseManager? = null
+        private var mParseManager: ParseManager? = null
 
         fun initialize(context: Context) : ParseManager? {
-            ParseObject.registerSubclass(UserProfile::class.java)
+            //ParseObject.registerSubclass(UserProfile::class.java)
             ParseObject.registerSubclass(Message::class.java)
             Parse.initialize(
                 Parse.Configuration.Builder(context)
@@ -25,12 +25,12 @@ class ParseConnection {
                     .server("https://parseapi.back4app.com")
                     .build()
             )
-            parseManager = ParseManager()
-            return parseManager
+            mParseManager = ParseManager()
+            return mParseManager
         }
 
         fun getParseManager() : ParseManager? {
-            return parseManager
+            return mParseManager
         }
     }
 }

@@ -9,9 +9,14 @@
             android:title="@string/menu_groups" />
 
         <item
+            android:id="@+id/nav_contacts"
+            android:icon="@drawable/ic_group_black"
+            android:title="@string/menu_contacts" />
+
+        <item
             android:id="@+id/nav_messages"
             android:icon="@drawable/ic_message_black"
-            android:title="@string/menu_messages" />
+            android:title="@string/menu_conversations" />
 
         <item
             android:id="@+id/nav_profile"

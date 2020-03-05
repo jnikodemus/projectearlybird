@@ -13,19 +13,22 @@ import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.navigation_header.view.*
 import kotlinx.android.synthetic.main.toolbar.*
 
-import de.ntbit.projectearlybird.R
 import com.google.android.material.navigation.NavigationView
+
+import de.ntbit.projectearlybird.R
 import de.ntbit.projectearlybird.connection.ParseConnection
+import de.ntbit.projectearlybird.manager.LocalUserManager
 import de.ntbit.projectearlybird.manager.ParseManager
 import de.ntbit.projectearlybird.model.UserProfile
+
 import java.util.logging.Logger
 
 
 class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private val log = Logger.getLogger(this::class.java.simpleName)
-    private val parseManager: ParseManager? = ParseConnection.getParseManager()
-    private var userProfile: UserProfile? = null
+    private val mParseManager: ParseManager? = ParseConnection.getParseManager()
+    //private var mUserProfile: UserProfile? = null
     private lateinit var drawer: DrawerLayout
     private lateinit var toggle: ActionBarDrawerToggle
 
@@ -46,6 +49,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         placeAppInformation()
         /* Select and inflate specific Fragment */
         selectMenuItem(0)
+
     }
 
     private fun placeToolbar() {
@@ -67,9 +71,11 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun placeUserInformation() {
         val navigationHeader = navigation_menu_view.getHeaderView(0)
-        userProfile = parseManager?.getUserProfile()
-        navigationHeader.navigation_username.text = parseManager?.getCurrentUser()?.username
-        navigationHeader.navigation_email.text = parseManager?.getCurrentUser()?.email
+        //mUserProfile = mParseManager?.getUserProfile()
+        navigationHeader.navigation_username.text = mParseManager?.getCurrentUser()?.username
+        navigationHeader.navigation_email.text = mParseManager?.getCurrentUser()?.email
+        val localUserManager = LocalUserManager()
+        val currentUser = localUserManager.getCurrentUser(this)
     }
 
     private fun placeAppInformation() {
@@ -83,8 +89,10 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         when(p0.itemId) {
             R.id.nav_groups -> supportFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, GroupsFragment()).commit()
+            R.id.nav_contacts -> supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, ContactsFragment()).commit()
             R.id.nav_messages -> supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, MessagesFragment()).commit()
+                .replace(R.id.fragment_container, ConversationsFragment()).commit()
             R.id.nav_profile -> supportFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, ProfileFragment()).commit()
             R.id.nav_settings -> supportFragmentManager.beginTransaction()
