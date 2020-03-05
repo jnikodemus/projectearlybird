@@ -17,9 +17,7 @@ import com.google.android.material.navigation.NavigationView
 
 import de.ntbit.projectearlybird.R
 import de.ntbit.projectearlybird.connection.ParseConnection
-import de.ntbit.projectearlybird.manager.LocalUserManager
 import de.ntbit.projectearlybird.manager.ParseManager
-import de.ntbit.projectearlybird.model.UserProfile
 
 import java.util.logging.Logger
 
@@ -74,8 +72,8 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         //mUserProfile = mParseManager?.getUserProfile()
         navigationHeader.navigation_username.text = mParseManager?.getCurrentUser()?.username
         navigationHeader.navigation_email.text = mParseManager?.getCurrentUser()?.email
-        val localUserManager = LocalUserManager()
-        val currentUser = localUserManager.getCurrentUser(this)
+        //val localUserManager = LocalUserManager()
+        //val currentUser = localUserManager.getCurrentUser(this)
     }
 
     private fun placeAppInformation() {

@@ -9,8 +9,7 @@ import com.parse.Parse.getApplicationContext
 import com.parse.ParseUser
 import de.ntbit.projectearlybird.data.PebContract
 import de.ntbit.projectearlybird.data.PebDbHelper
-import de.ntbit.projectearlybird.model.User
-import de.ntbit.projectearlybird.model.UserProfile
+//import de.ntbit.projectearlybird.model.UserProfile
 import de.ntbit.projectearlybird.ui.HomeActivity
 import java.util.*
 import java.util.logging.Logger
@@ -70,7 +69,7 @@ class ParseManager {
             if (user != null) {
                 mCurrentParseUser = user
                 updateLastLogin()
-                setUserOnline(user.username, activity.applicationContext)
+                //setUserOnline(user.username, activity.applicationContext)
                 val intent = Intent(activity.applicationContext, HomeActivity::class.java)
                 activity.startActivity(intent)
                 initAllUserNames()
@@ -86,7 +85,9 @@ class ParseManager {
         val userDatabase = mDbHelper.writableDatabase
         val valuesToInsert = ContentValues()
         valuesToInsert.put(PebContract.UserEntry.COLUMN_USER_IS_ONLINE, 1)
-        userDatabase.insert(PebContract.UserEntry.TABLE_NAME, null, valuesToInsert)
+        userDatabase.update(PebContract.UserEntry.TABLE_NAME, valuesToInsert,
+            "username = $username", null
+        )
     }
 
     private fun updateLastLogin() {
@@ -95,6 +96,7 @@ class ParseManager {
         mCurrentUser.saveInBackground()
     }
 
+    /*
     @Deprecated("UserProfile is being deleted")
     private fun setUserToProfileRelation(userProfile: UserProfile){
         val currentUser = ParseUser.getCurrentUser()
@@ -105,6 +107,7 @@ class ParseManager {
         }
         else log.info("currentUser is NULL")
     }
+     */
 
     fun getCurrentUser(): ParseUser? {
         return mCurrentParseUser
