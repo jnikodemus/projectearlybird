@@ -6,7 +6,6 @@ import com.parse.Parse
 import java.util.logging.Logger
 import com.parse.ParseObject
 import de.ntbit.projectearlybird.model.Message
-import de.ntbit.projectearlybird.model.UserProfile
 
 
 class ParseConnection {
