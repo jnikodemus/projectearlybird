@@ -143,6 +143,10 @@ class ParseManager {
         }
     }
 
+    fun getMessages(threadId: String) {
+
+    }
+
     /*
     @Deprecated("UserProfile is being deleted")
     private fun setUserToProfileRelation(userProfile: UserProfile){
