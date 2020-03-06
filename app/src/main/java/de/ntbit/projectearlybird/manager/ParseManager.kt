@@ -112,30 +112,32 @@ class ParseManager {
         mCurrentUser.saveInBackground()
     }
 
-    fun saveMessage(msg: Message) {
-        msg.saveInBackground { msg.print() }
-    }
-
-    fun sendMessage(msg: String) {
+    /**
+     * Sends a Message setting sender, ACL and timestamp
+     * TODO: set threadId and recipient dynamically
+     */
+    fun sendMessage(message: String) {
         val sender = ParseUser.getCurrentUser().objectId
         val entity = ParseObject.create("Message")
 
-        entity.put("recipient", "THoiv0O5rk")
-        entity.put("sender", "bQxXCbsAur")
+        entity.put("recipient", "bQxXCbsAur")
+        entity.put("sender", sender)
         entity.put("threadId", "bQxQCssAdr")
         entity.put("timestamp", Date(System.currentTimeMillis()))
-        entity.put("body", msg)
+        entity.put("body", message)
 
         val parseACL = ParseACL()
-        parseACL.setReadAccess("THoiv0O5rk", true)
-        parseACL.setWriteAccess("bQxXCbsAur", true)
+        parseACL.setReadAccess("bQxXCbsAur", true)
+        parseACL.setWriteAccess(sender, true)
 
         entity.put("ACL", parseACL)
-        // Saves the new object.
-        // Notice that the SaveCallback is totally optional!
-
-        // Saves the new object.
-        // Notice that the SaveCallback is totally optional!
+        /*
+         * Saves the new object.
+         * Notice that the SaveCallback is totally optional!
+         *
+         * Saves the new object.
+         * Notice that the SaveCallback is totally optional!
+         */
         entity.saveInBackground {
             // Here you can handle errors, if thrown. Otherwise, "e" should be null
         }
