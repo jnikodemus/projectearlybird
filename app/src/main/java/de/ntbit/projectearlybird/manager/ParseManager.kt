@@ -144,7 +144,7 @@ class ParseManager {
     }
 
     fun getMessages(threadId: String) {
-
+        val query = ParseQuery<ParseObject>("Message")
     }
 
     /*
