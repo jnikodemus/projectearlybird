@@ -1,13 +1,18 @@
 package de.ntbit.projectearlybird.ui
 
+import android.content.Intent
+import androidx.appcompat.app.AppCompatActivity
+
 import android.os.Bundle
+import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
-import com.parse.ParseObject
+import com.parse.ParseUser
+
 import de.ntbit.projectearlybird.R
 import de.ntbit.projectearlybird.connection.ParseConnection
 import de.ntbit.projectearlybird.manager.ParseManager
@@ -99,6 +104,27 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if (drawer.isDrawerOpen(GravityCompat.START))
             drawer.closeDrawer(GravityCompat.START)
         else super.onBackPressed()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId) {
+            R.id.new_message -> {
+                val intent = Intent(this, NewMessageActivity::class.java)
+                startActivity(intent)
+            }
+            R.id.sign_out -> {
+                ParseUser.logOut()
+                val intent = Intent(this,  LoginActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.top_right_menu, menu)
+        return super.onCreateOptionsMenu(menu)
     }
 
 }
