@@ -1,5 +1,6 @@
 package de.ntbit.projectearlybird.ui
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 
 import android.os.Bundle
@@ -15,6 +16,7 @@ import kotlinx.android.synthetic.main.navigation_header.view.*
 import kotlinx.android.synthetic.main.toolbar.*
 
 import com.google.android.material.navigation.NavigationView
+import com.parse.ParseUser
 
 import de.ntbit.projectearlybird.R
 import de.ntbit.projectearlybird.connection.ParseConnection
@@ -110,8 +112,20 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId) {
+            R.id.new_message -> {
+                val intent = Intent(this, NewMessageActivity::class.java)
+                startActivity(intent)
+            }
+            R.id.sign_out -> {
+                ParseUser.logOut()
+                val intent = Intent(this,  LoginActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
+            }
+        }
         return super.onOptionsItemSelected(item)
-    }//todo
+    }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.top_right_menu, menu)
