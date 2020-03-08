@@ -12,6 +12,7 @@ public class Test {
     private static List<ParseObject> allObjects = new ArrayList<ParseObject>();
 
     public void test() {
+        /*
         final ParseQuery parseQuery = new ParseQuery("Message");
         parseQuery.setLimit(1000);
         parseQuery.findInBackground(getAllObjects());
@@ -39,5 +40,7 @@ public class Test {
                 }
             };
         }
+
+         */
     }
 }
