@@ -1,15 +1,16 @@
 package de.ntbit.projectearlybird.manager
 
+//import de.ntbit.projectearlybird.model.UserProfile
 import android.app.Activity
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.widget.Toast
+import com.parse.*
 import com.parse.Parse.getApplicationContext
-import com.parse.ParseUser
 import de.ntbit.projectearlybird.data.PebContract
 import de.ntbit.projectearlybird.data.PebDbHelper
-//import de.ntbit.projectearlybird.model.UserProfile
+import de.ntbit.projectearlybird.model.Message
 import de.ntbit.projectearlybird.ui.HomeActivity
 import java.util.*
 import java.util.logging.Logger
@@ -17,7 +18,7 @@ import java.util.logging.Logger
 
 class ParseManager {
     private val log = Logger.getLogger(this::class.java.simpleName)
-    private var mCurrentParseUser: ParseUser? = null
+    //private var mCurrentParseUser: ParseUser? = null
     //private var mCurrentUserProfile: UserProfile? = null
     private val allUsers: ArrayList<String> = ArrayList()
 
@@ -62,14 +63,16 @@ class ParseManager {
         valuesToInsert.put(PebContract.UserEntry.COLUMN_USER_AVATAR, user.getBytes("avatar"))
         valuesToInsert.put(PebContract.UserEntry.COLUMN_USER_IS_ONLINE, PebContract.UserEntry.IS_OFFLINE)
         userDatabase.insert(PebContract.UserEntry.TABLE_NAME, null, valuesToInsert)
+        userDatabase.close()
     }
 
     fun loginUser(username: String, password: String, activity: Activity) {
         ParseUser.logInInBackground(username, password) { user, e ->
             if (user != null) {
-                mCurrentParseUser = user
                 updateLastLogin()
                 //setUserOnline(user.username, activity.applicationContext)
+                deleteLocalUsers(username, activity.applicationContext)
+                syncLocalUser(username, activity.applicationContext)
                 val intent = Intent(activity.applicationContext, HomeActivity::class.java)
                 activity.startActivity(intent)
                 initAllUserNames()
@@ -80,20 +83,68 @@ class ParseManager {
         }
     }
 
+    private fun deleteLocalUsers(username: String, ctx: Context) {
+        val mDbHelper = PebDbHelper(ctx)
+        val userDatabase = mDbHelper.writableDatabase
+        val whereClause = PebContract.UserEntry.COLUMN_USER_USERNAME + "!=?"
+        val whereArgs = arrayOf("0")
+        userDatabase.delete(PebContract.UserEntry.TABLE_NAME, whereClause, whereArgs)
+        userDatabase.close()
+    }
+
+    private fun syncLocalUser(username: String, ctx: Context) {
+        saveUserLocal(ParseUser.getCurrentUser(), ctx)
+    }
+
     private fun setUserOnline(username: String, ctx: Context) {
         val mDbHelper = PebDbHelper(ctx)
         val userDatabase = mDbHelper.writableDatabase
         val valuesToInsert = ContentValues()
-        valuesToInsert.put(PebContract.UserEntry.COLUMN_USER_IS_ONLINE, 1)
+        valuesToInsert.put(PebContract.UserEntry.COLUMN_USER_IS_ONLINE, PebContract.UserEntry.IS_ONLINE)
         userDatabase.update(PebContract.UserEntry.TABLE_NAME, valuesToInsert,
-            "username = $username", null
-        )
+            "username=?", arrayOf(username))
+        userDatabase.close()
     }
 
     private fun updateLastLogin() {
         val mCurrentUser = ParseUser.getCurrentUser()
-        mCurrentUser.put("lastLogin", Date(System.currentTimeMillis()))
+        mCurrentUser.put(PebContract.UserEntry.COLUMN_USER_LASTLOGIN, Date(System.currentTimeMillis()))
         mCurrentUser.saveInBackground()
+    }
+
+    /**
+     * Sends a Message setting sender, ACL and timestamp
+     * TODO: set threadId and recipient dynamically
+     */
+    fun sendMessage(message: String) {
+        val sender = ParseUser.getCurrentUser().objectId
+        val entity = ParseObject.create("Message")
+
+        entity.put("recipient", "bQxXCbsAur")
+        entity.put("sender", sender)
+        entity.put("threadId", "bQxQCssAdr")
+        entity.put("timestamp", Date(System.currentTimeMillis()))
+        entity.put("body", message)
+
+        val parseACL = ParseACL()
+        parseACL.setReadAccess("bQxXCbsAur", true)
+        parseACL.setWriteAccess(sender, true)
+
+        entity.put("ACL", parseACL)
+        /*
+         * Saves the new object.
+         * Notice that the SaveCallback is totally optional!
+         *
+         * Saves the new object.
+         * Notice that the SaveCallback is totally optional!
+         */
+        entity.saveInBackground {
+            // Here you can handle errors, if thrown. Otherwise, "e" should be null
+        }
+    }
+
+    fun getMessages(threadId: String) {
+        val query = ParseQuery<ParseObject>("Message")
     }
 
     /*
@@ -109,8 +160,8 @@ class ParseManager {
     }
      */
 
-    fun getCurrentUser(): ParseUser? {
-        return mCurrentParseUser
+    fun getCurrentUser(): ParseUser {
+        return ParseUser.getCurrentUser()
     }
 
     /**
@@ -125,7 +176,7 @@ class ParseManager {
             if (e == null) {
                 for (user in users) {
                     log.fine("CUSTOMDEBUG " + user.username)
-                    if(!user.username.equals(mCurrentParseUser?.username))
+                    if(!user.username.equals(getCurrentUser().username))
                         allUsers.add(user.username)
                 }
             } else {
@@ -139,13 +190,14 @@ class ParseManager {
         return allUsers
     }
 
+    // TODO: Check what exactly is isAuthenticated
     fun userIsLoggedIn(): Boolean {
-        return mCurrentParseUser != null
+        return getCurrentUser().isAuthenticated
     }
 
     fun logOut() {
         log.fine("logging out")
-        mCurrentParseUser = null
+        //mCurrentParseUser = null
         //mCurrentUserProfile = null
         ParseUser.logOut()
     }

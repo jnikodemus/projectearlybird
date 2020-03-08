@@ -19,7 +19,7 @@ class PebDbHelper(context: Context?) :
     }
 
     companion object {
-        const val DATABASE_VERSION = 1
+        const val DATABASE_VERSION = 2
         const val DATABASE_NAME = "peb.db"
         const val SQL_TEXT_TYPE = " TEXT"
         const val SQL_INTEGER_TYPE = " INTEGER"
