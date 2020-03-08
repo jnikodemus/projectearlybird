@@ -11,6 +11,7 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Item
 import de.ntbit.projectearlybird.R
+import de.ntbit.projectearlybird.connection.ParseConnection
 import de.ntbit.projectearlybird.model.User
 import kotlinx.android.synthetic.main.activity_new_message.*
 
@@ -20,16 +21,19 @@ class NewMessageActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_new_message)
 
+        val mParseManager = ParseConnection.getParseManager()
+
         supportActionBar?.title = "Select User"
 
         val adapter = GroupAdapter<GroupieViewHolder>()
-        adapter.add(UserItem())
-        adapter.add(UserItem())
-        adapter.add(UserItem())
+
+        if (mParseManager != null) {
+            for (name in mParseManager.getAllUserNames())
+                adapter.add(UserItem())
+        }
         rv_newMessage_user.adapter = adapter
 
-        fetchParseUser()
-
+        //fetchParseUser()
     }
 
     private fun fetchParseUser() {
