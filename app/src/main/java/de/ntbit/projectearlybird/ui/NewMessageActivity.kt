@@ -12,9 +12,11 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Item
 import de.ntbit.projectearlybird.R
+import de.ntbit.projectearlybird.connection.ParseConnection
 import de.ntbit.projectearlybird.manager.ParseManager
 import de.ntbit.projectearlybird.model.User
 import kotlinx.android.synthetic.main.activity_new_message.*
+import kotlinx.android.synthetic.main.new_message_user_row.view.*
 
 class NewMessageActivity : AppCompatActivity() {
 
@@ -30,7 +32,7 @@ class NewMessageActivity : AppCompatActivity() {
 
         if (mParseManager != null) {
             for (name in mParseManager.getAllUserNames())
-                adapter.add(UserItem())
+                adapter.add(UserItem(name))
         }
         rv_newMessage_user.adapter = adapter
 
@@ -49,9 +51,9 @@ class NewMessageActivity : AppCompatActivity() {
     }
 }
 
-class UserItem: Item<GroupieViewHolder>(){
+class UserItem(val username: String): Item<GroupieViewHolder>(){
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
-
+        viewHolder.itemView.textView_new_message.text = username
     }
 
     override fun getLayout(): Int {

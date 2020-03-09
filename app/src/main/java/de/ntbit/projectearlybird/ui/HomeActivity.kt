@@ -1,7 +1,11 @@
 package de.ntbit.projectearlybird.ui
 
+import android.app.Activity
+import android.app.Instrumentation
 import android.content.Intent
+import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.Menu
 import android.view.MenuItem
 
@@ -18,7 +22,9 @@ import de.ntbit.projectearlybird.connection.ParseConnection
 import de.ntbit.projectearlybird.manager.ParseManager
 import de.ntbit.projectearlybird.model.Message
 import kotlinx.android.synthetic.main.activity_home.*
+import kotlinx.android.synthetic.main.navigation_header.*
 import kotlinx.android.synthetic.main.navigation_header.view.*
+import kotlinx.android.synthetic.main.navigation_header.view.select_image_button
 import kotlinx.android.synthetic.main.toolbar.*
 import java.util.*
 import java.util.logging.Logger
@@ -36,6 +42,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
         initialize()
+
     }
 
     private fun initialize() {
@@ -49,6 +56,27 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         placeAppInformation()
         /* Select and inflate specific Fragment */
         selectMenuItem(0)
+        /*Hier stuerzt die App ab*/
+        //setListenerOnSelectPhoto()
+    }
+
+    private fun setListenerOnSelectPhoto() {
+        select_image_button.setOnClickListener{
+            val intent = Intent(Intent.ACTION_PICK)
+            intent.type = "image/*"
+            startActivityForResult(intent, 0)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 0 && resultCode == Activity.RESULT_OK && data != null) {
+            val uri = data?.data
+            val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, uri)
+            val bitmapDrawable = BitmapDrawable(bitmap)
+            select_image_button.setBackgroundDrawable(bitmapDrawable)
+        }
+
     }
 
     private fun placeToolbar() {
