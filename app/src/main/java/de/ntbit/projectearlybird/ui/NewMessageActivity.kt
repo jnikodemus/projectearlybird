@@ -2,6 +2,7 @@ package de.ntbit.projectearlybird.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.parse.ParseObject
@@ -11,7 +12,7 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Item
 import de.ntbit.projectearlybird.R
-import de.ntbit.projectearlybird.connection.ParseConnection
+import de.ntbit.projectearlybird.manager.ParseManager
 import de.ntbit.projectearlybird.model.User
 import kotlinx.android.synthetic.main.activity_new_message.*
 
@@ -33,11 +34,18 @@ class NewMessageActivity : AppCompatActivity() {
         }
         rv_newMessage_user.adapter = adapter
 
-        //fetchParseUser()
+        fetchAllParseUser()
+
     }
 
-    private fun fetchParseUser() {
-        //todo
+    private fun fetchAllParseUser() {
+        val parseManager = ParseManager()
+        val ref = parseManager.getAllUserNames()
+
+        ref.forEach{
+            Log.d("New Message", it.toString())
+        }
+
     }
 }
 
