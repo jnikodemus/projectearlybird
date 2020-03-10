@@ -8,10 +8,13 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
+import android.widget.Toast.LENGTH_LONG
 
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
+import androidx.core.view.get
 import androidx.drawerlayout.widget.DrawerLayout
 
 import com.google.android.material.navigation.NavigationView
@@ -55,8 +58,8 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         placeAppInformation()
         /* Select and inflate specific Fragment */
         selectMenuItem(0)
-        /* Hier stuerzt die App ab */
-        setListenerOnSelectPhoto()
+        /* Moved to Row 105 */
+        //setListenerOnSelectPhoto()
     }
 
     private fun setListenerOnSelectPhoto() {
@@ -99,6 +102,9 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val navigationHeader = navigation_menu_view.getHeaderView(0)
         navigationHeader.navigation_username.text = mParseManager?.getCurrentUser()?.username
         navigationHeader.navigation_email.text = mParseManager?.getCurrentUser()?.email
+        navigationHeader.select_image_button.setOnClickListener { val intent = Intent(Intent.ACTION_PICK)
+            intent.type = "image/*"
+            startActivityForResult(intent, 0)}
     }
 
     private fun placeAppInformation() {
