@@ -10,7 +10,6 @@ import com.parse.*
 import com.parse.Parse.getApplicationContext
 import de.ntbit.projectearlybird.data.PebContract
 import de.ntbit.projectearlybird.data.PebDbHelper
-import de.ntbit.projectearlybird.model.Message
 import de.ntbit.projectearlybird.ui.HomeActivity
 import java.util.*
 import java.util.logging.Logger
@@ -20,7 +19,8 @@ class ParseManager {
     private val log = Logger.getLogger(this::class.java.simpleName)
     //private var mCurrentParseUser: ParseUser? = null
     //private var mCurrentUserProfile: UserProfile? = null
-    private val allUsers: ArrayList<String> = ArrayList()
+    private val allUsernames: ArrayList<String> = ArrayList()
+    private val allUsers: ArrayList<ParseUser> = ArrayList()
 
     fun registerUser(username: String, email: String, uHashedPassword: String, ctx: Context): Boolean {
         val user = ParseUser()
@@ -76,6 +76,7 @@ class ParseManager {
                 val intent = Intent(activity.applicationContext, HomeActivity::class.java)
                 activity.startActivity(intent)
                 initAllUserNames()
+                initAllUsers()
             } else {
                 log.fine(e.message)
                 showToast("Invalid username/password")
@@ -142,9 +143,10 @@ class ParseManager {
          * Saves the new object.
          * Notice that the SaveCallback is totally optional!
          */
-        entity.saveInBackground {
+        //entity.saveInBackground {
             // Here you can handle errors, if thrown. Otherwise, "e" should be null
-        }
+        //}
+        entity.saveEventually {  }
     }
 
     fun getMessages(threadId: String) {
@@ -174,14 +176,30 @@ class ParseManager {
      */
     // TODO: Make observable?
     private fun initAllUserNames() {
-        allUsers.clear()
+        allUsernames.clear()
         val query = ParseUser.getQuery()
         query.findInBackground { users, e ->
             if (e == null) {
                 for (user in users) {
                     log.fine("CUSTOMDEBUG " + user.username)
                     if(!user.username.equals(getCurrentUser().username))
-                        allUsers.add(user.username)
+                        allUsernames.add(user.username)
+                }
+            } else {
+                log.fine("Error")
+            }
+        }
+    }
+
+    private fun initAllUsers() {
+        allUsers.clear()
+        val query = ParseUser.getQuery()
+        query.findInBackground { users, e ->
+            if (e == null) {
+                for (user in users) {
+                    log.fine("CUSTOMDEBUG - User: " + user.username + " Id: " + user.objectId)
+                    if(!user.objectId.equals(getCurrentUser().objectId))
+                        allUsers.add(user)
                 }
             } else {
                 log.fine("Error")
@@ -191,6 +209,10 @@ class ParseManager {
 
     // TODO: merge into initAllUserNames()?
     fun getAllUserNames(): ArrayList<String> {
+        return allUsernames
+    }
+
+    fun getAllUsers(): Collection<ParseUser> {
         return allUsers
     }
 
