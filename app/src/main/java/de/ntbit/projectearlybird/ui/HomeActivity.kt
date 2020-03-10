@@ -76,8 +76,8 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if (requestCode == 0 && resultCode == Activity.RESULT_OK && data != null) {
             val uri = data.data
             val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, uri)
-            val bitmapDrawable = BitmapDrawable(bitmap)
-            select_image_button.setBackgroundDrawable(bitmapDrawable)
+            val bitmapDrawable = BitmapDrawable(resources, bitmap)
+            select_image_button.background = bitmapDrawable
         }
     }
 

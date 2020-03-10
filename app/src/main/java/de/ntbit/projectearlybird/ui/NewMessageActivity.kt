@@ -1,5 +1,6 @@
 package de.ntbit.projectearlybird.ui
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -24,36 +25,34 @@ class NewMessageActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_new_message)
 
-        val mParseManager = ParseConnection.getParseManager()
+
 
         supportActionBar?.title = "Select User"
 
-        val adapter = GroupAdapter<GroupieViewHolder>()
+        fetchAllParseUser()
+    }
 
+    private fun fetchAllParseUser() {
+        val adapter = GroupAdapter<GroupieViewHolder>()
+        val mParseManager = ParseConnection.getParseManager()
         if (mParseManager != null) {
             for (name in mParseManager.getAllUserNames())
                 adapter.add(UserItem(name))
         }
-        rv_newMessage_user.adapter = adapter
+        adapter.setOnItemClickListener { item, view ->
+            val intent = Intent(view.context, ChatActivity::class.java)
+            startActivity(intent)
 
-        fetchAllParseUser()
-
-    }
-
-    private fun fetchAllParseUser() {
-        val parseManager = ParseManager()
-        val ref = parseManager.getAllUserNames()
-
-        ref.forEach{
-            Log.d("New Message", it.toString())
+            finish()
         }
-
+        rv_newMessage_user.adapter = adapter
     }
 }
 
 class UserItem(val username: String): Item<GroupieViewHolder>(){
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         viewHolder.itemView.textView_new_message.text = username
+        /*Bilder zu den usernames*/
     }
 
     override fun getLayout(): Int {
