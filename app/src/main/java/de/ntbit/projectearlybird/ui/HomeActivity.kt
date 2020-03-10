@@ -1,13 +1,20 @@
 package de.ntbit.projectearlybird.ui
 
+import android.app.Activity
+import android.app.Instrumentation
 import android.content.Intent
+import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
+import android.widget.Toast.LENGTH_LONG
 
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
+import androidx.core.view.get
 import androidx.drawerlayout.widget.DrawerLayout
 
 import com.google.android.material.navigation.NavigationView
@@ -18,7 +25,9 @@ import de.ntbit.projectearlybird.connection.ParseConnection
 import de.ntbit.projectearlybird.manager.ParseManager
 import de.ntbit.projectearlybird.model.Message
 import kotlinx.android.synthetic.main.activity_home.*
+import kotlinx.android.synthetic.main.navigation_header.*
 import kotlinx.android.synthetic.main.navigation_header.view.*
+import kotlinx.android.synthetic.main.navigation_header.view.select_image_button
 import kotlinx.android.synthetic.main.toolbar.*
 import java.util.*
 import java.util.logging.Logger
@@ -49,6 +58,27 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         placeAppInformation()
         /* Select and inflate specific Fragment */
         selectMenuItem(0)
+        /* Moved to Row 105 */
+        //setListenerOnSelectPhoto()
+    }
+
+    private fun setListenerOnSelectPhoto() {
+        /* select_image_button ist hier noch null. Inflate ausfuehren? */
+        select_image_button.setOnClickListener{
+            val intent = Intent(Intent.ACTION_PICK)
+            intent.type = "image/*"
+            startActivityForResult(intent, 0)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 0 && resultCode == Activity.RESULT_OK && data != null) {
+            val uri = data.data
+            val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, uri)
+            val bitmapDrawable = BitmapDrawable(resources, bitmap)
+            select_image_button.background = bitmapDrawable
+        }
     }
 
     private fun placeToolbar() {
@@ -72,6 +102,9 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val navigationHeader = navigation_menu_view.getHeaderView(0)
         navigationHeader.navigation_username.text = mParseManager?.getCurrentUser()?.username
         navigationHeader.navigation_email.text = mParseManager?.getCurrentUser()?.email
+        navigationHeader.select_image_button.setOnClickListener { val intent = Intent(Intent.ACTION_PICK)
+            intent.type = "image/*"
+            startActivityForResult(intent, 0)}
     }
 
     private fun placeAppInformation() {

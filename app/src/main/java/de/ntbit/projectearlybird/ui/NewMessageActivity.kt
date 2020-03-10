@@ -1,7 +1,9 @@
 package de.ntbit.projectearlybird.ui
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.parse.ParseObject
@@ -12,8 +14,10 @@ import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Item
 import de.ntbit.projectearlybird.R
 import de.ntbit.projectearlybird.connection.ParseConnection
+import de.ntbit.projectearlybird.manager.ParseManager
 import de.ntbit.projectearlybird.model.User
 import kotlinx.android.synthetic.main.activity_new_message.*
+import kotlinx.android.synthetic.main.new_message_user_row.view.*
 
 class NewMessageActivity : AppCompatActivity() {
 
@@ -21,29 +25,34 @@ class NewMessageActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_new_message)
 
-        val mParseManager = ParseConnection.getParseManager()
+
 
         supportActionBar?.title = "Select User"
 
-        val adapter = GroupAdapter<GroupieViewHolder>()
-
-        if (mParseManager != null) {
-            for (name in mParseManager.getAllUserNames())
-                adapter.add(UserItem())
-        }
-        rv_newMessage_user.adapter = adapter
-
-        //fetchParseUser()
+        fetchAllParseUser()
     }
 
-    private fun fetchParseUser() {
-        //todo
+    private fun fetchAllParseUser() {
+        val adapter = GroupAdapter<GroupieViewHolder>()
+        val mParseManager = ParseConnection.getParseManager()
+        if (mParseManager != null) {
+            for (name in mParseManager.getAllUserNames())
+                adapter.add(UserItem(name))
+        }
+        adapter.setOnItemClickListener { item, view ->
+            val intent = Intent(view.context, ChatActivity::class.java)
+            startActivity(intent)
+
+            finish()
+        }
+        rv_newMessage_user.adapter = adapter
     }
 }
 
-class UserItem: Item<GroupieViewHolder>(){
+class UserItem(val username: String): Item<GroupieViewHolder>(){
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
-
+        viewHolder.itemView.textView_new_message.text = username
+        /*Bilder zu den usernames*/
     }
 
     override fun getLayout(): Int {

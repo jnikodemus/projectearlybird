@@ -117,17 +117,21 @@ class ParseManager {
      * TODO: set threadId and recipient dynamically
      */
     fun sendMessage(message: String) {
+        sendMessage(message, "bQxXCbsAur")
+    }
+
+    fun sendMessage(message: String, recipient: String) {
         val sender = ParseUser.getCurrentUser().objectId
         val entity = ParseObject.create("Message")
 
-        entity.put("recipient", "bQxXCbsAur")
+        entity.put("recipient", recipient)
         entity.put("sender", sender)
-        entity.put("threadId", "bQxQCssAdr")
+        entity.put("threadId", sender + recipient)
         entity.put("timestamp", Date(System.currentTimeMillis()))
         entity.put("body", message)
 
         val parseACL = ParseACL()
-        parseACL.setReadAccess("bQxXCbsAur", true)
+        parseACL.setReadAccess(recipient, true)
         parseACL.setWriteAccess(sender, true)
 
         entity.put("ACL", parseACL)
