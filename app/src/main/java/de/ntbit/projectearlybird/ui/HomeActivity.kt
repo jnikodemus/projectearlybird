@@ -42,7 +42,6 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
         initialize()
-
     }
 
     private fun initialize() {
@@ -56,11 +55,12 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         placeAppInformation()
         /* Select and inflate specific Fragment */
         selectMenuItem(0)
-        /*Hier stuerzt die App ab*/
-        //setListenerOnSelectPhoto()
+        /* Hier stuerzt die App ab */
+        setListenerOnSelectPhoto()
     }
 
     private fun setListenerOnSelectPhoto() {
+        /* select_image_button ist hier noch null. Inflate ausfuehren? */
         select_image_button.setOnClickListener{
             val intent = Intent(Intent.ACTION_PICK)
             intent.type = "image/*"
@@ -71,12 +71,11 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 0 && resultCode == Activity.RESULT_OK && data != null) {
-            val uri = data?.data
+            val uri = data.data
             val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, uri)
             val bitmapDrawable = BitmapDrawable(bitmap)
             select_image_button.setBackgroundDrawable(bitmapDrawable)
         }
-
     }
 
     private fun placeToolbar() {
