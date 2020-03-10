@@ -36,9 +36,10 @@ class NewMessageActivity : AppCompatActivity() {
         val adapter = GroupAdapter<GroupieViewHolder>()
         val mParseManager = ParseConnection.getParseManager()
         if (mParseManager != null) {
-            for (name in mParseManager.getAllUserNames())
-                adapter.add(UserItem(name))
+            for (user in mParseManager.getAllUsers())
+                adapter.add(UserItem(user.username))
         }
+        /* TODO: send selected UserItem/User to intent */
         adapter.setOnItemClickListener { item, view ->
             val intent = Intent(view.context, ChatActivity::class.java)
             startActivity(intent)
