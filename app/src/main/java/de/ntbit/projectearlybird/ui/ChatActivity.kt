@@ -2,31 +2,72 @@ package de.ntbit.projectearlybird.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Message
+import com.parse.Parse
+import com.parse.ParseException
+import com.parse.ParseObject
+import com.parse.ParseUser
+import com.parse.SaveCallback
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Item
 import de.ntbit.projectearlybird.R
+import de.ntbit.projectearlybird.manager.ParseManager
 import kotlinx.android.synthetic.main.activity_chat.*
+import kotlinx.android.synthetic.main.chat_contact_row.view.*
+import kotlinx.android.synthetic.main.chat_self_row.view.*
 
 class ChatActivity : AppCompatActivity() {
+
+    companion object{
+        val TAG = "Chatlog"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat)
-        supportActionBar?.title = "Chat"
+
+        val user = intent.getParcelableExtra<ParseUser>(NewMessageActivity.USER_KEY)
+        supportActionBar?.title = user.username
+
+        createTestLayout()
+
+        bt_chat_send.setOnClickListener {
+            sendMessage()
+        }
+
+    }
+
+    private fun sendMessage(){
+        val parseManager = ParseManager()
+        val text = et_chat_enterMessage.text.toString()
+        /*val message = ParseObject.create("Message")
+        message.put("body", text)
+        message.saveInBackground()*/
+
+        parseManager.sendMessage(text, intent.getParcelableExtra<ParseUser>(NewMessageActivity.USER_KEY).username)
+
+
+
+        et_chat_enterMessage.text = null
+
+
+    }
+
+    private fun createTestLayout() {
         val adapter = GroupAdapter<GroupieViewHolder>()
-        adapter.add(ChatFromItem())
-        adapter.add(ChatSelfItem())
-        adapter.add(ChatFromItem())
-        adapter.add(ChatSelfItem())
+        adapter.add(ChatFromItem("FROM MESSAGEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE"))
+        adapter.add(ChatSelfItem("YESSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS SELF MESSAGE"))
+        adapter.add(ChatFromItem("YEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE"))
+        adapter.add(ChatSelfItem("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"))
 
         rv_chat_log.adapter = adapter
     }
 }
 
-class ChatFromItem: Item<GroupieViewHolder>(){
+class ChatFromItem(val text: String): Item<GroupieViewHolder>(){
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
-
+        viewHolder.itemView.tv_contact_row.text = text
     }
 
     override fun getLayout(): Int {
@@ -34,9 +75,9 @@ class ChatFromItem: Item<GroupieViewHolder>(){
     }
 }
 
-class ChatSelfItem: Item<GroupieViewHolder>(){
+class ChatSelfItem(val text: String): Item<GroupieViewHolder>(){
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
-
+        viewHolder.itemView.tv_self_row.text = text
     }
 
     override fun getLayout(): Int {

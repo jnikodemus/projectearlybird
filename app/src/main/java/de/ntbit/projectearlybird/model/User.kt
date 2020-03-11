@@ -1,9 +1,11 @@
 package de.ntbit.projectearlybird.model
 
+import android.os.Parcelable
 import com.parse.ParseClassName
 import com.parse.ParseFile
 import com.parse.ParseObject
 import com.parse.ParseUser
+import kotlinx.android.parcel.Parcelize
 
 import java.util.Date
 import java.util.logging.Logger
@@ -12,8 +14,9 @@ import java.util.logging.Logger
     https://guides.codepath.com/android/Building-Data-driven-Apps-with-Parse
  */
 
+@Parcelize
 @ParseClassName("User")
-class User : ParseUser() {
+class User : ParseUser(), Parcelable {
 
     private val log = Logger.getLogger(this::class.java.simpleName)
 

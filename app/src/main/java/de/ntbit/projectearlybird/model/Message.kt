@@ -32,6 +32,26 @@ class Message : ParseObject {
         this.parseACL.setWriteAccess(sender, true)
     }
 
+    fun setSender(sender: String){
+        put("sender", sender)
+    }
+
+    fun setRecipient(recipient: String){
+        put("recipient", recipient)
+    }
+
+    fun setThreadId(threadId: String){
+        put("threadId", threadId)
+    }
+
+    fun setBody(body: String){
+        put("body", body)
+    }
+
+    fun setTimestamp(timestamp: Date){
+        put("timestamp", timestamp)
+    }
+
     fun print() {
         println("Sender: $sender Recipient: $recipient Thread: $threadId " +
                 "Timestamp: $timestamp ACL: $parseACL Body: $body")

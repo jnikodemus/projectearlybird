@@ -10,6 +10,10 @@ apply plugin: 'io.fabric'
 
 apply plugin: 'org.jetbrains.dokka-android'
 
+androidExtensions {
+    experimental = true
+}
+
 android {
     compileSdkVersion 28
     defaultConfig {
