@@ -26,10 +26,13 @@ class ConversationsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        /*
         buttonSendMessage.setOnClickListener{
             if(editTextMessage.text.isNotBlank() && editTextMessage.text.isNotEmpty())
             mParseManager?.sendMessage(editTextMessage.text.toString())
             editTextMessage.text.clear()
         }
+        
+         */
     }
 }

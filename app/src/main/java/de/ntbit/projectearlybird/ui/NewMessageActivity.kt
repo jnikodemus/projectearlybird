@@ -32,16 +32,22 @@ class NewMessageActivity : AppCompatActivity() {
         fetchAllParseUser()
     }
 
+    companion object{
+        val USER_KEY = "USER_KEY"
+    }
+
     private fun fetchAllParseUser() {
         val adapter = GroupAdapter<GroupieViewHolder>()
         val mParseManager = ParseConnection.getParseManager()
         if (mParseManager != null) {
             for (user in mParseManager.getAllUsers())
-                adapter.add(UserItem(user.username))
+                adapter.add(UserItem(user))
         }
         /* TODO: send selected UserItem/User to intent */
         adapter.setOnItemClickListener { item, view ->
+            val userItem = item as UserItem
             val intent = Intent(view.context, ChatActivity::class.java)
+            intent.putExtra(USER_KEY, userItem.user)
             startActivity(intent)
 
             finish()
@@ -50,9 +56,9 @@ class NewMessageActivity : AppCompatActivity() {
     }
 }
 
-class UserItem(val username: String): Item<GroupieViewHolder>(){
+class UserItem(val user: ParseUser): Item<GroupieViewHolder>(){
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
-        viewHolder.itemView.textView_new_message.text = username
+        viewHolder.itemView.textView_new_message.text = user.username
         /*Bilder zu den usernames*/
     }
 
