@@ -2,12 +2,7 @@ package de.ntbit.projectearlybird.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Message
-import com.parse.Parse
-import com.parse.ParseException
-import com.parse.ParseObject
 import com.parse.ParseUser
-import com.parse.SaveCallback
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Item
@@ -41,17 +36,8 @@ class ChatActivity : AppCompatActivity() {
     private fun sendMessage(){
         val parseManager = ParseManager()
         val text = et_chat_enterMessage.text.toString()
-        /*val message = ParseObject.create("Message")
-        message.put("body", text)
-        message.saveInBackground()*/
-
-        parseManager.sendMessage(text, intent.getParcelableExtra<ParseUser>(NewMessageActivity.USER_KEY).username)
-
-
-
-        et_chat_enterMessage.text = null
-
-
+        parseManager.sendMessage(text, intent.getParcelableExtra<ParseUser>(NewMessageActivity.USER_KEY))
+        et_chat_enterMessage.text.clear()
     }
 
     private fun createTestLayout() {
