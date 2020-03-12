@@ -21,8 +21,8 @@ class ParseConnection {
             Parse.enableLocalDatastore(context)
             Parse.initialize(
                 Parse.Configuration.Builder(context)
-                    .applicationId("pYIuK6xeAMNkL2IYpOEWIiAoacyr8jEyTja8LqxV")
-                    .clientKey("mpF0Gq4uUR9e7qSgFBefH6UPgJxNdaQyHxEg73tH")
+                    .applicationId("7J46i6wiq0gQTeF91ArANMUYVjBHcogRrzJ5EICh")
+                    .clientKey("V9flekGgzi3v4neeRS7nj2BikZ921YfGvpe6kOyp")
                     .server("https://parseapi.back4app.com")
                     .build()
             )
