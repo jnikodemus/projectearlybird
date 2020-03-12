@@ -2,12 +2,16 @@ package de.ntbit.projectearlybird.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.parse.FindCallback
+import com.parse.ParseException
+import com.parse.ParseQuery
 import com.parse.ParseUser
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Item
 import de.ntbit.projectearlybird.R
 import de.ntbit.projectearlybird.manager.ParseManager
+import de.ntbit.projectearlybird.model.Message
 import kotlinx.android.synthetic.main.activity_chat.*
 import kotlinx.android.synthetic.main.chat_contact_row.view.*
 import kotlinx.android.synthetic.main.chat_self_row.view.*
@@ -18,19 +22,34 @@ class ChatActivity : AppCompatActivity() {
         val TAG = "Chatlog"
     }
 
+    val adapter = GroupAdapter<GroupieViewHolder>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat)
 
+        rv_chat_log.adapter = adapter
+
         val user = intent.getParcelableExtra<ParseUser>(NewMessageActivity.USER_KEY)
         supportActionBar?.title = user.username
 
-        createTestLayout()
+        //createTestLayout()
 
         bt_chat_send.setOnClickListener {
             sendMessage()
         }
 
+    }
+
+    private fun listenForMessage(){
+        val query = ParseQuery.getQuery(Message::class.java)
+        query.orderByDescending("timestamp")
+        query.findInBackground { messages, e ->
+            if(e == null){
+                for(message in messages)
+                    adapter.add(ChatFromItem(message?.getBody()))
+            }
+        }
     }
 
     private fun sendMessage(){
@@ -51,7 +70,7 @@ class ChatActivity : AppCompatActivity() {
     }
 }
 
-class ChatFromItem(val text: String): Item<GroupieViewHolder>(){
+class ChatFromItem(val text: String?): Item<GroupieViewHolder>(){
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         viewHolder.itemView.tv_contact_row.text = text
     }
@@ -61,7 +80,7 @@ class ChatFromItem(val text: String): Item<GroupieViewHolder>(){
     }
 }
 
-class ChatSelfItem(val text: String): Item<GroupieViewHolder>(){
+class ChatSelfItem(val text: String?): Item<GroupieViewHolder>(){
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         viewHolder.itemView.tv_self_row.text = text
     }

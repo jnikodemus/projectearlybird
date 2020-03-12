@@ -52,6 +52,10 @@ class Message : ParseObject {
         put("timestamp", timestamp)
     }
 
+    fun getBody() : String?{
+        return this.body
+    }
+
     fun print() {
         println("Sender: $sender Recipient: $recipient Thread: $threadId " +
                 "Timestamp: $timestamp ACL: $parseACL Body: $body")
