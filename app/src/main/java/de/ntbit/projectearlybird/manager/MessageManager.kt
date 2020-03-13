@@ -11,21 +11,19 @@ import kotlin.collections.ArrayList
 
 class MessageManager {
     private val log = Logger.getLogger(this::class.java.simpleName)
-    private val mUserManager: UserManager = ManagerFactory.getUserManager()
 
     /**
      * Sends a String as Message to [recipient] if [message] isNotEmpty() and [message] isNotBlank()
      */
     fun sendMessage(message: String, recipient: ParseUser) {
-        if(message.isNotBlank() && message.isNotEmpty()) {
+        //if(message.isNotBlank() && message.isNotEmpty()) {
             /* TODO: Change to
-             *  val entity = Message()
-             *  and message.saveEventually()
+             *  val entity = Message() and message.saveEventually()
              *  if Parse has fixed it
              * TODO: Change threadId to something more useful
              */
             val entity = ParseObject.create("Message")
-            val sender = mUserManager.getCurrentUser().objectId
+            val sender = ParseUser.getCurrentUser().objectId
             val recipient = recipient.objectId
             val threadId = sender + recipient
             val now = System.currentTimeMillis()
@@ -41,7 +39,27 @@ class MessageManager {
             entity.put("ACL", acl)
 
             entity.saveEventually{}
-        }
+        //}
+    }
+
+    fun sendMessageN(message: String, recipient: ParseUser) {
+        val sender = ParseUser.getCurrentUser().objectId
+        val recipient = recipient.objectId
+        val entity = ParseObject.create("Message")
+
+        entity.put("recipient", recipient)
+        entity.put("sender", sender)
+        entity.put("threadId", sender + recipient)
+        entity.put("timestamp", Date(System.currentTimeMillis()))
+        entity.put("body", message)
+
+        val parseACL = ParseACL()
+        parseACL.setReadAccess(recipient, true)
+        parseACL.setWriteAccess(sender, true)
+
+        entity.put("ACL", parseACL)
+
+        entity.saveEventually {  }
     }
 
     fun getMessagesByThreadId(threadId: String) : Collection<Message> {
