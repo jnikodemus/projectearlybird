@@ -16,7 +16,7 @@ class MessageManager {
      * Sends a String as Message to [recipient] if [message] isNotEmpty() and [message] isNotBlank()
      */
     fun sendMessage(message: String, recipient: ParseUser) {
-        //if(message.isNotBlank() && message.isNotEmpty()) {
+        if(message.isNotBlank() && message.isNotEmpty()) {
             /* TODO: Change to
              *  val entity = Message() and message.saveEventually()
              *  if Parse has fixed it
@@ -26,7 +26,7 @@ class MessageManager {
             val sender = ParseUser.getCurrentUser().objectId
             val recipient = recipient.objectId
             val threadId = sender + recipient
-            val now = System.currentTimeMillis()
+            val now = Date(System.currentTimeMillis())
             val acl = ParseACL()
             acl.setReadAccess(recipient, true)
             acl.setWriteAccess(sender, true)
@@ -38,30 +38,19 @@ class MessageManager {
             entity.put("timestamp", now)
             entity.put("ACL", acl)
 
-            entity.saveEventually{}
-        //}
+            entity.saveEventually {}
+
+            /*
+            val mess = Message(sender,recipient,threadId,message,now)
+            mess.print()
+            mess.saveEventually{ e -> println("CUSTOMDEBUG: MESSAGE_Exception $e") }
+            */
+        }
     }
 
-    fun sendMessageN(message: String, recipient: ParseUser) {
-        val sender = ParseUser.getCurrentUser().objectId
-        val recipient = recipient.objectId
-        val entity = ParseObject.create("Message")
-
-        entity.put("recipient", recipient)
-        entity.put("sender", sender)
-        entity.put("threadId", sender + recipient)
-        entity.put("timestamp", Date(System.currentTimeMillis()))
-        entity.put("body", message)
-
-        val parseACL = ParseACL()
-        parseACL.setReadAccess(recipient, true)
-        parseACL.setWriteAccess(sender, true)
-
-        entity.put("ACL", parseACL)
-
-        entity.saveEventually {  }
-    }
-
+    /**
+     * Returns all Messages as [Collection]<[Message]> for a given [threadId]
+     */
     fun getMessagesByThreadId(threadId: String) : Collection<Message> {
         val query = ParseQuery.getQuery(Message::class.java)
         val allMessages = ArrayList<Message>()
