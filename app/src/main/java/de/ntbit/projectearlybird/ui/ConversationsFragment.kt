@@ -7,13 +7,14 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import de.ntbit.projectearlybird.R
 import de.ntbit.projectearlybird.connection.ParseConnection
+import de.ntbit.projectearlybird.manager.ManagerFactory
 import kotlinx.android.synthetic.main.fragment_conversations.*
 
 class ConversationsFragment : Fragment() {
 
 
 
-    private val mParseManager = ParseConnection.getParseManager()
+    private val mUserManager = ManagerFactory.getUserManager()
 
     override fun onCreateView(
         inflater: LayoutInflater,

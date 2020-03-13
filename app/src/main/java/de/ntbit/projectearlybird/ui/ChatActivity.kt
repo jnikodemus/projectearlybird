@@ -2,27 +2,28 @@ package de.ntbit.projectearlybird.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.parse.ParseQuery
 import com.parse.ParseUser
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Item
 import de.ntbit.projectearlybird.R
-import de.ntbit.projectearlybird.manager.ParseManager
+import de.ntbit.projectearlybird.manager.ManagerFactory
 import de.ntbit.projectearlybird.connection.ParseConnection
-import de.ntbit.projectearlybird.model.Message
+import de.ntbit.projectearlybird.manager.MessageManager
+import de.ntbit.projectearlybird.manager.UserManager
 import kotlinx.android.synthetic.main.activity_chat.*
 import kotlinx.android.synthetic.main.chat_contact_row.view.*
 import kotlinx.android.synthetic.main.chat_self_row.view.*
 
 class ChatActivity : AppCompatActivity() {
-    private val mParseManager: ParseManager? = ParseConnection.getParseManager()
 
     companion object{
         val TAG = "Chatlog"
     }
 
-    val adapter = GroupAdapter<GroupieViewHolder>()
+    private val adapter = GroupAdapter<GroupieViewHolder>()
+    private val mMessageManager: MessageManager = ManagerFactory.getMessageManager()
+    private val mUserManager: UserManager = ManagerFactory.getUserManager()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +34,7 @@ class ChatActivity : AppCompatActivity() {
         val user = intent.getParcelableExtra<ParseUser>(NewMessageActivity.USER_KEY)
         supportActionBar?.title = user.username
 
+        listenForMessage(user)
         //createTestLayout()
 
         bt_chat_send.setOnClickListener {
@@ -41,7 +43,11 @@ class ChatActivity : AppCompatActivity() {
 
     }
 
-    private fun listenForMessage(){
+    private fun listenForMessage(chatPartner: ParseUser) {
+        /* Change to addAll? */
+        for(message in mMessageManager.getMessagesByThreadId(mUserManager.getCurrentUser().objectId + chatPartner.objectId))
+            adapter.add(ChatFromItem(message.getBody()))
+        /*
         val query = ParseQuery.getQuery(Message::class.java)
         query.orderByDescending("timestamp")
         query.findInBackground { messages, e ->
@@ -50,15 +56,16 @@ class ChatActivity : AppCompatActivity() {
                     adapter.add(ChatFromItem(message?.getBody()))
             }
         }
+         */
     }
 
     private fun sendMessage(){
-
         val text = et_chat_enterMessage.text.toString()
-        mParseManager?.sendMessage(text, intent.getParcelableExtra<ParseUser>(NewMessageActivity.USER_KEY))
+        mMessageManager.sendMessage(text, intent.getParcelableExtra(NewMessageActivity.USER_KEY))
         et_chat_enterMessage.text.clear()
     }
 
+    @Deprecated("Not used anymore")
     private fun createTestLayout() {
         val adapter = GroupAdapter<GroupieViewHolder>()
         adapter.add(ChatFromItem("FROM MESSAGEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE"))

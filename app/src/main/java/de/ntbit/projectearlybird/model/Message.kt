@@ -10,7 +10,7 @@ class Message : ParseObject {
     private lateinit var sender: String
     private lateinit var recipient: String
     private lateinit var threadId: String
-    private var body: String = ""
+    private lateinit var body: String
     private lateinit var timestamp: Date
     private lateinit var parseACL: ParseACL
 
@@ -64,4 +64,5 @@ class Message : ParseObject {
         println("Sender: $sender Recipient: $recipient Thread: $threadId " +
                 "Timestamp: $timestamp ACL: $parseACL Body: $body")
     }
+
 }

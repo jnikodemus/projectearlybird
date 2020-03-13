@@ -1,10 +1,10 @@
 package de.ntbit.projectearlybird.connection
 
 import android.content.Context
-import de.ntbit.projectearlybird.manager.ParseManager
 import com.parse.Parse
 import java.util.logging.Logger
 import com.parse.ParseObject
+import de.ntbit.projectearlybird.manager.ManagerFactory
 import de.ntbit.projectearlybird.model.Message
 
 
@@ -12,10 +12,9 @@ class ParseConnection {
 
     companion object {
         private val log = Logger.getLogger(this::class.java.simpleName)
-        private var mParseManager: ParseManager? = null
+        //private var mParseManager: ParseManager? = null
 
-        fun initialize(context: Context) : ParseManager? {
-            //ParseObject.registerSubclass(UserProfile::class.java)
+        fun initialize(context: Context) {
             ParseObject.registerSubclass(Message::class.java)
             // Enable local storage of Parseobjects
             Parse.enableLocalDatastore(context)
@@ -26,12 +25,9 @@ class ParseConnection {
                     .server("https://parseapi.back4app.com")
                     .build()
             )
-            mParseManager = ParseManager()
-            return mParseManager
-        }
-
-        fun getParseManager() : ParseManager? {
-            return mParseManager
+            ManagerFactory.initialize()
+            //mParseManager = ParseManager()
+            //return mParseManager
         }
     }
 }

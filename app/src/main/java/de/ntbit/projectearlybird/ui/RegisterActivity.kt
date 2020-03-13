@@ -4,10 +4,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.appcompat.widget.Toolbar
 import de.ntbit.projectearlybird.R
-import de.ntbit.projectearlybird.connection.ParseConnection
-import de.ntbit.projectearlybird.data.PebDbHelper
 import de.ntbit.projectearlybird.helper.InputValidator
-import de.ntbit.projectearlybird.manager.ParseManager
+import de.ntbit.projectearlybird.manager.ManagerFactory
+import de.ntbit.projectearlybird.manager.UserManager
 import kotlinx.android.synthetic.main.activity_register.*
 import kotlinx.android.synthetic.main.toolbar.*
 import java.util.logging.Logger
@@ -15,7 +14,7 @@ import java.util.logging.Logger
 class RegisterActivity : AppCompatActivity() {
 
     private val log = Logger.getLogger(this::class.java.simpleName)
-    private var mParseManager: ParseManager? = null
+    private val mUserManager: UserManager = ManagerFactory.getUserManager()
     private val mInputValidator = InputValidator()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,7 +26,6 @@ class RegisterActivity : AppCompatActivity() {
     private fun initialize() {
         val toolbar: Toolbar = toolbar
         setSupportActionBar(toolbar)
-        mParseManager = ParseConnection.getParseManager()
         actRegisterBtnRegister.setOnClickListener{
             var username: String
             var email: String
@@ -36,7 +34,7 @@ class RegisterActivity : AppCompatActivity() {
                 username = actRegisterEditTxtUsername.text.toString()
                 email = actRegisterEditTxtEmail.text.toString()
                 password = actRegisterEditTxtPassword.text.toString()
-                if(mParseManager!!.registerUser(username, email, password, this)) {
+                if(mUserManager.registerUser(username, email, password, this)) {
                     log.fine("User successfully registered ")
                     finish()
                     // TODO activate automatic login after successful registration

@@ -1,24 +1,21 @@
 package de.ntbit.projectearlybird.manager
 
-//import de.ntbit.projectearlybird.model.UserProfile
 import android.app.Activity
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.widget.Toast
-import com.parse.*
-import com.parse.Parse.getApplicationContext
+import com.parse.Parse
+import com.parse.ParseUser
 import de.ntbit.projectearlybird.data.PebContract
 import de.ntbit.projectearlybird.data.PebDbHelper
 import de.ntbit.projectearlybird.ui.HomeActivity
 import java.util.*
 import java.util.logging.Logger
 
-
-class ParseManager {
+class UserManager {
     private val log = Logger.getLogger(this::class.java.simpleName)
-    //private var mCurrentParseUser: ParseUser? = null
-    //private var mCurrentUserProfile: UserProfile? = null
+
     private val allUsernames: ArrayList<String> = ArrayList()
     private val allUsers: ArrayList<ParseUser> = ArrayList()
 
@@ -102,7 +99,8 @@ class ParseManager {
         val userDatabase = mDbHelper.writableDatabase
         val valuesToInsert = ContentValues()
         valuesToInsert.put(PebContract.UserEntry.COLUMN_USER_IS_ONLINE, PebContract.UserEntry.IS_ONLINE)
-        userDatabase.update(PebContract.UserEntry.TABLE_NAME, valuesToInsert,
+        userDatabase.update(
+            PebContract.UserEntry.TABLE_NAME, valuesToInsert,
             "username=?", arrayOf(username))
         userDatabase.close()
     }
@@ -112,60 +110,6 @@ class ParseManager {
         mCurrentUser.put(PebContract.UserEntry.COLUMN_USER_LASTLOGIN, Date(System.currentTimeMillis()))
         mCurrentUser.saveInBackground()
     }
-
-    /**
-     * Sends a Message setting sender, ACL and timestamp
-     * TODO: set threadId and recipient dynamically
-
-    fun sendMessage(message: String) {
-        sendMessage(message, "bQxXCbsAur")
-    }
-     */
-    fun sendMessage(message: String, recipient: ParseUser) {
-        val sender = ParseUser.getCurrentUser().objectId
-        val recipient = recipient.objectId
-        val entity = ParseObject.create("Message")
-
-        entity.put("recipient", recipient)
-        entity.put("sender", sender)
-        entity.put("threadId", sender + recipient)
-        entity.put("timestamp", Date(System.currentTimeMillis()))
-        entity.put("body", message)
-
-        val parseACL = ParseACL()
-        parseACL.setReadAccess(recipient, true)
-        parseACL.setWriteAccess(sender, true)
-
-        entity.put("ACL", parseACL)
-        /*
-         * Saves the new object.
-         * Notice that the SaveCallback is totally optional!
-         *
-         * Saves the new object.
-         * Notice that the SaveCallback is totally optional!
-         */
-        //entity.saveInBackground {
-            // Here you can handle errors, if thrown. Otherwise, "e" should be null
-        //}
-        entity.saveEventually {  }
-    }
-
-    fun getMessages(threadId: String) {
-        val query = ParseQuery<ParseObject>("Message")
-    }
-
-    /*
-    @Deprecated("UserProfile is being deleted")
-    private fun setUserToProfileRelation(userProfile: UserProfile){
-        val currentUser = ParseUser.getCurrentUser()
-        if(currentUser != null) {
-            currentUser.put("userProfileFk", userProfile.objectId)
-            currentUser.put("userProfilePtr", userProfile)
-            currentUser.saveInBackground()
-        }
-        else log.info("currentUser is NULL")
-    }
-     */
 
     fun getCurrentUser(): ParseUser {
         return ParseUser.getCurrentUser()
@@ -231,9 +175,10 @@ class ParseManager {
 
     private fun showToast(message: String) {
         Toast.makeText(
-            getApplicationContext(),
+            Parse.getApplicationContext(),
             message,
             Toast.LENGTH_SHORT
         ).show()
     }
+
 }

@@ -9,7 +9,8 @@ import com.parse.ParseUser
 import de.ntbit.projectearlybird.R
 
 import de.ntbit.projectearlybird.connection.ParseConnection
-import de.ntbit.projectearlybird.manager.ParseManager
+import de.ntbit.projectearlybird.manager.ManagerFactory
+import de.ntbit.projectearlybird.manager.UserManager
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.toolbar.*
 import java.util.logging.Logger
@@ -18,7 +19,7 @@ class LoginActivity : AppCompatActivity() {
 
     private val log = Logger.getLogger(this::class.java.simpleName)
     private var mFirebaseAnalytics: FirebaseAnalytics? = null
-    private var mParseManager: ParseManager? = null
+    private lateinit var mUserManager: UserManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,12 +33,12 @@ class LoginActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
         ParseConnection.initialize(this)
-        mParseManager = ParseConnection.getParseManager()
+        mUserManager = ManagerFactory.getUserManager()
 
         actLoginBtnLogin.setOnClickListener{
             if(actLoginEditTextUsername.text.isNotBlank() &&
                 actLoginEditTextPassword.text.isNotBlank()) {
-                mParseManager?.loginUser(
+                mUserManager.loginUser(
                     actLoginEditTextUsername.text.toString(),
                     actLoginEditTextPassword.text.toString(), this
                 )
@@ -53,6 +54,6 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        mParseManager?.logOut()
+        mUserManager.logOut()
     }
 }

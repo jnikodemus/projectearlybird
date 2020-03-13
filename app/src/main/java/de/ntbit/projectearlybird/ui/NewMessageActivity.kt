@@ -3,30 +3,23 @@ package de.ntbit.projectearlybird.ui
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.parse.ParseObject
-import com.parse.ParseQuery
 import com.parse.ParseUser
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Item
 import de.ntbit.projectearlybird.R
-import de.ntbit.projectearlybird.connection.ParseConnection
-import de.ntbit.projectearlybird.manager.ParseManager
-import de.ntbit.projectearlybird.model.User
+import de.ntbit.projectearlybird.manager.ManagerFactory
+import de.ntbit.projectearlybird.manager.UserManager
 import kotlinx.android.synthetic.main.activity_new_message.*
 import kotlinx.android.synthetic.main.new_message_user_row.view.*
 
 class NewMessageActivity : AppCompatActivity() {
 
+    private val mUserManager: UserManager = ManagerFactory.getUserManager()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_new_message)
-
-
-
         supportActionBar?.title = "Select User"
 
         fetchAllParseUser()
@@ -38,11 +31,8 @@ class NewMessageActivity : AppCompatActivity() {
 
     private fun fetchAllParseUser() {
         val adapter = GroupAdapter<GroupieViewHolder>()
-        val mParseManager = ParseConnection.getParseManager()
-        if (mParseManager != null) {
-            for (user in mParseManager.getAllUsers())
-                adapter.add(UserItem(user))
-        }
+        for (user in mUserManager.getAllUsers())
+            adapter.add(UserItem(user))
         /* TODO: send selected UserItem/User to intent */
         adapter.setOnItemClickListener { item, view ->
             val userItem = item as UserItem

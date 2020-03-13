@@ -9,12 +9,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import de.ntbit.projectearlybird.R
 import de.ntbit.projectearlybird.adapter.ContactAdapter
-import de.ntbit.projectearlybird.connection.ParseConnection
-import de.ntbit.projectearlybird.manager.ParseManager
+import de.ntbit.projectearlybird.manager.ManagerFactory
+import de.ntbit.projectearlybird.manager.UserManager
 
 class ContactsFragment : Fragment() {
 
-    private val mParseManager: ParseManager? = ParseConnection.getParseManager()
+    private val mUserManager: UserManager = ManagerFactory.getUserManager()
     lateinit var allUsers: ArrayList<String>
 
     override fun onCreateView(
@@ -27,10 +27,8 @@ class ContactsFragment : Fragment() {
         // TODO: Make observable?
         val recyclerViewContacts = view.findViewById<RecyclerView>(R.id.recyclerViewContacts)
         recyclerViewContacts.layoutManager = LinearLayoutManager(this.context)
-        if (mParseManager != null) {
-            allUsers = mParseManager.getAllUserNames()
-            recyclerViewContacts.adapter = ContactAdapter(allUsers, this.context!!)
-        }
+        allUsers = mUserManager.getAllUserNames()
+        recyclerViewContacts.adapter = ContactAdapter(allUsers, this.context!!)
 
         return view
     }
