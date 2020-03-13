@@ -7,20 +7,20 @@ import java.util.Date
 
 @ParseClassName("Message")
 class Message : ParseObject {
-    private var sender: String? = null
-    private var recipient: String? = null
-    private var threadId: String? = null
-    private var body: String? = null
-    private var timestamp: Date? = null
+    private lateinit var sender: String
+    private lateinit var recipient: String
+    private lateinit var threadId: String
+    private var body: String = ""
+    private lateinit var timestamp: Date
     private lateinit var parseACL: ParseACL
 
     internal constructor() : super() {}
     internal constructor(
-        sender: String?,
-        recipient: String?,
-        threadId: String?,
-        body: String?,
-        timestamp: Date?
+        sender: String,
+        recipient: String,
+        threadId: String,
+        body: String,
+        timestamp: Date
     ) {
         this.sender = sender
         this.recipient = recipient
@@ -52,8 +52,12 @@ class Message : ParseObject {
         put("timestamp", timestamp)
     }
 
-    fun getBody() : String?{
+    fun getBody() : String{
         return this.body
+    }
+
+    fun getRecipient() : String {
+        return this.recipient
     }
 
     fun print() {

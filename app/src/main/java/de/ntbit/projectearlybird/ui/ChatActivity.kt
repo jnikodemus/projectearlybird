@@ -2,8 +2,6 @@ package de.ntbit.projectearlybird.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.parse.FindCallback
-import com.parse.ParseException
 import com.parse.ParseQuery
 import com.parse.ParseUser
 import com.xwray.groupie.GroupAdapter
@@ -11,12 +9,14 @@ import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Item
 import de.ntbit.projectearlybird.R
 import de.ntbit.projectearlybird.manager.ParseManager
+import de.ntbit.projectearlybird.connection.ParseConnection
 import de.ntbit.projectearlybird.model.Message
 import kotlinx.android.synthetic.main.activity_chat.*
 import kotlinx.android.synthetic.main.chat_contact_row.view.*
 import kotlinx.android.synthetic.main.chat_self_row.view.*
 
 class ChatActivity : AppCompatActivity() {
+    private val mParseManager: ParseManager? = ParseConnection.getParseManager()
 
     companion object{
         val TAG = "Chatlog"
@@ -53,9 +53,9 @@ class ChatActivity : AppCompatActivity() {
     }
 
     private fun sendMessage(){
-        val parseManager = ParseManager()
+
         val text = et_chat_enterMessage.text.toString()
-        parseManager.sendMessage(text, intent.getParcelableExtra<ParseUser>(NewMessageActivity.USER_KEY))
+        mParseManager?.sendMessage(text, intent.getParcelableExtra<ParseUser>(NewMessageActivity.USER_KEY))
         et_chat_enterMessage.text.clear()
     }
 
