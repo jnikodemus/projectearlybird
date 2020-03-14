@@ -60,12 +60,10 @@ class User : ParseUser(), Parcelable {
             put("lastLogin", lastLogin)
         }
 
-    var avatar: ParseFile?
-        get() = getParseFile("avatar")
+    var avatar: ParseFile
+        get() = getParseFile("avatar")!!
         set(avatar) {
-            if (avatar != null) {
                 put("avatar", avatar)
-            }
         }
 
     /* TODO add groups
