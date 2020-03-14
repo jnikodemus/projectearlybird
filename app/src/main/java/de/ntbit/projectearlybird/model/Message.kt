@@ -15,7 +15,7 @@ class Message : ParseObject {
     private lateinit var parseACL: ParseACL
 
     internal constructor() : super() {}
-    internal constructor(sender: String,recipient: String,threadId: String,body: String,timestamp: Date) : super(){
+    internal constructor(sender: String, recipient: String, threadId: String, body: String, timestamp: Date) : super() {
         this.sender = sender
         this.recipient = recipient
         this.threadId = threadId
@@ -58,7 +58,7 @@ class Message : ParseObject {
         return threadId
     }
 
-    fun getBody(): String{
+    fun getBody(): String {
         return body
     }
 
