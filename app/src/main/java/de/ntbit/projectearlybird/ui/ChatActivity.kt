@@ -36,11 +36,10 @@ class ChatActivity : AppCompatActivity() {
 
         listenForMessage(user)
         //createTestLayout()
-
+        //listenForMessage()
         bt_chat_send.setOnClickListener {
             sendMessage()
         }
-
     }
 
     private fun listenForMessage(chatPartner: ParseUser) {
@@ -52,13 +51,14 @@ class ChatActivity : AppCompatActivity() {
         query.orderByDescending("timestamp")
         query.findInBackground { messages, e ->
             if(e == null){
-                for(message in messages)
+                for(message in messages) {
                     adapter.add(ChatFromItem(message?.getBody()))
+                }
             }
         }
          */
     }
-
+    /*Sending a message from currentuser to chosen contact*/
     private fun sendMessage(){
         val text = et_chat_enterMessage.text.toString()
         mMessageManager.sendMessage(text, intent.getParcelableExtra(NewMessageActivity.USER_KEY))
