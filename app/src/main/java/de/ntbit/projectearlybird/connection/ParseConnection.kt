@@ -26,9 +26,14 @@ class ParseConnection {
                     .server("https://parseapi.back4app.com")
                     .build()
             )
+            //AndroidApiKey: 'AIzaSyDkeFQRd1T-SmaNU1ckRcK43cm8hu8AUi4'
+
             ParseInstallation.getCurrentInstallation().saveInBackground()
             ParsePush.subscribeInBackground("Warning")
             ParsePush.subscribeInBackground("Develop")
+
+
+
             ManagerFactory.initialize()
         }
     }

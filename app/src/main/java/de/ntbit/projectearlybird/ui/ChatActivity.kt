@@ -14,6 +14,7 @@ import de.ntbit.projectearlybird.R
 import de.ntbit.projectearlybird.manager.ManagerFactory
 import de.ntbit.projectearlybird.manager.MessageManager
 import de.ntbit.projectearlybird.manager.UserManager
+import de.ntbit.projectearlybird.model.Message
 import kotlinx.android.synthetic.main.activity_chat.*
 import kotlinx.android.synthetic.main.chat_contact_row.view.*
 import kotlinx.android.synthetic.main.chat_self_row.view.*
@@ -52,6 +53,7 @@ class ChatActivity : AppCompatActivity() {
         /* Change to addAll? */
         for(message in mMessageManager.getAllMessages()) {
             Log.d("CUSTOM", message.getBody())
+            message.fetchIfNeeded<Message>()
             adapter.add(ChatFromItem(message.getBody()))
         }
 
