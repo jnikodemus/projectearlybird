@@ -2,13 +2,18 @@ package de.ntbit.projectearlybird.manager
 
 import android.util.Log
 import com.parse.*
+import com.xwray.groupie.GroupAdapter
+import com.xwray.groupie.GroupieViewHolder
 import de.ntbit.projectearlybird.model.Message
+import de.ntbit.projectearlybird.ui.ChatFromItem
 import java.util.*
 import java.util.logging.Logger
 import kotlin.collections.ArrayList
 
 class MessageManager {
     private val log = Logger.getLogger(this::class.java.simpleName)
+
+    //val mutableList: MutableList<Message> = ArrayList()
 
     /**
      * Sends a String as Message to [recipientUser] if [message] isNotEmpty() and [message] isNotBlank()
@@ -49,7 +54,7 @@ class MessageManager {
     }
 
     /**
-     * Returns all Messages as [Collection]<[Message]> for a given [threadId]
+     * Returns all messages as [Collection]<[Message]> for a given [threadId]
      */
     fun getMessagesByThreadId(threadId: String) : Collection<Message> {
         val query = ParseQuery.getQuery(Message::class.java)
@@ -64,17 +69,17 @@ class MessageManager {
         return allMessages
     }
 
-    fun getAllMessages() : MutableList<Message> {
+    fun getAllMessages(adapter: GroupAdapter<GroupieViewHolder>) {
         val mutableList: MutableList<Message> = ArrayList()
         val query = ParseQuery.getQuery(Message::class.java)
-        query.orderByDescending("timestamp")
+        query.orderByAscending("timestamp")
         query.findInBackground { messages, e ->
-            if(e == null){
+            if (e == null) {
                 mutableList.addAll(messages)
-                Log.d("CUSTOM", "got " + mutableList.size)
+                for(message in mutableList)
+                    adapter.add(ChatFromItem(message.getString("body")))
+                adapter.notifyDataSetChanged()
             }
         }
-
-        return mutableList
     }
 }

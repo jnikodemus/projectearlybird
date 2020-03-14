@@ -28,7 +28,7 @@ class ChatActivity : AppCompatActivity() {
 
     private val adapter = GroupAdapter<GroupieViewHolder>()
     private val mMessageManager: MessageManager = ManagerFactory.getMessageManager()
-    private val mUserManager: UserManager = ManagerFactory.getUserManager()
+    //private val mUserManager: UserManager = ManagerFactory.getUserManager()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,46 +38,29 @@ class ChatActivity : AppCompatActivity() {
         rv_chat_log.adapter = adapter
 
         val user = intent.getParcelableExtra<ParseUser>(NewMessageActivity.USER_KEY)
-        supportActionBar?.title = user.username
-
-        listenForMessage(user)
-        //createTestLayout()
-        //listenForMessage()
+        //supportActionBar?.title = user.username
+        listenForMessage()
         bt_chat_send.setOnClickListener {
             sendMessage()
         }
     }
 
-    private fun listenForMessage(chatPartner: ParseUser) {
-        Log.d("CUSTOM", "listening " + mMessageManager.getAllMessages().size)
+    private fun listenForMessage() {
         /* Change to addAll? */
+        /*
         for(message in mMessageManager.getAllMessages()) {
             Log.d("CUSTOM", message.getBody())
-            message.fetchIfNeeded<Message>()
             adapter.add(ChatFromItem(message.getBody()))
         }
+        */
+        mMessageManager.getAllMessages(adapter)
 
-
-
-
-        /*
-        val query = ParseQuery.getQuery(Message::class.java)
-        query.orderByDescending("timestamp")
-        query.findInBackground { messages, e ->
-            if(e == null){
-                for(message in messages) {
-                    adapter.add(ChatFromItem(message?.getBody()))
-                }
-            }
-        }
-         */
     }
     /*Sending a message from currentuser to chosen contact*/
     private fun sendMessage(){
         val text = et_chat_enterMessage.text.toString()
         mMessageManager.sendMessage(text, intent.getParcelableExtra(NewMessageActivity.USER_KEY))
         adapter.add(ChatSelfItem(text))
-        rv_chat_log.adapter = adapter
         et_chat_enterMessage.text.clear()
     }
 

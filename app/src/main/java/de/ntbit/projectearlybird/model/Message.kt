@@ -14,7 +14,7 @@ class Message : ParseObject {
     private lateinit var timestamp: Date
     private lateinit var parseACL: ParseACL
 
-    internal constructor() : super() {}
+    internal constructor() : super()
     internal constructor(sender: String, recipient: String, threadId: String, body: String, timestamp: Date) : super() {
         this.sender = sender
         this.recipient = recipient
