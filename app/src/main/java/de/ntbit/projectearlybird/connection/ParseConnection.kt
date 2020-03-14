@@ -16,7 +16,7 @@ class ParseConnection {
         private val log = Logger.getLogger(this::class.java.simpleName)
 
         fun initialize(context: Context) {
-            //ParseObject.registerSubclass(Message::class.java)
+            ParseObject.registerSubclass(Message::class.java)
             // Enable local storage of Parseobjects
             Parse.enableLocalDatastore(context)
             Parse.initialize(

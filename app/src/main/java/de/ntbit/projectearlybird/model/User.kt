@@ -59,18 +59,6 @@ class User : ParseUser(), Parcelable {
         set(lastLogin) {
             put("lastLogin", lastLogin)
         }
-    /*
-    var messages: List<Message>
-        get() = getList<Message>("messages")!!
-        set(messages) {
-            put("messages", messages)
-        }
-     */
-    var groups: List<Group>
-        get() = getList<Group>("groups")!!
-        set(groups) {
-            put("groups", groups)
-        }
 
     var avatar: ParseFile?
         get() = getParseFile("avatar")
@@ -91,7 +79,6 @@ class User : ParseUser(), Parcelable {
         this.birthday = Date(0)
         this.gender = 2
         //this.messages = ArrayList()
-        this.groups = ArrayList()
         this.lastLogin = Date(System.currentTimeMillis())
         //this.avatar = ParseFile(File(R.drawable.ic_launcher_foreground.toString()))
     }
