@@ -37,15 +37,15 @@ class ChatActivity : AppCompatActivity() {
 
         rv_chat_log.adapter = adapter
 
-        val user = intent.getParcelableExtra<ParseUser>(NewMessageActivity.USER_KEY)
+        val partner = intent.getParcelableExtra<ParseUser>(NewMessageActivity.USER_KEY)
         //supportActionBar?.title = user.username
-        listenForMessage()
+        listenForMessage(partner)
         bt_chat_send.setOnClickListener {
             sendMessage()
         }
     }
 
-    private fun listenForMessage() {
+    private fun listenForMessage(partner: ParseUser) {
         /* Change to addAll? */
         /*
         for(message in mMessageManager.getAllMessages()) {
@@ -53,7 +53,7 @@ class ChatActivity : AppCompatActivity() {
             adapter.add(ChatFromItem(message.getBody()))
         }
         */
-        mMessageManager.getAllMessages(adapter)
+        mMessageManager.getMessagesByPartner(partner, adapter)
 
     }
     /*Sending a message from currentuser to chosen contact*/
