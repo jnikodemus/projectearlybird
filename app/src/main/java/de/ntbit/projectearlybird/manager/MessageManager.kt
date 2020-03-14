@@ -1,9 +1,7 @@
 package de.ntbit.projectearlybird.manager
 
-import com.parse.ParseACL
-import com.parse.ParseObject
-import com.parse.ParseQuery
-import com.parse.ParseUser
+import android.util.Log
+import com.parse.*
 import de.ntbit.projectearlybird.model.Message
 import java.util.*
 import java.util.logging.Logger
@@ -40,11 +38,13 @@ class MessageManager {
 
             entity.saveEventually {}
 
-            /*
-            val mess = Message(sender,recipient,threadId,message,now)
-            mess.print()
-            mess.saveEventually{ e -> println("CUSTOMDEBUG: MESSAGE_Exception $e") }
-            */
+            //val mess = Message(sender,recipient,threadId,message,now)
+            //mess.print()
+            //mess.saveEventually{ e -> println("CUSTOMDEBUG: MESSAGE_Exception $e") }
+            val parsePush = ParsePush()
+            parsePush.setMessage(message)
+            parsePush.setChannel(recipient)
+            parsePush.sendInBackground()
         }
     }
 
@@ -58,8 +58,23 @@ class MessageManager {
         query.findInBackground { messages, e ->
             if(e == null){
                 allMessages.addAll(messages)
+                Log.d("CUSTOM", "got " + allMessages.size)
             }
         }
         return allMessages
+    }
+
+    fun getAllMessages() : MutableList<Message> {
+        val mutableList: MutableList<Message> = ArrayList()
+        val query = ParseQuery.getQuery(Message::class.java)
+        query.orderByDescending("timestamp")
+        query.findInBackground { messages, e ->
+            if(e == null){
+                mutableList.addAll(messages)
+                Log.d("CUSTOM", "got " + mutableList.size)
+            }
+        }
+
+        return mutableList
     }
 }

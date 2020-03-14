@@ -2,8 +2,10 @@ package de.ntbit.projectearlybird.connection
 
 import android.content.Context
 import com.parse.Parse
+import com.parse.ParseInstallation
 import java.util.logging.Logger
 import com.parse.ParseObject
+import com.parse.ParsePush
 import de.ntbit.projectearlybird.manager.ManagerFactory
 import de.ntbit.projectearlybird.model.Message
 
@@ -24,6 +26,9 @@ class ParseConnection {
                     .server("https://parseapi.back4app.com")
                     .build()
             )
+            ParseInstallation.getCurrentInstallation().saveInBackground()
+            ParsePush.subscribeInBackground("Warning")
+            ParsePush.subscribeInBackground("Develop")
             ManagerFactory.initialize()
         }
     }
