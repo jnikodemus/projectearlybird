@@ -15,7 +15,7 @@ class MessageManager {
     /**
      * Sends a String as Message to [recipient] if [message] isNotEmpty() and [message] isNotBlank()
      */
-    fun sendMessage(message: String, recipient: ParseUser) {
+    fun sendMessage(message: String, recipientUser: ParseUser) {
         if(message.isNotBlank() && message.isNotEmpty()) {
             /* TODO: Change to
              *  val entity = Message() and message.saveEventually()
@@ -24,7 +24,7 @@ class MessageManager {
              */
             val entity = ParseObject.create("Message")
             val sender = ParseUser.getCurrentUser().objectId
-            val recipient = recipient.objectId
+            val recipient = recipientUser.objectId
             val threadId = sender + recipient
             val now = Date(System.currentTimeMillis())
             val acl = ParseACL()
