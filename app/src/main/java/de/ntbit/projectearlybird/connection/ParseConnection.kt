@@ -29,10 +29,10 @@ class ParseConnection {
             //AndroidApiKey: 'AIzaSyDkeFQRd1T-SmaNU1ckRcK43cm8hu8AUi4'
 
             ParseInstallation.getCurrentInstallation().saveInBackground()
+            //installation.put("GCMSenderId", 474988434121)
+            //installation.saveInBackground()
             ParsePush.subscribeInBackground("Warning")
             ParsePush.subscribeInBackground("Develop")
-
-
 
             ManagerFactory.initialize()
         }

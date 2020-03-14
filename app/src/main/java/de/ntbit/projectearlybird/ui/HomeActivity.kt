@@ -94,8 +94,8 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun placeUserInformation() {
         val navigationHeader = navigation_menu_view.getHeaderView(0)
-        navigationHeader.navigation_username.text = mUserManager?.getCurrentUser()?.username
-        navigationHeader.navigation_email.text = mUserManager?.getCurrentUser()?.email
+        navigationHeader.navigation_username.text = mUserManager.getCurrentUser().username
+        navigationHeader.navigation_email.text = mUserManager.getCurrentUser().email
         navigationHeader.select_image_button.setOnClickListener { val intent = Intent(Intent.ACTION_PICK)
             intent.type = "image/*"
             startActivityForResult(intent, 0)}

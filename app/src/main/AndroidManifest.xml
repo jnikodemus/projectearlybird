@@ -36,19 +36,11 @@
         <meta-data android:name="com.parse.push.gcm_sender_id"
             android:value="id:474988434121" />
 
-        <!--
         <service
-            android:name="com.parse.fcm.ParseFirebaseInstanceIdService"
-            android:exported="true">
+            android:name="com.parse.fcm.ParseFirebaseMessagingService"
+            android:exported="false">
             <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
-            </intent-filter>
-        </service>
-    -->
-        <service
-            android:name="com.parse.fcm.ParseFirebaseMessagingService">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
 
