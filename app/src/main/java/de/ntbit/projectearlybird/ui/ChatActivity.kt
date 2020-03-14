@@ -2,6 +2,7 @@ package de.ntbit.projectearlybird.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import com.parse.FindCallback
 import com.parse.ParseException
 import com.parse.ParseQuery
@@ -22,7 +23,7 @@ class ChatActivity : AppCompatActivity() {
         val TAG = "Chatlog"
     }
 
-    val adapter = GroupAdapter<GroupieViewHolder>()
+    private val adapter = GroupAdapter<GroupieViewHolder>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,33 +33,38 @@ class ChatActivity : AppCompatActivity() {
 
         val user = intent.getParcelableExtra<ParseUser>(NewMessageActivity.USER_KEY)
         supportActionBar?.title = user.username
-
+        Log.d("ChatActivity", "HAAAAAAAAAAAAAAAAAAAAALLO")
         //createTestLayout()
-
+        //listenForMessage()
         bt_chat_send.setOnClickListener {
             sendMessage()
         }
-
     }
-
+    /*TODO: Listen for incoming messages*/
     private fun listenForMessage(){
         val query = ParseQuery.getQuery(Message::class.java)
         query.orderByDescending("timestamp")
         query.findInBackground { messages, e ->
             if(e == null){
-                for(message in messages)
+                for(message in messages) {
                     adapter.add(ChatFromItem(message?.getBody()))
+                }
             }
         }
-    }
+        rv_chat_log.adapter = adapter
 
+    }
+    /*Sending a message from currentuser to chosen contact*/
     private fun sendMessage(){
         val parseManager = ParseManager()
         val text = et_chat_enterMessage.text.toString()
         parseManager.sendMessage(text, intent.getParcelableExtra<ParseUser>(NewMessageActivity.USER_KEY))
+        adapter.add(ChatSelfItem(text))
+        rv_chat_log.adapter = adapter
         et_chat_enterMessage.text.clear()
     }
 
+    /*Just for creating a temporary layout*/
     private fun createTestLayout() {
         val adapter = GroupAdapter<GroupieViewHolder>()
         adapter.add(ChatFromItem("FROM MESSAGEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE"))
