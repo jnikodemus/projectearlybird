@@ -7,21 +7,15 @@ import java.util.Date
 
 @ParseClassName("Message")
 class Message : ParseObject {
-    private var sender: String? = null
-    private var recipient: String? = null
-    private var threadId: String? = null
-    private var body: String? = null
-    private var timestamp: Date? = null
+    private lateinit var sender: String
+    private lateinit var recipient: String
+    private lateinit var threadId: String
+    private lateinit var body: String
+    private lateinit var timestamp: Date
     private lateinit var parseACL: ParseACL
 
-    internal constructor() : super() {}
-    internal constructor(
-        sender: String?,
-        recipient: String?,
-        threadId: String?,
-        body: String?,
-        timestamp: Date?
-    ) {
+    //internal constructor() : super() {}
+    internal constructor(sender: String,recipient: String,threadId: String,body: String,timestamp: Date) : super(){
         this.sender = sender
         this.recipient = recipient
         this.threadId = threadId
@@ -32,7 +26,7 @@ class Message : ParseObject {
         this.parseACL.setWriteAccess(sender, true)
     }
 
-    fun setSender(sender: String){
+    fun setSender(sender: String) {
         put("sender", sender)
     }
 
@@ -52,12 +46,29 @@ class Message : ParseObject {
         put("timestamp", timestamp)
     }
 
-    fun getBody() : String?{
-        return this.body
+    fun getSender(): String {
+        return sender
+    }
+
+    fun getRecipient(): String {
+        return recipient
+    }
+
+    fun getThreadId(): String {
+        return threadId
+    }
+
+    fun getBody(): String{
+        return body
+    }
+
+    fun getTimestamp(): Date {
+        return timestamp
     }
 
     fun print() {
         println("Sender: $sender Recipient: $recipient Thread: $threadId " +
                 "Timestamp: $timestamp ACL: $parseACL Body: $body")
     }
+
 }

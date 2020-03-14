@@ -1,42 +1,36 @@
 package de.ntbit.projectearlybird.ui
 
 import android.app.Activity
-import android.app.Instrumentation
 import android.content.Intent
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
-import android.widget.Toast.LENGTH_LONG
 
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
-import androidx.core.view.get
 import androidx.drawerlayout.widget.DrawerLayout
 
 import com.google.android.material.navigation.NavigationView
 import com.parse.ParseUser
 
 import de.ntbit.projectearlybird.R
-import de.ntbit.projectearlybird.connection.ParseConnection
-import de.ntbit.projectearlybird.manager.ParseManager
-import de.ntbit.projectearlybird.model.Message
+import de.ntbit.projectearlybird.manager.ManagerFactory
+import de.ntbit.projectearlybird.manager.UserManager
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.navigation_header.*
 import kotlinx.android.synthetic.main.navigation_header.view.*
 import kotlinx.android.synthetic.main.navigation_header.view.select_image_button
 import kotlinx.android.synthetic.main.toolbar.*
-import java.util.*
 import java.util.logging.Logger
 
 
 class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private val log = Logger.getLogger(this::class.java.simpleName)
-    private val mParseManager: ParseManager? = ParseConnection.getParseManager()
+    private val mUserManager: UserManager = ManagerFactory.getUserManager()
     //private var mUserProfile: UserProfile? = null
     private lateinit var drawer: DrawerLayout
     private lateinit var toggle: ActionBarDrawerToggle
@@ -100,8 +94,8 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun placeUserInformation() {
         val navigationHeader = navigation_menu_view.getHeaderView(0)
-        navigationHeader.navigation_username.text = mParseManager?.getCurrentUser()?.username
-        navigationHeader.navigation_email.text = mParseManager?.getCurrentUser()?.email
+        navigationHeader.navigation_username.text = mUserManager?.getCurrentUser()?.username
+        navigationHeader.navigation_email.text = mUserManager?.getCurrentUser()?.email
         navigationHeader.select_image_button.setOnClickListener { val intent = Intent(Intent.ACTION_PICK)
             intent.type = "image/*"
             startActivityForResult(intent, 0)}
