@@ -14,7 +14,7 @@ class Message : ParseObject {
     private lateinit var timestamp: Date
     private lateinit var parseACL: ParseACL
 
-    internal constructor() : super() {}
+    //internal constructor() : super() {}
     internal constructor(sender: String,recipient: String,threadId: String,body: String,timestamp: Date) : super(){
         this.sender = sender
         this.recipient = recipient
@@ -26,7 +26,7 @@ class Message : ParseObject {
         this.parseACL.setWriteAccess(sender, true)
     }
 
-    fun setSender(sender: String){
+    fun setSender(sender: String) {
         put("sender", sender)
     }
 
@@ -46,12 +46,24 @@ class Message : ParseObject {
         put("timestamp", timestamp)
     }
 
-    fun getBody() : String{
-        return this.body
+    fun getSender(): String {
+        return sender
     }
 
-    fun getRecipient() : String {
-        return this.recipient
+    fun getRecipient(): String {
+        return recipient
+    }
+
+    fun getThreadId(): String {
+        return threadId
+    }
+
+    fun getBody(): String{
+        return body
+    }
+
+    fun getTimestamp(): Date {
+        return timestamp
     }
 
     fun print() {
