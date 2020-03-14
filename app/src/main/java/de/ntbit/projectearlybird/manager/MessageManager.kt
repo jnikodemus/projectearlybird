@@ -11,7 +11,7 @@ class MessageManager {
     private val log = Logger.getLogger(this::class.java.simpleName)
 
     /**
-     * Sends a String as Message to [recipient] if [message] isNotEmpty() and [message] isNotBlank()
+     * Sends a String as Message to [recipientUser] if [message] isNotEmpty() and [message] isNotBlank()
      */
     fun sendMessage(message: String, recipientUser: ParseUser) {
         if(message.isNotBlank() && message.isNotEmpty()) {
