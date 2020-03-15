@@ -3,11 +3,15 @@ package de.ntbit.projectearlybird.manager
 import android.R
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.widget.EditText
+import androidx.core.view.size
+import androidx.recyclerview.widget.RecyclerView
 import com.parse.ParseObject
 import com.parse.ParsePush
 import com.parse.ParseQuery
 import com.parse.ParseUser
+import com.parse.ktx.whereContains
 import com.parse.livequery.ParseLiveQueryClient
 import com.parse.livequery.SubscriptionHandling
 import com.parse.livequery.SubscriptionHandling.HandleEventCallback
@@ -15,6 +19,7 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import de.ntbit.projectearlybird.model.Message
 import de.ntbit.projectearlybird.ui.ChatFromItem
+import de.ntbit.projectearlybird.ui.ChatSelfItem
 import java.net.URI
 import java.util.logging.Logger
 
@@ -43,36 +48,44 @@ class MessageManager {
         parsePush.sendInBackground()
     }
 
-    /**
-     * Returns all messages as [Collection]<[Message]> for a given [threadId]
-     */
-    fun getMessagesByPartner(partner: ParseUser, adapter: GroupAdapter<GroupieViewHolder>) {
+    fun subscribeToPartner(partner: ParseUser, chatLog: RecyclerView) {
+        val adapter: GroupAdapter<GroupieViewHolder> = chatLog.adapter as GroupAdapter<GroupieViewHolder>
         val mutableList: MutableList<Message> = ArrayList()
         val parseQuery = ParseQuery.getQuery(Message::class.java)
         parseQuery.whereContains("threadId", partner.objectId)
+        parseQuery.whereEqualTo("senderId", partner.objectId)
         parseQuery.orderByAscending("timestamp")
         val subscriptionHandling: SubscriptionHandling<Message> = parseLiveQueryClient.subscribe(parseQuery)
 
-        subscriptionHandling.handleEvent(
-            SubscriptionHandling.Event.CREATE,
-            HandleEventCallback<Message> { query, message ->
-                val handler = Handler(Looper.getMainLooper())
-                handler.post(Runnable {
-                    mutableList.add(message)
-                    adapter.add(ChatFromItem(message.body, partner))
-                    adapter.notifyDataSetChanged()
-                })
+        subscriptionHandling.handleEvent(SubscriptionHandling.Event.CREATE) { _, message ->
+            val handler = Handler(Looper.getMainLooper())
+            handler.post {
+                mutableList.add(message)
+                adapter.add(ChatFromItem(message.body, partner))
+                adapter.notifyDataSetChanged()
             }
-        )
-/*
+        }
+    }
+
+    /**
+     * Returns all messages as [Collection]<[Message]> for a given [threadId]
+     */
+    fun getMessagesByPartner(partner: ParseUser, chatLog: RecyclerView) {
+        val adapter: GroupAdapter<GroupieViewHolder> = chatLog.adapter as GroupAdapter<GroupieViewHolder>
+        val mutableList: MutableList<Message> = ArrayList()
+        val query = ParseQuery.getQuery(Message::class.java)
+        query.whereContains("threadId", partner.objectId)
+        query.orderByAscending("timestamp")
         query.findInBackground { messages, e ->
             if (e == null) {
                 mutableList.addAll(messages)
                 for(message in mutableList) {
-                    adapter.add(ChatFromItem(message.body, partner))
+                    if(message.sender.objectId == partner.objectId)
+                        adapter.add(ChatFromItem(message.body, partner))
+                    else adapter.add(ChatSelfItem(message.body))
                 }
                 adapter.notifyDataSetChanged()
             }
-        } */
+        }
     }
 }

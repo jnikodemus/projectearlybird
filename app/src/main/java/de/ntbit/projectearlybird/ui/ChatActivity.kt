@@ -48,7 +48,8 @@ class ChatActivity : AppCompatActivity() {
     }
 
     private fun listenForMessage(partner: ParseUser) {
-        mMessageManager.getMessagesByPartner(partner, adapter)
+        mMessageManager.getMessagesByPartner(partner, rv_chat_log)
+        mMessageManager.subscribeToPartner(partner, rv_chat_log)
     }
     /*Sending a message from currentuser to chosen contact*/
     private fun sendMessage(){

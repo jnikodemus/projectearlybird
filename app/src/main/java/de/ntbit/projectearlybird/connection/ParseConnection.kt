@@ -19,7 +19,7 @@ class ParseConnection {
         fun initialize(context: Context) {
             ParseObject.registerSubclass(Message::class.java)
             // Enable local storage of Parseobjects
-            //Parse.enableLocalDatastore(context)
+            Parse.enableLocalDatastore(context)
             Parse.initialize(
                 Parse.Configuration.Builder(context)
                     .applicationId("7J46i6wiq0gQTeF91ArANMUYVjBHcogRrzJ5EICh")
