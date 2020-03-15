@@ -11,22 +11,31 @@ import de.ntbit.projectearlybird.R
 import de.ntbit.projectearlybird.manager.ManagerFactory
 import de.ntbit.projectearlybird.manager.UserManager
 import kotlinx.android.synthetic.main.activity_new_message.*
-import kotlinx.android.synthetic.main.new_message_user_row.view.*
+import kotlinx.android.synthetic.main.toolbar.*
 
 class NewMessageActivity : AppCompatActivity() {
 
     private val mUserManager: UserManager = ManagerFactory.getUserManager()
 
+    companion object{
+        val USER_KEY = "USER_KEY"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_new_message)
-        //supportActionBar?.title = "Select User"
 
+        initialize()
+    }
+
+    private fun initialize() {
+        placeToolbar()
         fetchAllParseUser()
     }
 
-    companion object{
-        val USER_KEY = "USER_KEY"
+    private fun placeToolbar() {
+        val toolbar = toolbar
+        setSupportActionBar(toolbar)
     }
 
     private fun fetchAllParseUser() {
