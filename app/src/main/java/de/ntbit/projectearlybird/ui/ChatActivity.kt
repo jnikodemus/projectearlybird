@@ -28,6 +28,7 @@ class ChatActivity : AppCompatActivity() {
 
     private val adapter = GroupAdapter<GroupieViewHolder>()
     private val mMessageManager: MessageManager = ManagerFactory.getMessageManager()
+    private lateinit var chatPartner: ParseUser
     //private val mUserManager: UserManager = ManagerFactory.getUserManager()
 
 

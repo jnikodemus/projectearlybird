@@ -16,6 +16,7 @@ import kotlinx.android.synthetic.main.toolbar.*
 class NewMessageActivity : AppCompatActivity() {
 
     private val mUserManager: UserManager = ManagerFactory.getUserManager()
+    private val adapter = GroupAdapter<GroupieViewHolder>()
 
     companion object{
         val USER_KEY = "USER_KEY"
@@ -30,6 +31,8 @@ class NewMessageActivity : AppCompatActivity() {
 
     private fun initialize() {
         placeToolbar()
+        connectAdapter()
+        setClickListener()
         fetchAllParseUser()
     }
 
@@ -38,20 +41,24 @@ class NewMessageActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
     }
 
-    private fun fetchAllParseUser() {
-        val adapter = GroupAdapter<GroupieViewHolder>()
-        for (user in mUserManager.getAllUsers())
-            adapter.add(UserItem(user))
-        /* TODO: send selected UserItem/User to intent */
+    private fun connectAdapter() {
+        rv_newMessage_user.adapter = adapter
+    }
+
+    private fun setClickListener() {
         adapter.setOnItemClickListener { item, view ->
             val userItem = item as UserItem
             val intent = Intent(view.context, ChatActivity::class.java)
             intent.putExtra(USER_KEY, userItem.user)
             startActivity(intent)
-
             finish()
         }
-        rv_newMessage_user.adapter = adapter
+    }
+
+    private fun fetchAllParseUser() {
+        for (user in mUserManager.getAllUsers())
+            adapter.add(UserItem(user))
+        adapter.notifyDataSetChanged()
     }
 }
 

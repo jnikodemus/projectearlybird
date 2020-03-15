@@ -4,16 +4,19 @@ import android.app.Activity
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
+import android.widget.ImageView
 import android.widget.Toast
-import com.parse.Parse
-import com.parse.ParsePush
-import com.parse.ParseUser
+import com.parse.*
 import de.ntbit.projectearlybird.data.PebContract
 import de.ntbit.projectearlybird.data.PebDbHelper
 import de.ntbit.projectearlybird.ui.HomeActivity
-import kotlinx.android.synthetic.main.activity_login.*
+import java.io.ByteArrayOutputStream
 import java.util.*
 import java.util.logging.Logger
+
 
 class UserManager {
     private val log = Logger.getLogger(this::class.java.simpleName)
@@ -175,9 +178,28 @@ class UserManager {
 
     fun logOut() {
         log.fine("logging out")
-        //mCurrentParseUser = null
-        //mCurrentUserProfile = null
         ParseUser.logOut()
+    }
+
+    fun updateAvatar(bitmap: Bitmap) {
+        val stream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
+        val image: ByteArray = stream.toByteArray()
+        getCurrentUser().put("avatar", ParseFile(image))
+        getCurrentUser().saveInBackground()
+    }
+
+    fun loadAvatar(img: ImageView) {
+        loadAvatar(img, getCurrentUser())
+    }
+
+    fun loadAvatar(img : ImageView, user: ParseUser) {
+        user.getParseFile("avatar")?.getDataInBackground { data, e ->
+            if (e == null) {
+                val bmp = BitmapFactory.decodeByteArray(data, 0, data.size)
+                img.setImageBitmap(bmp)
+            }
+        }
     }
 
     private fun showToast(message: String) {
