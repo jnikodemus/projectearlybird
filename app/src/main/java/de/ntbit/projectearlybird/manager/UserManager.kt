@@ -10,6 +10,7 @@ import com.parse.ParsePush
 import com.parse.ParseUser
 import de.ntbit.projectearlybird.data.PebContract
 import de.ntbit.projectearlybird.data.PebDbHelper
+import de.ntbit.projectearlybird.model.User
 import de.ntbit.projectearlybird.ui.HomeActivity
 import kotlinx.android.synthetic.main.activity_login.*
 import java.util.*
@@ -118,8 +119,8 @@ class UserManager {
         mCurrentUser.saveInBackground()
     }
 
-    fun getCurrentUser(): ParseUser {
-        return ParseUser.getCurrentUser()
+    fun getCurrentUser(): User {
+        return ParseUser.getCurrentUser() as User
     }
 
     /**

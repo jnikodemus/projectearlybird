@@ -2,6 +2,7 @@ package de.ntbit.projectearlybird.ui
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.provider.MediaStore
@@ -12,13 +13,18 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
+import com.parse.Parse
+import com.parse.ParseFile
+import com.parse.ParseUser
 import de.ntbit.projectearlybird.R
 import de.ntbit.projectearlybird.manager.ManagerFactory
 import de.ntbit.projectearlybird.manager.UserManager
+import de.ntbit.projectearlybird.model.User
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.navigation_header.*
 import kotlinx.android.synthetic.main.navigation_header.view.*
 import kotlinx.android.synthetic.main.toolbar.*
+import java.io.ByteArrayOutputStream
 import java.util.logging.Logger
 
 
@@ -67,6 +73,13 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, uri)
             val bitmapDrawable = BitmapDrawable(resources, bitmap)
             select_image_button.background = bitmapDrawable
+
+            /*Prepare bitmap to parsefile to upload it to database*/
+            val stream = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
+            val image: ByteArray = stream.toByteArray()
+            mUserManager.getCurrentUser().avatar = ParseFile(image)
+            //select_image_button.text = null
         }
     }
 

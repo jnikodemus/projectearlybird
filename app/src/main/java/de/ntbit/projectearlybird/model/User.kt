@@ -14,7 +14,7 @@ import java.util.logging.Logger
  */
 
 @Parcelize
-@ParseClassName("User")
+@ParseClassName("_User")
 class User : ParseUser(), Parcelable {
 
     private val log = Logger.getLogger(this::class.java.simpleName)

@@ -8,6 +8,7 @@ import com.parse.ParseObject
 import com.parse.ParsePush
 import de.ntbit.projectearlybird.manager.ManagerFactory
 import de.ntbit.projectearlybird.model.Message
+import de.ntbit.projectearlybird.model.User
 
 
 class ParseConnection {
@@ -17,6 +18,7 @@ class ParseConnection {
 
         fun initialize(context: Context) {
             ParseObject.registerSubclass(Message::class.java)
+            ParseObject.registerSubclass(User::class.java)
             // Enable local storage of Parseobjects
             //Parse.enableLocalDatastore(context)
             Parse.initialize(
