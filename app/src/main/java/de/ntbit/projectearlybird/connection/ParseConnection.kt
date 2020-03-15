@@ -3,11 +3,12 @@ package de.ntbit.projectearlybird.connection
 import android.content.Context
 import com.parse.Parse
 import com.parse.ParseInstallation
-import java.util.logging.Logger
 import com.parse.ParseObject
 import com.parse.ParsePush
+import com.parse.livequery.ParseLiveQueryClient
 import de.ntbit.projectearlybird.manager.ManagerFactory
 import de.ntbit.projectearlybird.model.Message
+import java.util.logging.Logger
 
 
 class ParseConnection {
