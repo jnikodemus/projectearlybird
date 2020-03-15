@@ -25,4 +25,6 @@
     <string name="profile_first_name">First name</string>
     <string name="profile_last_name">Last name</string>
     <string name="profile_birthday">Birthday</string>
+    <string name="profile_logout">Logout</string>
+    <string name="profile_delete_account">Delete Account</string>
 </resources>

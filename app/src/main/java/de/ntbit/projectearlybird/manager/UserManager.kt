@@ -11,6 +11,7 @@ import com.parse.ParseUser
 import de.ntbit.projectearlybird.data.PebContract
 import de.ntbit.projectearlybird.data.PebDbHelper
 import de.ntbit.projectearlybird.ui.HomeActivity
+import kotlinx.android.synthetic.main.activity_login.*
 import java.util.*
 import java.util.logging.Logger
 
