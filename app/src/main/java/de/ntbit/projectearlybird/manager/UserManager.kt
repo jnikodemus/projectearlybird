@@ -187,7 +187,7 @@ class UserManager {
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
         val image: ByteArray = stream.toByteArray()
         getCurrentUser().put("avatar", ParseFile(image))
-        getCurrentUser().saveInBackground()
+        getCurrentUser().saveEventually()
     }
 
     fun loadAvatar(img: ImageView) {

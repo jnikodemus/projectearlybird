@@ -11,6 +11,7 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Item
 import de.ntbit.projectearlybird.R
+import de.ntbit.projectearlybird.adapter.ChatSelfItem
 import de.ntbit.projectearlybird.manager.ManagerFactory
 import de.ntbit.projectearlybird.manager.MessageManager
 import de.ntbit.projectearlybird.manager.UserManager
@@ -39,7 +40,7 @@ class ChatActivity : AppCompatActivity() {
 
         rv_chat_log.adapter = adapter
 
-        chatPartner = intent.getParcelableExtra<ParseUser>(NewMessageActivity.USER_KEY)
+        chatPartner = intent.getParcelableExtra(NewMessageActivity.USER_KEY)
         //supportActionBar?.title = user.username
         listenForMessage(chatPartner)
         bt_chat_send.setOnClickListener {
@@ -57,29 +58,5 @@ class ChatActivity : AppCompatActivity() {
         mMessageManager.sendMessage(text, chatPartner)
         adapter.add(ChatSelfItem(text))
         et_chat_enterMessage.text.clear()
-    }
-}
-
-class ChatFromItem(val text: String, private val user: ParseUser): Item<GroupieViewHolder>(){
-    private val mUserManager = ManagerFactory.getUserManager()
-    override fun bind(viewHolder: GroupieViewHolder, position: Int) {
-        viewHolder.itemView.tv_contact_row.text = text
-        mUserManager.loadAvatar(viewHolder.itemView.chat_contact_row_iv_avatar, user)
-    }
-
-    override fun getLayout(): Int {
-        return R.layout.chat_contact_row
-    }
-}
-
-class ChatSelfItem(val text: String): Item<GroupieViewHolder>(){
-    private val mUserManager = ManagerFactory.getUserManager()
-    override fun bind(viewHolder: GroupieViewHolder, position: Int) {
-        viewHolder.itemView.tv_self_row.text = text
-        mUserManager.loadAvatar(viewHolder.itemView.chat_self_row_iv_avatar)
-    }
-
-    override fun getLayout(): Int {
-        return R.layout.chat_self_row
     }
 }
