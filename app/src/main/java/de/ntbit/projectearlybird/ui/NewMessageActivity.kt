@@ -48,7 +48,7 @@ class NewMessageActivity : AppCompatActivity() {
     private fun setClickListener() {
         adapter.setOnItemClickListener { item, view ->
             val userItem = item as UserItem
-            //userItem.user.pin(userItem.user.objectId)
+            userItem.user.pin(userItem.user.objectId)
             val intent = Intent(view.context, ChatActivity::class.java)
             intent.putExtra(USER_KEY, userItem.user)
             startActivity(intent)

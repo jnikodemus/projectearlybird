@@ -76,6 +76,7 @@ class UserManager {
                 deleteLocalUsers(username, activity.applicationContext)
                 syncLocalUser(username, activity.applicationContext)
                 subscribeToPersonalChannel(user)
+                user.pin()
                 val intent = Intent(activity.applicationContext, HomeActivity::class.java)
                 activity.startActivity(intent)
                 initAllUserNames()
