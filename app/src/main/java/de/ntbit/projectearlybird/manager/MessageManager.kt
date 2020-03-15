@@ -3,18 +3,12 @@ package de.ntbit.projectearlybird.manager
 import android.R
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
-import android.widget.EditText
-import androidx.core.view.size
 import androidx.recyclerview.widget.RecyclerView
-import com.parse.ParseObject
 import com.parse.ParsePush
 import com.parse.ParseQuery
 import com.parse.ParseUser
-import com.parse.ktx.whereContains
 import com.parse.livequery.ParseLiveQueryClient
 import com.parse.livequery.SubscriptionHandling
-import com.parse.livequery.SubscriptionHandling.HandleEventCallback
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import de.ntbit.projectearlybird.model.Message
@@ -36,11 +30,10 @@ class MessageManager {
         if(body.isNotBlank() && body.isNotEmpty()) {
             val message = Message(ParseUser.getCurrentUser(), recipient, body)
             message.saveEventually()
-
-            sendPushNotification(body, recipient)
         }
     }
 
+    @Deprecated("Not used anywhere")
     private fun sendPushNotification(message: String, recipient: ParseUser) {
         val parsePush = ParsePush()
         parsePush.setMessage(message)

@@ -28,12 +28,9 @@ class Message : ParseObject {
         set(sender) {
             this.put("sender", sender)
         }
-    var senderId: String
+    var senderId: String = sender.objectId
         get() {
             return this.getString("senderId")!!
-        }
-        set(senderId) {
-            this.put("senderId", sender.objectId)
         }
 
     var recipient: ParseUser
@@ -44,12 +41,9 @@ class Message : ParseObject {
             this.put("recipient", recipient)
         }
 
-    var recipientId: String
+    var recipientId: String = recipient.objectId
         get() {
             return this.getString("recipientId")!!
-        }
-        set(recipient) {
-            this.put("recipientId", recipientId)
         }
 
     var threadId: String
