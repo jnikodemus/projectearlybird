@@ -3,6 +3,7 @@ package de.ntbit.projectearlybird.ui
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.widget.Toolbar
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.parse.Parse
@@ -56,7 +57,6 @@ class LoginActivity : AppCompatActivity() {
                     actLoginEditTextUsername.text.toString(),
                     actLoginEditTextPassword.text.toString(), this
                 )
-
                 actLoginEditTextUsername.text.clear()
                 actLoginEditTextPassword.text.clear()
                 log.fine("User " + actLoginEditTextUsername.text + " successfully logged in")
