@@ -17,11 +17,11 @@
         android:maxWidth="240dp"
         android:padding="16dp"
         android:text="Ich bin eine Nachricht"
-        app:layout_constraintEnd_toStartOf="@+id/imageView"
-        app:layout_constraintTop_toTopOf="@+id/imageView" />
+        app:layout_constraintEnd_toStartOf="@+id/chat_self_row_iv_avatar"
+        app:layout_constraintTop_toTopOf="@+id/chat_self_row_iv_avatar" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/chat_self_row_iv_avatar"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginTop="8dp"

@@ -3,12 +3,12 @@ package de.ntbit.projectearlybird.connection
 import android.content.Context
 import com.parse.Parse
 import com.parse.ParseInstallation
-import java.util.logging.Logger
 import com.parse.ParseObject
 import com.parse.ParsePush
+import com.parse.livequery.ParseLiveQueryClient
 import de.ntbit.projectearlybird.manager.ManagerFactory
 import de.ntbit.projectearlybird.model.Message
-import de.ntbit.projectearlybird.model.User
+import java.util.logging.Logger
 
 
 class ParseConnection {
@@ -20,7 +20,7 @@ class ParseConnection {
             ParseObject.registerSubclass(Message::class.java)
             ParseObject.registerSubclass(User::class.java)
             // Enable local storage of Parseobjects
-            //Parse.enableLocalDatastore(context)
+            Parse.enableLocalDatastore(context)
             Parse.initialize(
                 Parse.Configuration.Builder(context)
                     .applicationId("7J46i6wiq0gQTeF91ArANMUYVjBHcogRrzJ5EICh")

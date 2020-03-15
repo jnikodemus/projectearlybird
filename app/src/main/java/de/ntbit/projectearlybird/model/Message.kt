@@ -13,7 +13,9 @@ class Message : ParseObject {
 
     internal constructor(sender: ParseUser, recipient: ParseUser, body: String) : super() {
         this.sender = sender
+        this.senderId = sender.objectId
         this.recipient = recipient
+        this.recipientId = recipient.objectId
         this.body = body
 
         generateTimestamp()
@@ -28,6 +30,13 @@ class Message : ParseObject {
         set(sender) {
             this.put("sender", sender)
         }
+    var senderId: String
+        get() {
+            return this.getString("senderId")!!
+        }
+        set(senderId) {
+            this.put("senderId",senderId)
+        }
 
     var recipient: ParseUser
         get() {
@@ -35,6 +44,14 @@ class Message : ParseObject {
         }
         set(recipient) {
             this.put("recipient", recipient)
+        }
+
+    var recipientId: String
+        get() {
+            return this.getString("recipientId")!!
+        }
+        set(recipientId) {
+            this.put("recipientId",recipientId)
         }
 
     var threadId: String
@@ -82,6 +99,7 @@ class Message : ParseObject {
     private fun generateACL() {
         val acl = ParseACL()
         acl.setReadAccess(recipient, true)
+        acl.setReadAccess(sender, true)
         acl.setWriteAccess(sender, true)
         this.parseACL = acl
     }

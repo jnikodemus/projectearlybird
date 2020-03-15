@@ -9,12 +9,11 @@
     android:padding="16dp"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-    <Button
-        android:id="@+id/select_image_button"
+    <ImageView
+        android:id="@+id/navigation_avatar"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:background="@drawable/rounded_select_photo"
-        android:text="Select Photo" />
+        android:contentDescription="@string/navigation_avatar" />
 
     <TextView
         android:id="@+id/navigation_username"

@@ -62,9 +62,11 @@ class ContactsFragment : Fragment() {
 }
 
 class UserItem(val user: ParseUser): Item<GroupieViewHolder>(){
+    private val mUserManager: UserManager = ManagerFactory.getUserManager()
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         viewHolder.itemView.textView_new_message.text = user.username
         /*Bilder zu den usernames*/
+        mUserManager.loadAvatar(viewHolder.itemView.imageView_new_message, user)
     }
 
     override fun getLayout(): Int {
