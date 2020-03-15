@@ -45,22 +45,7 @@ class MessageManager {
             if (e == null) {
                 mutableList.addAll(messages)
                 for(message in mutableList) {
-                    adapter.add(ChatFromItem(message.body))
-                }
-                adapter.notifyDataSetChanged()
-            }
-        }
-    }
-
-    fun getAllMessages(adapter: GroupAdapter<GroupieViewHolder>) {
-        val mutableList: MutableList<Message> = ArrayList()
-        val query = ParseQuery.getQuery(Message::class.java)
-        query.orderByAscending("timestamp")
-        query.findInBackground { messages, e ->
-            if (e == null) {
-                mutableList.addAll(messages)
-                for(message in mutableList) {
-                    adapter.add(ChatFromItem(message.body))
+                    adapter.add(ChatFromItem(message.body, partner))
                 }
                 adapter.notifyDataSetChanged()
             }
