@@ -13,7 +13,9 @@ class Message : ParseObject {
 
     internal constructor(sender: ParseUser, recipient: ParseUser, body: String) : super() {
         this.sender = sender
+        this.senderId = sender.objectId
         this.recipient = recipient
+        this.recipientId = recipient.objectId
         this.body = body
 
         generateTimestamp()
@@ -28,9 +30,12 @@ class Message : ParseObject {
         set(sender) {
             this.put("sender", sender)
         }
-    var senderId: String = sender.objectId
+    var senderId: String
         get() {
             return this.getString("senderId")!!
+        }
+        set(senderId) {
+            this.put("senderId",senderId)
         }
 
     var recipient: ParseUser
@@ -41,9 +46,12 @@ class Message : ParseObject {
             this.put("recipient", recipient)
         }
 
-    var recipientId: String = recipient.objectId
+    var recipientId: String
         get() {
             return this.getString("recipientId")!!
+        }
+        set(recipientId) {
+            this.put("recipientId",recipientId)
         }
 
     var threadId: String

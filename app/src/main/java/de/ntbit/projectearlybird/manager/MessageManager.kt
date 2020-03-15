@@ -1,6 +1,5 @@
 package de.ntbit.projectearlybird.manager
 
-import android.R
 import android.os.Handler
 import android.os.Looper
 import androidx.recyclerview.widget.RecyclerView
