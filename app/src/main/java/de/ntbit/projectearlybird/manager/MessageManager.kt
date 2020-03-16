@@ -26,11 +26,13 @@ class MessageManager {
     /**
      * Sends a String as Message to [recipient] if [body] isNotEmpty() and [body] isNotBlank()
      */
-    fun sendMessage(body: String, recipient: ParseUser) {
+    fun sendMessage(body: String, recipient: ParseUser) : Message? {
         if(body.isNotBlank() && body.isNotEmpty()) {
             val message = Message(ParseUser.getCurrentUser(), recipient, body)
             message.saveEventually()
+            return message
         }
+        return null
     }
 
     @Deprecated("Not used anywhere")
@@ -54,7 +56,7 @@ class MessageManager {
             val handler = Handler(Looper.getMainLooper())
             handler.post {
                 mutableList.add(message)
-                adapter.add(ChatFromItem(message.body, partner))
+                adapter.add(ChatFromItem(message, partner))
                 adapter.notifyDataSetChanged()
             }
         }
@@ -75,8 +77,8 @@ class MessageManager {
                 mutableList.addAll(messages)
                 for(message in mutableList) {
                     if(message.sender.objectId == partner.objectId)
-                        adapter.add(ChatFromItem(message.body, partner))
-                    else adapter.add(ChatSelfItem(message.body))
+                        adapter.add(ChatFromItem(message, partner))
+                    else adapter.add(ChatSelfItem(message))
                 }
                 adapter.notifyDataSetChanged()
             }

@@ -33,8 +33,8 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun initialize() {
-        val toolbar: Toolbar = toolbar
-        setSupportActionBar(toolbar)
+        //val toolbar: Toolbar = toolbar
+        //setSupportActionBar(toolbar)
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
         ParseConnection.initialize(this)
         mUserManager = ManagerFactory.getUserManager()
