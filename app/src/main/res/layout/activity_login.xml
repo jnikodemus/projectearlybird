@@ -6,21 +6,26 @@
     android:layout_height="match_parent"
     tools:context=".ui.LoginActivity">
 
+    <include layout="@layout/toolbar"/>
+
     <EditText
         android:id="@+id/actLoginEditTextUsername"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginStart="70dp"
+        android:layout_marginEnd="70dp"
+        android:layout_marginTop="60dp"
         android:ems="15"
         android:hint="@string/app_username"
         android:inputType="textEmailAddress"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.021"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
     <EditText
         android:id="@+id/actLoginEditTextPassword"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:ems="15"
@@ -48,4 +53,5 @@
         android:text="@string/app_register"
         app:layout_constraintStart_toStartOf="@+id/actLoginEditTextPassword"
         app:layout_constraintTop_toBottomOf="@+id/actLoginEditTextPassword" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

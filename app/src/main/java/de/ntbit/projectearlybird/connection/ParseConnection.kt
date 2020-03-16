@@ -1,8 +1,14 @@
 package de.ntbit.projectearlybird.connection
 
 import android.content.Context
-import de.ntbit.projectearlybird.manager.ParseManager
+import android.util.Log
 import com.parse.Parse
+import com.parse.Parse.isLocalDatastoreEnabled
+import com.parse.ParseInstallation
+import com.parse.ParseObject
+import com.parse.ParsePush
+import de.ntbit.projectearlybird.manager.ManagerFactory
+import de.ntbit.projectearlybird.model.Message
 import java.util.logging.Logger
 
 
@@ -10,23 +16,29 @@ class ParseConnection {
 
     companion object {
         private val log = Logger.getLogger(this::class.java.simpleName)
-        private var parseManager: ParseManager? = null
 
-        fun initialize(context: Context) : ParseManager? {
+        fun initialize(context: Context) {
+            ParseObject.registerSubclass(Message::class.java)
+
             Parse.initialize(
                 Parse.Configuration.Builder(context)
-                    .applicationId("pYIuK6xeAMNkL2IYpOEWIiAoacyr8jEyTja8LqxV")
-                    .clientKey("mpF0Gq4uUR9e7qSgFBefH6UPgJxNdaQyHxEg73tH")
+                    .applicationId("7J46i6wiq0gQTeF91ArANMUYVjBHcogRrzJ5EICh")
+                    .clientKey("V9flekGgzi3v4neeRS7nj2BikZ921YfGvpe6kOyp")
                     .server("https://parseapi.back4app.com")
+                    .enableLocalDataStore()
                     .build()
             )
-            parseManager = ParseManager()
-            println("ParseManager is null: " + (parseManager == null))
-            return parseManager
-        }
+            //AndroidApiKey: 'AIzaSyDkeFQRd1T-SmaNU1ckRcK43cm8hu8AUi4'
 
-        fun getParseManager() : ParseManager? {
-            return parseManager
+            Log.d("CUSTOMDEBUG", "Parse LocalDatastore is " + (if(isLocalDatastoreEnabled()) "enabled" else "disabled"))
+
+            ParseInstallation.getCurrentInstallation().saveInBackground()
+            //installation.put("GCMSenderId", 474988434121)
+            //installation.saveInBackground()
+            ParsePush.subscribeInBackground("Warning")
+            ParsePush.subscribeInBackground("Develop")
+
+            ManagerFactory.initialize()
         }
     }
 }

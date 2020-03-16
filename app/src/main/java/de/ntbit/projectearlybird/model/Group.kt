@@ -1,12 +1,21 @@
 package de.ntbit.projectearlybird.model
 
+import com.parse.ParseClassName
+import com.parse.ParseObject
 import java.util.logging.Logger
 
-abstract class Group internal constructor(var id: String, var name: String) {
+@ParseClassName("UserProfile")
+abstract class Group : ParseObject {
 
-    private val log = Logger.getLogger(this::class.java.simpleName)
+    private val log: Logger = Logger.getLogger(this::class.java.simpleName)
+/*
+    private var members: MutableList<UserProfile>
+        get() = getList<UserProfile>()
+        private set(userFk) {
+            addUnique("userFk", userFk)
+        }
+        
+ */
 
-    override fun toString(): String {
-        return this.name
-    }
+    constructor()
 }

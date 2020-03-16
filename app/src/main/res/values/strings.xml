@@ -1,6 +1,9 @@
 <resources>
+    <string name="app_major_version">0</string>
+    <string name="app_sub_version">1</string>
+    <string name="app_version">Version</string>
     <string name="app_name">ProjectEarlyBird</string>
-    <string name="app_welcome">Welcome!</string>
+    <string name="app_welcome">Welcome</string>
     <string name="app_email">Email</string>
     <string name="app_username">Username</string>
     <string name="app_password">Password</string>
@@ -8,4 +11,21 @@
     <string name="app_login">Login</string>
     <string name="app_register">Register</string>
     <string name="app_check_input">Check your input!</string>
+
+    <string name="menu_groups">Groups</string>
+    <string name="menu_contacts">Contacts</string>
+    <string name="menu_conversations">Conversations</string>
+    <string name="menu_profile">Profile</string>
+    <string name="menu_settings">Settings</string>
+    <string name="menu_info">Information</string>
+    <string name="menu_drawer_open">Open navigation drawer</string>
+    <string name="menu_drawer_close">Close navigation drawer</string>
+    <string name="navigation_icon_description">Menu icon</string>
+
+    <string name="profile_first_name">First name</string>
+    <string name="profile_last_name">Last name</string>
+    <string name="profile_birthday">Birthday</string>
+    <string name="profile_logout">Logout</string>
+    <string name="profile_delete_account">Delete Account</string>
+    <string name="navigation_avatar">Avatar</string>
 </resources>
