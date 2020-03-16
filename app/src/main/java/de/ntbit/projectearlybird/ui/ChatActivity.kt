@@ -55,8 +55,10 @@ class ChatActivity : AppCompatActivity() {
     /*Sending a message from currentuser to chosen contact*/
     private fun sendMessage(){
         val text = et_chat_enterMessage.text.toString()
-        mMessageManager.sendMessage(text, chatPartner)
-        adapter.add(ChatSelfItem(text))
+        val message = mMessageManager.sendMessage(text, chatPartner)
+        if(message != null) {
+            adapter.add(ChatSelfItem(message))
+        }
         et_chat_enterMessage.text.clear()
     }
 }
