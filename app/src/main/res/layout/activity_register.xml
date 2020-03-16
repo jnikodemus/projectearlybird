@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimaryLight"
+    android:background="@drawable/background_color_gradient"
     tools:context=".ui.RegisterActivity">
 
     <include layout="@layout/toolbar"/>
@@ -65,10 +65,13 @@
 
     <Button
         android:id="@+id/actRegisterBtnRegister"
+        android:width="250dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="45dp"
         android:text="@string/app_register"
+        android:background="@drawable/rounded_button"
+        android:textColor="@android:color/white"
         app:layout_constraintEnd_toEndOf="@+id/actRegisterEditTxtPasswordRetry"
         app:layout_constraintStart_toStartOf="@+id/actRegisterEditTxtPasswordRetry"
         app:layout_constraintTop_toBottomOf="@+id/actRegisterEditTxtPasswordRetry" />

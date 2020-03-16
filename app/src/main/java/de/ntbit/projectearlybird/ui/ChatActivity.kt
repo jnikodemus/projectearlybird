@@ -1,25 +1,16 @@
 package de.ntbit.projectearlybird.ui
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import com.parse.ParseInstallation
-import com.parse.ParsePush
-import com.parse.ParseQuery
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.parse.ParseUser
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
-import com.xwray.groupie.Item
 import de.ntbit.projectearlybird.R
 import de.ntbit.projectearlybird.adapter.ChatSelfItem
 import de.ntbit.projectearlybird.manager.ManagerFactory
 import de.ntbit.projectearlybird.manager.MessageManager
-import de.ntbit.projectearlybird.manager.UserManager
-import de.ntbit.projectearlybird.model.Message
 import kotlinx.android.synthetic.main.activity_chat.*
-import kotlinx.android.synthetic.main.chat_contact_row.view.*
-import kotlinx.android.synthetic.main.chat_self_row.view.*
-import kotlinx.android.synthetic.main.new_message_user_row.view.*
 
 
 class ChatActivity : AppCompatActivity() {
@@ -41,6 +32,10 @@ class ChatActivity : AppCompatActivity() {
         rv_chat_log.adapter = adapter
 
         chatPartner = intent.getParcelableExtra(NewMessageActivity.USER_KEY)
+
+        /* Resize Recyclerview if SoftKeyboard is selected */
+        (rv_chat_log.layoutManager as LinearLayoutManager).stackFromEnd = true
+
         //supportActionBar?.title = user.username
         listenForMessage(chatPartner)
         bt_chat_send.setOnClickListener {
