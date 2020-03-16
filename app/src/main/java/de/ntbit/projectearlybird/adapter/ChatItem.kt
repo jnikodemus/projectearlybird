@@ -27,6 +27,9 @@ class ChatFromItem(text:String, private val user: ParseUser): ChatItem(text) {
         viewHolder.itemView.tv_contact_row.text = text
         mUserManager.loadAvatar(viewHolder.itemView.chat_contact_row_iv_avatar, user)
     }
+    override fun getLayout(): Int {
+        return R.layout.chat_contact_row
+    }
 }
 
 class ChatSelfItem(text: String): ChatItem(text)
