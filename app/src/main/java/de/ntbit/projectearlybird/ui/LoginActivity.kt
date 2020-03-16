@@ -3,8 +3,12 @@ package de.ntbit.projectearlybird.ui
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.widget.Toolbar
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.parse.Parse
+import com.parse.ParseInstallation
+import com.parse.ParseSession
 import com.parse.ParseUser
 import de.ntbit.projectearlybird.R
 
@@ -35,6 +39,17 @@ class LoginActivity : AppCompatActivity() {
         ParseConnection.initialize(this)
         mUserManager = ManagerFactory.getUserManager()
 
+        setClickListener()
+    }
+
+    private fun checkLoggedIn() {
+        if(mUserManager.getCurrentUser().isAuthenticated) {
+            val intent = Intent(this.applicationContext, HomeActivity::class.java)
+            this.startActivity(intent)
+        }
+    }
+
+    private fun setClickListener() {
         actLoginBtnLogin.setOnClickListener{
             if(actLoginEditTextUsername.text.isNotBlank() &&
                 actLoginEditTextPassword.text.isNotBlank()) {
@@ -42,13 +57,11 @@ class LoginActivity : AppCompatActivity() {
                     actLoginEditTextUsername.text.toString(),
                     actLoginEditTextPassword.text.toString(), this
                 )
-
                 actLoginEditTextUsername.text.clear()
                 actLoginEditTextPassword.text.clear()
                 log.fine("User " + actLoginEditTextUsername.text + " successfully logged in")
             }
         }
-
         actLoginBtnRegister.setOnClickListener{
             startActivity(Intent(this, RegisterActivity::class.java))
         }

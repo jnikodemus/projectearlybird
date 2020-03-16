@@ -6,13 +6,14 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.drawable.BitmapDrawable
+import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
 import com.parse.*
 import de.ntbit.projectearlybird.data.PebContract
 import de.ntbit.projectearlybird.data.PebDbHelper
 import de.ntbit.projectearlybird.ui.HomeActivity
+import kotlinx.android.synthetic.main.activity_login.*
 import java.io.ByteArrayOutputStream
 import java.util.*
 import java.util.logging.Logger
@@ -76,6 +77,7 @@ class UserManager {
                 deleteLocalUsers(username, activity.applicationContext)
                 syncLocalUser(username, activity.applicationContext)
                 subscribeToPersonalChannel(user)
+                user.pin()
                 val intent = Intent(activity.applicationContext, HomeActivity::class.java)
                 activity.startActivity(intent)
                 initAllUserNames()
@@ -186,7 +188,7 @@ class UserManager {
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
         val image: ByteArray = stream.toByteArray()
         getCurrentUser().put("avatar", ParseFile(image))
-        getCurrentUser().saveInBackground()
+        getCurrentUser().saveEventually()
     }
 
     fun loadAvatar(img: ImageView) {

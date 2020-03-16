@@ -3,6 +3,7 @@ package de.ntbit.projectearlybird.manager
 import android.os.Handler
 import android.os.Looper
 import androidx.recyclerview.widget.RecyclerView
+import com.parse.ParseObject
 import com.parse.ParsePush
 import com.parse.ParseQuery
 import com.parse.ParseUser
@@ -10,9 +11,9 @@ import com.parse.livequery.ParseLiveQueryClient
 import com.parse.livequery.SubscriptionHandling
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
+import de.ntbit.projectearlybird.adapter.ChatFromItem
+import de.ntbit.projectearlybird.adapter.ChatSelfItem
 import de.ntbit.projectearlybird.model.Message
-import de.ntbit.projectearlybird.ui.ChatFromItem
-import de.ntbit.projectearlybird.ui.ChatSelfItem
 import java.net.URI
 import java.util.logging.Logger
 
@@ -63,6 +64,7 @@ class MessageManager {
      * Returns all messages as [Collection]<[Message]> for a given [threadId]
      */
     fun getMessagesByPartner(partner: ParseUser, chatLog: RecyclerView) {
+        partner.fetchFromLocalDatastore()
         val adapter: GroupAdapter<GroupieViewHolder> = chatLog.adapter as GroupAdapter<GroupieViewHolder>
         val mutableList: MutableList<Message> = ArrayList()
         val query = ParseQuery.getQuery(Message::class.java)

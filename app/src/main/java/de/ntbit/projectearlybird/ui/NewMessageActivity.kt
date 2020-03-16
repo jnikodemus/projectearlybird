@@ -8,6 +8,7 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Item
 import de.ntbit.projectearlybird.R
+import de.ntbit.projectearlybird.adapter.UserItem
 import de.ntbit.projectearlybird.manager.ManagerFactory
 import de.ntbit.projectearlybird.manager.UserManager
 import kotlinx.android.synthetic.main.activity_new_message.*
@@ -48,7 +49,7 @@ class NewMessageActivity : AppCompatActivity() {
     private fun setClickListener() {
         adapter.setOnItemClickListener { item, view ->
             val userItem = item as UserItem
-            //userItem.user.pin(userItem.user.objectId)
+            userItem.user.pin()
             val intent = Intent(view.context, ChatActivity::class.java)
             intent.putExtra(USER_KEY, userItem.user)
             startActivity(intent)

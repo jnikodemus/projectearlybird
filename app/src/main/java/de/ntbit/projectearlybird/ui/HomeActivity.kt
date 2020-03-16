@@ -1,11 +1,7 @@
 package de.ntbit.projectearlybird.ui
 
-import android.R.attr.data
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.Menu
@@ -15,16 +11,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
-import com.parse.ParseFile
 import de.ntbit.projectearlybird.R
 import de.ntbit.projectearlybird.manager.ManagerFactory
 import de.ntbit.projectearlybird.manager.UserManager
 import kotlinx.android.synthetic.main.activity_home.*
-import kotlinx.android.synthetic.main.chat_self_row.view.*
 import kotlinx.android.synthetic.main.navigation_header.*
 import kotlinx.android.synthetic.main.navigation_header.view.*
 import kotlinx.android.synthetic.main.toolbar.*
-import java.io.ByteArrayOutputStream
 import java.util.logging.Logger
 
 
@@ -32,7 +25,6 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private val log = Logger.getLogger(this::class.java.simpleName)
     private val mUserManager: UserManager = ManagerFactory.getUserManager()
-    //private var mUserProfile: UserProfile? = null
     private lateinit var drawer: DrawerLayout
     private lateinit var toggle: ActionBarDrawerToggle
 
@@ -136,21 +128,6 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         startMain.addCategory(Intent.CATEGORY_HOME)
         startMain.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(startMain)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item?.itemId) {
-            R.id.new_message -> {
-                val intent = Intent(this, NewMessageActivity::class.java)
-                startActivity(intent)
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.top_right_menu, menu)
-        return super.onCreateOptionsMenu(menu)
     }
 
 }
