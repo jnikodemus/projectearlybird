@@ -29,4 +29,6 @@
     <string name="profile_logout">Logout</string>
     <string name="profile_delete_account">Delete Account</string>
     <string name="navigation_avatar">Avatar</string>
+
+    <string name="username">Username</string>
 </resources>

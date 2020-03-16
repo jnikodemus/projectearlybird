@@ -71,7 +71,7 @@ class NewMessageActivity : AppCompatActivity() {
     }
 
     override fun getLayout(): Int {
-        return R.layout.new_message_user_row
+        return R.layout.row_new_message_user
     }
 }*/
 

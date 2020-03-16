@@ -2,11 +2,9 @@ package de.ntbit.projectearlybird.manager
 
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
-import com.parse.ParseObject
-import com.parse.ParsePush
-import com.parse.ParseQuery
-import com.parse.ParseUser
+import com.parse.*
 import com.parse.livequery.ParseLiveQueryClient
 import com.parse.livequery.SubscriptionHandling
 import com.xwray.groupie.GroupAdapter
@@ -58,8 +56,27 @@ class MessageManager {
                 mutableList.add(message)
                 adapter.add(ChatFromItem(message, partner))
                 adapter.notifyDataSetChanged()
+                chatLog.smoothScrollToPosition(adapter.itemCount - 1)
             }
         }
+    }
+
+    /**
+     * Returns the latest message received from given [user]
+     */
+    fun getLatestMessage(user: ParseUser): Message {
+        user.fetchFromLocalDatastore()
+        try {
+            val query = ParseQuery.getQuery(Message::class.java)
+            query.whereContains("threadId", user.objectId)
+            query.limit = 1
+            query.orderByDescending("timestamp")
+            return query.first
+        }
+        catch (e: ParseException) {
+            Log.d("EXEPTION", e.localizedMessage)
+        }
+        return Message()
     }
 
     /**

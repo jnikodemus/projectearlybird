@@ -173,6 +173,8 @@ class UserManager {
         return allUsers
     }
 
+    /* TODO: create getAllLocalUsers() */
+
     // TODO: Check what exactly is isAuthenticated
     fun userIsLoggedIn(): Boolean {
         return getCurrentUser().isAuthenticated
