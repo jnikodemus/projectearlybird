@@ -68,6 +68,7 @@ class MessageManager {
         user.fetchFromLocalDatastore()
         try {
             val query = ParseQuery.getQuery(Message::class.java)
+            //query.fromLocalDatastore()
             query.whereContains("threadId", user.objectId)
             query.limit = 1
             query.orderByDescending("timestamp")
@@ -93,6 +94,7 @@ class MessageManager {
             if (e == null) {
                 mutableList.addAll(messages)
                 for(message in mutableList) {
+                    message.pinInBackground()
                     if(message.sender.objectId == partner.objectId)
                         adapter.add(ChatFromItem(message, partner))
                     else adapter.add(ChatSelfItem(message))

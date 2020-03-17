@@ -1,8 +1,10 @@
 package de.ntbit.projectearlybird.ui
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.parse.ParseQuery
 import com.parse.ParseUser
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
@@ -10,6 +12,7 @@ import de.ntbit.projectearlybird.R
 import de.ntbit.projectearlybird.adapter.ChatSelfItem
 import de.ntbit.projectearlybird.manager.ManagerFactory
 import de.ntbit.projectearlybird.manager.MessageManager
+import de.ntbit.projectearlybird.model.Message
 import kotlinx.android.synthetic.main.activity_chat.*
 
 
@@ -41,6 +44,10 @@ class ChatActivity : AppCompatActivity() {
         bt_chat_send.setOnClickListener {
             sendMessage()
         }
+
+        val queryUser = ParseQuery.getQuery(Message::class.java)
+        queryUser.fromLocalDatastore()
+        Log.d("CUSTOMDEBUG","there are ${queryUser.count()} items in localDatastore.")
     }
 
     private fun listenForMessage(partner: ParseUser) {

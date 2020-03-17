@@ -155,8 +155,10 @@ class UserManager {
             if (e == null) {
                 for (user in users) {
                     log.fine("CUSTOMDEBUG - User: " + user.username + " Id: " + user.objectId)
-                    if(!user.objectId.equals(getCurrentUser().objectId))
+                    if(!user.objectId.equals(getCurrentUser().objectId)) {
+                        user.pinInBackground()
                         allUsers.add(user)
+                    }
                 }
             } else {
                 log.fine("Error")
