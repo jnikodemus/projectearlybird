@@ -1,8 +1,10 @@
 package de.ntbit.projectearlybird.manager
 
+import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import androidx.core.app.NotificationCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.parse.*
 import com.parse.livequery.ParseLiveQueryClient
@@ -57,9 +59,20 @@ class MessageManager {
                 adapter.add(ChatFromItem(message, partner))
                 adapter.notifyDataSetChanged()
                 chatLog.smoothScrollToPosition(adapter.itemCount - 1)
+                //buildNotification(message, chatLog.context)
             }
         }
     }
+
+    /* TODO: INSERT NOTIFICATION */
+    private fun buildNotification(message: Message, context: Context) {
+        var builder = NotificationCompat.Builder(context, 0.toString())
+            //.setSmallIcon(R.drawable.notification_icon)
+            .setContentTitle("New Message")
+            .setContentText(message.body)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+    }
+
 
     /**
      * Returns the latest message received from given [user]
