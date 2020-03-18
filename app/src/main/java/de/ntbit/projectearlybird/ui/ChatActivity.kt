@@ -60,6 +60,7 @@ class ChatActivity : AppCompatActivity() {
         val message = mMessageManager.sendMessage(text, chatPartner)
         if(message != null) {
             adapter.add(ChatSelfItem(message))
+            rv_chat_log.smoothScrollToPosition(adapter.itemCount - 1)
         }
         et_chat_enterMessage.text.clear()
     }
