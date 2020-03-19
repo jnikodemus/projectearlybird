@@ -14,6 +14,10 @@ import com.xwray.groupie.GroupieViewHolder
 import de.ntbit.projectearlybird.adapter.ChatFromItem
 import de.ntbit.projectearlybird.adapter.ChatSelfItem
 import de.ntbit.projectearlybird.model.Message
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.net.URI
 import java.util.logging.Logger
 
@@ -108,7 +112,7 @@ class MessageManager {
                 mutableList.addAll(messages)
                 for(message in mutableList) {
                     message.pinInBackground()
-                    if(message.sender.objectId == partner.objectId)
+                    if (message.sender.objectId == partner.objectId)
                         adapter.add(ChatFromItem(message, partner))
                     else adapter.add(ChatSelfItem(message))
                 }

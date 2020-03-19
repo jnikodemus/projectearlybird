@@ -14,6 +14,9 @@ import de.ntbit.projectearlybird.manager.ManagerFactory
 import de.ntbit.projectearlybird.manager.MessageManager
 import de.ntbit.projectearlybird.model.Message
 import kotlinx.android.synthetic.main.activity_chat.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.launch
 
 
 class ChatActivity : AppCompatActivity() {
@@ -26,7 +29,6 @@ class ChatActivity : AppCompatActivity() {
     private val mMessageManager: MessageManager = ManagerFactory.getMessageManager()
     private lateinit var chatPartner: ParseUser
     //private val mUserManager: UserManager = ManagerFactory.getUserManager()
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +43,7 @@ class ChatActivity : AppCompatActivity() {
 
         //supportActionBar?.title = user.username
         listenForMessage(chatPartner)
+
         bt_chat_send.setOnClickListener {
             sendMessage()
         }
@@ -54,8 +57,9 @@ class ChatActivity : AppCompatActivity() {
         mMessageManager.getMessagesByPartner(partner, rv_chat_log)
         mMessageManager.subscribeToPartner(partner, rv_chat_log)
     }
+
     /*Sending a message from currentuser to chosen contact*/
-    private fun sendMessage(){
+    private fun sendMessage() {
         val text = et_chat_enterMessage.text.toString()
         val message = mMessageManager.sendMessage(text, chatPartner)
         if(message != null) {

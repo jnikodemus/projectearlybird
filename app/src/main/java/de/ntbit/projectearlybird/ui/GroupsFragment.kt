@@ -10,6 +10,7 @@ import com.xwray.groupie.GroupieViewHolder
 import de.ntbit.projectearlybird.R
 import de.ntbit.projectearlybird.adapter.GroupItem
 import kotlinx.android.synthetic.main.fragment_contacts.*
+import kotlinx.android.synthetic.main.fragment_groups.*
 
 
 class GroupsFragment : Fragment() {
@@ -26,11 +27,11 @@ class GroupsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        createTestLayoutt()
-        frgmt_contacts_rv_contacts.adapter = adapter
+        createTestLayout()
+        frgmt_groups_rv_groups.adapter = adapter
     }
 
-    fun createTestLayoutt(){
+    fun createTestLayout(){
         adapter.add(GroupItem())
         adapter.add(GroupItem())
     }
