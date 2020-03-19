@@ -35,6 +35,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="10sp"
+        android:textIsSelectable="true"
         app:layout_constraintBottom_toTopOf="@+id/tv_contact_row"
         app:layout_constraintStart_toStartOf="@+id/tv_contact_row" />
 
