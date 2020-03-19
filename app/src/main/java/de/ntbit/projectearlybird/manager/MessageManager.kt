@@ -1,12 +1,12 @@
 package de.ntbit.projectearlybird.manager
 
+import android.content.Context
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
+import androidx.core.app.NotificationCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.parse.ParseObject
-import com.parse.ParsePush
-import com.parse.ParseQuery
-import com.parse.ParseUser
+import com.parse.*
 import com.parse.livequery.ParseLiveQueryClient
 import com.parse.livequery.SubscriptionHandling
 import com.xwray.groupie.GroupAdapter
@@ -58,8 +58,39 @@ class MessageManager {
                 mutableList.add(message)
                 adapter.add(ChatFromItem(message, partner))
                 adapter.notifyDataSetChanged()
+                chatLog.smoothScrollToPosition(adapter.itemCount - 1)
+                //buildNotification(message, chatLog.context)
             }
         }
+    }
+
+    /* TODO: INSERT NOTIFICATION */
+    private fun buildNotification(message: Message, context: Context) {
+        var builder = NotificationCompat.Builder(context, 0.toString())
+            //.setSmallIcon(R.drawable.notification_icon)
+            .setContentTitle("New Message")
+            .setContentText(message.body)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+    }
+
+
+    /**
+     * Returns the latest message received from given [user]
+     */
+    fun getLatestMessage(user: ParseUser): Message {
+        user.fetchFromLocalDatastore()
+        try {
+            val query = ParseQuery.getQuery(Message::class.java)
+            //query.fromLocalDatastore()
+            query.whereContains("threadId", user.objectId)
+            query.limit = 1
+            query.orderByDescending("timestamp")
+            return query.first
+        }
+        catch (e: ParseException) {
+            Log.d("EXEPTION", e.localizedMessage)
+        }
+        return Message()
     }
 
     /**
@@ -76,6 +107,7 @@ class MessageManager {
             if (e == null) {
                 mutableList.addAll(messages)
                 for(message in mutableList) {
+                    message.pinInBackground()
                     if(message.sender.objectId == partner.objectId)
                         adapter.add(ChatFromItem(message, partner))
                     else adapter.add(ChatSelfItem(message))

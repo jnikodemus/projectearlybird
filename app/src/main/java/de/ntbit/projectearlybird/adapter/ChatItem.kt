@@ -6,8 +6,8 @@ import com.xwray.groupie.Item
 import de.ntbit.projectearlybird.R
 import de.ntbit.projectearlybird.manager.ManagerFactory
 import de.ntbit.projectearlybird.model.Message
-import kotlinx.android.synthetic.main.chat_contact_row.view.*
-import kotlinx.android.synthetic.main.chat_self_row.view.*
+import kotlinx.android.synthetic.main.row_chat_contact.view.*
+import kotlinx.android.synthetic.main.row_chat_self.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -15,7 +15,7 @@ import java.util.*
 /* TODO: Change tv_self_row to something more useful */
 open class ChatItem(val message: Message): Item<GroupieViewHolder>() {
     val mUserManager = ManagerFactory.getUserManager()
-    /* TODO: CHANGE TO getCurrentLocale */
+    /* TODO: CHANGE TO getCurrentLocale and check if now -24h = gestern*/
     private val userLocale = Locale("de")
     private val datePattern = "HH:mm"
     val format = SimpleDateFormat(datePattern, userLocale)
@@ -27,7 +27,7 @@ open class ChatItem(val message: Message): Item<GroupieViewHolder>() {
     }
 
     override fun getLayout(): Int {
-        return R.layout.chat_self_row
+        return R.layout.row_chat_self
     }
 }
 
@@ -38,7 +38,7 @@ class ChatFromItem(message: Message, private val user: ParseUser): ChatItem(mess
         mUserManager.loadAvatar(viewHolder.itemView.chat_contact_row_iv_avatar, user)
     }
     override fun getLayout(): Int {
-        return R.layout.chat_contact_row
+        return R.layout.row_chat_contact
     }
 }
 

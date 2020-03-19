@@ -1,9 +1,12 @@
 package de.ntbit.projectearlybird.ui
 
+import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.widget.Toolbar
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.parse.Parse
@@ -44,26 +47,31 @@ class LoginActivity : AppCompatActivity() {
 
     private fun checkLoggedIn() {
         if(mUserManager.getCurrentUser().isAuthenticated) {
-            val intent = Intent(this.applicationContext, HomeActivity::class.java)
+            val intent = Intent(this, HomeActivity::class.java)
             this.startActivity(intent)
         }
     }
 
     private fun setClickListener() {
         actLoginBtnLogin.setOnClickListener{
-            if(actLoginEditTextUsername.text.isNotBlank() &&
-                actLoginEditTextPassword.text.isNotBlank()) {
-                mUserManager.loginUser(
-                    actLoginEditTextUsername.text.toString(),
-                    actLoginEditTextPassword.text.toString(), this
-                )
-                actLoginEditTextUsername.text.clear()
-                actLoginEditTextPassword.text.clear()
-                log.fine("User " + actLoginEditTextUsername.text + " successfully logged in")
-            }
+            tryLogin(it)
         }
         actLoginBtnRegister.setOnClickListener{
             startActivity(Intent(this, RegisterActivity::class.java))
+        }
+    }
+
+    private fun tryLogin(view: View) {
+        if(actLoginEditTextUsername.text.isNotBlank() &&
+            actLoginEditTextPassword.text.isNotBlank()) {
+            mUserManager.loginUser(
+                actLoginEditTextUsername.text.toString(),
+                actLoginEditTextPassword.text.toString(), this
+            )
+            (getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(view.windowToken, 0)
+            actLoginEditTextUsername.text.clear()
+            actLoginEditTextPassword.text.clear()
+            log.fine("User " + actLoginEditTextUsername.text + " successfully logged in")
         }
     }
 

@@ -155,8 +155,10 @@ class UserManager {
             if (e == null) {
                 for (user in users) {
                     log.fine("CUSTOMDEBUG - User: " + user.username + " Id: " + user.objectId)
-                    if(!user.objectId.equals(getCurrentUser().objectId))
+                    if(!user.objectId.equals(getCurrentUser().objectId)) {
+                        user.pinInBackground()
                         allUsers.add(user)
+                    }
                 }
             } else {
                 log.fine("Error")
@@ -172,6 +174,8 @@ class UserManager {
     fun getAllUsers(): Collection<ParseUser> {
         return allUsers
     }
+
+    /* TODO: create getAllLocalUsers() */
 
     // TODO: Check what exactly is isAuthenticated
     fun userIsLoggedIn(): Boolean {
