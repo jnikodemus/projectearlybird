@@ -20,14 +20,8 @@ class ParseConnection {
         fun initialize(context: Context) {
             ParseObject.registerSubclass(Message::class.java)
 
-            Parse.initialize(
-                Parse.Configuration.Builder(context)
-                    .applicationId("7J46i6wiq0gQTeF91ArANMUYVjBHcogRrzJ5EICh")
-                    .clientKey("V9flekGgzi3v4neeRS7nj2BikZ921YfGvpe6kOyp")
-                    .server("https://parseapi.back4app.com")
-                    .enableLocalDataStore()
-                    .build()
-            )
+            initializeBack4App(context)
+            //initializePrivateParse(context)
             //AndroidApiKey: 'AIzaSyDkeFQRd1T-SmaNU1ckRcK43cm8hu8AUi4'
 
             Log.d("CUSTOMDEBUG", "Parse LocalDatastore is " + (if(isLocalDatastoreEnabled()) "enabled" else "disabled"))
@@ -39,6 +33,28 @@ class ParseConnection {
             ParsePush.subscribeInBackground("Develop")
 
             ManagerFactory.initialize()
+        }
+
+        private fun initializePrivateParse(context: Context) {
+            Parse.initialize(
+                Parse.Configuration.Builder(context)
+                    .applicationId("APPLICATION_EARLYBIRD_DEV_0")
+                    .clientKey("JH64864h3fd4g5k4h354oiu35l435d4jse354wa35g43554zh3e55LKBHbl843zbljhbKHBklbh834lhsjblkhbrlks87bzLKBZZBIzblkwezbrlw")
+                    .server("http://217.5.174.224:1337")
+                    .enableLocalDataStore()
+                    .build()
+            )
+        }
+
+        private fun initializeBack4App(context: Context) {
+            Parse.initialize(
+                Parse.Configuration.Builder(context)
+                    .applicationId("7J46i6wiq0gQTeF91ArANMUYVjBHcogRrzJ5EICh")
+                    .clientKey("V9flekGgzi3v4neeRS7nj2BikZ921YfGvpe6kOyp")
+                    .server("https://parseapi.back4app.com")
+                    .enableLocalDataStore()
+                    .build()
+            )
         }
     }
 }
