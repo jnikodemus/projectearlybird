@@ -32,7 +32,7 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         initialize()
-        ParseUser.logOut()
+        //ParseUser.logOut()
     }
 
     private fun initialize() {
@@ -41,12 +41,15 @@ class LoginActivity : AppCompatActivity() {
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
         ParseConnection.initialize(this)
         mUserManager = ManagerFactory.getUserManager()
-
+        checkLoggedIn()
         setClickListener()
     }
 
+    /**
+     * Checks if a user is already logged in and starts HomeActivity if true
+     */
     private fun checkLoggedIn() {
-        if(mUserManager.getCurrentUser().isAuthenticated) {
+        if(mUserManager.isLoggedIn()) {
             val intent = Intent(this, HomeActivity::class.java)
             this.startActivity(intent)
         }

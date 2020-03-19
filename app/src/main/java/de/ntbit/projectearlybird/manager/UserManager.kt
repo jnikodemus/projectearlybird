@@ -76,8 +76,7 @@ class UserManager {
                 //setUserOnline(user.username, activity.applicationContext)
                 deleteLocalUsers(username, activity.applicationContext)
                 syncLocalUser(username, activity.applicationContext)
-                subscribeToPersonalChannel(user)
-                user.pin()
+                user.pin("currentUser")
                 val intent = Intent(activity.applicationContext, HomeActivity::class.java)
                 activity.startActivity(intent)
                 initAllUserNames()
@@ -87,10 +86,6 @@ class UserManager {
                 showToast("Invalid username/password")
             }
         }
-    }
-
-    private fun subscribeToPersonalChannel(user: ParseUser) {
-        ParsePush.subscribeInBackground(user.objectId)
     }
 
     private fun deleteLocalUsers(username: String, ctx: Context) {
@@ -177,13 +172,18 @@ class UserManager {
 
     /* TODO: create getAllLocalUsers() */
 
-    // TODO: Check what exactly is isAuthenticated
-    fun userIsLoggedIn(): Boolean {
-        return getCurrentUser().isAuthenticated
+    /**
+     * Checks if Parse.getCurrentUser() is null to determine if a user is already logged in and
+     * returns true if so
+     */
+    fun isLoggedIn(): Boolean {
+        return ParseUser.getCurrentUser() != null
     }
 
     fun logOut() {
         log.fine("logging out")
+        ParseUser.unpinAll()
+        ParseObject.unpinAll()
         ParseUser.logOut()
     }
 
