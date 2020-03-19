@@ -27,11 +27,25 @@ class GroupsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        createTestLayout()
         frgmt_groups_rv_groups.adapter = adapter
+        createTestLayout()
     }
 
     fun createTestLayout(){
+        adapter.add(GroupItem())
+        adapter.add(GroupItem())
+        adapter.add(GroupItem())
+        adapter.add(GroupItem())
+        adapter.add(GroupItem())
+        adapter.add(GroupItem())
+        adapter.add(GroupItem())
+        adapter.add(GroupItem())
+        adapter.add(GroupItem())
+        adapter.add(GroupItem())
+        adapter.add(GroupItem())
+        adapter.add(GroupItem())
+        adapter.add(GroupItem())
+        adapter.add(GroupItem())
         adapter.add(GroupItem())
         adapter.add(GroupItem())
     }

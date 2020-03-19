@@ -4,7 +4,7 @@ import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Item
 import de.ntbit.projectearlybird.R
 
-open class GroupItem(): Item<GroupieViewHolder>(){
+open class GroupItem : Item<GroupieViewHolder>(){
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
     }
 

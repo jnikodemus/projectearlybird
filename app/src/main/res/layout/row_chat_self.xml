@@ -17,6 +17,7 @@
         android:maxWidth="240dp"
         android:padding="16dp"
         android:text="Ich bin eine Nachricht"
+        android:textIsSelectable="true"
         app:layout_constraintEnd_toStartOf="@+id/chat_self_row_iv_avatar"
         app:layout_constraintTop_toTopOf="@+id/chat_self_row_iv_avatar" />
 
@@ -35,7 +36,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="10sp"
-        android:textIsSelectable="true"
         app:layout_constraintBottom_toTopOf="@+id/tv_self_row"
         app:layout_constraintEnd_toEndOf="@+id/tv_self_row" />
 
