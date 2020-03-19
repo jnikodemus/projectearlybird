@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
@@ -149,7 +150,7 @@ class UserManager {
         query.findInBackground { users, e ->
             if (e == null) {
                 for (user in users) {
-                    log.fine("CUSTOMDEBUG - User: " + user.username + " Id: " + user.objectId)
+                    Log.d("CUSTOMDEBUG","User: " + user.username + " Id: " + user.objectId)
                     if(!user.objectId.equals(getCurrentUser().objectId)) {
                         user.pinInBackground()
                         allUsers.add(user)
