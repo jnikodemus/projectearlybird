@@ -17,6 +17,7 @@
         android:maxWidth="240dp"
         android:padding="16dp"
         android:text="Ich bin eine Nachricht"
+        android:textIsSelectable="true"
         app:layout_constraintEnd_toStartOf="@+id/chat_self_row_iv_avatar"
         app:layout_constraintTop_toTopOf="@+id/chat_self_row_iv_avatar" />
 

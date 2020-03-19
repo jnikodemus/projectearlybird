@@ -8,6 +8,7 @@ import com.parse.ParseInstallation
 import com.parse.ParseObject
 import com.parse.ParsePush
 import de.ntbit.projectearlybird.manager.ManagerFactory
+import de.ntbit.projectearlybird.model.Group
 import de.ntbit.projectearlybird.model.Message
 import java.util.logging.Logger
 
@@ -18,13 +19,11 @@ class ParseConnection {
         private val log = Logger.getLogger(this::class.java.simpleName)
 
         fun initialize(context: Context) {
-            ParseObject.registerSubclass(Message::class.java)
+            registerSubclasses()
 
             initializeBack4App(context)
             //initializePrivateParse(context)
             //AndroidApiKey: 'AIzaSyDkeFQRd1T-SmaNU1ckRcK43cm8hu8AUi4'
-
-            Log.d("CUSTOMDEBUG", "Parse LocalDatastore is " + (if(isLocalDatastoreEnabled()) "enabled" else "disabled"))
 
             ParseInstallation.getCurrentInstallation().saveInBackground()
             //installation.put("GCMSenderId", 474988434121)
@@ -55,6 +54,11 @@ class ParseConnection {
                     .enableLocalDataStore()
                     .build()
             )
+        }
+
+        private fun registerSubclasses() {
+            ParseObject.registerSubclass(Message::class.java)
+            ParseObject.registerSubclass(Group::class.java)
         }
     }
 }
