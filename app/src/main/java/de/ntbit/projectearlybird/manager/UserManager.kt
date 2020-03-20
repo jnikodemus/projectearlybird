@@ -9,24 +9,26 @@ import android.graphics.BitmapFactory
 import android.util.Log
 import android.widget.ImageView
 import android.widget.Toast
-import com.parse.Parse
-import com.parse.ParseFile
-import com.parse.ParseObject
-import com.parse.ParseUser
+import com.parse.*
 import de.ntbit.projectearlybird.data.PebContract
 import de.ntbit.projectearlybird.data.PebDbHelper
+import de.ntbit.projectearlybird.model.Message
 import de.ntbit.projectearlybird.ui.HomeActivity
 import java.io.ByteArrayOutputStream
 import java.util.*
 import java.util.logging.Logger
+import kotlin.collections.HashSet
 
 
 class UserManager() {
     private val log = Logger.getLogger(this::class.java.simpleName)
 
-    private val allUsers: ArrayList<ParseUser> = ArrayList()
+    private val allUsersSet: HashSet<ParseUser> = HashSet()
 
     init {
+        val query = ParseQuery.getQuery(Message::class.java)
+        query.fromLocalDatastore()
+        Log.d("CUSTOMDEBUG","UserManager - There are ${query.count()} items in LocalDatastore.")
         if(isLoggedIn())
             initAllUsers()
     }
@@ -91,17 +93,21 @@ class UserManager() {
     }
 
     private fun initAllUsers() {
-        allUsers.clear()
+        //allUsers.clear()
         val query = ParseUser.getQuery()
         query.findInBackground { users, e ->
             if (e == null) {
+                users.remove(getCurrentUser())
+                allUsersSet.addAll(users)
+                ParseUser.pinAllInBackground(users)
+                /*
                 for (user in users) {
                     Log.d("CUSTOMDEBUG","User: " + user.username + " Id: " + user.objectId)
-                    if(!user.objectId.equals(getCurrentUser().objectId)) {
+                    if(user.objectId != getCurrentUser().objectId) {
                         user.pinInBackground()
                         allUsers.add(user)
                     }
-                }
+                }*/
             } else {
                 log.fine("Error")
             }
@@ -109,7 +115,7 @@ class UserManager() {
     }
 
     fun getAllUsers(): Collection<ParseUser> {
-        return allUsers
+        return allUsersSet
     }
 
     /* TODO: create getAllLocalUsers() */
@@ -123,7 +129,9 @@ class UserManager() {
     }
 
     fun logOut() {
-        log.fine("logging out")
+        val queryUser = ParseQuery.getQuery(Message::class.java)
+        queryUser.fromLocalDatastore()
+        Log.d("CUSTOMDEBUG","deleting ${queryUser.count()} items from localDatastore.")
         ParseUser.unpinAll()
         ParseObject.unpinAll()
         ParseUser.logOut()

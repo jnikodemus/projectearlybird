@@ -43,13 +43,11 @@ class ConversationsFragment : Fragment() {
         connectAdapter()
         setClickListener()
         val users = mUserManager.getAllUsers()
-        Log.d("CUSTOMDEBUG", "Got " + users.size + " Users.")
     }
 
     private fun connectAdapter() {
         frgmt_conversations_rv_latest_messages.adapter = adapter
         for(user in mUserManager.getAllUsers()) {
-            Log.d("CUSTOMDEBUG", user.username)
             adapter.add(UserItemLatestMessage(user))
         }
     }

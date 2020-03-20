@@ -14,6 +14,7 @@ import de.ntbit.projectearlybird.manager.ManagerFactory
 import de.ntbit.projectearlybird.manager.MessageManager
 import de.ntbit.projectearlybird.model.Message
 import kotlinx.android.synthetic.main.activity_chat.*
+import kotlinx.android.synthetic.main.toolbar.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
@@ -47,10 +48,6 @@ class ChatActivity : AppCompatActivity() {
         bt_chat_send.setOnClickListener {
             sendMessage()
         }
-
-        val queryUser = ParseQuery.getQuery(Message::class.java)
-        queryUser.fromLocalDatastore()
-        Log.d("CUSTOMDEBUG","there are ${queryUser.count()} items in localDatastore.")
     }
 
     private fun listenForMessage(partner: ParseUser) {
@@ -58,7 +55,7 @@ class ChatActivity : AppCompatActivity() {
         mMessageManager.subscribeToPartner(partner, rv_chat_log)
     }
 
-    /*Sending a message from currentuser to chosen contact*/
+    /* Sending a message from currentuser to chosen contact */
     private fun sendMessage() {
         val text = et_chat_enterMessage.text.toString()
         val message = mMessageManager.sendMessage(text, chatPartner)

@@ -82,7 +82,6 @@ class MessageManager {
      * Returns the latest message received from given [user]
      */
     fun getLatestMessage(user: ParseUser): Message {
-        user.fetchFromLocalDatastore()
         try {
             val query = ParseQuery.getQuery(Message::class.java)
             //query.fromLocalDatastore()
@@ -101,17 +100,18 @@ class MessageManager {
      * Returns all messages as [Collection]<[Message]> for a given [threadId]
      */
     fun getMessagesByPartner(partner: ParseUser, chatLog: RecyclerView) {
-        partner.fetchFromLocalDatastore()
         val adapter: GroupAdapter<GroupieViewHolder> = chatLog.adapter as GroupAdapter<GroupieViewHolder>
         val mutableList: MutableList<Message> = ArrayList()
         val query = ParseQuery.getQuery(Message::class.java)
         query.whereContains("threadId", partner.objectId)
         query.orderByAscending("timestamp")
+        query.fromLocalDatastore()
         query.findInBackground { messages, e ->
             if (e == null) {
+                Log.d("CUSTOMDEBUG", "MessageManager - Got ${messages.size} messages.")
                 mutableList.addAll(messages)
+                ParseObject.pinAllInBackground(messages)
                 for(message in mutableList) {
-                    message.pinInBackground()
                     if (message.sender.objectId == partner.objectId)
                         adapter.add(ChatFromItem(message, partner))
                     else adapter.add(ChatSelfItem(message))
