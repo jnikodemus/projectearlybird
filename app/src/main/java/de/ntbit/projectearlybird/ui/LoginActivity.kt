@@ -25,31 +25,17 @@ import java.util.logging.Logger
 class LoginActivity : AppCompatActivity() {
 
     private val log = Logger.getLogger(this::class.java.simpleName)
-    private var mFirebaseAnalytics: FirebaseAnalytics? = null
     private lateinit var mUserManager: UserManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         initialize()
-        ParseUser.logOut()
     }
 
     private fun initialize() {
-        //val toolbar: Toolbar = toolbar
-        //setSupportActionBar(toolbar)
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
-        ParseConnection.initialize(this)
         mUserManager = ManagerFactory.getUserManager()
-
         setClickListener()
-    }
-
-    private fun checkLoggedIn() {
-        if(mUserManager.getCurrentUser().isAuthenticated) {
-            val intent = Intent(this, HomeActivity::class.java)
-            this.startActivity(intent)
-        }
     }
 
     private fun setClickListener() {
@@ -73,10 +59,5 @@ class LoginActivity : AppCompatActivity() {
             actLoginEditTextPassword.text.clear()
             log.fine("User " + actLoginEditTextUsername.text + " successfully logged in")
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        mUserManager.logOut()
     }
 }

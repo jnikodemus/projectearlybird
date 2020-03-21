@@ -52,11 +52,11 @@ class GroupsFragment : Fragment() {
         val x: Int = view.right - currentDips
         val y: Int = view.bottom - currentDips
 
-        val finalRad : Float = view.width.coerceAtLeast(view.height).toFloat()
+        val finalRad : Float = view.width.coerceAtLeast((view.height * 1.25).toInt()).toFloat()
 
         val animator: Animator = ViewAnimationUtils.createCircularReveal(view, x, y, 0f, finalRad)
 
-        animator.duration = 1500
+        animator.duration = 500
         //view.visibility = View.VISIBLE
         animator.start()
     }

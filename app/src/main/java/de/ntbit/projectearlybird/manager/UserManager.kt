@@ -6,24 +6,32 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.view.View
+import android.util.Log
 import android.widget.ImageView
 import android.widget.Toast
 import com.parse.*
 import de.ntbit.projectearlybird.data.PebContract
 import de.ntbit.projectearlybird.data.PebDbHelper
+import de.ntbit.projectearlybird.model.Message
 import de.ntbit.projectearlybird.ui.HomeActivity
-import kotlinx.android.synthetic.main.activity_login.*
 import java.io.ByteArrayOutputStream
 import java.util.*
 import java.util.logging.Logger
+import kotlin.collections.HashSet
 
 
-class UserManager {
+class UserManager() {
     private val log = Logger.getLogger(this::class.java.simpleName)
 
-    private val allUsernames: ArrayList<String> = ArrayList()
-    private val allUsers: ArrayList<ParseUser> = ArrayList()
+    private val allUsersSet: HashSet<ParseUser> = HashSet()
+
+    init {
+        val query = ParseQuery.getQuery(Message::class.java)
+        query.fromLocalDatastore()
+        Log.d("CUSTOMDEBUG","UserManager - There are ${query.count()} items in LocalDatastore.")
+        if(isLoggedIn())
+            initAllUsers()
+    }
 
     fun registerUser(username: String, email: String, uHashedPassword: String, ctx: Context): Boolean {
         val user = ParseUser()
@@ -45,30 +53,6 @@ class UserManager {
         return success
     }
 
-    private fun saveUserLocal(user: ParseUser, ctx: Context) {
-        val mDbHelper = PebDbHelper(ctx)
-        val userDatabase = mDbHelper.writableDatabase
-        val valuesToInsert = ContentValues()
-        valuesToInsert.put(PebContract.UserEntry._ID, user.objectId)
-        valuesToInsert.put(PebContract.UserEntry.COLUMN_USER_EMAIL_VERIFIED, 0)
-        //valuesToInsert.put(PebContract.UserEntry.COLUMN_USER_ACL, user.acl)
-        //valuesToInsert.put(PebContract.UserEntry.COLUMN_USER_UPDATED_AT, user.updatedAt)
-        //valuesToInsert.put(PebContract.UserEntry.COLUMN_USER_AUTHDATA, user.auth)
-        valuesToInsert.put(PebContract.UserEntry.COLUMN_USER_USERNAME, user.username)
-        //valuesToInsert.put(PebContract.UserEntry.COLUMN_USER_CREATED_AT, user.createdAt)
-        //valuesToInsert.put(PebContract.UserEntry.COLUMN_USER_PASSWORD, user.password)
-        valuesToInsert.put(PebContract.UserEntry.COLUMN_USER_EMAIL, user.email)
-        valuesToInsert.put(PebContract.UserEntry.COLUMN_USER_FIRSTNAME, user.getString("firstName"))
-        valuesToInsert.put(PebContract.UserEntry.COLUMN_USER_LASTNAME, user.getString("lastName"))
-        valuesToInsert.put(PebContract.UserEntry.COLUMN_USER_GENDER, PebContract.UserEntry.GENDER_UNKNOWN)
-        //valuesToInsert.put(PebContract.UserEntry.COLUMN_USER_LASTLOGIN, user.getInt("lastLogin"))
-        //valuesToInsert.put(PebContract.UserEntry.COLUMN_USER_BIRTHDAY, null)
-        valuesToInsert.put(PebContract.UserEntry.COLUMN_USER_AVATAR, user.getBytes("avatar"))
-        valuesToInsert.put(PebContract.UserEntry.COLUMN_USER_IS_ONLINE, PebContract.UserEntry.IS_OFFLINE)
-        userDatabase.insert(PebContract.UserEntry.TABLE_NAME, null, valuesToInsert)
-        userDatabase.close()
-    }
-
     fun loginUser(username: String, password: String, activity: Activity) {
         ParseUser.logInInBackground(username, password) { user, e ->
             if (user != null) {
@@ -76,34 +60,15 @@ class UserManager {
                 //setUserOnline(user.username, activity.applicationContext)
                 deleteLocalUsers(username, activity.applicationContext)
                 syncLocalUser(username, activity.applicationContext)
-                subscribeToPersonalChannel(user)
-                user.pin()
+                user.pin("currentUser")
                 val intent = Intent(activity.applicationContext, HomeActivity::class.java)
                 activity.startActivity(intent)
-                initAllUserNames()
                 initAllUsers()
             } else {
                 log.fine(e.message)
                 showToast("Invalid username/password")
             }
         }
-    }
-
-    private fun subscribeToPersonalChannel(user: ParseUser) {
-        ParsePush.subscribeInBackground(user.objectId)
-    }
-
-    private fun deleteLocalUsers(username: String, ctx: Context) {
-        val mDbHelper = PebDbHelper(ctx)
-        val userDatabase = mDbHelper.writableDatabase
-        val whereClause = PebContract.UserEntry.COLUMN_USER_USERNAME + "!=?"
-        val whereArgs = arrayOf("0")
-        userDatabase.delete(PebContract.UserEntry.TABLE_NAME, whereClause, whereArgs)
-        userDatabase.close()
-    }
-
-    private fun syncLocalUser(username: String, ctx: Context) {
-        saveUserLocal(ParseUser.getCurrentUser(), ctx)
     }
 
     private fun setUserOnline(username: String, ctx: Context) {
@@ -127,63 +92,48 @@ class UserManager {
         return ParseUser.getCurrentUser()
     }
 
-    /**
-     * Returns all registered usernames
-     *     @return ArrayList<String>
-     */
-    // TODO: Make observable?
-    private fun initAllUserNames() {
-        allUsernames.clear()
-        val query = ParseUser.getQuery()
-        query.findInBackground { users, e ->
-            if (e == null) {
-                for (user in users) {
-                    log.fine("CUSTOMDEBUG " + user.username)
-                    if(!user.username.equals(getCurrentUser().username))
-                        allUsernames.add(user.username)
-                }
-            } else {
-                log.fine("Error")
-            }
-        }
-    }
-
     private fun initAllUsers() {
-        allUsers.clear()
+        //allUsers.clear()
         val query = ParseUser.getQuery()
         query.findInBackground { users, e ->
             if (e == null) {
+                users.remove(getCurrentUser())
+                allUsersSet.addAll(users)
+                ParseUser.pinAllInBackground(users)
+                /*
                 for (user in users) {
-                    log.fine("CUSTOMDEBUG - User: " + user.username + " Id: " + user.objectId)
-                    if(!user.objectId.equals(getCurrentUser().objectId)) {
+                    Log.d("CUSTOMDEBUG","User: " + user.username + " Id: " + user.objectId)
+                    if(user.objectId != getCurrentUser().objectId) {
                         user.pinInBackground()
                         allUsers.add(user)
                     }
-                }
+                }*/
             } else {
                 log.fine("Error")
             }
         }
     }
 
-    // TODO: merge into initAllUserNames()?
-    fun getAllUserNames(): ArrayList<String> {
-        return allUsernames
-    }
-
     fun getAllUsers(): Collection<ParseUser> {
-        return allUsers
+        return allUsersSet
     }
 
     /* TODO: create getAllLocalUsers() */
 
-    // TODO: Check what exactly is isAuthenticated
-    fun userIsLoggedIn(): Boolean {
-        return getCurrentUser().isAuthenticated
+    /**
+     * Checks if Parse.getCurrentUser() is null to determine if a user is already logged in and
+     * returns true if so
+     */
+    fun isLoggedIn(): Boolean {
+        return ParseUser.getCurrentUser() != null
     }
 
     fun logOut() {
-        log.fine("logging out")
+        val queryUser = ParseQuery.getQuery(Message::class.java)
+        queryUser.fromLocalDatastore()
+        Log.d("CUSTOMDEBUG","deleting ${queryUser.count()} items from localDatastore.")
+        ParseUser.unpinAll()
+        ParseObject.unpinAll()
         ParseUser.logOut()
     }
 
@@ -216,4 +166,43 @@ class UserManager {
         ).show()
     }
 
+    @Deprecated("Use Parse LocalDatastore")
+    private fun saveUserLocal(user: ParseUser, ctx: Context) {
+        val mDbHelper = PebDbHelper(ctx)
+        val userDatabase = mDbHelper.writableDatabase
+        val valuesToInsert = ContentValues()
+        valuesToInsert.put(PebContract.UserEntry._ID, user.objectId)
+        valuesToInsert.put(PebContract.UserEntry.COLUMN_USER_EMAIL_VERIFIED, 0)
+        //valuesToInsert.put(PebContract.UserEntry.COLUMN_USER_ACL, user.acl)
+        //valuesToInsert.put(PebContract.UserEntry.COLUMN_USER_UPDATED_AT, user.updatedAt)
+        //valuesToInsert.put(PebContract.UserEntry.COLUMN_USER_AUTHDATA, user.auth)
+        valuesToInsert.put(PebContract.UserEntry.COLUMN_USER_USERNAME, user.username)
+        //valuesToInsert.put(PebContract.UserEntry.COLUMN_USER_CREATED_AT, user.createdAt)
+        //valuesToInsert.put(PebContract.UserEntry.COLUMN_USER_PASSWORD, user.password)
+        valuesToInsert.put(PebContract.UserEntry.COLUMN_USER_EMAIL, user.email)
+        valuesToInsert.put(PebContract.UserEntry.COLUMN_USER_FIRSTNAME, user.getString("firstName"))
+        valuesToInsert.put(PebContract.UserEntry.COLUMN_USER_LASTNAME, user.getString("lastName"))
+        valuesToInsert.put(PebContract.UserEntry.COLUMN_USER_GENDER, PebContract.UserEntry.GENDER_UNKNOWN)
+        //valuesToInsert.put(PebContract.UserEntry.COLUMN_USER_LASTLOGIN, user.getInt("lastLogin"))
+        //valuesToInsert.put(PebContract.UserEntry.COLUMN_USER_BIRTHDAY, null)
+        valuesToInsert.put(PebContract.UserEntry.COLUMN_USER_AVATAR, user.getBytes("avatar"))
+        valuesToInsert.put(PebContract.UserEntry.COLUMN_USER_IS_ONLINE, PebContract.UserEntry.IS_OFFLINE)
+        userDatabase.insert(PebContract.UserEntry.TABLE_NAME, null, valuesToInsert)
+        userDatabase.close()
+    }
+
+    @Deprecated("Use Parse LocalDatastore")
+    private fun syncLocalUser(username: String, ctx: Context) {
+        saveUserLocal(ParseUser.getCurrentUser(), ctx)
+    }
+
+    @Deprecated("Use Parse LocalDatastore")
+    private fun deleteLocalUsers(username: String, ctx: Context) {
+        val mDbHelper = PebDbHelper(ctx)
+        val userDatabase = mDbHelper.writableDatabase
+        val whereClause = PebContract.UserEntry.COLUMN_USER_USERNAME + "!=?"
+        val whereArgs = arrayOf("0")
+        userDatabase.delete(PebContract.UserEntry.TABLE_NAME, whereClause, whereArgs)
+        userDatabase.close()
+    }
 }

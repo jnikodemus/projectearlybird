@@ -9,9 +9,12 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.parse.ParseUser
 import de.ntbit.projectearlybird.R
+import de.ntbit.projectearlybird.manager.ManagerFactory
 import kotlinx.android.synthetic.main.fragment_profile.*
 
 class ProfileFragment : Fragment() {
+
+    private val mUserManager = ManagerFactory.getUserManager()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -27,7 +30,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun logout() {
-        ParseUser.logOut()
+        mUserManager.logOut()
         val intent = Intent(this.context, LoginActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
