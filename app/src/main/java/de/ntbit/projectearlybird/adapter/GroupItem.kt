@@ -9,6 +9,6 @@ open class GroupItem : Item<GroupieViewHolder>(){
     }
 
     override fun getLayout(): Int {
-        return R.layout.row_group
+        return R.layout.row_crt_group_contact
     }
 }

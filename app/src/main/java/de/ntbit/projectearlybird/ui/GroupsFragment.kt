@@ -14,6 +14,7 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import de.ntbit.projectearlybird.R
 import de.ntbit.projectearlybird.adapter.GroupItem
+import kotlinx.android.synthetic.main.activity_create_group.*
 import kotlinx.android.synthetic.main.fragment_groups.*
 
 
@@ -40,8 +41,8 @@ class GroupsFragment : Fragment() {
         frgmt_groups_fab.setOnClickListener {
             //val animator: Animator = ViewAnimationUtils.createCircularReveal(this.view,0,0,0,0)
             val intent = Intent(this.context, CreateGroupActivity::class.java)
-            circularRevealActivity()
-            //startActivity(intent)
+            //circularRevealActivity()
+            startActivity(intent)
         }
     }
 
@@ -57,7 +58,7 @@ class GroupsFragment : Fragment() {
         val animator: Animator = ViewAnimationUtils.createCircularReveal(view, x, y, 0f, finalRad)
 
         animator.duration = 500
-        //view.visibility = View.VISIBLE
+        view.visibility = View.VISIBLE
         animator.start()
     }
 
