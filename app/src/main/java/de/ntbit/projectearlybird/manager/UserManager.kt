@@ -9,11 +9,13 @@ import android.graphics.BitmapFactory
 import android.util.Log
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.core.content.ContextCompat.startActivity
 import com.parse.*
 import de.ntbit.projectearlybird.data.PebContract
 import de.ntbit.projectearlybird.data.PebDbHelper
 import de.ntbit.projectearlybird.model.Message
 import de.ntbit.projectearlybird.ui.HomeActivity
+import de.ntbit.projectearlybird.ui.LoginActivity
 import java.io.ByteArrayOutputStream
 import java.util.*
 import java.util.logging.Logger
@@ -28,7 +30,7 @@ class UserManager() {
     init {
         val query = ParseQuery.getQuery(Message::class.java)
         query.fromLocalDatastore()
-        Log.d("CUSTOMDEBUG","UserManager - There are ${query.count()} items in LocalDatastore.")
+        log.info("UserManager - There are ${query.count()} items in LocalDatastore.")
         if(isLoggedIn())
             initAllUsers()
     }
