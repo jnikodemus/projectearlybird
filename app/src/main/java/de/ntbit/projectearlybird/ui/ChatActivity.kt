@@ -35,19 +35,30 @@ class ChatActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat)
 
-        rv_chat_log.adapter = adapter
+        initialize()
 
+    }
+
+    private fun initialize() {
         chatPartner = intent.getParcelableExtra(NewMessageActivity.USER_KEY)
+        placeToolbar()
+
+        rv_chat_log.adapter = adapter
 
         /* Resize Recyclerview if SoftKeyboard is selected */
         (rv_chat_log.layoutManager as LinearLayoutManager).stackFromEnd = true
 
-        //supportActionBar?.title = user.username
         listenForMessage(chatPartner)
 
         bt_chat_send.setOnClickListener {
             sendMessage()
         }
+    }
+
+    private fun placeToolbar() {
+        val toolbar = toolbar
+        setSupportActionBar(toolbar)
+        supportActionBar?.title = chatPartner.username
     }
 
     private fun listenForMessage(partner: ParseUser) {

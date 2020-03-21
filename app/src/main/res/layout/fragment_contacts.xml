@@ -23,9 +23,9 @@
         android:layout_marginEnd="15dp"
         android:layout_marginBottom="15dp"
         android:clickable="true"
+        android:focusable="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/ic_add_black_foreground"
-        android:focusable="true" />
+        app:srcCompat="@drawable/ic_add_black_foreground" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

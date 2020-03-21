@@ -23,7 +23,7 @@ open class ChatItem(val message: Message): Item<GroupieViewHolder>() {
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         viewHolder.itemView.tv_self_row.text = message.body
         viewHolder.itemView.chatSelfRow_tvTimestamp.text = format.format(message.timestamp)
-        mUserManager.loadAvatar(viewHolder.itemView.chat_self_row_iv_avatar)
+        //mUserManager.loadAvatar(viewHolder.itemView.chat_self_row_iv_avatar)
     }
 
     override fun getLayout(): Int {
@@ -35,7 +35,7 @@ class ChatFromItem(message: Message, private val user: ParseUser): ChatItem(mess
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         viewHolder.itemView.tv_contact_row.text = message.body
         viewHolder.itemView.chatContactRow_tvTimestamp.text = format.format(message.timestamp)
-        mUserManager.loadAvatar(viewHolder.itemView.chat_contact_row_iv_avatar, user)
+        //mUserManager.loadAvatar(viewHolder.itemView.chat_contact_row_iv_avatar, user)
     }
     override fun getLayout(): Int {
         return R.layout.row_chat_contact

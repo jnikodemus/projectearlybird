@@ -46,6 +46,9 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         selectMenuItem(0)
     }
 
+    /**
+     * Loads Avatar from database
+     */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 0 && resultCode == Activity.RESULT_OK && data != null) {
@@ -78,10 +81,11 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         navigationHeader.navigation_username.text = mUserManager.getCurrentUser().username
         navigationHeader.navigation_email.text = mUserManager.getCurrentUser().email
         mUserManager.loadAvatar(navigationHeader.navigation_avatar)
-        // navigationHeader.select_image_button.background = mUserManager.getCurrentUser().getParseFile("avatar") as Drawable
-        navigationHeader.navigation_avatar.setOnClickListener { val intent = Intent(Intent.ACTION_PICK)
+        navigationHeader.navigation_avatar.setOnClickListener {
+            val intent = Intent(Intent.ACTION_PICK)
             intent.type = "image/*"
-            startActivityForResult(intent, 0)}
+            startActivityForResult(intent, 0)
+        }
     }
 
     private fun placeAppInformation() {

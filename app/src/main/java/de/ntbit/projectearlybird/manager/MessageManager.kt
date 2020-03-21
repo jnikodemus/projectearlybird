@@ -47,6 +47,9 @@ class MessageManager {
         parsePush.sendInBackground()
     }
 
+    /**
+     * Listens for new messages for chat[partner] and adds it to [chatlog]
+     */
     fun subscribeToPartner(partner: ParseUser, chatLog: RecyclerView) {
         val adapter: GroupAdapter<GroupieViewHolder> = chatLog.adapter as GroupAdapter<GroupieViewHolder>
         val mutableList: MutableList<Message> = ArrayList()
@@ -97,7 +100,7 @@ class MessageManager {
     }
 
     /**
-     * Returns all messages as [Collection]<[Message]> for a given [threadId]
+     * Fills [chatLog] with all messages for a given chat[partner]
      */
     fun getMessagesByPartner(partner: ParseUser, chatLog: RecyclerView) {
         val adapter: GroupAdapter<GroupieViewHolder> = chatLog.adapter as GroupAdapter<GroupieViewHolder>
@@ -105,7 +108,7 @@ class MessageManager {
         val query = ParseQuery.getQuery(Message::class.java)
         query.whereContains("threadId", partner.objectId)
         query.orderByAscending("timestamp")
-        query.fromLocalDatastore()
+        //query.fromLocalDatastore()
         query.findInBackground { messages, e ->
             if (e == null) {
                 Log.d("CUSTOMDEBUG", "MessageManager - Got ${messages.size} messages.")
