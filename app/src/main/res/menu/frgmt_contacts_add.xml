@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item android:id="@+id/new_message"
-        android:title="New"
+    <item android:id="@+id/frgmt_contacts_add"
+        android:title="Add"
         app:showAsAction="ifRoom"/>
 
 

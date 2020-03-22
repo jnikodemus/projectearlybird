@@ -18,11 +18,14 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".ui.AddNewContactActivity"></activity>
         <activity android:name=".ui.LoadingActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter></activity>
+            </intent-filter>
+        </activity>
         <activity android:name=".ui.CreateGroupActivity" />
         <activity android:name=".ui.ChatActivity" />
         <activity android:name=".ui.NewMessageActivity">
@@ -32,9 +35,7 @@
         </activity>
         <activity android:name=".ui.HomeActivity" />
         <activity android:name=".ui.RegisterActivity" />
-        <activity android:name=".ui.LoginActivity">
-
-        </activity>
+        <activity android:name=".ui.LoginActivity"></activity>
 
         <meta-data
             android:name="com.parse.push.gcm_sender_id"
