@@ -7,10 +7,15 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Log
+import android.widget.Adapter
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.content.ContextCompat.startActivity
+import androidx.recyclerview.widget.RecyclerView
 import com.parse.*
+import com.xwray.groupie.GroupAdapter
+import com.xwray.groupie.GroupieViewHolder
+import de.ntbit.projectearlybird.adapter.UserItem
 import de.ntbit.projectearlybird.data.PebContract
 import de.ntbit.projectearlybird.data.PebDbHelper
 import de.ntbit.projectearlybird.model.Message
@@ -26,13 +31,17 @@ class UserManager() {
     private val log = Logger.getLogger(this::class.java.simpleName)
 
     private val allUsersSet: HashSet<ParseUser> = HashSet()
+    private val pinnedContacts: HashSet<ParseUser> = HashSet()
 
     init {
         val query = ParseQuery.getQuery(Message::class.java)
         query.fromLocalDatastore()
         log.info("UserManager - There are ${query.count()} items in LocalDatastore.")
-        if(isLoggedIn())
+        if(isLoggedIn()) {
+            initMyContacts()
             initAllUsers()
+        }
+
     }
 
     fun registerUser(username: String, email: String, uHashedPassword: String, ctx: Context): Boolean {
@@ -62,9 +71,9 @@ class UserManager() {
                 //setUserOnline(user.username, activity.applicationContext)
                 deleteLocalUsers(username, activity.applicationContext)
                 syncLocalUser(username, activity.applicationContext)
-                user.pin("currentUser")
                 val intent = Intent(activity.applicationContext, HomeActivity::class.java)
                 activity.startActivity(intent)
+                user.pinInBackground()
                 initAllUsers()
             } else {
                 log.fine(e.message)
@@ -101,7 +110,6 @@ class UserManager() {
             if (e == null) {
                 users.remove(getCurrentUser())
                 allUsersSet.addAll(users)
-                ParseUser.pinAllInBackground(users)
                 /*
                 for (user in users) {
                     Log.d("CUSTOMDEBUG","User: " + user.username + " Id: " + user.objectId)
@@ -120,6 +128,27 @@ class UserManager() {
         return allUsersSet
     }
 
+    private fun initMyContacts() {
+        val query = ParseUser.getQuery()
+        query.fromLocalDatastore()
+        query.findInBackground { ownContacts, e ->
+            if(e == null) {
+                ownContacts.remove(getCurrentUser())
+                pinnedContacts.addAll(ownContacts)
+            }
+        }
+    }
+
+    fun getMyContacts() : Collection<ParseUser> {
+        return pinnedContacts
+    }
+
+    fun addNewContact(contact : ParseUser) {
+        pinnedContacts.add(contact)
+        contact.pinInBackground()
+    }
+
+
     /* TODO: create getAllLocalUsers() */
 
     /**
@@ -130,12 +159,10 @@ class UserManager() {
         return ParseUser.getCurrentUser() != null
     }
 
+    // TODO: Delete ActivityStack? and del all pinned objects
     fun logOut() {
-        val queryUser = ParseQuery.getQuery(Message::class.java)
-        queryUser.fromLocalDatastore()
-        Log.d("CUSTOMDEBUG","deleting ${queryUser.count()} items from localDatastore.")
-        ParseUser.unpinAll()
         ParseObject.unpinAll()
+        ParseUser.unpinAll()
         ParseUser.logOut()
     }
 
