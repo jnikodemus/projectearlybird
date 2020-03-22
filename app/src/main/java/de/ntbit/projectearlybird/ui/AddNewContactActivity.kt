@@ -2,16 +2,14 @@ package de.ntbit.projectearlybird.ui
 
 import android.app.SearchManager
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import com.parse.ParseQuery
+import android.view.View.OnFocusChangeListener
+import androidx.appcompat.app.AppCompatActivity
 import com.parse.ParseUser
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import de.ntbit.projectearlybird.R
 import de.ntbit.projectearlybird.adapter.UserItem
-import de.ntbit.projectearlybird.model.Message
 import kotlinx.android.synthetic.main.activity_add_new_contact.*
 
 

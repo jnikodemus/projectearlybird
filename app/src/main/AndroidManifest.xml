@@ -18,7 +18,14 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.AddNewContactActivity"></activity>
+        <activity android:name=".ui.AddNewContactActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+            <meta-data android:name="android.app.searchable"
+                android:resource="@xml/searchable"
+                android:value=".ui.activity.AddNewContactActivity" />
+        </activity>
         <activity android:name=".ui.LoadingActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
