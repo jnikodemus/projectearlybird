@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
@@ -31,12 +32,25 @@ class ContactsFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_contacts, container, false)
+        val view = inflater.inflate(R.layout.fragment_contacts, container, false)
+
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initialize()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d("CUSTOMDEBUG","onPause()")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d("CUSTOMDEBUG", "onResume()")
+        fetchAllParseUser()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -45,7 +59,7 @@ class ContactsFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item?.itemId) {
+        when (item.itemId) {
             R.id.frgmt_contacts_add -> {
                 val intent = Intent(this.context, AddNewContactActivity::class.java)
                 startActivity(intent)
@@ -56,8 +70,8 @@ class ContactsFragment : Fragment() {
 
     private fun initialize() {
         connectAdapter()
-        setClickListener()
         fetchAllParseUser()
+        setClickListener()
     }
 
     private fun connectAdapter() {
@@ -78,8 +92,10 @@ class ContactsFragment : Fragment() {
     }
 
     private fun fetchAllParseUser() {
-        for (user in mUserManager.getAllUsers())
-            adapter.add(UserItem(user))
+        adapter.clear()
+        for(contact in mUserManager.getMyContacts()) {
+            adapter.add(UserItem(contact))
+        }
         adapter.notifyDataSetChanged()
     }
 
