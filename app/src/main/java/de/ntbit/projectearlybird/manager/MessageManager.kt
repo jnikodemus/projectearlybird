@@ -66,6 +66,7 @@ class MessageManager {
                 adapter.add(ChatFromItem(message, partner))
                 adapter.notifyDataSetChanged()
                 chatLog.smoothScrollToPosition(adapter.itemCount - 1)
+                message.pinInBackground()
                 //buildNotification(message, chatLog.context)
             }
         }
@@ -94,7 +95,7 @@ class MessageManager {
             return query.first
         }
         catch (e: ParseException) {
-            Log.d("EXEPTION", e.localizedMessage)
+            Log.d("EXCEPTION", e.localizedMessage)
         }
         return Message()
     }

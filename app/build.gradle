@@ -70,6 +70,7 @@ dependencies {
     implementation "com.github.parse-community.Parse-SDK-Android:coroutines:$parse_version"
     implementation "com.github.parse-community:ParseLiveQuery-Android:1.1.0"
     implementation 'com.parse.bolts:bolts-android:1.4.0'
+    api 'com.theartofdev.edmodo:android-image-cropper:2.8.+'
 
     implementation 'com.google.android.material:material:1.1.0'
     implementation 'com.google.firebase:firebase-core:17.2.3'

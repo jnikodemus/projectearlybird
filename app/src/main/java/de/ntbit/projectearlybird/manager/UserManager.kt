@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.util.Log
 import android.widget.Adapter
 import android.widget.ImageView
@@ -13,6 +14,8 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.parse.*
+import com.parse.ktx.whereExists
+import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import de.ntbit.projectearlybird.adapter.UserItem
@@ -21,6 +24,10 @@ import de.ntbit.projectearlybird.data.PebDbHelper
 import de.ntbit.projectearlybird.model.Message
 import de.ntbit.projectearlybird.ui.HomeActivity
 import de.ntbit.projectearlybird.ui.LoginActivity
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
 import java.util.*
 import java.util.logging.Logger
@@ -32,6 +39,7 @@ class UserManager() {
 
     private val allUsersSet: HashSet<ParseUser> = HashSet()
     private val pinnedContacts: HashSet<ParseUser> = HashSet()
+    private val pinnedConversationContacts: HashSet<ParseUser> = HashSet()
 
     init {
         val query = ParseQuery.getQuery(Message::class.java)
@@ -39,6 +47,7 @@ class UserManager() {
         log.info("UserManager - There are ${query.count()} items in LocalDatastore.")
         if(isLoggedIn()) {
             initMyContacts()
+            initMyConversationContacts()
             initAllUsers()
         }
 
@@ -148,6 +157,31 @@ class UserManager() {
         contact.pinInBackground()
     }
 
+    private fun initMyConversationContacts() {
+        Log.d("CUSTOMDEBUG", "initMyConversationContacts()")
+        val query = ParseUser.getQuery()
+        query.whereDoesNotMatchKeyInQuery("recipient", "pcMjz3GTTs", ParseQuery.getQuery(Message::class.java))
+        query.findInBackground {
+            convContacts, e ->
+            if(e == null) {
+                convContacts.remove(getCurrentUser())
+                pinnedConversationContacts.addAll(convContacts)
+                Log.d("CUSTOMDEBUG", pinnedConversationContacts.size.toString())
+                for(us in pinnedConversationContacts)
+                    Log.d("CUSTOMDEBUG", us.username)
+            }
+        }
+    }
+
+    fun getMyConversationContacts() : Collection<ParseUser> {
+        return pinnedConversationContacts
+    }
+
+    fun addNewConversationContact(contact : ParseUser) {
+        pinnedConversationContacts.add(contact)
+        contact.pinInBackground()
+    }
+
 
     /* TODO: create getAllLocalUsers() */
 
@@ -179,12 +213,14 @@ class UserManager() {
     }
 
     fun loadAvatar(img : ImageView, user: ParseUser) {
-        user.getParseFile("avatar")?.getDataInBackground { data, e ->
+        Picasso.get().load(user.getParseFile("avatar")?.url).resize(400,400).centerCrop().into(img)
+
+        /*user.getParseFile("avatar")?.getDataInBackground { data, e ->
             if (e == null) {
                 val bmp = BitmapFactory.decodeByteArray(data, 0, data.size)
                 img.setImageBitmap(bmp)
             }
-        }
+        }*/
     }
 
     private fun showToast(message: String) {
