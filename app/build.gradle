@@ -81,11 +81,9 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'de.hdodenhof:circleimageview:3.1.0'
 
-    implementation 'androidx.wear:wear:1.0.0'
     testImplementation 'junit:junit:4.12'
 
     androidTestImplementation 'com.android.support.test:rules:1.0.2'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    compileOnly 'com.google.android.wearable:wearable:2.4.0'
 }
