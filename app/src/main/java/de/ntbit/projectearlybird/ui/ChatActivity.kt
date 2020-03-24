@@ -36,7 +36,6 @@ class ChatActivity : AppCompatActivity() {
         setContentView(R.layout.activity_chat)
 
         initialize()
-
     }
 
     private fun initialize() {
@@ -44,7 +43,6 @@ class ChatActivity : AppCompatActivity() {
         placeToolbar()
 
         rv_chat_log.adapter = adapter
-
         /* Resize Recyclerview if SoftKeyboard is selected */
         (rv_chat_log.layoutManager as LinearLayoutManager).stackFromEnd = true
 
@@ -56,9 +54,11 @@ class ChatActivity : AppCompatActivity() {
     }
 
     private fun placeToolbar() {
+        // TODO: Set toolbar.title to ChatPartner.username
         val toolbar = toolbar
         setSupportActionBar(toolbar)
-        supportActionBar?.title = chatPartner.username
+        //supportActionBar?.title = chatPartner.username
+        supportActionBar?.title = "PARTNER"
     }
 
     private fun listenForMessage(partner: ParseUser) {

@@ -18,7 +18,7 @@ import kotlin.properties.Delegates
 class LoadingActivity : AppCompatActivity() {
 
     private val log = Logger.getLogger(this::class.java.simpleName)
-    private var mFirebaseAnalytics: FirebaseAnalytics? = null
+    private lateinit var mFirebaseAnalytics: FirebaseAnalytics
     private lateinit var mUserManager: UserManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,7 +28,7 @@ class LoadingActivity : AppCompatActivity() {
     }
 
     private fun initialize() {
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
+        //mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
         ParseConnection.initialize(this)
         mUserManager = ManagerFactory.getUserManager()
         checkLoggedIn()

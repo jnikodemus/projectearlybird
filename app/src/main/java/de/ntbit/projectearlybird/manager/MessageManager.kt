@@ -1,19 +1,30 @@
 package de.ntbit.projectearlybird.manager
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
+import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.widget.Toast
 import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.recyclerview.widget.RecyclerView
 import com.parse.*
 import com.parse.livequery.ParseLiveQueryClient
 import com.parse.livequery.SubscriptionHandling
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
+import de.ntbit.projectearlybird.R
 import de.ntbit.projectearlybird.adapter.ChatFromItem
 import de.ntbit.projectearlybird.adapter.ChatSelfItem
 import de.ntbit.projectearlybird.model.Message
+import de.ntbit.projectearlybird.ui.ChatActivity
+import de.ntbit.projectearlybird.ui.NewMessageActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
@@ -34,6 +45,7 @@ class MessageManager {
         if(body.isNotBlank() && body.isNotEmpty()) {
             val message = Message(ParseUser.getCurrentUser(), recipient, body)
             message.saveEventually()
+            Log.d("CUSTOMDEBUG", "Saved message ${message.body}")
             return message
         }
         return null
@@ -67,20 +79,54 @@ class MessageManager {
                 adapter.notifyDataSetChanged()
                 chatLog.smoothScrollToPosition(adapter.itemCount - 1)
                 message.pinInBackground()
-                //buildNotification(message, chatLog.context)
+                showNotification(message, chatLog.context)
             }
         }
     }
 
     /* TODO: INSERT NOTIFICATION */
+    private fun showNotification(message: Message, context: Context) {
+        val mNotificationManager: NotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            val channel = NotificationChannel("PEB_CHANNEL_ID",
+                "YOUR_CHANNEL_NAME",
+                NotificationManager.IMPORTANCE_DEFAULT)
+            channel.description = "YOUR_NOTIFICATION_CHANNEL_DESCRIPTION"
+            channel.enableVibration(true)
+            mNotificationManager.createNotificationChannel(channel)
+        }
+        val mBuilder = NotificationCompat.Builder(context, "PEB_CHANNEL_ID")
+            .setSmallIcon(R.drawable.ic_info_black) // notification icon
+            .setContentTitle(message.sender.username) // title for notification
+            .setContentText(message.body)// message for notification
+            .setAutoCancel(true) // clear notification after click
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setVibrate(longArrayOf(100,200,300,400,500))
+        val intent = Intent(context, ChatActivity::class.java)
+        intent.putExtra(NewMessageActivity.USER_KEY, message.sender)
+        val pi = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        mBuilder.setContentIntent(pi)
+        mNotificationManager.notify(0, mBuilder.build())
+    }
+    /*
     private fun buildNotification(message: Message, context: Context) {
-        var builder = NotificationCompat.Builder(context, 0.toString())
-            //.setSmallIcon(R.drawable.notification_icon)
-            .setContentTitle("New Message")
+        Toast.makeText(
+            Parse.getApplicationContext(),
+            message.body,
+            Toast.LENGTH_SHORT
+        ).show()
+        val builder = NotificationCompat.Builder(context)
+            .setSmallIcon(R.drawable.notify_panel_notification_icon_bg)
+            .setContentTitle(message.sender.username)
             .setContentText(message.body)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-    }
 
+        with(NotificationManagerCompat.from(context)) {
+            // notificationId is a unique int for each notification that you must define
+            notify(425, builder.build())
+        }
+    }
+     */
 
     /**
      * Returns the latest message received from given [user]
@@ -112,7 +158,7 @@ class MessageManager {
         //query.fromLocalDatastore()
         query.findInBackground { messages, e ->
             if (e == null) {
-                Log.d("CUSTOMDEBUG", "MessageManager - Got ${messages.size} messages.")
+                Log.d("CUSTOMDEBUG", "MessageManager - Got ${messages.size} messages from ${partner.username}.")
                 mutableList.addAll(messages)
                 ParseObject.pinAllInBackground(messages)
                 for(message in mutableList) {
