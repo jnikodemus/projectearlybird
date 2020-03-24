@@ -50,7 +50,7 @@ class CreateGroupActivity : AppCompatActivity() {
             CropImage.activity().setGuidelines(CropImageView.Guidelines.ON).start(this)
         }
 
-        if (requestCode === CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             val result = CropImage.getActivityResult(data)
 
         }

@@ -159,8 +159,12 @@ class UserManager() {
 
     private fun initMyConversationContacts() {
         Log.d("CUSTOMDEBUG", "initMyConversationContacts()")
+        // Query to get Messages
+        val mQuery = ParseQuery.getQuery<Message>(Message::class.java).whereEqualTo("recipient", getCurrentUser())
+        val messageCount = mQuery.count()
+        Log.d("CUSTOMDEBUG", "$messageCount messages for ${getCurrentUser().username} online")
         val query = ParseUser.getQuery()
-        query.whereDoesNotMatchKeyInQuery("recipient", "pcMjz3GTTs", ParseQuery.getQuery(Message::class.java))
+        query.whereMatchesKeyInQuery("objectId", "senderId", mQuery)
         query.findInBackground {
             convContacts, e ->
             if(e == null) {
