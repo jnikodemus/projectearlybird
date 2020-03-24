@@ -1,5 +1,6 @@
 package de.ntbit.projectearlybird.manager
 
+import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -93,40 +94,24 @@ class MessageManager {
                 NotificationManager.IMPORTANCE_DEFAULT)
             channel.description = "YOUR_NOTIFICATION_CHANNEL_DESCRIPTION"
             channel.enableVibration(true)
+            channel.lockscreenVisibility = NotificationCompat.VISIBILITY_PUBLIC
             mNotificationManager.createNotificationChannel(channel)
         }
         val mBuilder = NotificationCompat.Builder(context, "PEB_CHANNEL_ID")
             .setSmallIcon(R.drawable.ic_info_black) // notification icon
             .setContentTitle(message.sender.username) // title for notification
-            .setContentText(message.body)// message for notification
+            .setContentText(message.body) // message for notification
             .setAutoCancel(true) // clear notification after click
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setVibrate(longArrayOf(100,200,300,400,500))
+            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
         val intent = Intent(context, ChatActivity::class.java)
         intent.putExtra(NewMessageActivity.USER_KEY, message.sender)
         val pi = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
         mBuilder.setContentIntent(pi)
         mNotificationManager.notify(0, mBuilder.build())
-    }
-    /*
-    private fun buildNotification(message: Message, context: Context) {
-        Toast.makeText(
-            Parse.getApplicationContext(),
-            message.body,
-            Toast.LENGTH_SHORT
-        ).show()
-        val builder = NotificationCompat.Builder(context)
-            .setSmallIcon(R.drawable.notify_panel_notification_icon_bg)
-            .setContentTitle(message.sender.username)
-            .setContentText(message.body)
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
 
-        with(NotificationManagerCompat.from(context)) {
-            // notificationId is a unique int for each notification that you must define
-            notify(425, builder.build())
-        }
     }
-     */
 
     /**
      * Returns the latest message received from given [user]
