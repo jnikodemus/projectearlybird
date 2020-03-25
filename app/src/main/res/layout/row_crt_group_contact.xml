@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <CheckBox
+    <ImageView
         android:id="@+id/crt_group_row_cb_avatar"
         android:layout_width="64dp"
         android:layout_height="64dp"
@@ -15,8 +15,7 @@
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:button="@android:drawable/btn_star"/>
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
         android:id="@+id/crt_group_row_tv_username"

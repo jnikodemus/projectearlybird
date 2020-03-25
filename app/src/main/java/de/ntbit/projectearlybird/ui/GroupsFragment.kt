@@ -68,21 +68,5 @@ class GroupsFragment : Fragment() {
     }
 
     fun createTestLayout(){
-        adapter.add(GroupItem())
-        adapter.add(GroupItem())
-        adapter.add(GroupItem())
-        adapter.add(GroupItem())
-        adapter.add(GroupItem())
-        adapter.add(GroupItem())
-        adapter.add(GroupItem())
-        adapter.add(GroupItem())
-        adapter.add(GroupItem())
-        adapter.add(GroupItem())
-        adapter.add(GroupItem())
-        adapter.add(GroupItem())
-        adapter.add(GroupItem())
-        adapter.add(GroupItem())
-        adapter.add(GroupItem())
-        adapter.add(GroupItem())
     }
 }

@@ -217,6 +217,7 @@ class UserManager() {
     }
 
     fun loadAvatar(img : ImageView, user: ParseUser) {
+        Log.d("CUSTOMDEBUG", user.getParseFile("avatar")?.url)
         Picasso.get().load(user.getParseFile("avatar")?.url).resize(400,400).centerCrop().into(img)
 
         /*user.getParseFile("avatar")?.getDataInBackground { data, e ->

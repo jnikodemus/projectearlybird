@@ -8,4 +8,6 @@ class GroupManager {
     fun sendGroupDataToDatabase(){
 
     }
+
+
 }
