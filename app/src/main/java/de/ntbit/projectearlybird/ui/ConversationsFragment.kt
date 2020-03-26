@@ -18,6 +18,7 @@ import de.ntbit.projectearlybird.manager.MessageManager
 import de.ntbit.projectearlybird.manager.UserManager
 import kotlinx.android.synthetic.main.fragment_contacts.*
 import kotlinx.android.synthetic.main.fragment_conversations.*
+import kotlinx.coroutines.runBlocking
 
 class ConversationsFragment : Fragment() {
 
@@ -42,7 +43,6 @@ class ConversationsFragment : Fragment() {
     private fun initialize() {
         connectAdapter()
         setClickListener()
-       //val users = mUserManager.getAllUsers()
     }
 
     private fun connectAdapter() {

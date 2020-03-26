@@ -6,7 +6,6 @@
     android:id="@+id/row_new_message_user"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="16dp"
     android:background="@drawable/border_bottom"
     android:alpha="100">
 

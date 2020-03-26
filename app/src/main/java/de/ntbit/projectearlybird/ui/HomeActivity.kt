@@ -46,19 +46,6 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         selectMenuItem(0)
     }
 
-    /**
-     * Loads Avatar from database
-     */
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 0 && resultCode == Activity.RESULT_OK && data != null) {
-            val uri = data.data
-            val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, uri)
-            navigation_avatar.setImageBitmap(bitmap)
-            mUserManager.updateAvatar(bitmap)
-        }
-    }
-
     private fun placeToolbar() {
         val toolbar = toolbar
         setSupportActionBar(toolbar)
@@ -85,6 +72,19 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             val intent = Intent(Intent.ACTION_PICK)
             intent.type = "image/*"
             startActivityForResult(intent, 0)
+        }
+    }
+
+    /**
+     * Loads Avatar to database
+     */
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 0 && resultCode == Activity.RESULT_OK && data != null) {
+            val uri = data.data
+            val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, uri)
+            navigation_avatar.setImageBitmap(bitmap)
+            mUserManager.updateAvatar(bitmap)
         }
     }
 
