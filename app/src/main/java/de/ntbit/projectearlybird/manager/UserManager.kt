@@ -28,6 +28,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
 import java.util.*
 import java.util.logging.Logger
@@ -50,7 +51,6 @@ class UserManager() {
             initMyConversationContacts()
             initAllUsers()
         }
-
     }
 
     fun registerUser(username: String, email: String, uHashedPassword: String, ctx: Context): Boolean {
@@ -119,14 +119,6 @@ class UserManager() {
             if (e == null) {
                 users.remove(getCurrentUser())
                 allUsersSet.addAll(users)
-                /*
-                for (user in users) {
-                    Log.d("CUSTOMDEBUG","User: " + user.username + " Id: " + user.objectId)
-                    if(user.objectId != getCurrentUser().objectId) {
-                        user.pinInBackground()
-                        allUsers.add(user)
-                    }
-                }*/
             } else {
                 log.fine("Error")
             }
@@ -177,7 +169,19 @@ class UserManager() {
         }
     }
 
-    fun getMyConversationContacts() : Collection<ParseUser> {
+    private fun initMyConversationContacts2() {
+        // Query to get Messages
+        val mQuery = ParseQuery.getQuery<Message>(Message::class.java)
+            .whereEqualTo("recipient", getCurrentUser())
+        val query = ParseUser.getQuery()
+        query.whereMatchesKeyInQuery("objectId", "senderId", mQuery)
+        CoroutineScope(IO).launch {
+            val convContacts = query.find()
+            pinnedConversationContacts.addAll(convContacts)
+        }
+    }
+
+    fun getMyConversationContacts(): HashSet<ParseUser> {
         return pinnedConversationContacts
     }
 
@@ -186,9 +190,7 @@ class UserManager() {
         contact.pinInBackground()
     }
 
-
     /* TODO: create getAllLocalUsers() */
-
     /**
      * Checks if Parse.getCurrentUser() is null to determine if a user is already logged in and
      * returns true if so
@@ -219,13 +221,6 @@ class UserManager() {
     fun loadAvatar(img : ImageView, user: ParseUser) {
         Log.d("CUSTOMDEBUG", user.getParseFile("avatar")?.url)
         Picasso.get().load(user.getParseFile("avatar")?.url).resize(400,400).centerCrop().into(img)
-
-        /*user.getParseFile("avatar")?.getDataInBackground { data, e ->
-            if (e == null) {
-                val bmp = BitmapFactory.decodeByteArray(data, 0, data.size)
-                img.setImageBitmap(bmp)
-            }
-        }*/
     }
 
     private fun showToast(message: String) {

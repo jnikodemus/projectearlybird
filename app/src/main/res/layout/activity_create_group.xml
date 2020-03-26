@@ -7,25 +7,28 @@
     android:background="@android:color/white"
     tools:context=".ui.CreateGroupActivity">
 
+    <include
+        android:id="@+id/actCreatGroup_toolbar"
+        layout="@layout/toolbar" />
+
     <ImageView
         android:id="@+id/crt_group_iv_avatar"
         android:layout_width="0dp"
         android:layout_height="120dp"
-        android:layout_marginTop="8dp"
+        android:background="@color/colorPrimaryLight"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_group_black"
-        android:background="@color/colorPrimaryLight"/>
+        app:layout_constraintTop_toBottomOf="@+id/actCreatGroup_toolbar"
+        app:srcCompat="@drawable/ic_group_black" />
 
     <EditText
-        android:id="@+id/activity_crt_group_pt_groupname"
+        android:id="@+id/activity_crt_group_et_groupname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:ems="10"
+        android:hint="Groupname"
         android:inputType="textPersonName"
-        android:text="Groupname"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/crt_group_iv_avatar" />
@@ -34,12 +37,24 @@
         android:id="@+id/crt_group_rv_contacts"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="8dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/activity_crt_group_pt_groupname" />
+        app:layout_constraintTop_toBottomOf="@+id/activity_crt_group_et_groupname" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/actCreatGroup_check_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="15dp"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/ic_check_white_24dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

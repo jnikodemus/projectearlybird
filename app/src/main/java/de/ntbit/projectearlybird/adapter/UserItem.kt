@@ -1,5 +1,6 @@
 package de.ntbit.projectearlybird.adapter
 
+import android.util.Log
 import com.parse.ParseUser
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Item
@@ -14,10 +15,16 @@ import java.util.Locale
 
 open class UserItem(val user: ParseUser): Item<GroupieViewHolder>(){
     protected val mUserManager: UserManager = ManagerFactory.getUserManager()
+
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         viewHolder.itemView.textView_new_message.text = user.username
         /*Bilder zu den usernames*/
         mUserManager.loadAvatar(viewHolder.itemView.imageView_new_message, user)
+        /*
+        viewHolder.itemView.setOnClickListener{
+            Log.d("CUSTOMDEBUG","Clicked $position for $user.username")
+        }
+         */
     }
 
     override fun getLayout(): Int {
