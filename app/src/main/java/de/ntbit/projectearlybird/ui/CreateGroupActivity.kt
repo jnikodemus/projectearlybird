@@ -65,19 +65,15 @@ class CreateGroupActivity : AppCompatActivity() {
             val userItem = item as UserItem
             toggleView(view)
             processUserClicked(userItem.user)
-            Log.d("CUSTOMDEBUG","CreateGroupActivity - Selected ${groupMember.size} user.")
         }
 
         actCreatGroup_check_fab.setOnClickListener {
-            /*
-            val groupImage = ParseFile(crt_group_iv_avatar)
-            val group: Group = Group(activity_crt_group_et_groupname.text.toString(), mUserManager.getCurrentUser(), groupMember, )
+            //val groupImage = ParseFile(crt_group_iv_avatar)
+            //val group: Group = Group(activity_crt_group_et_groupname.text.toString(), mUserManager.getCurrentUser(), groupMember, )
             val intent = Intent(this, GroupActivity::class.java)
-            intent.putExtra(GROUP_MEMBER_KEY, groupMember)
+            //intent.putExtra(GROUP_MEMBER_KEY, groupMember)
             startActivity(intent)
             finish()
-
-             */
         }
 
         crt_group_iv_avatar.setOnClickListener {

@@ -8,11 +8,11 @@
     android:background="@android:color/white">
 
     <include
-        android:id="@+id/actChat_toolbar"
-        layout="@layout/toolbar" />
+        android:id="@+id/actChatToolbar"
+        layout="@layout/toolbar"/>
 
     <EditText
-        android:id="@+id/et_chat_enterMessage"
+        android:id="@+id/actChatEditTextMessage"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginStart="8dp"
@@ -20,20 +20,19 @@
         android:layout_marginBottom="8dp"
         android:background="@android:color/white"
         android:ems="10"
-        android:hint="Enter Message"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/bt_chat_send"
+        app:layout_constraintEnd_toStartOf="@+id/actChatButtonSend"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/bt_chat_send"
+        android:id="@+id/actChatButtonSend"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:background="@drawable/rounded_button"
-        android:text="Send"
+        android:text="@string/send"
         android:textColor="@android:color/white"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -45,9 +44,9 @@
         android:layout_height="0dp"
         android:layout_marginBottom="8dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintBottom_toTopOf="@+id/et_chat_enterMessage"
+        app:layout_constraintBottom_toTopOf="@+id/actChatEditTextMessage"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/actChat_toolbar" />
+        app:layout_constraintTop_toBottomOf="@+id/actChatToolbar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

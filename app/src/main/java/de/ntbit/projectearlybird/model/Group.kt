@@ -9,14 +9,17 @@ import com.parse.ParseUser
 import java.io.ByteArrayOutputStream
 import java.util.logging.Logger
 
-@ParseClassName("UserProfile")
+@ParseClassName("Group")
 class Group : ParseObject {
 
     private val log: Logger = Logger.getLogger(this::class.java.simpleName)
 
     internal constructor() : super()
 
-    internal constructor(name: String, owner: ParseUser, members: MutableCollection<ParseUser>, rawLogo: ImageView) : super() {
+    internal constructor(name: String,
+                         owner: ParseUser,
+                         members: MutableCollection<ParseUser>,
+                         rawLogo: ImageView) : super() {
         this.name = name
         //this.logo = convertRawImageToParseFile(rawLogo)
         this.owner = owner

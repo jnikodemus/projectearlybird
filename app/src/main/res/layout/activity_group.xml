@@ -7,7 +7,7 @@
     tools:context=".ui.GroupActivity">
 
     <include
-        android:id="@+id/actGroup_toolbar"
+        android:id="@+id/actGroupToolbar"
         layout="@layout/toolbar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
