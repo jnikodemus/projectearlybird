@@ -5,9 +5,9 @@ import java.util.logging.Logger
 class ManagerFactory {
     companion object {
         private val log = Logger.getLogger(this::class.java.simpleName)
-        private var mMessageManager: MessageManager? = null
-        private var mUserManager: UserManager? = null
-        private var mGroupManager: GroupManager? = null
+        private lateinit var mMessageManager: MessageManager
+        private lateinit var mUserManager: UserManager
+        private lateinit var mGroupManager: GroupManager
 
         fun initialize() {
             mMessageManager = MessageManager()
@@ -15,21 +15,21 @@ class ManagerFactory {
         }
 
         fun getMessageManager(): MessageManager {
-            if(mMessageManager == null)
+            if(!::mMessageManager.isInitialized)
                 mMessageManager = MessageManager()
-            return mMessageManager!!
+            return mMessageManager
         }
 
         fun getUserManager(): UserManager {
-            if(mUserManager == null)
+            if(!::mUserManager.isInitialized)
                 mUserManager = UserManager()
-            return mUserManager!!
+            return mUserManager
         }
 
         fun getGroupManager(): GroupManager {
-            if(mGroupManager == null)
+            if(!::mGroupManager.isInitialized)
                 mGroupManager = GroupManager()
-            return mGroupManager!!
+            return mGroupManager
         }
     }
 }

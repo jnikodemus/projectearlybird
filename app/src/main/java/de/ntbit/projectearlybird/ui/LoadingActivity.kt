@@ -28,7 +28,7 @@ class LoadingActivity : AppCompatActivity() {
     }
 
     private fun initialize() {
-        //mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
         ParseConnection.initialize(this)
         mUserManager = ManagerFactory.getUserManager()
         checkLoggedIn()
