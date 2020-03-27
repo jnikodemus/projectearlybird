@@ -15,7 +15,7 @@ import de.ntbit.projectearlybird.manager.ManagerFactory
 import kotlinx.android.synthetic.main.activity_add_new_contact.*
 
 
-class AddNewContactActivity : AppCompatActivity() {
+class AddContactActivity : AppCompatActivity() {
 
     private val adapter = GroupAdapter<GroupieViewHolder>()
     private val mUserManager = ManagerFactory.getUserManager()
