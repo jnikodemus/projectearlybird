@@ -16,8 +16,9 @@ class Group : ParseObject {
 
     internal constructor() : super()
 
-    internal constructor(name: String, owner: ParseUser, members: MutableCollection<ParseUser>, rawLogo: ImageView) : super() {
+    internal constructor(name: String, owner: ParseUser, members: MutableCollection<ParseUser>, logo: ParseFile) : super() {
         this.name = name
+        this.logo = logo
         //this.logo = convertRawImageToParseFile(rawLogo)
         this.owner = owner
         this.members = ArrayList(members)

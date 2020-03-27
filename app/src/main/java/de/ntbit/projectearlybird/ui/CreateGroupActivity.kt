@@ -3,6 +3,7 @@ package de.ntbit.projectearlybird.ui
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -24,6 +25,7 @@ import de.ntbit.projectearlybird.manager.UserManager
 import de.ntbit.projectearlybird.model.Group
 import kotlinx.android.synthetic.main.activity_create_group.*
 import kotlinx.android.synthetic.main.toolbar.*
+import java.io.ByteArrayOutputStream
 
 
 class CreateGroupActivity : AppCompatActivity() {
@@ -43,6 +45,7 @@ class CreateGroupActivity : AppCompatActivity() {
         setContentView(R.layout.activity_create_group)
 
         initialize()
+
 
     }
 
@@ -70,14 +73,16 @@ class CreateGroupActivity : AppCompatActivity() {
 
         actCreatGroup_check_fab.setOnClickListener {
             /*
-            val groupImage = ParseFile(crt_group_iv_avatar)
-            val group: Group = Group(activity_crt_group_et_groupname.text.toString(), mUserManager.getCurrentUser(), groupMember, )
+            val groupImage = ParseFile()
+            val group: Group = Group(activity_crt_group_et_groupname.text.toString(), mUserManager.getCurrentUser(), groupMember, groupImage)
+
+             */
             val intent = Intent(this, GroupActivity::class.java)
-            intent.putExtra(GROUP_MEMBER_KEY, groupMember)
+            //intent.putExtra(GROUP_MEMBER_KEY, group)
             startActivity(intent)
             finish()
 
-             */
+
         }
 
         crt_group_iv_avatar.setOnClickListener {
@@ -127,6 +132,7 @@ class CreateGroupActivity : AppCompatActivity() {
             }
         }
     }
+
 
     private fun launchImageCrop(uri: Uri) {
         CropImage.activity(uri).setGuidelines(CropImageView.Guidelines.ON)
