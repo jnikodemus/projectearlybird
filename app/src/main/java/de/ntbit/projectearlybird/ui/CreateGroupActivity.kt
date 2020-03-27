@@ -3,6 +3,7 @@ package de.ntbit.projectearlybird.ui
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -24,6 +25,7 @@ import de.ntbit.projectearlybird.manager.UserManager
 import de.ntbit.projectearlybird.model.Group
 import kotlinx.android.synthetic.main.activity_create_group.*
 import kotlinx.android.synthetic.main.toolbar.*
+import java.io.ByteArrayOutputStream
 
 
 class CreateGroupActivity : AppCompatActivity() {
@@ -43,6 +45,7 @@ class CreateGroupActivity : AppCompatActivity() {
         setContentView(R.layout.activity_create_group)
 
         initialize()
+
 
     }
 
@@ -123,6 +126,7 @@ class CreateGroupActivity : AppCompatActivity() {
             }
         }
     }
+
 
     private fun launchImageCrop(uri: Uri) {
         CropImage.activity(uri).setGuidelines(CropImageView.Guidelines.ON)

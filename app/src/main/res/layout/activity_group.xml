@@ -6,6 +6,18 @@
     android:layout_height="match_parent"
     tools:context=".ui.GroupActivity">
 
+    <ImageView
+        android:id="@+id/act_group_iv_avatar"
+        android:layout_width="0dp"
+        android:layout_height="120dp"
+        android:background="@color/colorPrimaryLight"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/actGroup_toolbar"
+        app:srcCompat="@drawable/ic_group_black"
+        android:transitionName="groupAvatarTrans"/>
+
     <include
         android:id="@+id/actGroupToolbar"
         layout="@layout/toolbar" />

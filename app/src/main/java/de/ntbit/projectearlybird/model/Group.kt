@@ -21,6 +21,7 @@ class Group : ParseObject {
                          members: MutableCollection<ParseUser>,
                          rawLogo: ImageView) : super() {
         this.name = name
+        this.logo = logo
         //this.logo = convertRawImageToParseFile(rawLogo)
         this.owner = owner
         this.members = ArrayList(members)
