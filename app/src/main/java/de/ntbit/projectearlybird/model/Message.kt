@@ -11,7 +11,9 @@ class Message : ParseObject {
 
     internal constructor() : super()
 
-    internal constructor(sender: ParseUser, recipient: ParseUser, body: String) : super() {
+    internal constructor(sender: ParseUser,
+                         recipient: ParseUser,
+                         body: String) : super() {
         this.sender = sender
         this.senderId = sender.objectId
         this.recipient = recipient

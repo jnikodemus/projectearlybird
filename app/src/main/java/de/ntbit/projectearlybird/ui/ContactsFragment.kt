@@ -1,14 +1,9 @@
 package de.ntbit.projectearlybird.ui
 
-import android.app.Dialog
-import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import androidx.appcompat.app.AlertDialog
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
@@ -62,7 +57,7 @@ class ContactsFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.frgmt_contacts_add -> {
-                val intent = Intent(this.context, AddNewContactActivity::class.java)
+                val intent = Intent(this.context, AddContactActivity::class.java)
                 startActivity(intent)
             }
         }

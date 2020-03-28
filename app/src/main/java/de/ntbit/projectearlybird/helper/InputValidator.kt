@@ -6,6 +6,20 @@ import java.util.logging.Logger
 
 class InputValidator {
     private val log = Logger.getLogger(this::class.java.simpleName)
+
+    companion object {
+
+        const val ERROR_NOT_NULL_NOR_EMPTY = "Must not be empty or blank"
+
+        fun isValidInputNotNullNotEmpty(editText: EditText) : Boolean {
+            if(editText.text.isNullOrBlank() || editText.text.isNullOrEmpty()) {
+                editText.error = ERROR_NOT_NULL_NOR_EMPTY
+                return false
+            }
+            return true
+        }
+    }
+
     // TODO: Change from fix String to R.string
     //private val errorText = Resources.getSystem().getString(R.string.app_check_input)
     private val errorText = "Check your Input!"

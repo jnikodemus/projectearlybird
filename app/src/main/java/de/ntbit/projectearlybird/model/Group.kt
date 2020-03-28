@@ -1,7 +1,9 @@
 package de.ntbit.projectearlybird.model
 
+import android.content.ContentResolver
 import android.graphics.Bitmap
-import android.widget.ImageView
+import android.net.Uri
+import android.provider.MediaStore
 import com.parse.ParseClassName
 import com.parse.ParseFile
 import com.parse.ParseObject
@@ -9,33 +11,38 @@ import com.parse.ParseUser
 import java.io.ByteArrayOutputStream
 import java.util.logging.Logger
 
-@ParseClassName("UserProfile")
+@ParseClassName("Group")
 class Group : ParseObject {
+
+    companion object {
+        fun convertBitmapToParseFileByUri(contentResolver: ContentResolver, uri: Uri) : ParseFile{
+            val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, uri)
+            return convertBitmapToParseFile(bitmap)
+        }
+
+        fun convertBitmapToParseFile(bitmap: Bitmap) : ParseFile {
+            val stream = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
+            val image: ByteArray = stream.toByteArray()
+            return ParseFile(image)
+        }
+    }
 
     private val log: Logger = Logger.getLogger(this::class.java.simpleName)
 
     internal constructor() : super()
 
-    internal constructor(name: String, owner: ParseUser, members: MutableCollection<ParseUser>, logo: ParseFile) : super() {
+    internal constructor(name: String,
+                         owner: ParseUser,
+                         members: MutableCollection<ParseUser>,
+                         groupImage: ParseFile) : super() {
         this.name = name
-        this.logo = logo
-        //this.logo = convertRawImageToParseFile(rawLogo)
+        this.groupImage = groupImage
         this.owner = owner
         this.members = ArrayList(members)
         this.members.add(owner)
         this.admins = ArrayList()
         this.admins.add(owner)
-    }
-
-    private fun convertRawImageToParseFile(rawLogo: ImageView): ParseFile? {
-        /*
-        val stream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
-        val image: ByteArray = stream.toByteArray()
-        getCurrentUser().put("avatar", ParseFile(image))
-        getCurrentUser().saveEventually()
-         */
-        return null
     }
 
     var name: String
@@ -54,12 +61,24 @@ class Group : ParseObject {
             this.put("owner", owner)
         }
 
-    var logo: ParseFile
+    var groupImage: ParseFile
         get() {
-            return this.getParseFile("logo")!!
+            return this.getParseFile("groupImage")!!
         }
-        set(logo) {
-            this.put("logo", logo)
+        set(groupImage) {
+            groupImage.save()
+            this.put("groupImage", groupImage)
+        }
+
+    var croppedImage: ParseFile?
+        get() {
+            return this.getParseFile("croppedImage")
+        }
+        set(croppedImage) {
+            croppedImage?.save()
+            if (croppedImage != null) {
+                this.put("croppedImage", croppedImage)
+            }
         }
 
     var members: ArrayList<ParseUser>
