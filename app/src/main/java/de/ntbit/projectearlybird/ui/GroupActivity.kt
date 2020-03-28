@@ -1,17 +1,19 @@
 package de.ntbit.projectearlybird.ui
 
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.widget.Toolbar
-import com.parse.ParseUser
+import com.squareup.picasso.Picasso
 import de.ntbit.projectearlybird.R
+import de.ntbit.projectearlybird.helper.PixelCalculator
 import de.ntbit.projectearlybird.model.Group
-import de.ntbit.projectearlybird.model.Test
+import kotlinx.android.synthetic.main.activity_create_group.*
 import kotlinx.android.synthetic.main.activity_group.*
-import kotlinx.android.synthetic.main.toolbar.*
 
 class GroupActivity : AppCompatActivity() {
+
+    private lateinit var group: Group
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,14 +23,26 @@ class GroupActivity : AppCompatActivity() {
     }
 
     private fun initialize() {
+        group = intent.getParcelableExtra(CreateGroupActivity.GROUP_KEY)
         placeToolbar()
-        //val group = intent.getParcelableExtra<Group>(CreateGroupActivity.GROUP_KEY)
+        setGroupImage()
     }
 
     private fun placeToolbar() {
-        // TODO: Set toolbar.title
         val toolbar = actGroupToolbar
         setSupportActionBar(toolbar as Toolbar)
-        supportActionBar?.title = "GROUPNAME"
+        supportActionBar?.title = group.name
+    }
+
+    private fun setGroupImage() {
+        actGroupIvImage.layoutParams.height = PixelCalculator.calculateHeightForFullHD()
+        var uri = group.groupImage.url
+        if(group.croppedImage != null)
+            uri = group.croppedImage!!.url
+        Picasso.get()
+            .load(uri)
+            .fit()
+            .centerCrop()
+            .into(actGroupIvImage)
     }
 }

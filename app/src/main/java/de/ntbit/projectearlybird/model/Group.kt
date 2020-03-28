@@ -70,6 +70,17 @@ class Group : ParseObject {
             this.put("groupImage", groupImage)
         }
 
+    var croppedImage: ParseFile?
+        get() {
+            return this.getParseFile("croppedImage")
+        }
+        set(croppedImage) {
+            croppedImage?.save()
+            if (croppedImage != null) {
+                this.put("croppedImage", croppedImage)
+            }
+        }
+
     var members: ArrayList<ParseUser>
             get() {
                 return this.getList<ParseUser>("members") as ArrayList<ParseUser>

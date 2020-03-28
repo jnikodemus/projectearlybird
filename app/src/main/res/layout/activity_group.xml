@@ -7,16 +7,14 @@
     tools:context=".ui.GroupActivity">
 
     <ImageView
-        android:id="@+id/act_group_iv_avatar"
-        android:layout_width="0dp"
+        android:id="@+id/actGroupIvImage"
+        android:layout_width="match_parent"
         android:layout_height="120dp"
-        android:background="@color/colorPrimaryLight"
+        android:transitionName="groupAvatarTrans"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/actGroup_toolbar"
-        app:srcCompat="@drawable/ic_group_black"
-        android:transitionName="groupAvatarTrans"/>
+        app:layout_constraintTop_toBottomOf="@+id/actGroupToolbar"/>
 
     <include
         android:id="@+id/actGroupToolbar"

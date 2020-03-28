@@ -9,6 +9,7 @@ import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.drawToBitmap
 import com.parse.ParseUser
 import com.squareup.picasso.Picasso
 import com.theartofdev.edmodo.cropper.CropImage
@@ -17,11 +18,12 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import de.ntbit.projectearlybird.R
 import de.ntbit.projectearlybird.adapter.UserItem
+import de.ntbit.projectearlybird.helper.InputValidator
+import de.ntbit.projectearlybird.helper.PixelCalculator
 import de.ntbit.projectearlybird.manager.GroupManager
 import de.ntbit.projectearlybird.manager.ManagerFactory
 import de.ntbit.projectearlybird.manager.UserManager
 import de.ntbit.projectearlybird.model.Group
-import de.ntbit.projectearlybird.model.Test
 import kotlinx.android.synthetic.main.activity_create_group.*
 import kotlinx.android.synthetic.main.toolbar.*
 
@@ -73,13 +75,14 @@ class CreateGroupActivity : AppCompatActivity() {
         }
 
         actCreatGroup_check_fab.setOnClickListener {
-            val intent = Intent(this, GroupActivity::class.java)
-            //val test = Test()
-            //intent.putExtra(GROUP_KEY, test)
-            intent.putExtra(GROUP_KEY, createdGroup)
-            createdGroup.saveEventually()
-            startActivity(intent)
-            finish()
+            if(InputValidator.isValidInputNotNullNotEmpty(actCreateGroupEtName)) {
+                createdGroup.name = actCreateGroupEtName.text.toString()
+                val intent = Intent(this, GroupActivity::class.java)
+                intent.putExtra(GROUP_KEY, createdGroup)
+                createdGroup.saveEventually()
+                startActivity(intent)
+                finish()
+            }
         }
 
         crt_group_iv_avatar.setOnClickListener {
@@ -89,7 +92,7 @@ class CreateGroupActivity : AppCompatActivity() {
 
     private fun createInitialGroup() {
         val initialGroupImage = Group.convertBitmapToParseFileByUri(contentResolver, Uri.parse(IMAGE_GROUP_DEFAULT_URI))
-        createdGroup = Group("group#", mUserManager.getCurrentUser(), ArrayList(), initialGroupImage)
+        createdGroup = Group("anonGroup", mUserManager.getCurrentUser(), ArrayList(), initialGroupImage)
         createdGroup.name += createdGroup.objectId
     }
 
@@ -132,6 +135,7 @@ class CreateGroupActivity : AppCompatActivity() {
                             .fit()
                             .centerCrop()
                             .into(crt_group_iv_avatar)
+                        createdGroup.croppedImage = Group.convertBitmapToParseFileByUri(this.contentResolver, it)
                     }
                 }
             }
@@ -157,12 +161,10 @@ class CreateGroupActivity : AppCompatActivity() {
     }
 
     private fun setDefaultImage() {
-        val calculatedHeight: Float = 1080f/1920f * Resources.getSystem().displayMetrics.widthPixels
-        crt_group_iv_avatar.layoutParams.height = calculatedHeight.toInt()
+        crt_group_iv_avatar.layoutParams.height = PixelCalculator.calculateHeightForFullHD()
         val uri = Uri.parse(IMAGE_GROUP_DEFAULT_URI)
         Picasso.get()
             .load(uri)
-            //.resize(maxWidth, maxHeight)
             .fit()
             .centerCrop()
             .into(crt_group_iv_avatar)
