@@ -41,6 +41,7 @@ class UserManager() {
     private val allUsersSet: HashSet<ParseUser> = HashSet()
     private val pinnedContacts: HashSet<ParseUser> = HashSet()
     private val pinnedConversationContacts: HashSet<ParseUser> = HashSet()
+    val IMAGE_USER_DEFAULT_URI = "android.resource://de.ntbit.projectearlybird/mipmap/ic_compass"
 
     init {
         val query = ParseQuery.getQuery(Message::class.java)
@@ -210,7 +211,9 @@ class UserManager() {
         val stream = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
         val image: ByteArray = stream.toByteArray()
-        getCurrentUser().put("avatar", ParseFile(image))
+        val avatar = ParseFile(image)
+        avatar.save()
+        getCurrentUser().put("avatar", avatar)
         getCurrentUser().saveEventually()
     }
 
@@ -218,9 +221,18 @@ class UserManager() {
         loadAvatar(img, getCurrentUser())
     }
 
-    fun loadAvatar(img : ImageView, user: ParseUser) {
-        Log.d("CUSTOMDEBUG", user.getParseFile("avatar")?.url)
-        Picasso.get().load(user.getParseFile("avatar")?.url).resize(400,400).centerCrop().into(img)
+    // TODO: CHECK IMAGE_USER_DEFAULT_URI
+    fun loadAvatar(img: ImageView, user: ParseUser) {
+        var imageUri = Uri.parse(IMAGE_USER_DEFAULT_URI)
+        val userAvatar: ParseFile? = user.getParseFile("avatar")
+        Log.d("CUSTOMDEBUG","UserManager - loadAvatar(): userAvatar is null? ${userAvatar == null}")
+        if(userAvatar != null)
+            imageUri = Uri.parse(userAvatar.url)
+        Picasso.get()
+            .load(imageUri)
+            .resize(400,400)
+            .centerCrop()
+            .into(img)
     }
 
     private fun showToast(message: String) {
