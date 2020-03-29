@@ -108,7 +108,7 @@ class UserManager {
 
     private fun initMyContacts() {
         val mQuery = ParseQuery.getQuery(Message::class.java)
-            .whereEqualTo("recipient", getCurrentUser())
+            .whereContains("threadId", getCurrentUser().objectId)
         val query = ParseQuery.getQuery(User::class.java)
         query.whereMatchesKeyInQuery("objectId", "senderId", mQuery)
         query.findInBackground { ownContacts, e ->
@@ -123,9 +123,11 @@ class UserManager {
         return pinnedContacts
     }
 
-    fun addNewContact(contact : User) {
-        pinnedContacts.add(contact)
-        contact.pinInBackground()
+    fun addContact(contact : User) {
+        if(!contact.equals(getCurrentUser())) {
+            pinnedContacts.add(contact)
+            contact.pinInBackground()
+        }
     }
 
     private fun initMyConversationContacts() {

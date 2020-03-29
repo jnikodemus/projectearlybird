@@ -49,7 +49,7 @@ class AddContactActivity : AppCompatActivity() {
     private fun setClickListeners() {
         adapter.setOnItemClickListener { item, view ->
             val userItem = item as UserItem
-            mUserManager.addNewContact(item.user)
+            mUserManager.addContact(item.user)
             val intent = Intent(view.context, ChatActivity::class.java)
             intent.putExtra(ContactsFragment.USER_KEY, userItem.user)
             startActivity(intent)
