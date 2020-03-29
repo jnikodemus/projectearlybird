@@ -14,10 +14,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/actGroupToolbar"/>
+        app:layout_constraintTop_toBottomOf="@+id/actGroupToolbar" />
 
     <include
         android:id="@+id/actGroupToolbar"
         layout="@layout/toolbar" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/act_group_rv_modules"
+        android:layout_width="409dp"
+        android:layout_height="553dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/actGroupIvImage" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
