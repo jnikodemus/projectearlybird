@@ -15,6 +15,7 @@ import de.ntbit.projectearlybird.adapter.ChatSelfItem
 import de.ntbit.projectearlybird.manager.ManagerFactory
 import de.ntbit.projectearlybird.manager.MessageManager
 import de.ntbit.projectearlybird.manager.UserManager
+import de.ntbit.projectearlybird.model.User
 import kotlinx.android.synthetic.main.activity_chat.*
 
 
@@ -27,7 +28,7 @@ class ChatActivity : AppCompatActivity() {
     private val adapter = GroupAdapter<GroupieViewHolder>()
     private val mMessageManager: MessageManager = ManagerFactory.getMessageManager()
     private val mUserManager: UserManager = ManagerFactory.getUserManager()
-    private lateinit var chatPartner: ParseUser
+    private lateinit var chatPartner: User
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,7 +57,6 @@ class ChatActivity : AppCompatActivity() {
     }
 
     private fun placeToolbar() {
-        // TODO: Set toolbar.title to ChatPartner.username
         val thisToolbar = actChatToolbar
         setSupportActionBar(thisToolbar as Toolbar)
         supportActionBar?.title = chatPartner.username
@@ -73,7 +73,7 @@ class ChatActivity : AppCompatActivity() {
         supportActionBar?.customView = imageView
     }
 
-    private fun listenForMessage(partner: ParseUser) {
+    private fun listenForMessage(partner: User) {
         mMessageManager.getMessagesByPartner(partner, rv_chat_log)
         mMessageManager.subscribeToPartner(partner, rv_chat_log)
     }

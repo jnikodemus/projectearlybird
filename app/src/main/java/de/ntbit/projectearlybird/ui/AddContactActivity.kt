@@ -6,12 +6,14 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.parse.ParseQuery
 import com.parse.ParseUser
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import de.ntbit.projectearlybird.R
 import de.ntbit.projectearlybird.adapter.UserItem
 import de.ntbit.projectearlybird.manager.ManagerFactory
+import de.ntbit.projectearlybird.model.User
 import kotlinx.android.synthetic.main.activity_add_new_contact.*
 
 
@@ -54,7 +56,7 @@ class AddContactActivity : AppCompatActivity() {
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 Log.d("CUSTOMDEBUG","onTextChanged")
                 if(!p0.isNullOrBlank() && p0.isNotEmpty()) {
-                    val query = ParseUser.getQuery()
+                    val query = ParseQuery.getQuery(User::class.java)
                     query.whereStartsWith("username", p0.toString())
                     query.findInBackground { users, e ->
                         adapter.clear()

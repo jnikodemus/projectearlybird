@@ -5,30 +5,20 @@ import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.util.Log
-import android.widget.Adapter
 import android.widget.ImageView
 import android.widget.Toast
-import androidx.core.content.ContextCompat.startActivity
-import androidx.recyclerview.widget.RecyclerView
 import com.parse.*
-import com.parse.ktx.whereExists
 import com.squareup.picasso.Picasso
-import com.xwray.groupie.GroupAdapter
-import com.xwray.groupie.GroupieViewHolder
-import de.ntbit.projectearlybird.adapter.UserItem
 import de.ntbit.projectearlybird.data.PebContract
 import de.ntbit.projectearlybird.data.PebDbHelper
 import de.ntbit.projectearlybird.model.Message
+import de.ntbit.projectearlybird.model.User
 import de.ntbit.projectearlybird.ui.HomeActivity
-import de.ntbit.projectearlybird.ui.LoginActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
 import java.util.*
 import java.util.logging.Logger
@@ -38,9 +28,9 @@ import kotlin.collections.HashSet
 class UserManager() {
     private val log = Logger.getLogger(this::class.java.simpleName)
 
-    private val allUsersSet: HashSet<ParseUser> = HashSet()
-    private val pinnedContacts: HashSet<ParseUser> = HashSet()
-    private val pinnedConversationContacts: HashSet<ParseUser> = HashSet()
+    private val allUsersSet: HashSet<User> = HashSet()
+    private val pinnedContacts: HashSet<User> = HashSet()
+    private val pinnedConversationContacts: HashSet<User> = HashSet()
     val IMAGE_USER_DEFAULT_URI = "android.resource://de.ntbit.projectearlybird/mipmap/ic_compass"
 
     init {
@@ -55,15 +45,15 @@ class UserManager() {
     }
 
     fun registerUser(username: String, email: String, uHashedPassword: String, ctx: Context): Boolean {
-        val user = ParseUser()
+        val user = User()
         var success = true
-        user.username = username
+        user.username = username.toLowerCase(Locale.ROOT)
         user.email = email
         user.setPassword(uHashedPassword)
 
         user.signUpInBackground { e ->
             if (e == null) {
-                saveUserLocal(ParseUser.getCurrentUser(), ctx)
+                saveUserLocal(getCurrentUser(), ctx)
                 showToast("Registration successful. Please verify your Email")
                 // TODO activate automatic login after successful registration
             } else {
@@ -92,30 +82,19 @@ class UserManager() {
         }
     }
 
-    private fun setUserOnline(username: String, ctx: Context) {
-        val mDbHelper = PebDbHelper(ctx)
-        val userDatabase = mDbHelper.writableDatabase
-        val valuesToInsert = ContentValues()
-        valuesToInsert.put(PebContract.UserEntry.COLUMN_USER_IS_ONLINE, PebContract.UserEntry.IS_ONLINE)
-        userDatabase.update(
-            PebContract.UserEntry.TABLE_NAME, valuesToInsert,
-            "username=?", arrayOf(username))
-        userDatabase.close()
-    }
-
     private fun updateLastLogin() {
-        val mCurrentUser = ParseUser.getCurrentUser()
+        val mCurrentUser = getCurrentUser()
         mCurrentUser.put(PebContract.UserEntry.COLUMN_USER_LASTLOGIN, Date(System.currentTimeMillis()))
         mCurrentUser.saveInBackground()
     }
 
-    fun getCurrentUser(): ParseUser {
-        return ParseUser.getCurrentUser()
+    fun getCurrentUser(): User {
+        return ParseUser.getCurrentUser() as User
     }
 
     private fun initAllUsers() {
         //allUsers.clear()
-        val query = ParseUser.getQuery()
+        val query = ParseQuery.getQuery(User::class.java)
         query.findInBackground { users, e ->
             if (e == null) {
                 users.remove(getCurrentUser())
@@ -126,12 +105,12 @@ class UserManager() {
         }
     }
 
-    fun getAllUsers(): Collection<ParseUser> {
+    fun getAllUsers(): Collection<User> {
         return allUsersSet
     }
 
     private fun initMyContacts() {
-        val query = ParseUser.getQuery()
+        val query = ParseQuery.getQuery(User::class.java)
         query.fromLocalDatastore()
         query.findInBackground { ownContacts, e ->
             if(e == null) {
@@ -141,11 +120,11 @@ class UserManager() {
         }
     }
 
-    fun getMyContacts() : Collection<ParseUser> {
+    fun getMyContacts() : Collection<User> {
         return pinnedContacts
     }
 
-    fun addNewContact(contact : ParseUser) {
+    fun addNewContact(contact : User) {
         pinnedContacts.add(contact)
         contact.pinInBackground()
     }
@@ -155,7 +134,7 @@ class UserManager() {
         val mQuery = ParseQuery.getQuery(Message::class.java).whereEqualTo("recipient", getCurrentUser())
         val messageCount = mQuery.count()
         Log.d("CUSTOMDEBUG", "$messageCount messages for ${getCurrentUser().username} online")
-        val query = ParseUser.getQuery()
+        val query = ParseQuery.getQuery(User::class.java)
         query.whereMatchesKeyInQuery("objectId", "senderId", mQuery)
         query.findInBackground {
             convContacts, e ->
@@ -168,9 +147,9 @@ class UserManager() {
 
     private fun initMyConversationContacts2() {
         // Query to get Messages
-        val mQuery = ParseQuery.getQuery<Message>(Message::class.java)
+        val mQuery = ParseQuery.getQuery(Message::class.java)
             .whereEqualTo("recipient", getCurrentUser())
-        val query = ParseUser.getQuery()
+        val query = ParseQuery.getQuery(User::class.java)
         query.whereMatchesKeyInQuery("objectId", "senderId", mQuery)
         CoroutineScope(IO).launch {
             val convContacts = query.find()
@@ -178,16 +157,15 @@ class UserManager() {
         }
     }
 
-    fun getMyConversationContacts(): HashSet<ParseUser> {
+    fun getMyConversationContacts(): HashSet<User> {
         return pinnedConversationContacts
     }
 
-    fun addNewConversationContact(contact : ParseUser) {
+    fun addNewConversationContact(contact: User) {
         pinnedConversationContacts.add(contact)
         contact.pinInBackground()
     }
 
-    /* TODO: create getAllLocalUsers() */
     /**
      * Checks if Parse.getCurrentUser() is null to determine if a user is already logged in and
      * returns true if so
@@ -237,6 +215,18 @@ class UserManager() {
             message,
             Toast.LENGTH_SHORT
         ).show()
+    }
+
+    @Deprecated("Use Parse LocalDatastore")
+    private fun setUserOnline(username: String, ctx: Context) {
+        val mDbHelper = PebDbHelper(ctx)
+        val userDatabase = mDbHelper.writableDatabase
+        val valuesToInsert = ContentValues()
+        valuesToInsert.put(PebContract.UserEntry.COLUMN_USER_IS_ONLINE, PebContract.UserEntry.IS_ONLINE)
+        userDatabase.update(
+            PebContract.UserEntry.TABLE_NAME, valuesToInsert,
+            "username=?", arrayOf(username))
+        userDatabase.close()
     }
 
     @Deprecated("Use Parse LocalDatastore")

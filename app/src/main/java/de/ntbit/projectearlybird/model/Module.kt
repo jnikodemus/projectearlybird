@@ -1,29 +1,31 @@
 package de.ntbit.projectearlybird.model
 
-import android.widget.ImageView
+import android.graphics.Color
+import com.parse.ParseClassName
+import com.parse.ParseObject
 
-open class Module {
+@ParseClassName("Module")
+open class Module : ParseObject {
+
     internal constructor() : super()
 
-    internal constructor(name: String, icon: ImageView) {
+    internal constructor(name: String) {
         this.name = name
-        this.icon = icon
-
     }
 
     var name: String
         get() {
-            return name
+            return this.getString("name")!!
         }
-        set(name) {
-            this.name = name
+        private set(name) {
+            this.put("name", name)
         }
 
-    var icon: ImageView
+    var colorInt: Int
         get() {
-            return icon
+            return this.getInt("colorInt")
         }
-        set(name) {
-            this.icon = icon
+        private set(colorInt) {
+            this.put("colorInt", colorInt)
         }
 }

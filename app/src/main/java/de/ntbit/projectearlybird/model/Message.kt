@@ -11,8 +11,8 @@ class Message : ParseObject {
 
     internal constructor() : super()
 
-    internal constructor(sender: ParseUser,
-                         recipient: ParseUser,
+    internal constructor(sender: User,
+                         recipient: User,
                          body: String) : super() {
         this.sender = sender
         this.senderId = sender.objectId
@@ -25,9 +25,9 @@ class Message : ParseObject {
         generateACL()
     }
 
-    var sender: ParseUser
+    var sender: User
         get() {
-            return this.getParseUser("sender")!!
+            return this.getParseUser("sender")!! as User
         }
         set(sender) {
             this.put("sender", sender)
@@ -40,9 +40,9 @@ class Message : ParseObject {
             this.put("senderId",senderId)
         }
 
-    var recipient: ParseUser
+    var recipient: User
         get() {
-            return this.getParseUser("recipient")!!
+            return this.getParseUser("recipient")!! as User
         }
         set(recipient) {
             this.put("recipient", recipient)

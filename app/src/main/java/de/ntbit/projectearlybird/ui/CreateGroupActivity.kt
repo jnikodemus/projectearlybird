@@ -83,7 +83,6 @@ class CreateGroupActivity : AppCompatActivity() {
                 createdGroup.name = actCreateGroupEtName.text.toString()
                 val intent = Intent(this, GroupActivity::class.java)
                 intent.putExtra(GROUP_KEY, createdGroup)
-                intent.putExtra("TEST", User())
                 createdGroup.saveEventually()
                 startActivity(intent)
                 finish()
@@ -101,7 +100,7 @@ class CreateGroupActivity : AppCompatActivity() {
         createdGroup.name += createdGroup.objectId
     }
 
-    private fun processUserClicked(user: ParseUser) {
+    private fun processUserClicked(user: User) {
         if(createdGroup.members.contains(user))
             createdGroup.members.remove(user)
         else createdGroup.members.add(user)
