@@ -21,9 +21,9 @@ open class ChatItem(val message: Message): Item<GroupieViewHolder>() {
     val format = SimpleDateFormat(datePattern, userLocale)
 
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
-        viewHolder.itemView.tv_self_row.text = message.body
-        viewHolder.itemView.chatSelfRow_tvTimestamp.text = format.format(message.timestamp)
-        mUserManager.loadAvatar(viewHolder.itemView.chat_self_row_iv_avatar)
+        viewHolder.itemView.row_chat_self_tv_message.text = message.body
+        viewHolder.itemView.row_chat_self_tv_timestamp.text = format.format(message.timestamp)
+        //mUserManager.loadAvatar(viewHolder.itemView.chat_self_row_iv_avatar)
     }
 
     override fun getLayout(): Int {
@@ -33,9 +33,9 @@ open class ChatItem(val message: Message): Item<GroupieViewHolder>() {
 
 class ChatFromItem(message: Message, private val user: ParseUser): ChatItem(message) {
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
-        viewHolder.itemView.tv_contact_row.text = message.body
-        viewHolder.itemView.chatContactRow_tvTimestamp.text = format.format(message.timestamp)
-        mUserManager.loadAvatar(viewHolder.itemView.chat_contact_row_iv_avatar, user)
+        viewHolder.itemView.row_chat_contact_tv_message.text = message.body
+        viewHolder.itemView.row_chat_contact_tv_timestamp.text = format.format(message.timestamp)
+        //mUserManager.loadAvatar(viewHolder.itemView.chat_contact_row_iv_avatar, user)
     }
     override fun getLayout(): Int {
         return R.layout.row_chat_contact

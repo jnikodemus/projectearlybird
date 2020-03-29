@@ -4,12 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.ChatActivity"
-    android:background="@android:color/white">
+    android:background="#E1F5FE"
+    tools:context=".ui.ChatActivity">
 
     <include
         android:id="@+id/actChatToolbar"
-        layout="@layout/toolbar"/>
+        layout="@layout/toolbar" />
 
     <EditText
         android:id="@+id/actChatEditTextMessage"
@@ -43,6 +43,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="8dp"
+        android:background="#00FFFFFF"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toTopOf="@+id/actChatEditTextMessage"
         app:layout_constraintEnd_toEndOf="parent"
