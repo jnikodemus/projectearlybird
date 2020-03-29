@@ -7,6 +7,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.util.Log
+import android.widget.Adapter
 import android.widget.ImageView
 import android.widget.Toast
 import com.parse.*
@@ -106,8 +107,10 @@ class UserManager {
     }
 
     private fun initMyContacts() {
+        val mQuery = ParseQuery.getQuery(Message::class.java)
+            .whereEqualTo("recipient", getCurrentUser())
         val query = ParseQuery.getQuery(User::class.java)
-        query.fromLocalDatastore()
+        query.whereMatchesKeyInQuery("objectId", "senderId", mQuery)
         query.findInBackground { ownContacts, e ->
             if(e == null) {
                 ownContacts.remove(getCurrentUser())
