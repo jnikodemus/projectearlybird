@@ -1,7 +1,5 @@
 package de.ntbit.projectearlybird.adapter
 
-import android.util.Log
-import com.parse.ParseUser
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Item
 import de.ntbit.projectearlybird.R

@@ -22,13 +22,15 @@
     <string name="menu_drawer_open">Open navigation drawer</string>
     <string name="menu_drawer_close">Close navigation drawer</string>
     <string name="navigation_icon_description">Menu icon</string>
+    <string name="navigation_avatar">Avatar</string>
 
     <string name="profile_first_name">First name</string>
     <string name="profile_last_name">Last name</string>
     <string name="profile_birthday">Birthday</string>
     <string name="profile_logout">Logout</string>
     <string name="profile_delete_account">Delete Account</string>
-    <string name="navigation_avatar">Avatar</string>
+
+    <string name="chat_hint_message">Message</string>
 
     <string name="username">Username</string>
     <string name="title_activity_loading">LoadingActivity</string>
