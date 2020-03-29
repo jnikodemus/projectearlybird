@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
+    android:background="@color/colorBackgroundPrimary"
     tools:context=".ui.CreateGroupActivity">
 
     <include
-        android:id="@+id/actCreateGroup_toolbar"
+        android:id="@+id/act_create_group_toolbar"
         layout="@layout/toolbar" />
 
     <ImageView
@@ -18,22 +18,28 @@
         android:transitionName="groupAvatarTrans"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/actCreateGroup_toolbar"/>
+        app:layout_constraintTop_toBottomOf="@+id/act_create_group_toolbar"/>
 
     <EditText
-        android:id="@+id/actCreateGroupEtName"
-        android:layout_width="wrap_content"
+        android:id="@+id/act_create_group_et_name"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:ems="10"
         android:hint="Groupname"
+        android:alpha="0.7"
+        android:background="@drawable/rounded_text"
+        android:backgroundTint="@android:color/white"
+        android:minHeight="40dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/crt_group_iv_avatar" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/crt_group_rv_contacts"
+        android:id="@+id/act_create_group_rv_contacts"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
@@ -42,10 +48,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/actCreateGroupEtName" />
+        app:layout_constraintTop_toBottomOf="@+id/act_create_group_et_name" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/actCreatGroup_check_fab"
+        android:id="@+id/act_create_group_check_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="15dp"

@@ -10,4 +10,5 @@
     <color name="colorIcons">#FFFFFF</color>
     <color name="colorDivider">#BDBDBD</color>
     <color name="colorToolbarText">#FFFFFF</color>
+    <color name="colorBackgroundPrimary">#E1F5FE</color>
 </resources>

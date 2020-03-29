@@ -7,7 +7,6 @@ import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.parse.ParseUser
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import de.ntbit.projectearlybird.R
@@ -41,9 +40,9 @@ class ChatActivity : AppCompatActivity() {
         chatPartner = intent.getParcelableExtra(NewMessageActivity.USER_KEY)
         placeToolbar()
 
-        rv_chat_log.adapter = adapter
+        act_chat_rv_log.adapter = adapter
         /* Resize Recyclerview if SoftKeyboard is selected */
-        (rv_chat_log.layoutManager as LinearLayoutManager).stackFromEnd = true
+        (act_chat_rv_log.layoutManager as LinearLayoutManager).stackFromEnd = true
 
         setClickListener()
 
@@ -51,13 +50,13 @@ class ChatActivity : AppCompatActivity() {
     }
 
     private fun setClickListener() {
-        actChatButtonSend.setOnClickListener {
+        act_chat_btn_send.setOnClickListener {
             sendMessage()
         }
     }
 
     private fun placeToolbar() {
-        val thisToolbar = actChatToolbar
+        val thisToolbar = act_chat_toolbar
         setSupportActionBar(thisToolbar as Toolbar)
         supportActionBar?.title = chatPartner.username
 
@@ -74,18 +73,18 @@ class ChatActivity : AppCompatActivity() {
     }
 
     private fun listenForMessage(partner: User) {
-        mMessageManager.getMessagesByPartner(partner, rv_chat_log)
-        mMessageManager.subscribeToPartner(partner, rv_chat_log)
+        mMessageManager.getMessagesByPartner(partner, act_chat_rv_log)
+        mMessageManager.subscribeToPartner(partner, act_chat_rv_log)
     }
 
     /* Sending a message from currentuser to chosen contact */
     private fun sendMessage() {
-        val text = actChatEditTextMessage.text.toString()
+        val text = act_chat_et_message.text.toString()
         val message = mMessageManager.sendMessage(text, chatPartner)
         if(message != null) {
             adapter.add(ChatSelfItem(message))
-            rv_chat_log.smoothScrollToPosition(adapter.itemCount - 1)
+            act_chat_rv_log.smoothScrollToPosition(adapter.itemCount - 1)
         }
-        actChatEditTextMessage.text.clear()
+        act_chat_et_message.text.clear()
     }
 }

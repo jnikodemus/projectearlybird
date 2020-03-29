@@ -2,16 +2,13 @@ package de.ntbit.projectearlybird.ui
 
 import android.app.Activity
 import android.content.Intent
-import android.content.res.Resources
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.drawToBitmap
-import com.parse.ParseObject
-import com.parse.ParseUser
+import androidx.appcompat.widget.Toolbar
 import com.squareup.picasso.Picasso
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
@@ -27,7 +24,6 @@ import de.ntbit.projectearlybird.manager.UserManager
 import de.ntbit.projectearlybird.model.Group
 import de.ntbit.projectearlybird.model.User
 import kotlinx.android.synthetic.main.activity_create_group.*
-import kotlinx.android.synthetic.main.toolbar.*
 
 
 class CreateGroupActivity : AppCompatActivity() {
@@ -60,14 +56,14 @@ class CreateGroupActivity : AppCompatActivity() {
         setDefaultImage()
         createInitialGroup()
         fetchAllParseUser()
-        crt_group_rv_contacts.adapter = adapter
+        act_create_group_rv_contacts.adapter = adapter
         setClickListeners()
     }
 
     private fun placeToolbar() {
-        // TODO: Set toolbar.title
-        val toolbar = toolbar
-        setSupportActionBar(toolbar)
+        val toolbar = act_create_group_toolbar
+        setSupportActionBar(toolbar as Toolbar)
+        supportActionBar!!.title = "Create a new Group"
     }
 
     private fun setClickListeners() {
@@ -78,9 +74,9 @@ class CreateGroupActivity : AppCompatActivity() {
             processUserClicked(userItem.user)
         }
 
-        actCreatGroup_check_fab.setOnClickListener {
-            if(InputValidator.isValidInputNotNullNotEmpty(actCreateGroupEtName)) {
-                createdGroup.name = actCreateGroupEtName.text.toString()
+        act_create_group_check_fab.setOnClickListener {
+            if(InputValidator.isValidInputNotNullNotEmpty(act_create_group_et_name)) {
+                createdGroup.name = act_create_group_et_name.text.toString()
                 val intent = Intent(this, GroupActivity::class.java)
                 intent.putExtra(GROUP_KEY, createdGroup)
                 createdGroup.saveEventually()

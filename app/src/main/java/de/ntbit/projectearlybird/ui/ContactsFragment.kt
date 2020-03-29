@@ -49,6 +49,7 @@ class ContactsFragment : Fragment() {
         fetchAllParseUser()
     }
 
+    /*
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.frgmt_contacts_add, menu)
         super.onCreateOptionsMenu(menu, inflater)
@@ -63,6 +64,7 @@ class ContactsFragment : Fragment() {
         }
         return super.onOptionsItemSelected(item)
     }
+     */
 
     private fun initialize() {
         connectAdapter()
@@ -83,7 +85,7 @@ class ContactsFragment : Fragment() {
             startActivity(intent)
         }
         frgmt_contacts_fab.setOnClickListener {
-            showUserSearchDialog()
+            showUserSearchActivity()
         }
     }
 
@@ -95,6 +97,8 @@ class ContactsFragment : Fragment() {
         adapter.notifyDataSetChanged()
     }
 
-    private fun showUserSearchDialog() {
+    private fun showUserSearchActivity() {
+        val intent = Intent(this.context, AddContactActivity::class.java)
+        startActivity(intent)
     }
 }
