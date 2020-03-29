@@ -151,9 +151,8 @@ class UserManager() {
     }
 
     private fun initMyConversationContacts() {
-        Log.d("CUSTOMDEBUG", "initMyConversationContacts()")
         // Query to get Messages
-        val mQuery = ParseQuery.getQuery<Message>(Message::class.java).whereEqualTo("recipient", getCurrentUser())
+        val mQuery = ParseQuery.getQuery(Message::class.java).whereEqualTo("recipient", getCurrentUser())
         val messageCount = mQuery.count()
         Log.d("CUSTOMDEBUG", "$messageCount messages for ${getCurrentUser().username} online")
         val query = ParseUser.getQuery()
@@ -163,9 +162,6 @@ class UserManager() {
             if(e == null) {
                 convContacts.remove(getCurrentUser())
                 pinnedConversationContacts.addAll(convContacts)
-                Log.d("CUSTOMDEBUG", pinnedConversationContacts.size.toString())
-                for(us in pinnedConversationContacts)
-                    Log.d("CUSTOMDEBUG", us.username)
             }
         }
     }

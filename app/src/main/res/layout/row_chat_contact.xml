@@ -8,35 +8,24 @@
     android:layout_marginBottom="12dp">
 
     <TextView
-        android:id="@+id/tv_contact_row"
+        android:id="@+id/row_chat_contact_tv_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:background="@drawable/rounded_text"
         android:padding="16dp"
-        android:text="Ich bin eine Nachricht"
         android:textIsSelectable="true"
         android:maxWidth="240dp"
-        app:layout_constraintStart_toEndOf="@+id/chat_contact_row_iv_avatar"
-        app:layout_constraintTop_toTopOf="@+id/chat_contact_row_iv_avatar" />
-
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/chat_contact_row_iv_avatar"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/btn_star_big_on" />
+        app:layout_constraintTop_toBottomOf="@+id/row_chat_contact_tv_timestamp" />
 
     <TextView
-        android:id="@+id/chatContactRow_tvTimestamp"
+        android:id="@+id/row_chat_contact_tv_timestamp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="10sp"
-        app:layout_constraintBottom_toTopOf="@+id/tv_contact_row"
-        app:layout_constraintStart_toStartOf="@+id/tv_contact_row" />
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

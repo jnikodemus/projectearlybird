@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.drawToBitmap
+import com.parse.ParseObject
 import com.parse.ParseUser
 import com.squareup.picasso.Picasso
 import com.theartofdev.edmodo.cropper.CropImage
@@ -24,6 +25,7 @@ import de.ntbit.projectearlybird.manager.GroupManager
 import de.ntbit.projectearlybird.manager.ManagerFactory
 import de.ntbit.projectearlybird.manager.UserManager
 import de.ntbit.projectearlybird.model.Group
+import de.ntbit.projectearlybird.model.User
 import kotlinx.android.synthetic.main.activity_create_group.*
 import kotlinx.android.synthetic.main.toolbar.*
 
@@ -47,6 +49,8 @@ class CreateGroupActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_group)
+
+        Log.d("CUSTOMDEBUG", "${this.javaClass.simpleName} - ")
 
         initialize()
     }
@@ -79,6 +83,7 @@ class CreateGroupActivity : AppCompatActivity() {
                 createdGroup.name = actCreateGroupEtName.text.toString()
                 val intent = Intent(this, GroupActivity::class.java)
                 intent.putExtra(GROUP_KEY, createdGroup)
+                intent.putExtra("TEST", User())
                 createdGroup.saveEventually()
                 startActivity(intent)
                 finish()
