@@ -22,6 +22,7 @@
 
     <TextView
         android:id="@+id/row_chat_contact_tv_timestamp"
+        android:layout_marginStart="8dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="12sp"
