@@ -17,7 +17,6 @@ import kotlin.properties.Delegates
 
 class LoadingActivity : AppCompatActivity() {
 
-    private val log = Logger.getLogger(this::class.java.simpleName)
     private lateinit var mFirebaseAnalytics: FirebaseAnalytics
     private lateinit var mUserManager: UserManager
 

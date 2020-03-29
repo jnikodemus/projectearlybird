@@ -21,12 +21,10 @@ import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
 import java.util.*
-import java.util.logging.Logger
 import kotlin.collections.HashSet
 
 
-class UserManager() {
-    private val log = Logger.getLogger(this::class.java.simpleName)
+class UserManager {
 
     private val allUsersSet: HashSet<User> = HashSet()
     private val pinnedContacts: HashSet<User> = HashSet()
@@ -34,9 +32,9 @@ class UserManager() {
     val IMAGE_USER_DEFAULT_URI = "android.resource://de.ntbit.projectearlybird/mipmap/ic_compass"
 
     init {
+        Log.d("CUSTOMDEBUG", "${this.javaClass.simpleName} - init executed")
         val query = ParseQuery.getQuery(Message::class.java)
         query.fromLocalDatastore()
-        log.info("UserManager - There are ${query.count()} items in LocalDatastore.")
         if(isLoggedIn()) {
             initMyContacts()
             initMyConversationContacts()
@@ -53,11 +51,10 @@ class UserManager() {
 
         user.signUpInBackground { e ->
             if (e == null) {
-                saveUserLocal(getCurrentUser(), ctx)
+                //saveUserLocal(getCurrentUser(), ctx)
                 showToast("Registration successful. Please verify your Email")
                 // TODO activate automatic login after successful registration
             } else {
-                log.fine(e.message)
                 success = false
             }
         }
@@ -69,14 +66,13 @@ class UserManager() {
             if (user != null) {
                 updateLastLogin()
                 //setUserOnline(user.username, activity.applicationContext)
-                deleteLocalUsers(username, activity.applicationContext)
-                syncLocalUser(username, activity.applicationContext)
+                //deleteLocalUsers(username, activity.applicationContext)
+                //syncLocalUser(username, activity.applicationContext)
                 val intent = Intent(activity.applicationContext, HomeActivity::class.java)
                 activity.startActivity(intent)
                 user.pinInBackground()
                 initAllUsers()
             } else {
-                log.fine(e.message)
                 showToast("Invalid username/password")
             }
         }
@@ -100,7 +96,7 @@ class UserManager() {
                 users.remove(getCurrentUser())
                 allUsersSet.addAll(users)
             } else {
-                log.fine("Error")
+                Log.d("CUSTOMDEBUG", "${this.javaClass.simpleName} - Error: ${e.message}")
             }
         }
     }
@@ -130,10 +126,9 @@ class UserManager() {
     }
 
     private fun initMyConversationContacts() {
+        Log.d("CUSTOMDEBUG", "${this.javaClass.simpleName} - initMyConversationContacts() executed")
         // Query to get Messages
         val mQuery = ParseQuery.getQuery(Message::class.java).whereEqualTo("recipient", getCurrentUser())
-        val messageCount = mQuery.count()
-        Log.d("CUSTOMDEBUG", "$messageCount messages for ${getCurrentUser().username} online")
         val query = ParseQuery.getQuery(User::class.java)
         query.whereMatchesKeyInQuery("objectId", "senderId", mQuery)
         query.findInBackground {
@@ -199,7 +194,6 @@ class UserManager() {
     fun loadAvatar(img: ImageView, user: ParseUser) {
         var imageUri = Uri.parse(IMAGE_USER_DEFAULT_URI)
         val userAvatar: ParseFile? = user.getParseFile("avatar")
-        Log.d("CUSTOMDEBUG","UserManager - loadAvatar(): userAvatar is null? ${userAvatar == null}")
         if(userAvatar != null)
             imageUri = Uri.parse(userAvatar.url)
         Picasso.get()
@@ -228,7 +222,7 @@ class UserManager() {
             "username=?", arrayOf(username))
         userDatabase.close()
     }
-
+/*
     @Deprecated("Use Parse LocalDatastore")
     private fun saveUserLocal(user: ParseUser, ctx: Context) {
         val mDbHelper = PebDbHelper(ctx)
@@ -268,4 +262,6 @@ class UserManager() {
         userDatabase.delete(PebContract.UserEntry.TABLE_NAME, whereClause, whereArgs)
         userDatabase.close()
     }
+
+ */
 }

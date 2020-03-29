@@ -42,12 +42,10 @@ class ContactsFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
-        Log.d("CUSTOMDEBUG","onPause()")
     }
 
     override fun onResume() {
         super.onResume()
-        Log.d("CUSTOMDEBUG", "onResume()")
         fetchAllParseUser()
     }
 
