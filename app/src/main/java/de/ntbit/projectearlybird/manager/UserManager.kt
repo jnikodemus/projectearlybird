@@ -22,6 +22,7 @@ import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.collections.HashSet
 
 
@@ -49,6 +50,7 @@ class UserManager {
         user.username = username.toLowerCase(Locale.ROOT)
         user.email = email
         user.setPassword(uHashedPassword)
+        user.contacts = ArrayList()
 
         user.signUpInBackground { e ->
             if (e == null) {
@@ -126,7 +128,7 @@ class UserManager {
     fun addContact(contact : User) {
         if(!contact.equals(getCurrentUser())) {
             pinnedContacts.add(contact)
-            contact.pinInBackground()
+            getCurrentUser().addContact(contact)
         }
     }
 

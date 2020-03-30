@@ -44,12 +44,13 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val numLocalUsers = localUsers.size
         val numLocalGroups = ParseQuery.getQuery(Group::class.java).fromLocalDatastore().count()
         val numLocalModules = ParseQuery.getQuery(Module::class.java).fromLocalDatastore().count()
+        //val numContacts = mUserManager.getCurrentUser().contacts.size
 
         Log.d("CUSTOMDEBUG", "${this.javaClass.simpleName} - " +
                 "LocalMessages: $numLocalMessages " +
                 "LocalUsers: $numLocalUsers " +
                 "LocalGroups: $numLocalGroups " +
-                "LocalModules: $numLocalModules")
+                "LocalModules: $numLocalModules ")
     }
 
     private fun initialize() {

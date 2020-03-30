@@ -16,6 +16,10 @@ import de.ntbit.projectearlybird.manager.MessageManager
 import de.ntbit.projectearlybird.manager.UserManager
 import de.ntbit.projectearlybird.model.User
 import kotlinx.android.synthetic.main.activity_chat.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 
 
 class ChatActivity : AppCompatActivity() {
@@ -73,6 +77,11 @@ class ChatActivity : AppCompatActivity() {
     }
 
     private fun listenForMessage(partner: User) {
+       /* CoroutineScope(IO).launch{
+            val messages = async{
+                mMessageManager.getMessagesByPartner(partner, act_chat_rv_log)
+            }.await()
+        }*/
         mMessageManager.getMessagesByPartner(partner, act_chat_rv_log)
         mMessageManager.subscribeToPartner(partner, act_chat_rv_log)
     }
