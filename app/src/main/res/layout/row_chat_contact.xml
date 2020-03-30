@@ -14,7 +14,10 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:background="@drawable/rounded_text"
+        android:backgroundTint="@color/colorPrimaryDark"
+        android:textColor="@android:color/white"
         android:padding="16dp"
+        android:textSize="15dp"
         android:textIsSelectable="true"
         android:maxWidth="240dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -25,7 +28,7 @@
         android:layout_marginStart="8dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="12sp"
+        android:textSize="12dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

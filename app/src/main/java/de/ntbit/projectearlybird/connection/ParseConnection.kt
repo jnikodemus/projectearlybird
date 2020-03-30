@@ -7,6 +7,7 @@ import com.parse.Parse.isLocalDatastoreEnabled
 import de.ntbit.projectearlybird.manager.ManagerFactory
 import de.ntbit.projectearlybird.model.Group
 import de.ntbit.projectearlybird.model.Message
+import de.ntbit.projectearlybird.model.Module
 import de.ntbit.projectearlybird.model.User
 import java.util.logging.Logger
 
@@ -58,6 +59,7 @@ class ParseConnection {
             ParseUser.registerSubclass(User::class.java)
             ParseObject.registerSubclass(Message::class.java)
             ParseObject.registerSubclass(Group::class.java)
+            ParseObject.registerSubclass(Module::class.java)
         }
     }
 }

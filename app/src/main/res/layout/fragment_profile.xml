@@ -4,89 +4,31 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#E3F2FD"
+    android:background="@color/colorBackgroundPrimary"
     android:paddingTop="?attr/actionBarSize">
-
-    <TextView
-        android:id="@+id/frgmProfileTxtViewFirstname"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:text="@string/profile_first_name"
-        android:textColor="@color/colorPrimaryText"
-        app:layout_constraintBottom_toBottomOf="@+id/frgmProfileEditTxtFirstname"
-        app:layout_constraintEnd_toStartOf="@+id/frgmProfileEditTxtFirstname"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <EditText
-        android:id="@+id/frgmProfileEditTxtFirstname"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/frgmProfileTxtViewFirstname"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/frgmProfileTxtViewLastname"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/profile_last_name"
-        android:textColor="@color/colorPrimaryText"
-        app:layout_constraintBottom_toBottomOf="@+id/frgmProfileEditTxtLastname"
-        app:layout_constraintEnd_toEndOf="@+id/frgmProfileTxtViewFirstname"
-        app:layout_constraintStart_toStartOf="@+id/frgmProfileTxtViewFirstname"
-        app:layout_constraintTop_toBottomOf="@+id/frgmProfileTxtViewFirstname" />
-
-    <EditText
-        android:id="@+id/frgmProfileEditTxtLastname"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="@+id/frgmProfileEditTxtFirstname"
-        app:layout_constraintStart_toStartOf="@+id/frgmProfileEditTxtFirstname"
-        app:layout_constraintTop_toBottomOf="@+id/frgmProfileEditTxtFirstname" />
-
-    <TextView
-        android:id="@+id/frgmProfileTxtViewBirthday"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/profile_birthday"
-        android:textColor="@color/colorPrimaryText"
-        app:layout_constraintBottom_toBottomOf="@+id/frgmProfileEditTxtBirthday"
-        app:layout_constraintEnd_toEndOf="@+id/frgmProfileTxtViewLastname"
-        app:layout_constraintStart_toStartOf="@+id/frgmProfileTxtViewLastname"
-        app:layout_constraintTop_toBottomOf="@+id/frgmProfileTxtViewLastname" />
-
-    <EditText
-        android:id="@+id/frgmProfileEditTxtBirthday"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="date"
-        app:layout_constraintEnd_toEndOf="@+id/frgmProfileEditTxtLastname"
-        app:layout_constraintStart_toStartOf="@+id/frgmProfileEditTxtLastname"
-        app:layout_constraintTop_toBottomOf="@+id/frgmProfileEditTxtLastname" />
 
     <Button
         android:id="@+id/frmProfileBtnDeleteAccount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="25dp"
+        android:background="@drawable/rounded_button"
+        android:backgroundTint="@android:color/holo_red_dark"
         android:text="@string/profile_delete_account"
+        android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/frgmProfileBtnLogout"/>
+        app:layout_constraintEnd_toStartOf="@+id/frgmProfileBtnLogout"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/frgmProfileBtnLogout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="25dp"
+        android:background="@drawable/rounded_button"
+        android:backgroundTint="@color/colorPrimaryText"
         android:text="@string/profile_logout"
+        android:textColor="@color/colorIcons"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/frmProfileBtnDeleteAccount" />

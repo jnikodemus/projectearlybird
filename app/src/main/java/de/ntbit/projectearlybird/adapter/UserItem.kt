@@ -1,19 +1,18 @@
 package de.ntbit.projectearlybird.adapter
 
-import android.util.Log
-import com.parse.ParseUser
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Item
 import de.ntbit.projectearlybird.R
 import de.ntbit.projectearlybird.manager.ManagerFactory
 import de.ntbit.projectearlybird.manager.UserManager
 import de.ntbit.projectearlybird.model.Message
+import de.ntbit.projectearlybird.model.User
 import kotlinx.android.synthetic.main.row_new_message_user.view.*
 import kotlinx.android.synthetic.main.row_latest_message.view.*
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-open class UserItem(val user: ParseUser): Item<GroupieViewHolder>(){
+open class UserItem(val user: User): Item<GroupieViewHolder>(){
     protected val mUserManager: UserManager = ManagerFactory.getUserManager()
 
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
@@ -32,7 +31,7 @@ open class UserItem(val user: ParseUser): Item<GroupieViewHolder>(){
     }
 }
 
-class UserItemLatestMessage(user: ParseUser) : UserItem(user) {
+class UserItemLatestMessage(user: User) : UserItem(user) {
     /* TODO: CHANGE TO getCurrentLocale */
     private val userLocale = Locale("de")
     private val datePattern = "HH:mm"

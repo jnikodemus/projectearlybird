@@ -6,13 +6,15 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import com.parse.ParseUser
+import androidx.appcompat.widget.Toolbar
+import com.parse.ParseQuery
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import de.ntbit.projectearlybird.R
 import de.ntbit.projectearlybird.adapter.UserItem
 import de.ntbit.projectearlybird.manager.ManagerFactory
-import kotlinx.android.synthetic.main.activity_add_new_contact.*
+import de.ntbit.projectearlybird.model.User
+import kotlinx.android.synthetic.main.activity_add_contact.*
 
 
 class AddContactActivity : AppCompatActivity() {
@@ -22,23 +24,42 @@ class AddContactActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_new_contact)
+        setContentView(R.layout.activity_add_contact)
 
+        initialize()
+    }
+
+    private fun initialize() {
+        placeToolbar()
+        connectAdapter()
+        setClickListeners()
+        initializeSearchFunction()
+    }
+
+    private fun placeToolbar() {
+        val toolbar = act_add_contact_toolbar
+        setSupportActionBar(toolbar as Toolbar)
+        supportActionBar!!.title = "Add contact"
+    }
+
+    private fun connectAdapter() {
         add_new_contact_rv.adapter = adapter
+    }
 
-
+    private fun setClickListeners() {
         adapter.setOnItemClickListener { item, view ->
             val userItem = item as UserItem
-            mUserManager.addNewContact(item.user)
+            mUserManager.addContact(item.user)
             val intent = Intent(view.context, ChatActivity::class.java)
             intent.putExtra(ContactsFragment.USER_KEY, userItem.user)
             startActivity(intent)
             finish()
         }
+    }
 
-
+    private fun initializeSearchFunction() {
         // TODO: Check why adapter callback comes later if input is already cleared
-        actAddNewContactEditTextSearch.addTextChangedListener(object : TextWatcher{
+        actAddNewContactEditTextSearch.addTextChangedListener(object: TextWatcher{
             override fun afterTextChanged(p0: Editable?) {
                 Log.d("CUSTOMDEBUG","afterTextChanged")
                 if(!p0.isNullOrBlank() && p0.isNotEmpty())
@@ -54,7 +75,7 @@ class AddContactActivity : AppCompatActivity() {
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 Log.d("CUSTOMDEBUG","onTextChanged")
                 if(!p0.isNullOrBlank() && p0.isNotEmpty()) {
-                    val query = ParseUser.getQuery()
+                    val query = ParseQuery.getQuery(User::class.java)
                     query.whereStartsWith("username", p0.toString())
                     query.findInBackground { users, e ->
                         adapter.clear()

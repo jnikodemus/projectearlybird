@@ -3,6 +3,7 @@ package de.ntbit.projectearlybird.model
 import com.parse.ParseClassName
 import com.parse.ParseFile
 import com.parse.ParseUser
+import org.json.JSONArray
 
 import java.util.Date
 import java.util.logging.Logger
@@ -69,5 +70,17 @@ class User: ParseUser {
         set(avatar) {
             avatar.save()
             put("avatar", avatar)
+        }
+
+    var contacts: JSONArray
+        get() = getJSONArray("contacts")!!
+        set(contacts) {
+            put("contacts", contacts)
+        }
+
+    var groups: JSONArray
+        get() = getJSONArray("groups")!!
+        set(groups) {
+            put("groups", groups)
         }
 }

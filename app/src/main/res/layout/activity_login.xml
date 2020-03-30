@@ -21,14 +21,20 @@
 
     <EditText
         android:id="@+id/actLoginEditTextUsername"
-        android:layout_width="0dp"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="70dp"
-        android:layout_marginEnd="70dp"
         android:layout_marginTop="60dp"
+        android:layout_marginEnd="70dp"
+        android:alpha="0.7"
+        android:background="@drawable/rounded_text"
+        android:backgroundTint="@android:color/white"
+        android:minHeight="40dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
         android:ems="15"
         android:hint="@string/app_username"
-        android:inputType="textEmailAddress"
+        android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.021"
         app:layout_constraintStart_toStartOf="parent"
@@ -36,12 +42,18 @@
 
     <EditText
         android:id="@+id/actLoginEditTextPassword"
-        android:layout_width="0dp"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
+        android:alpha="0.7"
+        android:background="@drawable/rounded_text"
+        android:backgroundTint="@android:color/white"
         android:ems="15"
         android:hint="@string/app_password"
         android:inputType="textPassword"
+        android:minHeight="40dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
         app:layout_constraintEnd_toEndOf="@+id/actLoginEditTextUsername"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/actLoginEditTextUsername"
@@ -49,28 +61,28 @@
 
     <Button
         android:id="@+id/actLoginBtnLogin"
-        android:width="250dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="45dp"
-        android:text="@string/app_login"
+        android:width="250dp"
         android:background="@drawable/rounded_button"
+        android:text="@string/app_login"
         android:textColor="@android:color/white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/actLoginEditTextPassword"/>
+        app:layout_constraintEnd_toEndOf="@+id/actLoginEditTextPassword"
+        app:layout_constraintStart_toStartOf="@+id/actLoginEditTextPassword"
+        app:layout_constraintTop_toBottomOf="@+id/actLoginEditTextPassword" />
 
     <Button
         android:id="@+id/actLoginBtnRegister"
-        android:width="250dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
-        android:text="@string/app_register"
+        android:width="250dp"
         android:background="@drawable/rounded_button"
+        android:text="@string/app_register"
         android:textColor="@android:color/white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/actLoginBtnLogin"
+        app:layout_constraintStart_toStartOf="@+id/actLoginBtnLogin"
         app:layout_constraintTop_toBottomOf="@+id/actLoginBtnLogin" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

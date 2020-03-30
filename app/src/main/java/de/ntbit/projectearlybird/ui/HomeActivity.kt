@@ -4,25 +4,29 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
+import com.parse.ParseQuery
 import de.ntbit.projectearlybird.R
 import de.ntbit.projectearlybird.manager.ManagerFactory
 import de.ntbit.projectearlybird.manager.UserManager
+import de.ntbit.projectearlybird.model.Group
+import de.ntbit.projectearlybird.model.Message
+import de.ntbit.projectearlybird.model.Module
+import de.ntbit.projectearlybird.model.User
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.navigation_header.*
 import kotlinx.android.synthetic.main.navigation_header.view.*
 import kotlinx.android.synthetic.main.toolbar.*
-import java.util.logging.Logger
 
 
 class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
-    private val log = Logger.getLogger(this::class.java.simpleName)
     private val mUserManager: UserManager = ManagerFactory.getUserManager()
     private lateinit var drawer: DrawerLayout
     private lateinit var toggle: ActionBarDrawerToggle
@@ -31,6 +35,21 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
         initialize()
+        logDatastore()
+    }
+
+    private fun logDatastore() {
+        val numLocalMessages = ParseQuery.getQuery(Message::class.java).fromLocalDatastore().count()
+        val localUsers = ParseQuery.getQuery(User::class.java).fromLocalDatastore().find()
+        val numLocalUsers = localUsers.size
+        val numLocalGroups = ParseQuery.getQuery(Group::class.java).fromLocalDatastore().count()
+        val numLocalModules = ParseQuery.getQuery(Module::class.java).fromLocalDatastore().count()
+
+        Log.d("CUSTOMDEBUG", "${this.javaClass.simpleName} - " +
+                "LocalMessages: $numLocalMessages " +
+                "LocalUsers: $numLocalUsers " +
+                "LocalGroups: $numLocalGroups " +
+                "LocalModules: $numLocalModules")
     }
 
     private fun initialize() {

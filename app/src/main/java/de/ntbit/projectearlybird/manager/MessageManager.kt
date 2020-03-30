@@ -24,6 +24,7 @@ import de.ntbit.projectearlybird.R
 import de.ntbit.projectearlybird.adapter.ChatFromItem
 import de.ntbit.projectearlybird.adapter.ChatSelfItem
 import de.ntbit.projectearlybird.model.Message
+import de.ntbit.projectearlybird.model.User
 import de.ntbit.projectearlybird.ui.ChatActivity
 import de.ntbit.projectearlybird.ui.NewMessageActivity
 import kotlinx.coroutines.CoroutineScope
@@ -36,15 +37,16 @@ import java.util.logging.Logger
 
 class MessageManager {
     private val log = Logger.getLogger(this::class.java.simpleName)
+    private val mUserManager = ManagerFactory.getUserManager()
     private val parseLiveQueryClient: ParseLiveQueryClient =
         ParseLiveQueryClient.Factory.getClient(URI("wss://projectearlybird.back4app.io/"))
 
     /**
      * Sends a String as Message to [recipient] if [body] isNotEmpty() and [body] isNotBlank()
      */
-    fun sendMessage(body: String, recipient: ParseUser) : Message? {
+    fun sendMessage(body: String, recipient: User) : Message? {
         if(body.isNotBlank() && body.isNotEmpty()) {
-            val message = Message(ParseUser.getCurrentUser(), recipient, body)
+            val message = Message(mUserManager.getCurrentUser(), recipient, body)
             message.saveEventually()
             Log.d("CUSTOMDEBUG", "Saved message ${message.body}")
             return message
@@ -53,7 +55,7 @@ class MessageManager {
     }
 
     @Deprecated("Not used anywhere")
-    private fun sendPushNotification(message: String, recipient: ParseUser) {
+    private fun sendPushNotification(message: String, recipient: User) {
         val parsePush = ParsePush()
         parsePush.setMessage(message)
         parsePush.setChannel(recipient.objectId)
@@ -63,7 +65,7 @@ class MessageManager {
     /**
      * Listens for new messages for chat[partner] and adds it to [chatlog]
      */
-    fun subscribeToPartner(partner: ParseUser, chatLog: RecyclerView) {
+    fun subscribeToPartner(partner: User, chatLog: RecyclerView) {
         val adapter: GroupAdapter<GroupieViewHolder> = chatLog.adapter as GroupAdapter<GroupieViewHolder>
         val mutableList: MutableList<Message> = ArrayList()
         val parseQuery = ParseQuery.getQuery(Message::class.java)
@@ -116,7 +118,7 @@ class MessageManager {
     /**
      * Returns the latest message received from given [user]
      */
-    fun getLatestMessage(user: ParseUser): Message {
+    fun getLatestMessage(user: User): Message {
         try {
             val query = ParseQuery.getQuery(Message::class.java)
             //query.fromLocalDatastore()
@@ -134,7 +136,7 @@ class MessageManager {
     /**
      * Fills [chatLog] with all messages for a given chat[partner]
      */
-    fun getMessagesByPartner(partner: ParseUser, chatLog: RecyclerView) {
+    fun getMessagesByPartner(partner: User, chatLog: RecyclerView) {
         val adapter: GroupAdapter<GroupieViewHolder> = chatLog.adapter as GroupAdapter<GroupieViewHolder>
         val mutableList: MutableList<Message> = ArrayList()
         val query = ParseQuery.getQuery(Message::class.java)

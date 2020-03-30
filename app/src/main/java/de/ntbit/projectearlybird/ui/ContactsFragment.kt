@@ -2,7 +2,6 @@ package de.ntbit.projectearlybird.ui
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import com.xwray.groupie.GroupAdapter
@@ -40,15 +39,14 @@ class ContactsFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
-        Log.d("CUSTOMDEBUG","onPause()")
     }
 
     override fun onResume() {
         super.onResume()
-        Log.d("CUSTOMDEBUG", "onResume()")
         fetchAllParseUser()
     }
 
+    /*
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.frgmt_contacts_add, menu)
         super.onCreateOptionsMenu(menu, inflater)
@@ -63,6 +61,7 @@ class ContactsFragment : Fragment() {
         }
         return super.onOptionsItemSelected(item)
     }
+     */
 
     private fun initialize() {
         connectAdapter()
@@ -83,7 +82,7 @@ class ContactsFragment : Fragment() {
             startActivity(intent)
         }
         frgmt_contacts_fab.setOnClickListener {
-            showUserSearchDialog()
+            showUserSearchActivity()
         }
     }
 
@@ -95,6 +94,8 @@ class ContactsFragment : Fragment() {
         adapter.notifyDataSetChanged()
     }
 
-    private fun showUserSearchDialog() {
+    private fun showUserSearchActivity() {
+        val intent = Intent(this.context, AddContactActivity::class.java)
+        startActivity(intent)
     }
 }

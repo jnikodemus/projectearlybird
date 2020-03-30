@@ -50,7 +50,10 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun isValidUsername() : Boolean {
-        return mInputValidator.isValidUsername(actRegisterEditTxtUsername)
+        if(InputValidator.isValidEmail(actRegisterEditTxtEmail.text.toString()))
+            return true
+        actRegisterEditTxtEmail.error = InputValidator.EMAIL_NOT_VALID
+        return false
     }
 
     private fun isValidEmail() : Boolean {

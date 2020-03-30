@@ -16,9 +16,12 @@ import de.ntbit.projectearlybird.connection.ParseConnection
 import de.ntbit.projectearlybird.manager.ManagerFactory
 import de.ntbit.projectearlybird.manager.MessageManager
 import de.ntbit.projectearlybird.manager.UserManager
+import de.ntbit.projectearlybird.model.User
 import kotlinx.android.synthetic.main.fragment_contacts.*
 import kotlinx.android.synthetic.main.fragment_conversations.*
 import kotlinx.coroutines.runBlocking
+import java.util.*
+import kotlin.collections.ArrayList
 
 class ConversationsFragment : Fragment() {
 
@@ -47,7 +50,8 @@ class ConversationsFragment : Fragment() {
 
     private fun connectAdapter() {
         frgmt_conversations_rv_latest_messages.adapter = adapter
-        for(user in mUserManager.getMyConversationContacts()) {
+        //for(user in mUserManager.getMyConversationContacts()) {
+        for(user in mUserManager.getMyContacts()) {
             adapter.add(UserItemLatestMessage(user))
         }
     }

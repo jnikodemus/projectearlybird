@@ -24,7 +24,6 @@ import java.util.logging.Logger
 
 class LoginActivity : AppCompatActivity() {
 
-    private val log = Logger.getLogger(this::class.java.simpleName)
     private lateinit var mUserManager: UserManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,7 +56,6 @@ class LoginActivity : AppCompatActivity() {
             (getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(view.windowToken, 0)
             actLoginEditTextUsername.text.clear()
             actLoginEditTextPassword.text.clear()
-            log.fine("User " + actLoginEditTextUsername.text + " successfully logged in")
         }
     }
 }
