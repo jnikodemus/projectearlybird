@@ -9,7 +9,19 @@ class InputValidator {
 
     companion object {
 
+        const val EMAIL_NOT_VALID = "Please provide a valid email"
         const val ERROR_NOT_NULL_NOR_EMPTY = "Must not be empty or blank"
+
+        /**
+         * Gibt zurueck ob der übergebene String [email] valide ist.
+         */
+        fun isValidEmail(email: String) : Boolean {
+            if(email.isNotBlank()
+                && !TextUtils.isEmpty(email)
+                && android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches())
+                return true
+            return false
+        }
 
         fun isValidInputNotNullNotEmpty(editText: EditText) : Boolean {
             if(editText.text.isNullOrBlank() || editText.text.isNullOrEmpty()) {
@@ -35,9 +47,7 @@ class InputValidator {
      * Gibt zurueck ob der Inhalt des uebergebenen [actRegisterEditTxtEmail] eine valide Email ist.
      */
     fun isValidEmail(actRegisterEditTxtEmail: EditText) : Boolean {
-        if(actRegisterEditTxtEmail.text.isNotBlank()
-                && !TextUtils.isEmpty(actRegisterEditTxtEmail.text.toString())
-                && android.util.Patterns.EMAIL_ADDRESS.matcher(actRegisterEditTxtEmail.text.toString()).matches())
+        if(isValidEmail(actRegisterEditTxtEmail.text.toString()))
             return true
         actRegisterEditTxtEmail.error = errorText
         return false
