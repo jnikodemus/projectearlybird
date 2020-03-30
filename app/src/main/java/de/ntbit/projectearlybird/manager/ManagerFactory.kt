@@ -7,12 +7,14 @@ class ManagerFactory {
         private lateinit var mMessageManager: MessageManager
         private lateinit var mUserManager: UserManager
         private lateinit var mGroupManager: GroupManager
+        private lateinit var mAdapterManager: AdapterManager
 
         fun initialize() {
             Log.d("CUSTOMDEBUG", "ManagerFactory - initialize() executed")
             mMessageManager = MessageManager()
             mUserManager = UserManager()
             mGroupManager = GroupManager()
+            mAdapterManager = AdapterManager()
         }
 
         fun getMessageManager(): MessageManager {
@@ -37,6 +39,14 @@ class ManagerFactory {
                 mGroupManager = GroupManager()
             }
             return mGroupManager
+        }
+
+        fun getAdapterManager(): AdapterManager {
+            if(!::mAdapterManager.isInitialized) {
+                Log.d("CUSTOMDEBUG", "ManagerFactory - initializing AdapterManager")
+                mAdapterManager = AdapterManager()
+            }
+            return mAdapterManager
         }
     }
 }

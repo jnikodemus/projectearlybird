@@ -2,6 +2,7 @@ package de.ntbit.projectearlybird.model
 
 import com.parse.ParseClassName
 import com.parse.ParseFile
+import com.parse.ParseObject
 import com.parse.ParseUser
 import org.json.JSONArray
 
@@ -11,9 +12,22 @@ import java.util.logging.Logger
 @ParseClassName("_User")
 class User: ParseUser {
 
-    private val log = Logger.getLogger(this::class.java.simpleName)
+    companion object {
+        const val MALE = 0
+        const val FEMALE = 1
+        const val UNKNOWN = 2
+    }
 
     internal constructor() : super()
+
+    internal constructor(username: String, email: String) {
+        this.username = username
+        this.email = email
+        contacts = ArrayList()
+        emailVerified = false
+        isOnline = false
+        gender = UNKNOWN
+    }
 
     var emailVerified: Boolean?
         get() = getBoolean("emailVerified")
@@ -72,6 +86,19 @@ class User: ParseUser {
             put("avatar", avatar)
         }
 
+    var contacts: ArrayList<User>
+        get() = getList<User>("contacts")!! as ArrayList<User>
+        set(contacts) {
+            put("contacts", contacts)
+        }
+
+    fun addContact(contact: User) {
+        addUnique("contacts", contact)
+        saveEventually()
+    }
+
+    /*
+
     var contacts: JSONArray
         get() = getJSONArray("contacts")!!
         set(contacts) {
@@ -83,4 +110,6 @@ class User: ParseUser {
         set(groups) {
             put("groups", groups)
         }
+
+     */
 }

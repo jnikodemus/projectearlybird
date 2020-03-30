@@ -77,11 +77,12 @@ class MessageManager {
         subscriptionHandling.handleEvent(SubscriptionHandling.Event.CREATE) { _, message ->
             val handler = Handler(Looper.getMainLooper())
             handler.post {
+                Log.d("CUSTOMDEBUG", "MessageManager - NEW MESSAGE TRIGGERED")
                 mutableList.add(message)
                 adapter.add(ChatFromItem(message, partner))
                 adapter.notifyDataSetChanged()
                 chatLog.smoothScrollToPosition(adapter.itemCount - 1)
-                message.pinInBackground()
+                //message.pinInBackground()
                 showNotification(message, chatLog.context)
             }
         }
@@ -147,7 +148,7 @@ class MessageManager {
             if (e == null) {
                 Log.d("CUSTOMDEBUG", "MessageManager - Got ${messages.size} messages from ${partner.username}.")
                 mutableList.addAll(messages)
-                ParseObject.pinAllInBackground(messages)
+                //ParseObject.pinAllInBackground(messages)
                 for(message in mutableList) {
                     if (message.sender.objectId == partner.objectId)
                         adapter.add(ChatFromItem(message, partner))

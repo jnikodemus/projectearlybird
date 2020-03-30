@@ -6,12 +6,16 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
-import android.widget.Adapter
 import android.widget.ImageView
 import android.widget.Toast
 import com.parse.*
+import com.parse.livequery.ParseLiveQueryClient
+import com.parse.livequery.SubscriptionHandling
 import com.squareup.picasso.Picasso
+import de.ntbit.projectearlybird.adapter.ChatFromItem
 import de.ntbit.projectearlybird.data.PebContract
 import de.ntbit.projectearlybird.data.PebDbHelper
 import de.ntbit.projectearlybird.model.Message
@@ -21,7 +25,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
+import java.net.URI
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.collections.HashSet
 
 
@@ -32,13 +38,14 @@ class UserManager {
     private val pinnedConversationContacts: HashSet<User> = HashSet()
     val IMAGE_USER_DEFAULT_URI = "android.resource://de.ntbit.projectearlybird/mipmap/ic_compass"
 
+
     init {
         Log.d("CUSTOMDEBUG", "${this.javaClass.simpleName} - init executed")
-        val query = ParseQuery.getQuery(Message::class.java)
-        query.fromLocalDatastore()
+        //val query = ParseQuery.getQuery(Message::class.java)
+        //query.fromLocalDatastore()
         if(isLoggedIn()) {
             initMyContacts()
-            initMyConversationContacts()
+            //initMyConversationContacts()
             initAllUsers()
         }
     }
@@ -49,6 +56,7 @@ class UserManager {
         user.username = username.toLowerCase(Locale.ROOT)
         user.email = email
         user.setPassword(uHashedPassword)
+        user.contacts = ArrayList()
 
         user.signUpInBackground { e ->
             if (e == null) {
@@ -71,7 +79,7 @@ class UserManager {
                 //syncLocalUser(username, activity.applicationContext)
                 val intent = Intent(activity.applicationContext, HomeActivity::class.java)
                 activity.startActivity(intent)
-                user.pinInBackground()
+                //user.pinInBackground()
                 initAllUsers()
             } else {
                 showToast("Invalid username/password")
@@ -120,23 +128,24 @@ class UserManager {
     }
 
     fun getMyContacts() : Collection<User> {
-        return pinnedContacts
+        return getCurrentUser().contacts
     }
 
     fun addContact(contact : User) {
         if(!contact.equals(getCurrentUser())) {
             pinnedContacts.add(contact)
-            contact.pinInBackground()
+            getCurrentUser().addContact(contact)
         }
     }
 
     private fun initMyConversationContacts() {
         Log.d("CUSTOMDEBUG", "${this.javaClass.simpleName} - initMyConversationContacts() executed")
         // Query to get Messages
-        val mQuery = ParseQuery.getQuery(Message::class.java).whereEqualTo("recipient", getCurrentUser())
-        val query = ParseQuery.getQuery(User::class.java)
-        query.whereMatchesKeyInQuery("objectId", "senderId", mQuery)
-        query.findInBackground {
+        val messageQuery = ParseQuery.getQuery(Message::class.java).whereContains("threadId", getCurrentUser().objectId)
+        val userQuery = ParseQuery.getQuery(User::class.java)
+        userQuery.whereMatchesKeyInQuery("objectId", "senderId", messageQuery)
+        userQuery.whereMatchesKeyInQuery("objectId", "recipientId", messageQuery)
+        userQuery.findInBackground {
             convContacts, e ->
             if(e == null) {
                 convContacts.remove(getCurrentUser())
@@ -144,6 +153,7 @@ class UserManager {
             }
         }
     }
+
 
     private fun initMyConversationContacts2() {
         // Query to get Messages
@@ -163,7 +173,7 @@ class UserManager {
 
     fun addNewConversationContact(contact: User) {
         pinnedConversationContacts.add(contact)
-        contact.pinInBackground()
+        //contact.pinInBackground()
     }
 
     /**

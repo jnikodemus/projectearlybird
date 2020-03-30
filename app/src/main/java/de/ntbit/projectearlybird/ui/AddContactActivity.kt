@@ -61,19 +61,19 @@ class AddContactActivity : AppCompatActivity() {
         // TODO: Check why adapter callback comes later if input is already cleared
         actAddNewContactEditTextSearch.addTextChangedListener(object: TextWatcher{
             override fun afterTextChanged(p0: Editable?) {
-                Log.d("CUSTOMDEBUG","afterTextChanged")
+                //Log.d("CUSTOMDEBUG","afterTextChanged")
                 if(!p0.isNullOrBlank() && p0.isNotEmpty())
                     adapter.notifyDataSetChanged()
                 else adapter.clear()
             }
 
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                Log.d("CUSTOMDEBUG","beforeTextChanged")
-                Log.d("CUSTOMDEBUG", p0.toString())
+               // Log.d("CUSTOMDEBUG","beforeTextChanged")
+                //Log.d("CUSTOMDEBUG", p0.toString())
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                Log.d("CUSTOMDEBUG","onTextChanged")
+                //Log.d("CUSTOMDEBUG","onTextChanged")
                 if(!p0.isNullOrBlank() && p0.isNotEmpty()) {
                     val query = ParseQuery.getQuery(User::class.java)
                     query.whereStartsWith("username", p0.toString())
