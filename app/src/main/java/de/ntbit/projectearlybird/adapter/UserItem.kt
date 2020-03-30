@@ -1,5 +1,6 @@
 package de.ntbit.projectearlybird.adapter
 
+import android.graphics.Color
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Item
 import de.ntbit.projectearlybird.R
@@ -47,6 +48,7 @@ class UserItemLatestMessage(user: User) : UserItem(user) {
     }
 
     override fun getLayout(): Int {
+        Color.RED
         return R.layout.row_latest_message
     }
 }

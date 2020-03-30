@@ -1,11 +1,12 @@
 package de.ntbit.projectearlybird.adapter
 
-import com.parse.ParseUser
+
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Item
 import de.ntbit.projectearlybird.R
 import de.ntbit.projectearlybird.manager.ManagerFactory
 import de.ntbit.projectearlybird.model.Message
+import de.ntbit.projectearlybird.model.User
 import kotlinx.android.synthetic.main.row_chat_contact.view.*
 import kotlinx.android.synthetic.main.row_chat_self.view.*
 import java.text.SimpleDateFormat
@@ -31,7 +32,7 @@ open class ChatItem(val message: Message): Item<GroupieViewHolder>() {
     }
 }
 
-class ChatFromItem(message: Message, private val user: ParseUser): ChatItem(message) {
+class ChatFromItem(message: Message, private val user: User): ChatItem(message) {
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         viewHolder.itemView.row_chat_contact_tv_message.text = message.body
         viewHolder.itemView.row_chat_contact_tv_timestamp.text = format.format(message.timestamp)

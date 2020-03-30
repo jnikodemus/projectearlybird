@@ -7,9 +7,10 @@ import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Item
 import de.ntbit.projectearlybird.R
 import de.ntbit.projectearlybird.manager.ManagerFactory
+import de.ntbit.projectearlybird.model.User
 import kotlinx.android.synthetic.main.row_crt_group_contact.view.*
 
-open class GroupItem(val user: ParseUser) : Item<GroupieViewHolder>(){
+open class GroupItem(val user: User) : Item<GroupieViewHolder>(){
     val mUserManager = ManagerFactory.getUserManager()
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         viewHolder.itemView.crt_group_row_tv_username.text = user.username
