@@ -1,4 +1,4 @@
-package de.ntbit.projectearlybird.manager
+package de.ntbit.projectearlybird.adapter
 
 import android.os.Handler
 import android.os.Looper
@@ -8,40 +8,25 @@ import com.parse.livequery.ParseLiveQueryClient
 import com.parse.livequery.SubscriptionHandling
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
-import de.ntbit.projectearlybird.adapter.ConversationsAdapter
-import de.ntbit.projectearlybird.adapter.UserItemLatestMessage
+import de.ntbit.projectearlybird.manager.ManagerFactory
 import de.ntbit.projectearlybird.model.Message
 import de.ntbit.projectearlybird.model.User
 import java.net.URI
-import kotlin.collections.ArrayList
-import kotlin.collections.HashSet
 
-class AdapterManager {
-
-    val theRealConversationsAdapter = ConversationsAdapter()
+class ConversationsAdapter: GroupAdapter<GroupieViewHolder>() {
 
     private val simpleClassName = this.javaClass.simpleName
     private val parseLiveQueryClient: ParseLiveQueryClient =
         ParseLiveQueryClient.Factory.getClient(URI("wss://projectearlybird.back4app.io/"))
 
     private val mUserManager = ManagerFactory.getUserManager()
-
     //private val conversationObjects = HashMap<User, UserItemLatestMessage>()
     private val conversationContacts = HashSet<User>()
     private val conversationsAdapter = GroupAdapter<GroupieViewHolder>()
 
     private var isInitialized = false
 
-    fun getConversationsAdapter(): GroupAdapter<GroupieViewHolder> {
-        if (!isInitialized) {
-            readExistingConversations()
-            listenForNewConversation()
-            isInitialized = true
-        }
-        return conversationsAdapter
-    }
-
-    private fun readExistingConversations() {
+    fun readExistingConversations() {
         Log.d("CUSTOMDEBUG", "$simpleClassName - readExistingConversations()")
         getUserQuery().orderByDescending("username").findInBackground {
                 convContacts, e ->
@@ -61,7 +46,7 @@ class AdapterManager {
         }
     }
 
-    private fun listenForNewConversation() {
+    fun listenForNewConversation() {
         Log.d("CUSTOMDEBUG", "$simpleClassName - listenForNewConversation()")
 
         val parseQuery = ParseQuery.getQuery(Message::class.java)
@@ -96,6 +81,15 @@ class AdapterManager {
         return ParseQuery.or(queries)
     }
 
+    fun getConversationsAdapter(): GroupAdapter<GroupieViewHolder> {
+        if(!isInitialized) {
+            readExistingConversations()
+            listenForNewConversation()
+            isInitialized = true
+        }
+        return conversationsAdapter
+    }
+
     fun processOutgoingMessage(message: Message) {
         // TODO: implement code
         Log.d("CUSTOMDEBUG", "$simpleClassName - Processing outgoing message (STILL TODO)... " +
@@ -105,18 +99,15 @@ class AdapterManager {
     }
 
     private fun processIncomingMessage(message: Message) {
-        Log.d(
-            "CUSTOMDEBUG", "$simpleClassName - Processing incoming message... " +
-                    "From: ${message.recipient.username} - Body: \"${message.body}\""
-        )
+        Log.d("CUSTOMDEBUG", "$simpleClassName - Processing incoming message... " +
+                "From: ${message.recipient.username} - Body: \"${message.body}\"")
 
         val latestContact = UserItemLatestMessage(message.sender)
-        if (!conversationContacts.contains(latestContact.user))
+        if(!conversationContacts.contains(latestContact.user))
             conversationsAdapter.add(0, latestContact)
         conversationsAdapter.notifyDataSetChanged()
         // TODO: Implement notifyItemChanged()
-        /*
-        conversationsAdapter.notifyDataSetChanged()
+        /*conversationsAdapter.notifyDataSetChanged()
         if(conversationObjects.containsKey(latestContact.user)) {
             val fromPos =
                 conversationsAdapter.getAdapterPosition(conversationObjects[latestContact.user]!!)
@@ -131,8 +122,7 @@ class AdapterManager {
             conversationsAdapter.notifyItemInserted(0)
             Log.d("CUSTOMDEBUG", "$simpleClassName - else")
         }
+         */
         // TODO: Check notifyItemRangeChanged()
-    }
-     */
     }
 }

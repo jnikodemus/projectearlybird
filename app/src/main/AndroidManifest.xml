@@ -20,7 +20,8 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.GroupActivity"></activity>
+        <activity android:name=".ui.ModuleChecklistActivity"></activity>
+        <activity android:name=".ui.GroupActivity" />
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />

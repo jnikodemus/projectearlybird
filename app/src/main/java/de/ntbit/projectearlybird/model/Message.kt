@@ -98,6 +98,7 @@ class Message : ParseObject {
          */
         this.threadId = sender.objectId + recipient.objectId
     }
+
     private fun generateACL() {
         val acl = ParseACL()
         acl.setReadAccess(recipient, true)

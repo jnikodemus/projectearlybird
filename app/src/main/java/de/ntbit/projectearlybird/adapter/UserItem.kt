@@ -1,6 +1,8 @@
 package de.ntbit.projectearlybird.adapter
 
 import android.graphics.Color
+import android.util.Log
+import androidx.recyclerview.widget.RecyclerView
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Item
 import de.ntbit.projectearlybird.R
@@ -29,22 +31,22 @@ open class UserItem(val user: User): Item<GroupieViewHolder>(){
 
 class UserItemLatestMessage(user: User) : UserItem(user) {
     private val mMessageManager = ManagerFactory.getMessageManager()
-    private val latestMessage: Message = mMessageManager.getLatestMessage(user)
 
     /* TODO: CHANGE TO getCurrentLocale */
     private val userLocale = Locale("de")
-    private val datePattern = getDatePattern()
-    val format = SimpleDateFormat(datePattern, userLocale)
-
 
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
+        val latestMessage: Message = mMessageManager.getLatestMessage(user)
+
+        Log.d("CUSTOMDEBUG", "UserItem - User: ${user.username} at position: $position viewHolder: $viewHolder")
+
         mUserManager.loadAvatar(viewHolder.itemView.latest_message_row_iv_avatar, user)
         viewHolder.itemView.latest_message_row_tv_username.text = user.username
         viewHolder.itemView.latest_message_row_tv_message.text =
             if(latestMessage.body.length > 73)
                 latestMessage.body.subSequence(0,70).toString() + "..."
             else latestMessage.body
-        viewHolder.itemView.latest_message_row_tv_timestamp.text = format
+        viewHolder.itemView.latest_message_row_tv_timestamp.text = getDateFormat(latestMessage)
             .format(latestMessage.timestamp)
     }
 
@@ -52,9 +54,9 @@ class UserItemLatestMessage(user: User) : UserItem(user) {
         return R.layout.row_latest_message
     }
 
-    private fun getDatePattern(): String {
+    private fun getDateFormat(latestMessage: Message): SimpleDateFormat {
         if(System.currentTimeMillis() - latestMessage.timestamp.time > 3600000)
-            return "dd.MM.yyyy"
-        return "HH:mm"
+            return SimpleDateFormat("dd.MM.yyyy",userLocale)
+        return SimpleDateFormat("HH:mm",userLocale)
     }
 }

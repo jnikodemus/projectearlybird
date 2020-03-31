@@ -1,7 +1,6 @@
 package de.ntbit.projectearlybird.ui
 
-import android.graphics.Color
-import android.net.Uri
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.appcompat.widget.Toolbar
@@ -42,6 +41,13 @@ class GroupActivity : AppCompatActivity() {
     fun dummyLayout(){
         adapter.add(ModuleItem(Module("Checklist")))
         adapter.add(ModuleItem(Module("Chat")))
+
+        adapter.setOnItemClickListener { item, view ->
+            val moduleItem = item as ModuleItem
+            when(moduleItem.name) {
+                "Checklist" -> startActivity(Intent(this, ModuleChecklistActivity::class.java))
+            }
+        }
     }
 
     private fun placeToolbar() {
