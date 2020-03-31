@@ -36,8 +36,10 @@ import java.util.logging.Logger
 
 
 class MessageManager {
-    private val log = Logger.getLogger(this::class.java.simpleName)
+
+    private val simpleClassName = this.javaClass.simpleName
     private val mUserManager = ManagerFactory.getUserManager()
+    private val mAdapterManager = ManagerFactory.getAdapterManager()
     private val parseLiveQueryClient: ParseLiveQueryClient =
         ParseLiveQueryClient.Factory.getClient(URI("wss://projectearlybird.back4app.io/"))
 
@@ -48,7 +50,7 @@ class MessageManager {
         if(body.isNotBlank() && body.isNotEmpty()) {
             val message = Message(mUserManager.getCurrentUser(), recipient, body)
             message.saveEventually()
-            Log.d("CUSTOMDEBUG", "Saved message ${message.body}")
+            mAdapterManager.processOutgoingMessage(message)
             return message
         }
         return null
@@ -77,7 +79,6 @@ class MessageManager {
         subscriptionHandling.handleEvent(SubscriptionHandling.Event.CREATE) { _, message ->
             val handler = Handler(Looper.getMainLooper())
             handler.post {
-                Log.d("CUSTOMDEBUG", "MessageManager - NEW MESSAGE TRIGGERED")
                 mutableList.add(message)
                 adapter.add(ChatFromItem(message, partner))
                 adapter.notifyDataSetChanged()
@@ -137,6 +138,7 @@ class MessageManager {
     /**
      * Fills [chatLog] with all messages for a given chat[partner]
      */
+    @Suppress("UNCHECKED_CAST")
     fun getMessagesByPartner(partner: User, chatLog: RecyclerView) {
         val adapter: GroupAdapter<GroupieViewHolder> = chatLog.adapter as GroupAdapter<GroupieViewHolder>
         val mutableList: MutableList<Message> = ArrayList()
@@ -146,7 +148,8 @@ class MessageManager {
         //query.fromLocalDatastore()
         query.findInBackground { messages, e ->
             if (e == null) {
-                Log.d("CUSTOMDEBUG", "MessageManager - Got ${messages.size} messages from ${partner.username}.")
+                Log.d("CUSTOMDEBUG", "$simpleClassName - Got ${messages.size} " +
+                        "messages in conversation with ${partner.username}.")
                 mutableList.addAll(messages)
                 //ParseObject.pinAllInBackground(messages)
                 for(message in mutableList) {

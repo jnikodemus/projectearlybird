@@ -35,11 +35,13 @@ class LoadingActivity : AppCompatActivity() {
 
     /**
      * Checks if a user is already logged in and starts HomeActivity if true
+     * right after calling [ManagerFactory.initializeAdapter]
      */
     private fun checkLoggedIn() {
         lateinit var intent: Intent
         var delay: Long = 0
         if(mUserManager.isLoggedIn()) {
+            ManagerFactory.initializeAdapter()
             intent = Intent(this, HomeActivity::class.java)
             delay = 500
         }

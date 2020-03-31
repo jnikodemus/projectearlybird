@@ -15,6 +15,7 @@ import java.net.URI
 
 class AdapterManager {
 
+    private val simpleClassName = this.javaClass.simpleName
     private val parseLiveQueryClient: ParseLiveQueryClient =
         ParseLiveQueryClient.Factory.getClient(URI("wss://projectearlybird.back4app.io/"))
 
@@ -23,7 +24,7 @@ class AdapterManager {
     private var isInitialized = false
 
     private fun readExistingConversations() {
-        Log.d("CUSTOMDEBUG", "AdapterManager - readExistingConversations()")
+        Log.d("CUSTOMDEBUG", "$simpleClassName - readExistingConversations()")
         getUserQuery().findInBackground {
                 convContacts, e ->
             if(e == null) {
@@ -34,25 +35,14 @@ class AdapterManager {
                 }
             }
             else {
-                Log.d("CUSTOMDEBUG","ERROR - ${e.message}")
+                Log.d("CUSTOMDEBUG","$simpleClassName - ERROR - ${e.message}")
             }
         }
     }
 
     private fun listenForNewConversation() {
-        Log.d("CUSTOMDEBUG", "AdapterManager - listenForNewConversation()")
+        Log.d("CUSTOMDEBUG", "$simpleClassName - listenForNewConversation()")
 
-        /*val subscriptionHandling: SubscriptionHandling<User> = parseLiveQueryClient.subscribe(getUserQuery())
-
-        subscriptionHandling.handleEvent(SubscriptionHandling.Event.CREATE) { _, contact ->
-            val handler = Handler(Looper.getMainLooper())
-            handler.post {
-                Log.d("CUSTOMDEBUG", "AdapterManager - NEW MESSAGE TRIGGERED")
-                conversationsAdapter.add(UserItemLatestMessage(contact))
-                conversationsAdapter.notifyDataSetChanged()
-            }
-        }
-         */
         val parseQuery = ParseQuery.getQuery(Message::class.java)
         parseQuery.whereContains("threadId", mUserManager.getCurrentUser().objectId)
         parseQuery.whereNotEqualTo("senderId", mUserManager.getCurrentUser().objectId)
@@ -61,7 +51,8 @@ class AdapterManager {
         subscriptionHandling.handleEvent(SubscriptionHandling.Event.CREATE) { _, message ->
             val handler = Handler(Looper.getMainLooper())
             handler.post {
-                Log.d("CUSTOMDEBUG", "AdapterManager - NEW MESSAGE TRIGGERED")
+                Log.d("CUSTOMDEBUG", "$simpleClassName - Processing incoming message... " +
+                        "From: ${message.recipient.username} - Body: \"${message.body}\"")
                 conversationsAdapter.add(UserItemLatestMessage(message.sender))
                 conversationsAdapter.notifyDataSetChanged()
             }
@@ -69,7 +60,7 @@ class AdapterManager {
     }
 
     private fun getUserQuery(): ParseQuery<User> {
-        Log.d("CUSTOMDEBUG", "AdapterManager - getUserQuery()")
+        Log.d("CUSTOMDEBUG", "$simpleClassName - getUserQuery()")
         val messageQuery = ParseQuery
             .getQuery(Message::class.java)
             .whereContains("threadId", mUserManager.getCurrentUser().objectId)
@@ -94,5 +85,13 @@ class AdapterManager {
             isInitialized = true
         }
         return conversationsAdapter
+    }
+
+    fun processOutgoingMessage(message: Message) {
+        // TODO: implement code
+        Log.d("CUSTOMDEBUG", "$simpleClassName - Processing outgoing message (STILL TODO)... " +
+                "Recipient: ${message.recipient.username} - Body: \"${message.body}\"")
+        //conversationsAdapter.add(UserItemLatestMessage(message.recipient))
+        //conversationsAdapter.notifyDataSetChanged()
     }
 }

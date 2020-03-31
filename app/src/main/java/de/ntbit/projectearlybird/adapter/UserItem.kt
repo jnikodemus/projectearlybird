@@ -11,7 +11,7 @@ import de.ntbit.projectearlybird.model.User
 import kotlinx.android.synthetic.main.row_new_message_user.view.*
 import kotlinx.android.synthetic.main.row_latest_message.view.*
 import java.text.SimpleDateFormat
-import java.util.Locale
+import java.util.*
 
 open class UserItem(val user: User): Item<GroupieViewHolder>(){
     protected val mUserManager: UserManager = ManagerFactory.getUserManager()
@@ -20,11 +20,6 @@ open class UserItem(val user: User): Item<GroupieViewHolder>(){
         viewHolder.itemView.textView_new_message.text = user.username
         /*Bilder zu den usernames*/
         mUserManager.loadAvatar(viewHolder.itemView.imageView_new_message, user)
-        /*
-        viewHolder.itemView.setOnClickListener{
-            Log.d("CUSTOMDEBUG","Clicked $position for $user.username")
-        }
-         */
     }
 
     override fun getLayout(): Int {
@@ -33,22 +28,33 @@ open class UserItem(val user: User): Item<GroupieViewHolder>(){
 }
 
 class UserItemLatestMessage(user: User) : UserItem(user) {
-    /* TODO: CHANGE TO getCurrentLocale */
-    private val userLocale = Locale("de")
-    private val datePattern = "HH:mm"
-    val format = SimpleDateFormat(datePattern, userLocale)
     private val mMessageManager = ManagerFactory.getMessageManager()
     private val latestMessage: Message = mMessageManager.getLatestMessage(user)
+
+    /* TODO: CHANGE TO getCurrentLocale */
+    private val userLocale = Locale("de")
+    private val datePattern = getDatePattern()
+    val format = SimpleDateFormat(datePattern, userLocale)
+
 
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         mUserManager.loadAvatar(viewHolder.itemView.latest_message_row_iv_avatar, user)
         viewHolder.itemView.latest_message_row_tv_username.text = user.username
-        viewHolder.itemView.latest_message_row_tv_message.text = if(latestMessage.body.length > 73) latestMessage.body.subSequence(0,70).toString() + "..." else latestMessage.body
-        viewHolder.itemView.latest_message_row_tv_timestamp.text = format.format(latestMessage.timestamp)
+        viewHolder.itemView.latest_message_row_tv_message.text =
+            if(latestMessage.body.length > 73)
+                latestMessage.body.subSequence(0,70).toString() + "..."
+            else latestMessage.body
+        viewHolder.itemView.latest_message_row_tv_timestamp.text = format
+            .format(latestMessage.timestamp)
     }
 
     override fun getLayout(): Int {
-        Color.RED
         return R.layout.row_latest_message
+    }
+
+    private fun getDatePattern(): String {
+        if(System.currentTimeMillis() - latestMessage.timestamp.time > 3600000)
+            return "dd.MM.yyyy"
+        return "HH:mm"
     }
 }

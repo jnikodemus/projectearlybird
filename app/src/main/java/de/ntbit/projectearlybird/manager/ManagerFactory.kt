@@ -48,5 +48,9 @@ class ManagerFactory {
             }
             return mAdapterManager
         }
+
+        fun initializeAdapter() {
+            getAdapterManager().getConversationsAdapter()
+        }
     }
 }
