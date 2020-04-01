@@ -1,8 +1,6 @@
 package de.ntbit.projectearlybird.adapter
 
-import android.graphics.Color
 import android.util.Log
-import androidx.recyclerview.widget.RecyclerView
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Item
 import de.ntbit.projectearlybird.R
@@ -19,9 +17,10 @@ open class UserItem(val user: User): Item<GroupieViewHolder>(){
     protected val mUserManager: UserManager = ManagerFactory.getUserManager()
 
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
-        viewHolder.itemView.textView_new_message.text = user.username
+        viewHolder.itemView.row_new_message_user_tv_new_message.text = user.username
+        viewHolder.itemView.row_new_message_user_tv_about.text = user.aboutMe
         /*Bilder zu den usernames*/
-        mUserManager.loadAvatar(viewHolder.itemView.imageView_new_message, user)
+        mUserManager.loadAvatar(viewHolder.itemView.row_new_message_user_iv_new_message, user)
     }
 
     override fun getLayout(): Int {

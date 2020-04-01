@@ -80,6 +80,7 @@ class AddContactActivity : AppCompatActivity() {
                     query.findInBackground { users, e ->
                         adapter.clear()
                         if (e == null) {
+                            users.remove(mUserManager.getCurrentUser())
                             for (user in users)
                                 adapter.add(UserItem(user))
                         }
