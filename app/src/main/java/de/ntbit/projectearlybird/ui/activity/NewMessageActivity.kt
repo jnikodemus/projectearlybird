@@ -1,14 +1,12 @@
-package de.ntbit.projectearlybird.ui
+package de.ntbit.projectearlybird.ui.activity
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.parse.ParseUser
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
-import com.xwray.groupie.Item
 import de.ntbit.projectearlybird.R
-import de.ntbit.projectearlybird.adapter.UserItem
+import de.ntbit.projectearlybird.adapter.item.UserItem
 import de.ntbit.projectearlybird.manager.ManagerFactory
 import de.ntbit.projectearlybird.manager.UserManager
 import kotlinx.android.synthetic.main.activity_new_message.*

@@ -1,9 +1,8 @@
-package de.ntbit.projectearlybird.ui
+package de.ntbit.projectearlybird.ui.fragment
 
 import android.animation.Animator
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -13,8 +12,7 @@ import androidx.fragment.app.Fragment
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import de.ntbit.projectearlybird.R
-import de.ntbit.projectearlybird.adapter.GroupItem
-import kotlinx.android.synthetic.main.activity_create_group.*
+import de.ntbit.projectearlybird.ui.activity.CreateGroupActivity
 import kotlinx.android.synthetic.main.fragment_groups.*
 
 

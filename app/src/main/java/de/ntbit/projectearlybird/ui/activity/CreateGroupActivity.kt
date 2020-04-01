@@ -1,4 +1,4 @@
-package de.ntbit.projectearlybird.ui
+package de.ntbit.projectearlybird.ui.activity
 
 import android.app.Activity
 import android.content.Intent
@@ -15,7 +15,7 @@ import com.theartofdev.edmodo.cropper.CropImageView
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import de.ntbit.projectearlybird.R
-import de.ntbit.projectearlybird.adapter.UserItem
+import de.ntbit.projectearlybird.adapter.item.UserItem
 import de.ntbit.projectearlybird.helper.InputValidator
 import de.ntbit.projectearlybird.helper.PixelCalculator
 import de.ntbit.projectearlybird.manager.GroupManager

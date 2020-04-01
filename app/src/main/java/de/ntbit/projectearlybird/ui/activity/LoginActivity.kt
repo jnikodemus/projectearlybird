@@ -1,26 +1,16 @@
-package de.ntbit.projectearlybird.ui
+package de.ntbit.projectearlybird.ui.activity
 
 import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import androidx.appcompat.widget.Toolbar
-import com.google.firebase.analytics.FirebaseAnalytics
-import com.parse.Parse
-import com.parse.ParseInstallation
-import com.parse.ParseSession
-import com.parse.ParseUser
 import de.ntbit.projectearlybird.R
 
-import de.ntbit.projectearlybird.connection.ParseConnection
 import de.ntbit.projectearlybird.manager.ManagerFactory
 import de.ntbit.projectearlybird.manager.UserManager
 import kotlinx.android.synthetic.main.activity_login.*
-import kotlinx.android.synthetic.main.toolbar.*
-import java.util.logging.Logger
 
 class LoginActivity : AppCompatActivity() {
 

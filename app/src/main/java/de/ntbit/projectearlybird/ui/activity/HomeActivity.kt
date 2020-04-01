@@ -1,4 +1,4 @@
-package de.ntbit.projectearlybird.ui
+package de.ntbit.projectearlybird.ui.activity
 
 import android.app.Activity
 import android.content.Intent
@@ -19,6 +19,7 @@ import de.ntbit.projectearlybird.model.Group
 import de.ntbit.projectearlybird.model.Message
 import de.ntbit.projectearlybird.model.Module
 import de.ntbit.projectearlybird.model.User
+import de.ntbit.projectearlybird.ui.fragment.*
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.navigation_header.*
 import kotlinx.android.synthetic.main.navigation_header.view.*
@@ -118,17 +119,29 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNavigationItemSelected(p0: MenuItem): Boolean {
         when(p0.itemId) {
             R.id.nav_groups -> supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, GroupsFragment()).commit()
+                .replace(R.id.fragment_container,
+                    GroupsFragment()
+                ).commit()
             R.id.nav_contacts -> supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, ContactsFragment()).commit()
+                .replace(R.id.fragment_container,
+                    ContactsFragment()
+                ).commit()
             R.id.nav_messages -> supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, ConversationsFragment()).commit()
+                .replace(R.id.fragment_container,
+                    ConversationsFragment()
+                ).commit()
             R.id.nav_profile -> supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, ProfileFragment()).commit()
+                .replace(R.id.fragment_container,
+                    ProfileFragment()
+                ).commit()
             R.id.nav_settings -> supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, SettingsFragment()).commit()
+                .replace(R.id.fragment_container,
+                    SettingsFragment()
+                ).commit()
             R.id.nav_info -> supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, InfoFragment()).commit()
+                .replace(R.id.fragment_container,
+                    InfoFragment()
+                ).commit()
         }
         drawer.closeDrawer(GravityCompat.START)
         return true

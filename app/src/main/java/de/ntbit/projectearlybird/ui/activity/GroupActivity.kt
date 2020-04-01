@@ -1,4 +1,4 @@
-package de.ntbit.projectearlybird.ui
+package de.ntbit.projectearlybird.ui.activity
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -9,13 +9,11 @@ import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import de.ntbit.projectearlybird.R
-import de.ntbit.projectearlybird.adapter.ModuleItem
+import de.ntbit.projectearlybird.adapter.item.ModuleItem
 import de.ntbit.projectearlybird.helper.PixelCalculator
 import de.ntbit.projectearlybird.model.Group
 import de.ntbit.projectearlybird.model.Module
-import kotlinx.android.synthetic.main.activity_create_group.*
 import kotlinx.android.synthetic.main.activity_group.*
-import kotlinx.android.synthetic.main.square_group_module.*
 
 class GroupActivity : AppCompatActivity() {
 

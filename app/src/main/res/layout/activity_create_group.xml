@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorBackgroundPrimary"
-    tools:context=".ui.CreateGroupActivity">
+    tools:context=".ui.activity.CreateGroupActivity">
 
     <include
         android:id="@+id/act_create_group_toolbar"

@@ -1,4 +1,4 @@
-package de.ntbit.projectearlybird.ui
+package de.ntbit.projectearlybird.ui.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

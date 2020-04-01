@@ -8,8 +8,8 @@ import com.parse.livequery.ParseLiveQueryClient
 import com.parse.livequery.SubscriptionHandling
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
-import de.ntbit.projectearlybird.adapter.ConversationsAdapter
-import de.ntbit.projectearlybird.adapter.UserItemLatestMessage
+//import de.ntbit.projectearlybird.adapter.ConversationsAdapter
+import de.ntbit.projectearlybird.adapter.item.UserItemLatestMessage
 import de.ntbit.projectearlybird.model.Message
 import de.ntbit.projectearlybird.model.User
 import java.net.URI
@@ -18,7 +18,7 @@ import kotlin.collections.HashSet
 
 class AdapterManager {
 
-    val theRealConversationsAdapter = ConversationsAdapter()
+    //val theRealConversationsAdapter = ConversationsAdapter()
 
     private val simpleClassName = this.javaClass.simpleName
     private val parseLiveQueryClient: ParseLiveQueryClient =
@@ -48,7 +48,10 @@ class AdapterManager {
             if(e == null) {
                 convContacts.remove(mUserManager.getCurrentUser())
                 for(contact in convContacts) {
-                    val latestContact = UserItemLatestMessage(contact)
+                    val latestContact =
+                        UserItemLatestMessage(
+                            contact
+                        )
                     conversationsAdapter.add(0, latestContact)
                     conversationContacts.add(contact)
                     //conversationObjects.put(latestContact.user,latestContact)
@@ -110,7 +113,8 @@ class AdapterManager {
                     "From: ${message.recipient.username} - Body: \"${message.body}\""
         )
 
-        val latestContact = UserItemLatestMessage(message.sender)
+        val latestContact =
+            UserItemLatestMessage(message.sender)
         if (!conversationContacts.contains(latestContact.user))
             conversationsAdapter.add(0, latestContact)
         conversationsAdapter.notifyDataSetChanged()

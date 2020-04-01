@@ -1,4 +1,4 @@
-package de.ntbit.projectearlybird.ui
+package de.ntbit.projectearlybird.ui.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater

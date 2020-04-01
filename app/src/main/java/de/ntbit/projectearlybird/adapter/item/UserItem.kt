@@ -1,4 +1,4 @@
-package de.ntbit.projectearlybird.adapter
+package de.ntbit.projectearlybird.adapter.item
 
 import android.util.Log
 import com.xwray.groupie.GroupieViewHolder

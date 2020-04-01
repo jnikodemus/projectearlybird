@@ -1,4 +1,4 @@
-package de.ntbit.projectearlybird.ui
+package de.ntbit.projectearlybird.ui.activity
 
 import android.os.Bundle
 import android.view.Gravity
@@ -10,16 +10,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import de.ntbit.projectearlybird.R
-import de.ntbit.projectearlybird.adapter.ChatSelfItem
+import de.ntbit.projectearlybird.adapter.item.ChatSelfItem
 import de.ntbit.projectearlybird.manager.ManagerFactory
 import de.ntbit.projectearlybird.manager.MessageManager
 import de.ntbit.projectearlybird.manager.UserManager
 import de.ntbit.projectearlybird.model.User
 import kotlinx.android.synthetic.main.activity_chat.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
 
 
 class ChatActivity : AppCompatActivity() {
@@ -91,7 +87,11 @@ class ChatActivity : AppCompatActivity() {
         val text = act_chat_et_message.text.toString()
         val message = mMessageManager.sendMessage(text, chatPartner)
         if(message != null) {
-            adapter.add(ChatSelfItem(message))
+            adapter.add(
+                ChatSelfItem(
+                    message
+                )
+            )
             act_chat_rv_log.smoothScrollToPosition(adapter.itemCount - 1)
         }
         act_chat_et_message.text.clear()
