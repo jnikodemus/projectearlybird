@@ -35,7 +35,15 @@ class ProfileActivity : AppCompatActivity() {
     private fun placeToolbar() {
         val thisToolbar = act_profile_toolbar
         setSupportActionBar(thisToolbar as Toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
         supportActionBar?.title = "Profile"
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        super.onSupportNavigateUp()
+        onBackPressed()
+        return true
     }
 
     private fun setClickListener() {

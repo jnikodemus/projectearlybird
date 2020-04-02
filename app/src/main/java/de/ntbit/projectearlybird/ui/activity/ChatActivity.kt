@@ -36,6 +36,12 @@ class ChatActivity : AppCompatActivity() {
         initialize()
     }
 
+    override fun onSupportNavigateUp(): Boolean {
+        super.onSupportNavigateUp()
+        onBackPressed()
+        return true
+    }
+
     private fun initialize() {
         chatPartner = intent.getParcelableExtra(NewMessageActivity.USER_KEY)
         placeToolbar()
@@ -58,6 +64,8 @@ class ChatActivity : AppCompatActivity() {
     private fun placeToolbar() {
         val thisToolbar = act_chat_toolbar
         setSupportActionBar(thisToolbar as Toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
         supportActionBar?.title = chatPartner.username
 
         supportActionBar?.displayOptions = (supportActionBar?.displayOptions?.or(ActionBar.DISPLAY_SHOW_CUSTOM)!!)

@@ -23,13 +23,30 @@ class RegisterActivity : AppCompatActivity() {
         initialize()
     }
 
+    override fun onSupportNavigateUp(): Boolean {
+        super.onSupportNavigateUp()
+        onBackPressed()
+        return true
+    }
+
     private fun initialize() {
+        placeToolbar()
+        setClickListener()
+    }
+
+    private fun placeToolbar() {
+
         val toolbar: Toolbar = toolbar
         setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
+    }
+
+    private fun setClickListener() {
         actRegisterBtnRegister.setOnClickListener{
-            var username: String
-            var email: String
-            var password: String
+            val username: String
+            val email: String
+            val password: String
             if(inputIsOK()) {
                 username = actRegisterEditTxtUsername.text.toString()
                 email = actRegisterEditTxtEmail.text.toString()

@@ -60,9 +60,17 @@ class CreateGroupActivity : AppCompatActivity() {
         setClickListeners()
     }
 
+    override fun onSupportNavigateUp(): Boolean {
+        super.onSupportNavigateUp()
+        onBackPressed()
+        return true
+    }
+
     private fun placeToolbar() {
         val toolbar = act_create_group_toolbar
         setSupportActionBar(toolbar as Toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
         supportActionBar!!.title = "Create a new Group"
     }
 

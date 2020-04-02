@@ -28,6 +28,12 @@ class NewMessageActivity : AppCompatActivity() {
         initialize()
     }
 
+    override fun onSupportNavigateUp(): Boolean {
+        super.onSupportNavigateUp()
+        onBackPressed()
+        return true
+    }
+
     private fun initialize() {
         placeToolbar()
         connectAdapter()
@@ -38,6 +44,8 @@ class NewMessageActivity : AppCompatActivity() {
     private fun placeToolbar() {
         val toolbar = toolbar
         setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
     }
 
     private fun connectAdapter() {

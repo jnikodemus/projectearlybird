@@ -27,6 +27,12 @@ class GroupActivity : AppCompatActivity() {
         initialize()
     }
 
+    override fun onSupportNavigateUp(): Boolean {
+        super.onSupportNavigateUp()
+        onBackPressed()
+        return true
+    }
+
     private fun initialize() {
         group = intent.getParcelableExtra(CreateGroupActivity.GROUP_KEY)
         act_group_rv_modules.adapter = adapter
@@ -51,6 +57,8 @@ class GroupActivity : AppCompatActivity() {
     private fun placeToolbar() {
         val toolbar = actGroupToolbar
         setSupportActionBar(toolbar as Toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
         supportActionBar?.title = group.name
     }
 

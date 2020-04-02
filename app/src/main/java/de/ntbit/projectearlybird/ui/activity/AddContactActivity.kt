@@ -37,9 +37,17 @@ class AddContactActivity : AppCompatActivity() {
         initializeSearchFunction()
     }
 
+    override fun onSupportNavigateUp(): Boolean {
+        super.onSupportNavigateUp()
+        onBackPressed()
+        return true
+    }
+
     private fun placeToolbar() {
         val toolbar = act_add_contact_toolbar
         setSupportActionBar(toolbar as Toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
         supportActionBar!!.title = "Add contact"
     }
 
