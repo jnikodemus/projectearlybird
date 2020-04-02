@@ -130,10 +130,6 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 .replace(R.id.fragment_container,
                     ConversationsFragment()
                 ).commit()
-            R.id.nav_profile -> supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container,
-                    ProfileFragment()
-                ).commit()
             R.id.nav_settings -> supportFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container,
                     SettingsFragment()

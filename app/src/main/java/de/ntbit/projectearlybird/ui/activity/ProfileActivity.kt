@@ -1,35 +1,46 @@
-package de.ntbit.projectearlybird.ui.fragment
+package de.ntbit.projectearlybird.ui.activity
 
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.LayoutInflater
+import android.util.AttributeSet
+import android.view.Gravity
 import android.view.View
-import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
+import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.Fragment
 import de.ntbit.projectearlybird.R
 import de.ntbit.projectearlybird.manager.ManagerFactory
-import de.ntbit.projectearlybird.ui.activity.LoginActivity
-import kotlinx.android.synthetic.main.fragment_profile.*
+import kotlinx.android.synthetic.main.activity_chat.*
+import kotlinx.android.synthetic.main.activity_profile.*
 
-class ProfileFragment : Fragment() {
+class ProfileActivity : AppCompatActivity() {
 
-    private val mUserManager = ManagerFactory.getUserManager()
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?): View? {
-            return inflater.inflate(R.layout.fragment_profile, container, false)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_profile)
+        initialize()
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        frgmProfileBtnLogout.setOnClickListener {logout()}
-        frmProfileBtnDeleteAccount.setOnClickListener { deleteAccount() }
+    private fun initialize() {
+        placeToolbar()
+        setClickListener()
+    }
+
+    private fun placeToolbar() {
+        val thisToolbar = act_profile_toolbar
+        setSupportActionBar(thisToolbar as Toolbar)
+        supportActionBar?.title = "Profile"
+    }
+
+    private fun setClickListener() {
+        act_profile_btn_logout.setOnClickListener { logout() }
+        act_profile_btn_delete_account.setOnClickListener { deleteAccount() }
     }
 
     private fun logout() {
@@ -38,22 +49,20 @@ class ProfileFragment : Fragment() {
             "logout",
             "cancel"
         )
-        dialog.show(this.parentFragmentManager, "DIALOG_PROFILE_FRAGMENT_LOGOUT")
-
+        dialog.show(this.supportFragmentManager, "DIALOG_PROFILE_FRAGMENT_LOGOUT")
     }
 
     private fun deleteAccount() {
-        Toast.makeText(this.context,"Not available",Toast.LENGTH_SHORT).show()
+        Toast.makeText(this,"Not available", Toast.LENGTH_SHORT).show()
     }
 }
 
-class LogoutDialogFragment(message: String, positiveButtonText: String, negativeButtonText: String) : DialogFragment() {
+class LogoutDialogFragment(
+    private var message: String, private var positiveButtonText: String,
+    private var negativeButtonText: String
+) : DialogFragment() {
 
     val mUserManager = ManagerFactory.getUserManager()
-
-    private var message: String = message
-    private var positiveButtonText: String = positiveButtonText
-    private var negativeButtonText: String = negativeButtonText
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {

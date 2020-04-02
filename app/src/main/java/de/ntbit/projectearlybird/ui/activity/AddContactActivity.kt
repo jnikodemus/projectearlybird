@@ -82,11 +82,7 @@ class AddContactActivity : AppCompatActivity() {
                         if (e == null) {
                             users.remove(mUserManager.getCurrentUser())
                             for (user in users)
-                                adapter.add(
-                                    UserItem(
-                                        user
-                                    )
-                                )
+                                adapter.add(UserItem(user))
                         }
                     }
                 }

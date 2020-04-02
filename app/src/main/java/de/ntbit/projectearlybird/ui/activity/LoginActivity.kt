@@ -41,9 +41,7 @@ class LoginActivity : AppCompatActivity() {
             actLoginEditTextPassword.text.isNotBlank()) {
             mUserManager.loginUser(
                 actLoginEditTextUsername.text.toString(),
-                actLoginEditTextPassword.text.toString(), this
-            )
-            ManagerFactory.initializeAdapter()
+                actLoginEditTextPassword.text.toString(), this)
             (getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(view.windowToken, 0)
             actLoginEditTextUsername.text.clear()
             actLoginEditTextPassword.text.clear()

@@ -4,11 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBackgroundPrimary"
-    android:paddingTop="?attr/actionBarSize">
+    tools:context=".ui.activity.ProfileActivity"
+    android:background="@color/colorBackgroundPrimary">
+
+    <include
+        android:id="@+id/act_profile_toolbar"
+        layout="@layout/toolbar" />
 
     <Button
-        android:id="@+id/frmProfileBtnDeleteAccount"
+        android:id="@+id/act_profile_btn_delete_account"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="25dp"
@@ -17,11 +21,11 @@
         android:text="@string/profile_delete_account"
         android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/frgmProfileBtnLogout"
+        app:layout_constraintEnd_toStartOf="@+id/act_profile_btn_logout"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/frgmProfileBtnLogout"
+        android:id="@+id/act_profile_btn_logout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="25dp"
@@ -31,6 +35,6 @@
         android:textColor="@color/colorIcons"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/frmProfileBtnDeleteAccount" />
+        app:layout_constraintStart_toEndOf="@+id/act_profile_btn_delete_account" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

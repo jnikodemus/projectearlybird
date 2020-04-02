@@ -71,6 +71,7 @@ class UserManager {
                 //setUserOnline(user.username, activity.applicationContext)
                 //deleteLocalUsers(username, activity.applicationContext)
                 //syncLocalUser(username, activity.applicationContext)
+                ManagerFactory.initializeAdapter()
                 val intent = Intent(activity.applicationContext, HomeActivity::class.java)
                 activity.startActivity(intent)
                 //user.pinInBackground()
