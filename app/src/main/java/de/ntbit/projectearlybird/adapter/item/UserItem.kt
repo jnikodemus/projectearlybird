@@ -54,7 +54,9 @@ class UserItemLatestMessage(user: User) : UserItem(user) {
     }
 
     private fun getDateFormat(latestMessage: Message): SimpleDateFormat {
-        if(System.currentTimeMillis() - latestMessage.timestamp.time > 3600000)
+        val dayInMillis = 86400000
+        val weekInMillis = 604800000
+        if(System.currentTimeMillis() - latestMessage.timestamp.time > dayInMillis)
             return SimpleDateFormat("dd.MM.yyyy",userLocale)
         return SimpleDateFormat("HH:mm",userLocale)
     }

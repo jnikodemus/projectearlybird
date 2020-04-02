@@ -38,6 +38,8 @@
 
     <string name="sample_username">frank_the_tank</string>
     <string name="sample_email">f_the_t@oldschool.org</string>
+    <string name="sample_first_name">Frank</string>
+    <string name="sample_last_name">Ricard</string>
     <string name="sample_timestamp">23:42</string>
     <string name="sample_message">Blue YOU\'RE MY BOY!!!"</string>
     <!--
