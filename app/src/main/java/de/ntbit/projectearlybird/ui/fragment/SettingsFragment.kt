@@ -28,6 +28,11 @@ class SettingsFragment : Fragment() {
         initialize()
     }
 
+    override fun onResume() {
+        super.onResume()
+        frgmt_settings_tv_about_me.text = mUserManager.getCurrentUser().aboutMe
+    }
+
     private fun initialize() {
         setClicklistener()
         placeUserInformation()

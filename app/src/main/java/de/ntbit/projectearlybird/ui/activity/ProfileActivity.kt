@@ -5,10 +5,14 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.SpannableStringBuilder
 import android.util.AttributeSet
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AlertDialog
@@ -21,14 +25,41 @@ import kotlinx.android.synthetic.main.activity_profile.*
 
 class ProfileActivity : AppCompatActivity() {
 
+    val mUserManager = ManagerFactory.getUserManager()
+    val currentUser = mUserManager.getCurrentUser()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
         initialize()
     }
 
+    override fun onPause() {
+        super.onPause()
+        if(act_profile_et_first_name.text.toString() != currentUser.firstName)
+            currentUser.firstName = act_profile_et_first_name.text.toString()
+
+        if(act_profile_et_last_name.text.toString() != currentUser.lastName)
+            currentUser.lastName = act_profile_et_last_name.text.toString()
+
+        if(act_profile_et_about_me.text.toString() != currentUser.aboutMe
+            && act_profile_et_about_me.text.toString().length <= 42)
+                currentUser.aboutMe = act_profile_et_about_me.text.toString()
+
+        Log.d("CUSTOMDEBUG", "" + currentUser.aboutMe?.length)
+
+        currentUser.saveEventually()
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        super.onSupportNavigateUp()
+        onBackPressed()
+        return true
+    }
+
     private fun initialize() {
         placeToolbar()
+        placeUserProfile()
         setClickListener()
     }
 
@@ -40,15 +71,43 @@ class ProfileActivity : AppCompatActivity() {
         supportActionBar?.title = "Profile"
     }
 
-    override fun onSupportNavigateUp(): Boolean {
-        super.onSupportNavigateUp()
-        onBackPressed()
-        return true
+    private fun placeUserProfile() {
+        act_profile_et_username.text = currentUser.username
+        act_profile_et_email.text = currentUser.email
+        if(currentUser.firstName != null)
+            act_profile_et_first_name.text = SpannableStringBuilder(currentUser.firstName)
+        if(currentUser.lastName != null)
+            act_profile_et_last_name.text = SpannableStringBuilder(currentUser.lastName)
+        if(currentUser.aboutMe != null)
+            act_profile_et_about_me.text = SpannableStringBuilder(currentUser.aboutMe)
     }
 
     private fun setClickListener() {
         act_profile_btn_logout.setOnClickListener { logout() }
         act_profile_btn_delete_account.setOnClickListener { deleteAccount() }
+        /*
+        act_profile_et_first_name.setOnFocusChangeListener {
+                view, hasFocus ->
+            if(!hasFocus && act_profile_et_first_name.text.toString() != currentUser.firstName) {
+                currentUser.firstName = act_profile_et_first_name.text.toString()
+                currentUser.saveEventually()
+            }
+        }
+        act_profile_et_last_name.setOnFocusChangeListener {
+                view, hasFocus ->
+            if(!hasFocus && act_profile_et_last_name.text.toString() != currentUser.firstName) {
+                currentUser.lastName = act_profile_et_last_name.text.toString()
+                currentUser.saveEventually()
+            }
+        }
+        act_profile_et_about_me.setOnFocusChangeListener {
+                view, hasFocus ->
+            if(!hasFocus && act_profile_et_about_me.text.toString() != currentUser.aboutMe) {
+                currentUser.aboutMe = act_profile_et_about_me.text.toString()
+                currentUser.saveEventually()
+            }
+        }
+         */
     }
 
     private fun logout() {

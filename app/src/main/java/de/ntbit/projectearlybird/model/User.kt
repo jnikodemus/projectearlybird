@@ -79,10 +79,12 @@ class User: ParseUser {
             put("isOnline", isOnline)
         }
 
-    var aboutMe: String
-        get() = getString("aboutMe")!!
+    var aboutMe: String?
+        get() = getString("aboutMe")
         set(aboutMe) {
-            put("aboutMe", aboutMe)
+            if (aboutMe != null) {
+                put("aboutMe", aboutMe)
+            }
         }
 
     var avatar: ParseFile
