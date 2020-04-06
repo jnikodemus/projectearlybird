@@ -9,7 +9,6 @@ class GroupManager {
     private val log = Logger.getLogger(this::class.java.simpleName)
     val mUserManager = ManagerFactory.getUserManager()
 
-    fun sendGroupDataToDatabase(){
 
     }
 

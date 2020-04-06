@@ -1,27 +1,19 @@
-package de.ntbit.projectearlybird.ui
+package de.ntbit.projectearlybird.ui.fragment
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.xwray.groupie.GroupAdapter
-import com.xwray.groupie.GroupieViewHolder
 import de.ntbit.projectearlybird.R
-import de.ntbit.projectearlybird.adapter.UserItem
-import de.ntbit.projectearlybird.adapter.UserItemLatestMessage
-import de.ntbit.projectearlybird.connection.ParseConnection
+import de.ntbit.projectearlybird.adapter.item.UserItem
 import de.ntbit.projectearlybird.manager.AdapterManager
 import de.ntbit.projectearlybird.manager.ManagerFactory
 import de.ntbit.projectearlybird.manager.MessageManager
 import de.ntbit.projectearlybird.manager.UserManager
+import de.ntbit.projectearlybird.ui.activity.ChatActivity
 import kotlinx.android.synthetic.main.fragment_conversations.*
-import kotlinx.coroutines.runBlocking
-import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashSet
 
 class ConversationsFragment : Fragment() {
 

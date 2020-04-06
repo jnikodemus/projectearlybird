@@ -1,4 +1,4 @@
-package de.ntbit.projectearlybird.ui
+package de.ntbit.projectearlybird.ui.activity
 
 import android.app.Activity
 import android.content.Intent
@@ -15,7 +15,7 @@ import com.theartofdev.edmodo.cropper.CropImageView
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import de.ntbit.projectearlybird.R
-import de.ntbit.projectearlybird.adapter.UserItem
+import de.ntbit.projectearlybird.adapter.item.UserItem
 import de.ntbit.projectearlybird.helper.InputValidator
 import de.ntbit.projectearlybird.helper.PixelCalculator
 import de.ntbit.projectearlybird.manager.GroupManager
@@ -60,9 +60,17 @@ class CreateGroupActivity : AppCompatActivity() {
         setClickListeners()
     }
 
+    override fun onSupportNavigateUp(): Boolean {
+        super.onSupportNavigateUp()
+        onBackPressed()
+        return true
+    }
+
     private fun placeToolbar() {
         val toolbar = act_create_group_toolbar
         setSupportActionBar(toolbar as Toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
         supportActionBar!!.title = "Create a new Group"
     }
 
@@ -79,7 +87,8 @@ class CreateGroupActivity : AppCompatActivity() {
                 createdGroup.name = act_create_group_et_name.text.toString()
                 val intent = Intent(this, GroupActivity::class.java)
                 intent.putExtra(GROUP_KEY, createdGroup)
-                createdGroup.saveEventually()
+
+                //createdGroup.saveEventually()
                 startActivity(intent)
                 finish()
             }

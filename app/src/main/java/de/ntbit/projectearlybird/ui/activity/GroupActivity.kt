@@ -1,7 +1,6 @@
-package de.ntbit.projectearlybird.ui
+package de.ntbit.projectearlybird.ui.activity
 
-import android.graphics.Color
-import android.net.Uri
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.appcompat.widget.Toolbar
@@ -10,13 +9,11 @@ import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import de.ntbit.projectearlybird.R
-import de.ntbit.projectearlybird.adapter.ModuleItem
+import de.ntbit.projectearlybird.adapter.item.ModuleItem
 import de.ntbit.projectearlybird.helper.PixelCalculator
 import de.ntbit.projectearlybird.model.Group
 import de.ntbit.projectearlybird.model.Module
-import kotlinx.android.synthetic.main.activity_create_group.*
 import kotlinx.android.synthetic.main.activity_group.*
-import kotlinx.android.synthetic.main.square_group_module.*
 
 class GroupActivity : AppCompatActivity() {
 
@@ -28,6 +25,12 @@ class GroupActivity : AppCompatActivity() {
         setContentView(R.layout.activity_group)
 
         initialize()
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        super.onSupportNavigateUp()
+        onBackPressed()
+        return true
     }
 
     private fun initialize() {
@@ -42,11 +45,20 @@ class GroupActivity : AppCompatActivity() {
     fun dummyLayout(){
         adapter.add(ModuleItem(Module("Checklist")))
         adapter.add(ModuleItem(Module("Chat")))
+
+        adapter.setOnItemClickListener { item, view ->
+            val moduleItem = item as ModuleItem
+            when(moduleItem.name) {
+                "Checklist" -> startActivity(Intent(this, ModuleChecklistActivity::class.java))
+            }
+        }
     }
 
     private fun placeToolbar() {
         val toolbar = actGroupToolbar
         setSupportActionBar(toolbar as Toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
         supportActionBar?.title = group.name
     }
 

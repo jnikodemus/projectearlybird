@@ -4,10 +4,7 @@ import android.content.ContentResolver
 import android.graphics.Bitmap
 import android.net.Uri
 import android.provider.MediaStore
-import com.parse.ParseClassName
-import com.parse.ParseFile
-import com.parse.ParseObject
-import com.parse.ParseUser
+import com.parse.*
 import java.io.ByteArrayOutputStream
 import java.util.logging.Logger
 
@@ -28,8 +25,6 @@ class Group : ParseObject {
         }
     }
 
-    private val log: Logger = Logger.getLogger(this::class.java.simpleName)
-
     internal constructor() : super()
 
     internal constructor(name: String,
@@ -43,6 +38,7 @@ class Group : ParseObject {
         this.members.add(owner)
         this.admins = ArrayList()
         this.admins.add(owner)
+        generateACL()
     }
 
     var name: String
@@ -97,7 +93,22 @@ class Group : ParseObject {
             this.put("admins", admins)
         }
 
+    var parseACL: ParseACL
+        get() {
+            return super.getACL()!!
+        }
+        set(parseACL) {
+            this.put("ACL",parseACL)
+        }
+
     fun getGroupSize() : Int {
         return this.members.size
+    }
+
+    private fun generateACL() {
+        val acl = ParseACL()
+        acl.publicReadAccess = true
+        acl.setWriteAccess(owner, true)
+        this.parseACL = acl
     }
 }

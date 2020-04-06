@@ -27,6 +27,7 @@
     <string name="profile_first_name">First name</string>
     <string name="profile_last_name">Last name</string>
     <string name="profile_birthday">Birthday</string>
+    <string name="profile_about_me">About me</string>
     <string name="profile_logout">Logout</string>
     <string name="profile_delete_account">Delete Account</string>
 
@@ -37,6 +38,9 @@
     <string name="title_activity_loading">LoadingActivity</string>
 
     <string name="sample_username">frank_the_tank</string>
+    <string name="sample_email">f_the_t@oldschool.org</string>
+    <string name="sample_first_name">Frank</string>
+    <string name="sample_last_name">Ricard</string>
     <string name="sample_timestamp">23:42</string>
     <string name="sample_message">Blue YOU\'RE MY BOY!!!"</string>
     <!--

@@ -20,7 +20,7 @@ class ParseConnection {
         fun initialize(context: Context) {
             registerSubclasses()
 
-            initializeBack4App(context)
+            initializeBack4App0(context)
             //initializePrivateParse(context)
             //AndroidApiKey: 'AIzaSyDkeFQRd1T-SmaNU1ckRcK43cm8hu8AUi4'
 
@@ -44,7 +44,18 @@ class ParseConnection {
             )
         }
 
-        private fun initializeBack4App(context: Context) {
+        private fun initializeBack4App0(context: Context) {
+            Parse.initialize(
+                Parse.Configuration.Builder(context)
+                    .applicationId("pYIuK6xeAMNkL2IYpOEWIiAoacyr8jEyTja8LqxV")
+                    .clientKey("mpF0Gq4uUR9e7qSgFBefH6UPgJxNdaQyHxEg73tH")
+                    .server("https://parseapi.back4app.com")
+                    .enableLocalDataStore()
+                    .build()
+            )
+        }
+
+        private fun initializeBack4App1(context: Context) {
             Parse.initialize(
                 Parse.Configuration.Builder(context)
                     .applicationId("7J46i6wiq0gQTeF91ArANMUYVjBHcogRrzJ5EICh")
