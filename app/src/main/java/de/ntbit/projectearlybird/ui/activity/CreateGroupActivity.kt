@@ -88,7 +88,7 @@ class CreateGroupActivity : AppCompatActivity() {
                 val intent = Intent(this, GroupActivity::class.java)
                 intent.putExtra(GROUP_KEY, createdGroup)
 
-                //createdGroup.saveEventually()
+                createdGroup.saveEventually()
                 startActivity(intent)
                 finish()
             }
