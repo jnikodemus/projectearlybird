@@ -32,16 +32,14 @@ class GroupManager {
 
     /*STOPPED HERE BECAUSE NO INTERNET*/
     private fun readGroups() {
-        Log.d("CUSTOMDEBUG", "Fetching groups from database")
+        Log.d("CUSTOMDEBUG", "GroupManager - Fetching groups from database")
         //val currentUserGroups = ArrayList<Group>()
         val query = ParseQuery.getQuery(Group::class.java)
         //query.whereEqualTo("owner", mUserManager.getCurrentUser())
         query.findInBackground { groups, e ->
             if (e == null) {
-                Log.d("CUSTOMDEBUG", "HELOLOOOOOOOOOOOOOOOOOOO")
                 for(group in groups)
                     adapter.add(GroupItem(group))
-                Log.d("CUSTOMDEBUG", "GOT " + groups.size + " groups")
             }
         }
         //Log.d("CUSTOMDEBUG", "GOT " + currentUserGroups.size + " groups")
@@ -62,8 +60,9 @@ class GroupManager {
     }
 
     private fun processNewGroup(group: Group) {
+        Log.d("CUSTOMDEBUG", "GroupManager - processing new Group")
         adapter.add(GroupItem(group))
-        adapter.notifyItemInserted(adapter.itemCount)
+        adapter.notifyDataSetChanged()
     }
 
 }

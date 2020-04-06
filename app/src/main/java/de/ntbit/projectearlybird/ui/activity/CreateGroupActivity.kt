@@ -83,6 +83,7 @@ class CreateGroupActivity : AppCompatActivity() {
         }
 
         act_create_group_check_fab.setOnClickListener {
+            // TODO: Check name length
             if(InputValidator.isValidInputNotNullNotEmpty(act_create_group_et_name)) {
                 createdGroup.name = act_create_group_et_name.text.toString()
                 val intent = Intent(this, GroupActivity::class.java)

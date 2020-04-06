@@ -34,6 +34,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var toggle: ActionBarDrawerToggle
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        //setTheme(R.style.AppThemeDark)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
         initialize()

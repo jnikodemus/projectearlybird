@@ -45,6 +45,7 @@ class UserManager {
     }
 
     fun registerUser(username: String, email: String, uHashedPassword: String, ctx: Context): Boolean {
+        Log.d("CUSTOMDEBUG", "UserManager - Registering new User $username")
         val user = User()
         var success = true
         user.username = username.toLowerCase(Locale.ROOT)
@@ -59,6 +60,7 @@ class UserManager {
                 // TODO activate automatic login after successful registration
             } else {
                 success = false
+                Log.d("CUSTOMDEBUG", "UserManager - Error: ${e.message}")
             }
         }
         return success

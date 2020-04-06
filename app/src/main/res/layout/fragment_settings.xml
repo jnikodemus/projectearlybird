@@ -1,21 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/relativeLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorBackgroundPrimary">
+    android:layout_height="match_parent">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/frgmt_settings_cv_profile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp">
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/frgmt_settings_cl_profile"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/frgmt_settings_cl_profile">
+            android:layout_height="match_parent">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/frgmt_settings_iv_avatar"
@@ -55,10 +58,10 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
+                android:singleLine="false"
                 android:text="@string/sample_message"
                 android:textAllCaps="false"
                 android:textStyle="italic"
-                android:singleLine="false"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/frgmt_settings_iv_avatar"
                 app:layout_constraintTop_toBottomOf="@+id/frgmt_settings_tv_email" />
@@ -66,4 +69,54 @@
 
     </androidx.cardview.widget.CardView>
 
-</RelativeLayout>
+    <androidx.cardview.widget.CardView
+        android:id="@+id/frgmt_settings_cv_interface"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/frgmt_settings_cv_profile">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/frgmt_settings_cl_interface"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/frgmt_settings_tv_interface_header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/settings_interface_header"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/frgmt_settings_tv_interface_theme"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:text="@string/settings_interface_theme"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/frgmt_settings_tv_interface_header"
+                app:layout_constraintTop_toBottomOf="@+id/frgmt_settings_tv_interface_header" />
+
+            <Switch
+                android:id="@+id/frgmt_settings_switch_interface_theme"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                app:layout_constraintBottom_toBottomOf="@+id/frgmt_settings_tv_interface_theme"
+                app:layout_constraintStart_toEndOf="@+id/frgmt_settings_tv_interface_theme"
+                app:layout_constraintTop_toTopOf="@+id/frgmt_settings_tv_interface_theme" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

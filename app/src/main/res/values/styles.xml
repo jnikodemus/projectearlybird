@@ -15,9 +15,10 @@
     </style>
 
     <!-- Second application theme. -->
-    <style name="AppTheme.Red" parent="Theme.AppCompat">
-        <item name="colorPrimary">@color/colorSecondary</item>
-        <item name="colorPrimaryDark">@color/colorSecondaryDark</item>
+    <style name="AppThemeDark" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorDarkPrimary</item>
+        <item name="colorPrimaryDark">@color/colorDarkPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
     </style>
 
 
