@@ -1,7 +1,9 @@
 package de.ntbit.projectearlybird.ui.fragment
 
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +12,7 @@ import de.ntbit.projectearlybird.R
 import de.ntbit.projectearlybird.manager.ManagerFactory
 import de.ntbit.projectearlybird.ui.activity.ProfileActivity
 import kotlinx.android.synthetic.main.fragment_settings.*
+
 
 class SettingsFragment : Fragment() {
 
@@ -47,10 +50,18 @@ class SettingsFragment : Fragment() {
 
     private fun setClicklistener() {
         frgmt_settings_cv_profile.setOnClickListener { showProfileSettings() }
+        frgmt_settings_switch_interface_theme.setOnClickListener { toggleTheme() }
     }
 
     private fun showProfileSettings() {
         val intent = Intent(this.context, ProfileActivity::class.java)
         startActivity(intent)
+    }
+
+    private fun toggleTheme() {
+        if(frgmt_settings_switch_interface_theme.isChecked)
+            Log.d("CUSTOMDEBUG", "SettingsFragment - Switch is checked now")
+        else
+            Log.d("CUSTOMDEBUG", "SettingsFragment - Switch is not checked now")
     }
 }

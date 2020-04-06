@@ -31,6 +31,9 @@
     <string name="profile_logout">Logout</string>
     <string name="profile_delete_account">Delete Account</string>
 
+    <string name="settings_interface_header">Interface</string>
+    <string name="settings_interface_theme">Theme</string>
+
     <string name="chat_hint_message">Message</string>
     <string name="search_hint"> SearchHint</string>
 
@@ -43,6 +46,9 @@
     <string name="sample_last_name">Ricard</string>
     <string name="sample_timestamp">23:42</string>
     <string name="sample_message">Blue YOU\'RE MY BOY!!!"</string>
+    <string name="sample_group_name">OldSchool</string>
+    <string name="sample_group_size">3</string>
+    <string name="sample_group_last_modified_module">Checklist</string>
     <!--
     This string is used for square devices and overridden by hello_world in
     values-round/strings.xml for round devices.

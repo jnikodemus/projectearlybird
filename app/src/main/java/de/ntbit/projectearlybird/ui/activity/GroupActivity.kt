@@ -65,8 +65,8 @@ class GroupActivity : AppCompatActivity() {
     private fun setGroupImage() {
         actGroupIvImage.layoutParams.height = PixelCalculator.calculateHeightForFullHD()
         var uri = group.groupImage.url
-        if(group.croppedImage != null)
-            uri = group.croppedImage!!.url
+        //if(group.croppedImage != null)
+        //    uri = group.croppedImage!!.url
         Picasso.get()
             .load(uri)
             .fit()

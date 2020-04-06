@@ -1,24 +1,46 @@
-package de.ntbit.projectearlybird.ui.fragment
+package de.ntbit.projectearlybird.ui
 
 import android.animation.Animator
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewAnimationUtils
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.parse.ParseQuery
+import com.parse.livequery.ParseLiveQueryClient
+import com.parse.livequery.SubscriptionHandling
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import de.ntbit.projectearlybird.R
+import de.ntbit.projectearlybird.adapter.item.GroupItem
+import de.ntbit.projectearlybird.adapter.item.UserItem
+import de.ntbit.projectearlybird.helper.InputValidator
+import de.ntbit.projectearlybird.manager.ManagerFactory
+import de.ntbit.projectearlybird.model.Group
+import de.ntbit.projectearlybird.ui.activity.ChatActivity
 import de.ntbit.projectearlybird.ui.activity.CreateGroupActivity
+import de.ntbit.projectearlybird.ui.activity.GroupActivity
+import de.ntbit.projectearlybird.ui.fragment.ContactsFragment
+import kotlinx.android.synthetic.main.activity_create_group.*
 import kotlinx.android.synthetic.main.fragment_groups.*
+import kotlinx.android.synthetic.main.row_group.*
+import java.net.URI
 
 
 class GroupsFragment : Fragment() {
 
-    private val adapter = GroupAdapter<GroupieViewHolder>()
+    companion object {
+        val GROUP_KEY = "GROUP"
+    }
+
+    private val mGroupManager = ManagerFactory.getGroupManager()
+    private val adapter = mGroupManager.getAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,6 +62,12 @@ class GroupsFragment : Fragment() {
             //val animator: Animator = ViewAnimationUtils.createCircularReveal(this.view,0,0,0,0)
             val intent = Intent(this.context, CreateGroupActivity::class.java)
             //circularRevealActivity()
+            startActivity(intent)
+        }
+        adapter.setOnItemClickListener { item, view ->
+            val groupItem = item as GroupItem
+            val intent = Intent(view.context, GroupActivity::class.java)
+            intent.putExtra(GROUP_KEY, groupItem.group)
             startActivity(intent)
         }
     }
@@ -67,4 +95,5 @@ class GroupsFragment : Fragment() {
 
     fun createTestLayout(){
     }
+
 }

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <!-- LightTheme -->
     <color name="colorPrimary">#00d1e7</color>
     <color name="colorPrimaryDark">#00B4DA</color>
     <color name="colorPrimaryLight">#00EDED</color>
@@ -11,4 +13,16 @@
     <color name="colorDivider">#BDBDBD</color>
     <color name="colorToolbarText">#FFFFFF</color>
     <color name="colorBackgroundPrimary">#E1F5FE</color>
+
+    <!-- DarkTheme -->
+    <color name="colorDarkPrimary">#7627a9</color>
+    <color name="colorDarkPrimaryDark">#121212</color>
+    <color name="colorDarkPrimaryLight">#00EDED</color>
+    <color name="colorDarkAccent">#7627a9</color>
+    <color name="colorDarkSecondAccent">#FFCDDC39</color>
+    <color name="colorDarkPrimaryText">#FFFFFF</color>
+    <color name="colorDarkSecondaryText">#757575</color>
+    <color name="colorDarkIcons">#FFFFFF</color>
+    <color name="colorDarkDivider">#BDBDBD</color>
+    <color name="colorDarkToolbarText">#FFFFFF</color>
 </resources>

@@ -19,6 +19,7 @@ import de.ntbit.projectearlybird.model.Group
 import de.ntbit.projectearlybird.model.Message
 import de.ntbit.projectearlybird.model.Module
 import de.ntbit.projectearlybird.model.User
+import de.ntbit.projectearlybird.ui.GroupsFragment
 import de.ntbit.projectearlybird.ui.fragment.*
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.navigation_header.*
@@ -33,6 +34,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var toggle: ActionBarDrawerToggle
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        //setTheme(R.style.AppThemeDark)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
         initialize()
