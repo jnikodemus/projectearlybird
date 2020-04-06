@@ -6,13 +6,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/tv_group_row"
-        android:layout_width="match_parent"
-        android:layout_height="120dp"
-        android:background="@drawable/background_color_gradient"
-        android:text="Wohngemeinschaft"
+    <ImageView
+        android:id="@+id/row_group_banner"
+        android:layout_width="0dp"
+        android:layout_height="230dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/default_group_image" />
 </androidx.constraintlayout.widget.ConstraintLayout>

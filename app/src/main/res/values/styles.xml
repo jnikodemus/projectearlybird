@@ -14,6 +14,12 @@
         <item name="theme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
     </style>
 
+    <!-- Second application theme. -->
+    <style name="AppTheme.Red" parent="Theme.AppCompat">
+        <item name="colorPrimary">@color/colorSecondary</item>
+        <item name="colorPrimaryDark">@color/colorSecondaryDark</item>
+    </style>
+
 
 
 </resources>

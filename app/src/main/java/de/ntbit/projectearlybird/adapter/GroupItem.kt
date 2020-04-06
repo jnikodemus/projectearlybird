@@ -1,24 +1,22 @@
 package de.ntbit.projectearlybird.adapter
 
-import com.parse.ParseObject
-import com.parse.ParseUser
+
 import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Item
 import de.ntbit.projectearlybird.R
 import de.ntbit.projectearlybird.manager.ManagerFactory
-import de.ntbit.projectearlybird.model.User
-import kotlinx.android.synthetic.main.row_crt_group_contact.view.*
+import de.ntbit.projectearlybird.model.Group
+import kotlinx.android.synthetic.main.row_group.view.*
 
-open class GroupItem(val user: User) : Item<GroupieViewHolder>(){
+class GroupItem(private val group: Group) : Item<GroupieViewHolder>(){
     val mUserManager = ManagerFactory.getUserManager()
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
-        viewHolder.itemView.crt_group_row_tv_username.text = user.username
-        mUserManager.loadAvatar(viewHolder.itemView.crt_group_row_cb_avatar, user)
+        Picasso.get().load(group.croppedImage?.url).into(viewHolder.itemView.row_group_banner)
     }
 
     override fun getLayout(): Int {
-        return R.layout.row_crt_group_contact
+        return R.layout.row_group
     }
 
 
