@@ -97,14 +97,27 @@ class GroupManager {
             group.updateACL()
             group.save()
 
-            Log.d("CUSTOMDEBUG", "GroupManager - adapter has ${adapter.itemCount} items")
-            Log.d("CUSTOMDEBUG", "GroupManager - deleting at position $posToDelete")
+            // TODO: search for right Group in adapter
             adapter.removeGroupAtAdapterPosition(posToDelete)
             adapter.notifyItemRemoved(posToDelete)
 
             return true
         }
         return false
+    }
+
+    fun addUser(user: User, group: Group): Boolean {
+        val members = group.members
+        if(!group.members.contains(user)) {
+            members.add(user)
+            group.members = members
+            group.updateACL()
+            return true
+        }
+        else {
+            Log.d("CUSTOMDEBUG", "GroupManager - Did not add ${user.username}. Maybe already member?")
+            return false
+        }
     }
 
 }

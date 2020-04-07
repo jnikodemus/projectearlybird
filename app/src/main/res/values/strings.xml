@@ -25,6 +25,8 @@
     <string name="navigation_avatar">Avatar</string>
 
     <string name="group_added_to_new">You have been added to GROUPNAME by OWNER</string>
+    <string name="group_context_menu_add">Add User</string>
+    <string name="group_context_menu_remove">Remove User</string>
     <string name="group_context_menu_leave">Leave Group</string>
 
     <string name="profile_first_name">First name</string>
