@@ -24,6 +24,8 @@
     <string name="navigation_icon_description">Menu icon</string>
     <string name="navigation_avatar">Avatar</string>
 
+    <string name="group_added_to_new">You have been added to GROUPNAME by OWNER</string>
+
     <string name="profile_first_name">First name</string>
     <string name="profile_last_name">Last name</string>
     <string name="profile_birthday">Birthday</string>
