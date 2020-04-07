@@ -84,7 +84,6 @@ class MessageManager {
         }
     }
 
-    /* TODO: INSERT NOTIFICATION */
     private fun showNotification(message: Message, context: Context) {
         val mNotificationManager: NotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
@@ -109,7 +108,6 @@ class MessageManager {
         val pi = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
         mBuilder.setContentIntent(pi)
         mNotificationManager.notify(0, mBuilder.build())
-
     }
 
     /**

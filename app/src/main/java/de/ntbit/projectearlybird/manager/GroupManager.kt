@@ -1,5 +1,7 @@
 package de.ntbit.projectearlybird.manager
 
+import android.content.Context
+import android.content.Intent
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
@@ -8,9 +10,13 @@ import com.parse.livequery.ParseLiveQueryClient
 import com.parse.livequery.SubscriptionHandling
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
+import de.ntbit.projectearlybird.R
 import de.ntbit.projectearlybird.adapter.item.GroupItem
+import de.ntbit.projectearlybird.helper.ApplicationContextProvider
+import de.ntbit.projectearlybird.helper.NotificationHelper
 import de.ntbit.projectearlybird.model.Group
 import de.ntbit.projectearlybird.model.Message
+import de.ntbit.projectearlybird.ui.activity.GroupActivity
 import java.net.URI
 import java.util.logging.Logger
 
@@ -55,6 +61,12 @@ class GroupManager {
             val handler = Handler(Looper.getMainLooper())
             handler.post {
                 processNewGroup(group)
+                NotificationHelper.showNotification(group.name,
+                    R.string.group_added_to_new.toString()
+                    .replace("GROUP",group.name)
+                    .replace("OWNER",group.owner.username),
+                    Intent(ApplicationContextProvider.getApplicationContext(), GroupActivity::class.java)
+                        .putExtra("GROUP",group))
             }
         }
     }
