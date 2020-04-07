@@ -5,6 +5,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.util.Log
 import android.widget.ImageView
@@ -30,7 +31,7 @@ class UserManager {
     private val allUsersSet: HashSet<User> = HashSet()
     private val pinnedContacts: HashSet<User> = HashSet()
     private val pinnedConversationContacts: HashSet<User> = HashSet()
-    val IMAGE_USER_DEFAULT_URI = "android.resource://de.ntbit.projectearlybird/mipmap/ic_compass"
+    val IMAGE_USER_DEFAULT_URI = "android.resource://de.ntbit.projectearlybird/drawable/icon_default_avatar"
 
 
     init {
@@ -206,11 +207,13 @@ class UserManager {
     fun loadAvatar(img: ImageView, user: ParseUser) {
         var imageUri = Uri.parse(IMAGE_USER_DEFAULT_URI)
         val userAvatar: ParseFile? = user.getParseFile("avatar")
-        if(userAvatar != null)
+        if(userAvatar != null) {
             imageUri = Uri.parse(userAvatar.url)
+            Log.d("CUSTOMDEBUG", "UserManager - ${userAvatar.url}")
+        }
         Picasso.get()
             .load(imageUri)
-            .resize(400,400)
+            .resize(400, 400)
             .centerCrop()
             .into(img)
     }

@@ -10,6 +10,7 @@ import com.parse.livequery.SubscriptionHandling
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import de.ntbit.projectearlybird.R
+import de.ntbit.projectearlybird.R.*
 import de.ntbit.projectearlybird.adapter.item.GroupItem
 import de.ntbit.projectearlybird.helper.ApplicationContextProvider
 import de.ntbit.projectearlybird.helper.NotificationHelper
@@ -60,9 +61,9 @@ class GroupManager {
             handler.post {
                 processNewGroup(group)
                 NotificationHelper.showNotification(group.name,
-                    R.string.group_added_to_new.toString()
-                    .replace("GROUP",group.name)
-                    .replace("OWNER",group.owner.username),
+                    ApplicationContextProvider.getApplicationContext()
+                        .getString(string.group_added_to_new)
+                        .replace("GROUPNAME",group.name),
                     Intent(ApplicationContextProvider.getApplicationContext(), GroupActivity::class.java)
                         .putExtra("GROUP",group))
             }

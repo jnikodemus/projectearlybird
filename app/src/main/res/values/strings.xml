@@ -2,6 +2,7 @@
     <string name="app_major_version">0</string>
     <string name="app_sub_version">1</string>
     <string name="app_version">Version</string>
+    <string name="app_version_template">Version MAJOR.SUB</string>
     <string name="app_name">CrewSync</string>
     <string name="app_welcome">Welcome</string>
     <string name="app_email">Email</string>
@@ -24,10 +25,11 @@
     <string name="navigation_icon_description">Menu icon</string>
     <string name="navigation_avatar">Avatar</string>
 
-    <string name="group_added_to_new">You have been added to GROUPNAME by OWNER</string>
-    <string name="group_context_menu_add">Add User</string>
-    <string name="group_context_menu_remove">Remove User</string>
-    <string name="group_context_menu_leave">Leave Group</string>
+    <string name="group_added_to_new">You have been added to the group GROUPNAME!</string>
+    <string name="group_context_menu_change_image">Change image</string>
+    <string name="group_context_menu_add">Add user</string>
+    <string name="group_context_menu_remove">Remove user</string>
+    <string name="group_context_menu_leave">Leave group</string>
 
     <string name="profile_first_name">First name</string>
     <string name="profile_last_name">Last name</string>
