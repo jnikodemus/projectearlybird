@@ -86,6 +86,7 @@ class CreateGroupActivity : AppCompatActivity() {
             // TODO: Check name length
             if(InputValidator.isValidInputNotNullNotEmpty(act_create_group_et_name)) {
                 createdGroup.name = act_create_group_et_name.text.toString()
+                createdGroup.updateACL()
                 val intent = Intent(this, GroupActivity::class.java)
                 intent.putExtra(GROUP_KEY, createdGroup)
 

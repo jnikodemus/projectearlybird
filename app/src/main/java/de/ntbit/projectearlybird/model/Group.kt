@@ -4,6 +4,7 @@ import android.content.ContentResolver
 import android.graphics.Bitmap
 import android.net.Uri
 import android.provider.MediaStore
+import android.util.Log
 import com.parse.*
 import java.io.ByteArrayOutputStream
 import java.util.logging.Logger
@@ -107,8 +108,16 @@ class Group : ParseObject {
 
     private fun generateACL() {
         val acl = ParseACL()
-        acl.publicReadAccess = true
-        acl.setWriteAccess(owner, true)
+        acl.publicReadAccess = false
+        acl.publicWriteAccess = false
+        for(user in members) {
+            acl.setReadAccess(user, true)
+            acl.setWriteAccess(user, true)
+        }
         this.parseACL = acl
+    }
+
+    fun updateACL() {
+        generateACL()
     }
 }
