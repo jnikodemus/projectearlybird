@@ -40,7 +40,7 @@ class CreateGroupActivity : AppCompatActivity() {
     private lateinit var createdGroup: Group
 
     val GALLERY_REQUEST_CODE = 1234
-    val IMAGE_GROUP_DEFAULT_URI = "android.resource://de.ntbit.projectearlybird/drawable/default_group_image"
+    val IMAGE_GROUP_DEFAULT_URI = "android.resource://de.ntbit.projectearlybird/drawable/logo_app_00"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

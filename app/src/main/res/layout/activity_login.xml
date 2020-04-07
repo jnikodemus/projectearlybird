@@ -8,26 +8,22 @@
     android:background="@drawable/background_color_gradient">
 
     <ImageView
-        android:id="@+id/actLoginIvLogo"
+        android:id="@+id/act_login_iv_logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:contentDescription="@string/app_logo"
+        app:srcCompat="@drawable/logo_app_00"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/avatars"
-        tools:visibility="visible" />
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <EditText
         android:id="@+id/actLoginEditTextUsername"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
+        android:alpha="0.9"
         android:background="@drawable/rounded_text"
         android:backgroundTint="@android:color/white"
         android:ems="15"
-        android:alpha="0.9"
         android:hint="@string/app_username"
         android:inputType="text"
         android:minHeight="40dp"
@@ -35,7 +31,7 @@
         android:paddingEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/actLoginIvLogo" />
+        app:layout_constraintTop_toBottomOf="@+id/act_login_iv_logo" />
 
     <EditText
         android:id="@+id/actLoginEditTextPassword"
