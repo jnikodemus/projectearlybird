@@ -223,6 +223,7 @@ class UserManager {
         ).show()
     }
 
+    /*
     @Deprecated("Use Parse LocalDatastore")
     private fun setUserOnline(username: String, ctx: Context) {
         val mDbHelper = PebDbHelper(ctx)
@@ -234,7 +235,7 @@ class UserManager {
             "username=?", arrayOf(username))
         userDatabase.close()
     }
-/*
+
     @Deprecated("Use Parse LocalDatastore")
     private fun saveUserLocal(user: ParseUser, ctx: Context) {
         val mDbHelper = PebDbHelper(ctx)

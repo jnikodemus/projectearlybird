@@ -1,6 +1,5 @@
 package de.ntbit.projectearlybird.manager
 
-import android.content.Context
 import android.content.Intent
 import android.os.Handler
 import android.os.Looper
@@ -15,10 +14,9 @@ import de.ntbit.projectearlybird.adapter.item.GroupItem
 import de.ntbit.projectearlybird.helper.ApplicationContextProvider
 import de.ntbit.projectearlybird.helper.NotificationHelper
 import de.ntbit.projectearlybird.model.Group
-import de.ntbit.projectearlybird.model.Message
+import de.ntbit.projectearlybird.model.User
 import de.ntbit.projectearlybird.ui.activity.GroupActivity
 import java.net.URI
-import java.util.logging.Logger
 
 class GroupManager {
 
@@ -75,6 +73,38 @@ class GroupManager {
         Log.d("CUSTOMDEBUG", "GroupManager - processing new Group")
         adapter.add(GroupItem(group))
         adapter.notifyDataSetChanged()
+    }
+
+
+    // TODO: Check admin/owner leaving; implement size < 2
+    fun leaveGroup(group: Group): Boolean {
+        val currentUser = mUserManager.getCurrentUser()
+        val members = group.members
+        val admins = group.admins
+        val posToDelete = adapter.getAdapterPosition(GroupItem(group))
+
+        if(group.getSize() > 1) {
+            members.remove(currentUser)
+            admins.remove(currentUser)
+            if(group.owner == currentUser) {
+                group.owner = members[0]
+            }
+            if(!admins.contains(group.owner))
+                admins.add(group.owner)
+
+            group.members = members
+            group.admins = admins
+            group.updateACL()
+            group.save()
+
+            Log.d("CUSTOMDEBUG", "GroupManager - adapter has ${adapter.itemCount} items")
+            Log.d("CUSTOMDEBUG", "GroupManager - deleting at position $posToDelete")
+            adapter.removeGroupAtAdapterPosition(posToDelete)
+            adapter.notifyItemRemoved(posToDelete)
+
+            return true
+        }
+        return false
     }
 
 }
