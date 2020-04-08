@@ -27,7 +27,8 @@
 
     <string name="group_added_to_new">You have been added to the group GROUPNAME!</string>
     <string name="group_context_menu_change_image">Change image</string>
-    <string name="group_context_menu_add">Add user</string>
+    <string name="group_context_menu_add_module">Add module</string>
+    <string name="group_context_menu_add_user">Add user</string>
     <string name="group_context_menu_remove">Remove user</string>
     <string name="group_context_menu_leave">Leave group</string>
 

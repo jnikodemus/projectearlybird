@@ -3,6 +3,7 @@ package de.ntbit.projectearlybird.ui.activity
 import android.os.Bundle
 import android.view.Gravity
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -16,6 +17,7 @@ import de.ntbit.projectearlybird.manager.MessageManager
 import de.ntbit.projectearlybird.manager.UserManager
 import de.ntbit.projectearlybird.model.User
 import kotlinx.android.synthetic.main.activity_chat.*
+import kotlinx.android.synthetic.main.toolbar.*
 
 
 class ChatActivity : AppCompatActivity() {
@@ -35,6 +37,17 @@ class ChatActivity : AppCompatActivity() {
 
         initialize()
     }
+
+    override fun onResume() {
+        super.onResume()
+        toolbar_tv_root_title.visibility = TextView.GONE
+    }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        toolbar_tv_root_title.visibility = TextView.VISIBLE
+    }
+
 
     override fun onSupportNavigateUp(): Boolean {
         super.onSupportNavigateUp()
@@ -66,8 +79,11 @@ class ChatActivity : AppCompatActivity() {
         setSupportActionBar(thisToolbar as Toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
-        supportActionBar?.title = chatPartner.username
 
+        mUserManager.loadAvatar(toolbar_iv_image, chatPartner)
+        toolbar_iv_image.visibility = ImageView.VISIBLE
+        toolbar_tv_title.text = chatPartner.username
+        /*
         supportActionBar?.displayOptions = (supportActionBar?.displayOptions?.or(ActionBar.DISPLAY_SHOW_CUSTOM)!!)
         val imageView = ImageView(supportActionBar!!.themedContext)
         imageView.scaleType = ImageView.ScaleType.CENTER
@@ -78,6 +94,7 @@ class ChatActivity : AppCompatActivity() {
         )
         imageView.layoutParams = layoutParams
         supportActionBar?.customView = imageView
+         */
     }
 
     private fun listenForMessage(partner: User) {

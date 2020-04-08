@@ -6,8 +6,12 @@
         android:title="@string/group_context_menu_change_image" />
 
     <item
-        android:id="@+id/group_context_menu_add"
-        android:title="@string/group_context_menu_add" />
+        android:id="@+id/group_context_menu_add_user"
+        android:title="@string/group_context_menu_add_user" />
+
+    <item
+        android:id="@+id/group_context_menu_add_module"
+        android:title="@string/group_context_menu_add_module" />
 
     <item
         android:id="@+id/group_context_menu_remove"

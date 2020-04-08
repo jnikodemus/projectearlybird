@@ -120,29 +120,51 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onNavigationItemSelected(p0: MenuItem): Boolean {
         when(p0.itemId) {
-            R.id.nav_groups -> supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container,
-                    GroupsFragment()
-                ).commit()
-            R.id.nav_contacts -> supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container,
-                    ContactsFragment()
-                ).commit()
-            R.id.nav_messages -> supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container,
-                    ConversationsFragment()
-                ).commit()
-            R.id.nav_settings -> supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container,
-                    SettingsFragment()
-                ).commit()
-            R.id.nav_info -> supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container,
-                    InfoFragment()
-                ).commit()
+            R.id.nav_groups -> {
+                supportFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, GroupsFragment())
+                    .commit()
+                changeToolbarTitle(getString(R.string.menu_groups))
+            }
+            R.id.nav_contacts -> {
+                supportFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, ContactsFragment())
+                    .commit()
+                changeToolbarTitle(getString(R.string.menu_contacts))
+            }
+            R.id.nav_messages -> {
+                supportFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, ConversationsFragment())
+                    .commit()
+                changeToolbarTitle(getString(R.string.menu_conversations))
+            }
+            R.id.nav_settings -> {
+                supportFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, SettingsFragment())
+                    .commit()
+                changeToolbarTitle(getString(R.string.menu_settings))
+            }
+            R.id.nav_info -> {
+                supportFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, InfoFragment())
+                    .commit()
+                changeToolbarTitle(getString(R.string.menu_info))
+            }
         }
         drawer.closeDrawer(GravityCompat.START)
         return true
+    }
+
+    /**
+     * Sets the title of the toolbar to the provided [title]
+     */
+    private fun changeToolbarTitle(title: String) {
+        toolbar_tv_root_title.text = title
     }
 
     /**
