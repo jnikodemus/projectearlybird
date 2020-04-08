@@ -54,6 +54,7 @@
     <string name="sample_last_name">Ricard</string>
     <string name="sample_timestamp">23:42</string>
     <string name="sample_message">Blue YOU\'RE MY BOY!!!"</string>
+    <string name="sample_checklist_item_name">Beer</string>
     <string name="sample_group_name">OldSchool</string>
     <string name="sample_group_size">3</string>
     <string name="sample_group_last_modified_module">Checklist</string>

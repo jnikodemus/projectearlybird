@@ -35,10 +35,15 @@ class Group : ParseObject {
         this.name = name
         this.groupImage = groupImage
         this.owner = owner
+        
         this.members = ArrayList(members)
         this.members.add(owner)
+
         this.admins = ArrayList()
         this.admins.add(owner)
+
+        this.modules = ArrayList()
+
         generateACL()
     }
 
@@ -102,8 +107,24 @@ class Group : ParseObject {
             this.put("ACL",parseACL)
         }
 
+    var modules: ArrayList<Module>
+        get() {
+            return this.getList<Module>("modules") as ArrayList<Module>
+        }
+        set(modules) {
+            Log.d("CUSTOMDEBUG", "Group - setting modules with size ${modules.size}")
+            this.put("modules", modules)
+        }
+
     fun getSize() : Int {
         return this.members.size
+    }
+
+    fun getModuleNames(): String {
+        var moduleList = ""
+        for(m in modules)
+            moduleList += ", " + m.name
+        return moduleList
     }
 
     private fun generateACL() {

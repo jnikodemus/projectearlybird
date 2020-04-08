@@ -17,7 +17,7 @@ open class Module : ParseObject {
         get() {
             return this.getString("name")!!
         }
-        private set(name) {
+        protected set(name) {
             this.put("name", name)
         }
 
@@ -27,5 +27,13 @@ open class Module : ParseObject {
         }
         private set(colorInt) {
             this.put("colorInt", colorInt)
+        }
+
+    var description: String
+        get() {
+            return this.getString("description")!!
+        }
+        private set(description) {
+            this.put("description", description)
         }
 }

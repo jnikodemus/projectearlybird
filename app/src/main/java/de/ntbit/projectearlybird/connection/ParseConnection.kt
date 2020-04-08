@@ -5,10 +5,7 @@ import android.util.Log
 import com.parse.*
 import com.parse.Parse.isLocalDatastoreEnabled
 import de.ntbit.projectearlybird.manager.ManagerFactory
-import de.ntbit.projectearlybird.model.Group
-import de.ntbit.projectearlybird.model.Message
-import de.ntbit.projectearlybird.model.Module
-import de.ntbit.projectearlybird.model.User
+import de.ntbit.projectearlybird.model.*
 import java.util.logging.Logger
 
 
@@ -71,6 +68,7 @@ class ParseConnection {
             ParseObject.registerSubclass(Message::class.java)
             ParseObject.registerSubclass(Group::class.java)
             ParseObject.registerSubclass(Module::class.java)
+            ParseObject.registerSubclass(ModuleChecklist::class.java)
         }
     }
 }

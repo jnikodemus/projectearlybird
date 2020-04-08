@@ -87,12 +87,17 @@ class CreateGroupActivity : AppCompatActivity() {
             if(InputValidator.isValidInputNotNullNotEmpty(act_create_group_et_name)) {
                 createdGroup.name = act_create_group_et_name.text.toString()
                 createdGroup.updateACL()
-                val intent = Intent(this, GroupActivity::class.java)
-                intent.putExtra(GROUP_KEY, createdGroup)
-
-                createdGroup.saveEventually()
-                startActivity(intent)
-                finish()
+                try {
+                    //createdGroup.saveEventually()
+                    val intent = Intent(this, GroupActivity::class.java)
+                    intent.putExtra(GROUP_KEY, createdGroup)
+                    Log.d("CUSTOMDEBUG", "GroupActivity - ${createdGroup.objectId}")
+                    startActivity(intent)
+                    finish()
+                }
+                catch(e: Exception) {
+                    Log.d("CUSTOMDEBUG", "GroupActivity - ${e.message}")
+                }
             }
         }
 
