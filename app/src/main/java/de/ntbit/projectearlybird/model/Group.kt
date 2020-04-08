@@ -102,7 +102,7 @@ class Group : ParseObject {
             this.put("ACL",parseACL)
         }
 
-    fun getGroupSize() : Int {
+    fun getSize() : Int {
         return this.members.size
     }
 

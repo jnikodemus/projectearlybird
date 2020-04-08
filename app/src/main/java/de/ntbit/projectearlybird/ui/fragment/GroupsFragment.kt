@@ -1,16 +1,16 @@
 package de.ntbit.projectearlybird.ui
 
 import android.animation.Animator
+import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.util.TypedValue
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewAnimationUtils
-import android.view.ViewGroup
+import android.view.*
+import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import com.parse.ParseQuery
 import com.parse.livequery.ParseLiveQueryClient
@@ -20,12 +20,14 @@ import com.xwray.groupie.GroupieViewHolder
 import de.ntbit.projectearlybird.R
 import de.ntbit.projectearlybird.adapter.item.GroupItem
 import de.ntbit.projectearlybird.adapter.item.UserItem
+import de.ntbit.projectearlybird.helper.ApplicationContextProvider
 import de.ntbit.projectearlybird.helper.InputValidator
 import de.ntbit.projectearlybird.manager.ManagerFactory
 import de.ntbit.projectearlybird.model.Group
 import de.ntbit.projectearlybird.ui.activity.ChatActivity
 import de.ntbit.projectearlybird.ui.activity.CreateGroupActivity
 import de.ntbit.projectearlybird.ui.activity.GroupActivity
+import de.ntbit.projectearlybird.ui.activity.LoginActivity
 import de.ntbit.projectearlybird.ui.fragment.ContactsFragment
 import kotlinx.android.synthetic.main.activity_create_group.*
 import kotlinx.android.synthetic.main.fragment_groups.*
@@ -55,6 +57,11 @@ class GroupsFragment : Fragment() {
 
         setClicklistener()
         frgmt_groups_rv_groups.adapter = adapter
+    }
+
+    override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenu.ContextMenuInfo?) {
+        super.onCreateContextMenu(menu, v, menuInfo)
+        this.activity!!.menuInflater.inflate(R.menu.group_context_menu, menu)
     }
 
     private fun setClicklistener() {
@@ -93,7 +100,5 @@ class GroupsFragment : Fragment() {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dps.toFloat(), resources.displayMetrics).toInt()
     }
 
-    fun createTestLayout(){
-    }
 
 }

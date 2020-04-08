@@ -1,6 +1,5 @@
 package de.ntbit.projectearlybird.manager
 
-import android.content.Context
 import android.content.Intent
 import android.os.Handler
 import android.os.Looper
@@ -11,14 +10,14 @@ import com.parse.livequery.SubscriptionHandling
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import de.ntbit.projectearlybird.R
+import de.ntbit.projectearlybird.R.*
 import de.ntbit.projectearlybird.adapter.item.GroupItem
 import de.ntbit.projectearlybird.helper.ApplicationContextProvider
 import de.ntbit.projectearlybird.helper.NotificationHelper
 import de.ntbit.projectearlybird.model.Group
-import de.ntbit.projectearlybird.model.Message
+import de.ntbit.projectearlybird.model.User
 import de.ntbit.projectearlybird.ui.activity.GroupActivity
 import java.net.URI
-import java.util.logging.Logger
 
 class GroupManager {
 
@@ -62,9 +61,9 @@ class GroupManager {
             handler.post {
                 processNewGroup(group)
                 NotificationHelper.showNotification(group.name,
-                    R.string.group_added_to_new.toString()
-                    .replace("GROUP",group.name)
-                    .replace("OWNER",group.owner.username),
+                    ApplicationContextProvider.getApplicationContext()
+                        .getString(string.group_added_to_new)
+                        .replace("GROUPNAME",group.name),
                     Intent(ApplicationContextProvider.getApplicationContext(), GroupActivity::class.java)
                         .putExtra("GROUP",group))
             }
@@ -75,6 +74,51 @@ class GroupManager {
         Log.d("CUSTOMDEBUG", "GroupManager - processing new Group")
         adapter.add(GroupItem(group))
         adapter.notifyDataSetChanged()
+    }
+
+
+    // TODO: Check admin/owner leaving; implement size < 2
+    fun leaveGroup(group: Group): Boolean {
+        val currentUser = mUserManager.getCurrentUser()
+        val members = group.members
+        val admins = group.admins
+        val posToDelete = adapter.getAdapterPosition(GroupItem(group))
+
+        if(group.getSize() > 1) {
+            members.remove(currentUser)
+            admins.remove(currentUser)
+            if(group.owner == currentUser) {
+                group.owner = members[0]
+            }
+            if(!admins.contains(group.owner))
+                admins.add(group.owner)
+
+            group.members = members
+            group.admins = admins
+            group.updateACL()
+            group.save()
+
+            // TODO: search for right Group in adapter
+            adapter.removeGroupAtAdapterPosition(posToDelete)
+            adapter.notifyItemRemoved(posToDelete)
+
+            return true
+        }
+        return false
+    }
+
+    fun addUser(user: User, group: Group): Boolean {
+        val members = group.members
+        if(!group.members.contains(user)) {
+            members.add(user)
+            group.members = members
+            group.updateACL()
+            return true
+        }
+        else {
+            Log.d("CUSTOMDEBUG", "GroupManager - Did not add ${user.username}. Maybe already member?")
+            return false
+        }
     }
 
 }

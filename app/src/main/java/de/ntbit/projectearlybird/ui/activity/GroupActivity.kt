@@ -3,6 +3,8 @@ package de.ntbit.projectearlybird.ui.activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.squareup.picasso.Picasso
@@ -11,12 +13,14 @@ import com.xwray.groupie.GroupieViewHolder
 import de.ntbit.projectearlybird.R
 import de.ntbit.projectearlybird.adapter.item.ModuleItem
 import de.ntbit.projectearlybird.helper.PixelCalculator
+import de.ntbit.projectearlybird.manager.ManagerFactory
 import de.ntbit.projectearlybird.model.Group
 import de.ntbit.projectearlybird.model.Module
 import kotlinx.android.synthetic.main.activity_group.*
 
 class GroupActivity : AppCompatActivity() {
 
+    private val mGroupManager = ManagerFactory.getGroupManager()
     private lateinit var group: Group
     private val adapter = GroupAdapter<GroupieViewHolder>()
 
@@ -31,6 +35,24 @@ class GroupActivity : AppCompatActivity() {
         super.onSupportNavigateUp()
         onBackPressed()
         return true
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.group_context_menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId) {
+            R.id.group_context_menu_leave -> {
+                if(mGroupManager.leaveGroup(group)) {
+                    finish()
+                    return true
+                }
+                return false
+            }
+            else -> return super.onOptionsItemSelected(item)
+        }
     }
 
     private fun initialize() {

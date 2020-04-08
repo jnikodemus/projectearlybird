@@ -12,7 +12,9 @@ import de.ntbit.projectearlybird.manager.ManagerFactory
 import de.ntbit.projectearlybird.manager.UserManager
 import de.ntbit.projectearlybird.ui.activity.AddContactActivity
 import de.ntbit.projectearlybird.ui.activity.ChatActivity
+import de.ntbit.projectearlybird.ui.activity.HomeActivity
 import kotlinx.android.synthetic.main.fragment_contacts.*
+import kotlinx.android.synthetic.main.toolbar.*
 
 class ContactsFragment : Fragment() {
 
@@ -30,7 +32,6 @@ class ContactsFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_contacts, container, false)
-
         return view
     }
 

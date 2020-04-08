@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.activity.ProfileActivity"
-    android:background="@color/colorBackgroundPrimary">
+    tools:context=".ui.activity.ProfileActivity">
 
     <include
         android:id="@+id/act_profile_toolbar"

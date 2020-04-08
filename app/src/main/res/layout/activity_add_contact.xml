@@ -5,8 +5,7 @@
     android:orientation="vertical"
     android:weightSum="1"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorBackgroundPrimary">
+    android:layout_height="match_parent">
 
     <include
         android:id="@+id/act_add_contact_toolbar"
