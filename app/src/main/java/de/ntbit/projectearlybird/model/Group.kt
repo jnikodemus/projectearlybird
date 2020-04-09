@@ -68,7 +68,7 @@ class Group : ParseObject {
             return this.getParseFile("groupImage")!!
         }
         set(groupImage) {
-            groupImage.save()
+            //groupImage.save()
             this.put("groupImage", groupImage)
         }
 
@@ -77,7 +77,7 @@ class Group : ParseObject {
             return this.getParseFile("croppedImage")
         }
         set(croppedImage) {
-            croppedImage?.save()
+            //croppedImage?.save()
             if (croppedImage != null) {
                 this.put("croppedImage", croppedImage)
             }
@@ -115,6 +115,12 @@ class Group : ParseObject {
             Log.d("CUSTOMDEBUG", "Group - setting modules with size ${modules.size}")
             this.put("modules", modules)
         }
+
+    fun addModule(module: Module) {
+        addUnique("modules", module)
+        //module.saveEventually()
+        //saveEventually()
+    }
 
     fun getSize() : Int {
         return this.members.size

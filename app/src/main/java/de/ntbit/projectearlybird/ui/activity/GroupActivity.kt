@@ -22,6 +22,7 @@ import de.ntbit.projectearlybird.model.Group
 import de.ntbit.projectearlybird.model.Module
 import de.ntbit.projectearlybird.model.ModuleChecklist
 import kotlinx.android.synthetic.main.activity_group.*
+import kotlinx.android.synthetic.main.toolbar.*
 
 
 class GroupActivity : AppCompatActivity() {
@@ -33,10 +34,13 @@ class GroupActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_group)
-
-        initialize()
+        try {
+            initialize()
+        }
+        catch(e: Exception) {
+            Log.d("CUSTOMDEBUG", "GroupActivity - ${e.message}")
+        }
     }
-
 
 /*
 
@@ -56,9 +60,6 @@ class GroupActivity : AppCompatActivity() {
     }
 
  */
-
-
-
 
     override fun onSupportNavigateUp(): Boolean {
         super.onSupportNavigateUp()
@@ -85,7 +86,7 @@ class GroupActivity : AppCompatActivity() {
     }
 
     private fun initialize() {
-        group = intent.getParcelableExtra(CreateGroupActivity.GROUP_KEY)
+        group = mGroupManager.getGroupById(intent.getStringExtra(CreateGroupActivity.GROUP_KEY))
         act_group_rv_modules.adapter = adapter
         act_group_rv_modules.layoutManager = StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL)
         placeToolbar()
@@ -93,23 +94,31 @@ class GroupActivity : AppCompatActivity() {
         dummyLayout()
     }
 
+    private fun placeToolbar() {
+        val toolbar = actGroupToolbar
+        setSupportActionBar(toolbar as Toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
+        toolbar_tv_root_title.text = group.name
+    }
+
     fun dummyLayout(){
-        val bla = group.modules
-        Log.d("CUSTOMDEBUG", "GroupActivity - blaList: ${bla.size}; modulesList: ${group.modules.size}")
-        adapter.add(ModuleItem(Module("Checklist")))
-        adapter.add(ModuleItem(Module("Chat")))
+        //val bla = group.modules // Leere Liste mit Modules
+        //Log.d("CUSTOMDEBUG", "GroupActivity - blaList: ${bla.size}; modulesList: ${group.modules.size}")
+        //adapter.add(ModuleItem(Module("Checklist")))
+        //adapter.add(ModuleItem(Module("Chat")))
 
 
-        val items = ArrayList<ModuleChecklistItem>()
-        items.add(ModuleChecklistItem("Bier"))
-        items.add(ModuleChecklistItem("Klopapier"))
+        val itemsList = ArrayList<ModuleChecklistItem>()
 
-        bla.add(ModuleChecklist(items))
-        group.modules = bla
-        Log.d("CUSTOMDEBUG", "GroupActivity - blaList: ${bla.size}; modulesList: ${group.modules.size}")
+        val moduleChecklist = ModuleChecklist(itemsList)
+
+        group.addModule(moduleChecklist)
+
+        //Log.d("CUSTOMDEBUG", "GroupActivity - blaList: ${bla.size}; modulesList: ${group.modules.size}")
 
         try {
-            group.saveEventually()
+            //group.saveEventually()
             Log.d("CUSTOMDEBUG", "GroupActivity - ${group.objectId}")
         }
         catch(e: Exception) {
@@ -132,14 +141,6 @@ class GroupActivity : AppCompatActivity() {
                 }
             }
         }
-    }
-
-    private fun placeToolbar() {
-        val toolbar = actGroupToolbar
-        setSupportActionBar(toolbar as Toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setDisplayShowHomeEnabled(true)
-        supportActionBar?.title = group.name
     }
 
     private fun setGroupImage() {

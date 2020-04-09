@@ -121,4 +121,10 @@ class GroupManager {
         }
     }
 
+    fun getGroupById(objectId: String): Group {
+        val query = ParseQuery(Group::class.java)
+        query.fromPin("group")
+        return query.first
+    }
+
 }
