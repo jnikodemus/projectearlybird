@@ -25,13 +25,23 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashSet
 
-
+/**
+ * A global manager for [User]
+ *
+ * This class manages all [User] interactions
+ *
+ * @property allUsersSet contains every [User] stored in the database
+ * @property pinnedContacts contains all [User] stored in the local datastore
+ * @property pinnedConversationContacts contains all [User] which sent a message to the current [User] stored in the local datastore
+ * @property IMAGE_USER_DEFAULT_URI path to the default image
+ * @constructor Creates a [UserManager] and initializes th contacts of the current [User] and also fetches all [User]
+ */
 class UserManager {
 
     private val allUsersSet: HashSet<User> = HashSet()
     private val pinnedContacts: HashSet<User> = HashSet()
     private val pinnedConversationContacts: HashSet<User> = HashSet()
-    val IMAGE_USER_DEFAULT_URI = "android.resource://de.ntbit.projectearlybird/drawable/icon_default_avatar"
+    private val IMAGE_USER_DEFAULT_URI = "android.resource://de.ntbit.projectearlybird/drawable/icon_default_avatar"
 
 
     init {
@@ -45,6 +55,14 @@ class UserManager {
         }
     }
 
+    /**
+     * Registers the user
+     *
+     * Needs a [username], a correct [email] address and hashed [uHashedPassword]
+     *
+     *
+     * @return either true or false if the register fails or succeeds
+     */
     fun registerUser(username: String, email: String, uHashedPassword: String, ctx: Context): Boolean {
         Log.d("CUSTOMDEBUG", "UserManager - Registering new User $username")
         val user = User()
@@ -67,6 +85,11 @@ class UserManager {
         return success
     }
 
+    /**
+     * Login the user with [username] and [password]
+     *
+     *
+     */
     fun loginUser(username: String, password: String, activity: Activity) {
         ParseUser.logInInBackground(username, password) { user, e ->
             if (user != null) {
@@ -84,17 +107,29 @@ class UserManager {
             }
         }
     }
-
+    /**
+     * Updates the last login of the current user to the database
+     *
+     */
     private fun updateLastLogin() {
         val mCurrentUser = getCurrentUser()
         mCurrentUser.put(PebContract.UserEntry.COLUMN_USER_LASTLOGIN, Date(System.currentTimeMillis()))
         mCurrentUser.saveInBackground()
     }
 
+    /**
+     * Getter for the current [User]
+     *
+     *
+     * @return the [User] that is currently logged in on his own device
+     */
     fun getCurrentUser(): User {
         return ParseUser.getCurrentUser() as User
     }
-
+    /**
+     * Fetches all [User] from the database and saves it to [allUsersSet]
+     *
+     */
     private fun initAllUsers() {
         //allUsers.clear()
         val query = ParseQuery.getQuery(User::class.java)
@@ -108,10 +143,20 @@ class UserManager {
         }
     }
 
+    /**
+     * Getter for the current [allUsersSet]
+     *
+     *
+     * @return the set filled with all [User]
+     */
     fun getAllUsers(): Collection<User> {
         return allUsersSet
     }
 
+    /**
+     * Initializes the contacts of the current [User]
+     *
+     */
     private fun initMyContacts() {
         val mQuery = ParseQuery.getQuery(Message::class.java)
             .whereContains("threadId", getCurrentUser().objectId)
@@ -125,10 +170,20 @@ class UserManager {
         }
     }
 
+    /**
+     * Getter for the contacts of the current [User]
+     *
+     *
+     * @return a set filled with the own contacts of the current [User]
+     */
     fun getMyContacts() : Collection<User> {
         return getCurrentUser().contacts
     }
 
+    /**
+     * Adds a [User] contact to the local datastore and stores it into the database
+     *
+     */
     fun addContact(contact : User) {
         if(!contact.equals(getCurrentUser())) {
             pinnedContacts.add(contact)
@@ -176,19 +231,29 @@ class UserManager {
 
     /**
      * Checks if Parse.getCurrentUser() is null to determine if a user is already logged in and
-     * returns true if so
+     *@return true if so
      */
     fun isLoggedIn(): Boolean {
         return ParseUser.getCurrentUser() != null
     }
 
     // TODO: Delete ActivityStack? and del all pinned objects
+    /**
+     * Deletes the content of the local datastore and logout the [User]
+     *
+     *
+     */
     fun logOut() {
         ParseObject.unpinAll()
         ParseUser.unpinAll()
         ParseUser.logOut()
     }
 
+    /**
+     * Updates the Avatar of the [User] in the database
+     *
+     *
+     */
     fun updateAvatar(bitmap: Bitmap) {
         val stream = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)

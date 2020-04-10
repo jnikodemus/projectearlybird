@@ -10,8 +10,16 @@ import de.ntbit.projectearlybird.manager.ManagerFactory
 import de.ntbit.projectearlybird.model.Group
 import kotlinx.android.synthetic.main.row_group.view.*
 
+/**
+ * A [GroupItem] for displaying the [Group] in the GroupsFragment
+ *
+ * This class is a subclass of ChatItem
+ *
+ * @property group contains the image and the name
+ * @constructor Creates an empty [GroupItem]
+ */
 class GroupItem(val group: Group) : Item<GroupieViewHolder>(){
-    val mUserManager = ManagerFactory.getUserManager()
+    //val mUserManager = ManagerFactory.getUserManager()
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         if(group.croppedImage != null)
             Picasso.get().load(group.croppedImage?.url).into(viewHolder.itemView.frgmt_groups_iv_image)

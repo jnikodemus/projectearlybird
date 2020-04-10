@@ -14,8 +14,19 @@ import java.util.*
 
 
 /* TODO: Change tv_self_row to something more useful */
+/**
+ * A [ChatItem] for the ChatActivity.
+ *
+ * This class is the root class for the ChatActivity bubbles
+ *
+ * @property message content of the chat bubble.
+ * @property userLocale displays the time in 24h
+ * @property datePattern displays the date in HH:mm
+ * @property format formats the timestamp
+ * @constructor Creates an empty ChatItem.
+ */
 open class ChatItem(val message: Message): Item<GroupieViewHolder>() {
-    val mUserManager = ManagerFactory.getUserManager()
+    //val mUserManager = ManagerFactory.getUserManager()
     /* TODO: CHANGE TO getCurrentLocale and check if now -24h = gestern*/
     private val userLocale = Locale("de")
     private val datePattern = "HH:mm"
@@ -32,6 +43,12 @@ open class ChatItem(val message: Message): Item<GroupieViewHolder>() {
     }
 }
 
+/**
+ * A ChatItem from the partner for the ChatActivity.
+ *
+ * This class is a subclass of [ChatItem]
+ *
+ */
 class ChatFromItem(message: Message, private val user: User): ChatItem(message) {
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         viewHolder.itemView.row_chat_contact_tv_message.text = message.body
@@ -43,4 +60,9 @@ class ChatFromItem(message: Message, private val user: User): ChatItem(message) 
     }
 }
 
+/**
+ * A ChatItem from the partner for the ChatActivity.
+ *
+ * This class is a subclass of [ChatItem]
+ */
 class ChatSelfItem(message: Message): ChatItem(message)
