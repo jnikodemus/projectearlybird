@@ -24,6 +24,9 @@ import de.ntbit.projectearlybird.manager.UserManager
 import de.ntbit.projectearlybird.model.Group
 import de.ntbit.projectearlybird.model.User
 import kotlinx.android.synthetic.main.activity_create_group.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.Dispatchers.Main
 
 
 class CreateGroupActivity : AppCompatActivity() {
@@ -45,8 +48,6 @@ class CreateGroupActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_group)
-
-        Log.d("CUSTOMDEBUG", "${this.javaClass.simpleName} - ")
 
         initialize()
     }
@@ -87,12 +88,22 @@ class CreateGroupActivity : AppCompatActivity() {
             if(InputValidator.isValidInputNotNullNotEmpty(act_create_group_et_name)) {
                 createdGroup.name = act_create_group_et_name.text.toString()
                 createdGroup.updateACL()
-                val intent = Intent(this, GroupActivity::class.java)
-                intent.putExtra(GROUP_KEY, createdGroup)
 
-                createdGroup.saveEventually()
-                startActivity(intent)
-                finish()
+                CoroutineScope(IO).launch {
+                    createdGroup.save()
+                    val groupId: Deferred<String> = async {
+                        createdGroup.objectId
+                    }
+                    //doMainContext(groupId.await())
+                }
+                //Log.d("CUSTOMDEBUG", "CreateGroupActivity - after CoroutineScope() ObjectId: ${createdGroup.objectId}")
+                // wait for Async and start next Activity
+                //val intent = Intent(this, GroupActivity::class.java)
+                //intent.putExtra(GROUP_KEY, createdGroup.objectId)
+                //intent.putExtra(GROUP_KEY, createdGroup)
+                    //Log.d("CUSTOMDEBUG", "CreateGroupActivity - ObjectId: ${createdGroup.objectId}")
+                //startActivity(intent)
+                //finish()
             }
         }
 
