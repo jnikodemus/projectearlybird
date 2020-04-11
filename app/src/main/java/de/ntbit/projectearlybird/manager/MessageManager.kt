@@ -10,7 +10,8 @@ import android.os.Looper
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.parse.*
+import com.parse.ParseException
+import com.parse.ParseQuery
 import com.parse.livequery.ParseLiveQueryClient
 import com.parse.livequery.SubscriptionHandling
 import com.xwray.groupie.GroupAdapter
@@ -24,7 +25,14 @@ import de.ntbit.projectearlybird.ui.activity.ChatActivity
 import de.ntbit.projectearlybird.ui.activity.NewMessageActivity
 import java.net.URI
 
-
+/**
+ * [MessageManager] is used for interacting with [Message] objects.
+ *
+ * @property simpleClassName holds the simple name of this class
+ * @property mUserManager holds an instance of [UserManager]
+ * @property mAdapterManager holds an instance of [AdapterManager]
+ * @property parseLiveQueryClient holds an instance of [ParseLiveQueryClient]
+ */
 class MessageManager {
 
     private val simpleClassName = this.javaClass.simpleName
@@ -35,6 +43,8 @@ class MessageManager {
 
     /**
      * Sends a String as Message to [recipient] if [body] isNotEmpty() and [body] isNotBlank()
+     *
+     * @return [Boolean]
      */
     fun sendMessage(body: String, recipient: User) : Message? {
         if(body.isNotBlank() && body.isNotEmpty()) {
@@ -46,16 +56,8 @@ class MessageManager {
         return null
     }
 
-    @Deprecated("Not used anywhere")
-    private fun sendPushNotification(message: String, recipient: User) {
-        val parsePush = ParsePush()
-        parsePush.setMessage(message)
-        parsePush.setChannel(recipient.objectId)
-        parsePush.sendInBackground()
-    }
-
     /**
-     * Listens for new messages for chat[partner] and adds it to [chatlog]
+     * Listens for new messages for chat[partner] and adds it to [chatlog] as [ChatFromItem].
      */
     fun subscribeToPartner(partner: User, chatLog: RecyclerView) {
         val adapter: GroupAdapter<GroupieViewHolder> = chatLog.adapter as GroupAdapter<GroupieViewHolder>
@@ -84,6 +86,9 @@ class MessageManager {
         }
     }
 
+    /**
+     * Builds and shows a systemnotification if the current user has received a new [Message].
+     */
     private fun showNotification(message: Message, context: Context) {
         val mNotificationManager: NotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
@@ -112,6 +117,7 @@ class MessageManager {
 
     /**
      * Returns the latest message received from given [user]
+     * @return [Message]
      */
     fun getLatestMessage(user: User): Message {
         try {

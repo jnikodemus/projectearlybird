@@ -5,7 +5,6 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.provider.Settings
 import androidx.core.app.NotificationCompat
 import de.ntbit.projectearlybird.R
 import de.ntbit.projectearlybird.model.Message
@@ -14,6 +13,9 @@ import de.ntbit.projectearlybird.ui.activity.NewMessageActivity
 
 /**
  * Builds and sends Systemnotifications to the user using [NotificationManager]
+ * @property CHANNEL_ID contains the channel Id
+ * @property CHANNEL_NAME contains the channel name
+ * @property CHANNEL_DESCRIPTION contains the channel description
  */
 class NotificationHelper {
     companion object {

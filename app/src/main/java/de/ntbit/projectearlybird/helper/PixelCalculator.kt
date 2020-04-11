@@ -11,6 +11,7 @@ class PixelCalculator {
 
         /**
          * Returns the calculated height for actual displaywidth.
+         * @return [Int]
          */
         fun calculateHeightForFullHD() : Int {
             return (1080F/1920F * Resources.getSystem().displayMetrics.widthPixels).toInt()
@@ -18,6 +19,7 @@ class PixelCalculator {
 
         /**
          * Returns calculated width for a provided height.
+         * @return [Int]
          */
         fun calculateWidthForHeight(height: Int) : Int {
             return (1920F/1080F * height).toInt()
