@@ -1,6 +1,5 @@
 package de.ntbit.projectearlybird.manager
 
-//import de.ntbit.projectearlybird.adapter.ConversationsAdapter
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
@@ -86,7 +85,9 @@ class AdapterManager {
     }
 
     /**
-     * Subscribes to a [ParseQuery] listening for new [Message] and calls [processIncomingMessage]
+     * Subscribes to a [ParseQuery] listening for new [Message].
+     * Calls [processIncomingMessage] if a new [Message] came in.
+     *
      */
     private fun listenForNewConversation() {
         Log.d("CUSTOMDEBUG", "$simpleClassName - listenForNewConversation()")

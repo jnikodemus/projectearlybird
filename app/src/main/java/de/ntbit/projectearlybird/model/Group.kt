@@ -9,15 +9,29 @@ import com.parse.*
 import java.io.ByteArrayOutputStream
 import java.util.logging.Logger
 
+/**
+ * Model corresponding to table "Group" in Parse Database extends [ParseObject]
+ */
 @ParseClassName("Group")
 class Group : ParseObject {
 
     companion object {
+
+        /**
+         * Static method to convert a [Bitmap] to [ParseFile] expecting [contentResolver] and [uri].
+         * Calls [convertBitmapToParseFile] for compression and at long last convert.
+         * @return [ParseFile]
+         */
         fun convertBitmapToParseFileByUri(contentResolver: ContentResolver, uri: Uri) : ParseFile{
             val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, uri)
             return convertBitmapToParseFile(bitmap)
         }
 
+        /**
+         * Static method to convert a [Bitmap] to [ParseFile] expecting only the [Bitmap].
+         * The provided Bitmap is compressed to [Bitmap.CompressFormat.PNG] in 100% quality.
+         * @return [ParseFile]
+         */
         fun convertBitmapToParseFile(bitmap: Bitmap) : ParseFile {
             val stream = ByteArrayOutputStream()
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
@@ -116,23 +130,39 @@ class Group : ParseObject {
             this.put("modules", modules)
         }
 
+    /**
+     * Adds provided [module] to [Group.modules] if it doesn't already exist.
+     */
     fun addModule(module: Module) {
         addUnique("modules", module)
         //module.saveEventually()
         //saveEventually()
     }
 
+    /**
+     * Returns number of members in actual [Group]
+     * @return [Int]
+     */
     fun getSize() : Int {
         return this.members.size
     }
 
+    /**
+     * Writes all module names to a [String] and returns it.
+     * @return [String]
+     */
     fun getModuleNames(): String {
         var moduleList = ""
         for(m in modules)
-            moduleList += ", " + m.name
+            moduleList += " " + m.name
         return moduleList
     }
 
+    /**
+     * Creates a new [ParseACL] setting public read and write access to false.
+     * Afterwards read and write access for every user in [Group.members] is set to true
+     * and resulting acl is written to [Group.parseACL]
+     */
     private fun generateACL() {
         val acl = ParseACL()
         acl.publicReadAccess = false
@@ -144,6 +174,9 @@ class Group : ParseObject {
         this.parseACL = acl
     }
 
+    /**
+     * Instantly calls private method [generateACL].
+     */
     fun updateACL() {
         generateACL()
     }
