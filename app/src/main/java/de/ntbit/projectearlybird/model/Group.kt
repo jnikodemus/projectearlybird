@@ -6,6 +6,7 @@ import android.net.Uri
 import android.provider.MediaStore
 import android.util.Log
 import com.parse.*
+import com.parse.coroutines.read.parse_object.fetch
 import java.io.ByteArrayOutputStream
 import java.util.logging.Logger
 
@@ -82,7 +83,8 @@ class Group : ParseObject {
             return this.getParseFile("groupImage")!!
         }
         set(groupImage) {
-            //groupImage.save()
+            // TODO: CHECK save()
+            groupImage.save()
             this.put("groupImage", groupImage)
         }
 
@@ -91,7 +93,8 @@ class Group : ParseObject {
             return this.getParseFile("croppedImage")
         }
         set(croppedImage) {
-            //croppedImage?.save()
+            // TODO: CHECK save()
+            croppedImage?.save()
             if (croppedImage != null) {
                 this.put("croppedImage", croppedImage)
             }
@@ -135,7 +138,7 @@ class Group : ParseObject {
      */
     fun addModule(module: Module) {
         addUnique("modules", module)
-        //module.saveEventually()
+        module.save()
         //saveEventually()
     }
 
@@ -153,8 +156,10 @@ class Group : ParseObject {
      */
     fun getModuleNames(): String {
         var moduleList = ""
-        for(m in modules)
-            moduleList += " " + m.name
+        for(m in modules) {
+            m.fetchIfNeeded<Module>()
+            moduleList += m.name + " "
+        }
         return moduleList
     }
 

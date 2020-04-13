@@ -1,9 +1,11 @@
 package de.ntbit.projectearlybird.manager
 
+import android.content.Context
 import android.content.Intent
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import androidx.core.content.ContextCompat.startActivity
 import com.parse.ParseQuery
 import com.parse.livequery.ParseLiveQueryClient
 import com.parse.livequery.SubscriptionHandling
@@ -16,6 +18,12 @@ import de.ntbit.projectearlybird.helper.NotificationHelper
 import de.ntbit.projectearlybird.model.Group
 import de.ntbit.projectearlybird.model.User
 import de.ntbit.projectearlybird.ui.activity.GroupActivity
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.net.URI
 
 /**
@@ -27,6 +35,8 @@ import java.net.URI
  */
 
 class GroupManager {
+
+    private val simpleClassName = this.javaClass.simpleName
 
     private val parseLiveQueryClient: ParseLiveQueryClient =
         ParseLiveQueryClient.Factory.getClient(URI("wss://projectearlybird.back4app.io/"))
@@ -153,6 +163,13 @@ class GroupManager {
         else {
             Log.d("CUSTOMDEBUG", "GroupManager - Did not add ${user.username}. Maybe already member?")
             return false
+        }
+    }
+
+    fun save(group: Group) {
+        group.saveEventually {
+            if(it != null)
+                Log.d("CUSTOMDEBUG", "$simpleClassName - Error at save(): ${it.message}")
         }
     }
 

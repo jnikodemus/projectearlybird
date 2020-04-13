@@ -27,6 +27,8 @@ import kotlinx.android.synthetic.main.toolbar.*
 
 class GroupActivity : AppCompatActivity() {
 
+    private val simpleClassName = this.javaClass.simpleName
+
     private val mGroupManager = ManagerFactory.getGroupManager()
     private lateinit var group: Group
     private val adapter = GroupAdapter<GroupieViewHolder>()
@@ -34,32 +36,9 @@ class GroupActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_group)
-        try {
-            initialize()
-        }
-        catch(e: Exception) {
-            Log.d("CUSTOMDEBUG", "GroupActivity - ${e.message}")
-        }
+
+        initialize()
     }
-
-/*
-
-    private var file: ParseFile? = null
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        if (!file!!.isDirty) {
-            outState.putParcelable("file", file)
-        }
-    }
-
-    override fun onCreate(@Nullable savedInstanceState: Bundle?) {
-        if (savedInstanceState != null) {
-            file = savedInstanceState.getParcelable<Parcelable>("file") as ParseFile
-        }
-    }
-
- */
 
     override fun onSupportNavigateUp(): Boolean {
         super.onSupportNavigateUp()
@@ -86,12 +65,22 @@ class GroupActivity : AppCompatActivity() {
     }
 
     private fun initialize() {
-        group = mGroupManager.getGroupById(intent.getStringExtra(CreateGroupActivity.GROUP_KEY))
-        act_group_rv_modules.adapter = adapter
-        act_group_rv_modules.layoutManager = StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL)
+        group = intent.getParcelableExtra("GROUP")
+        saveGroup()
+        connectAdapter()
         placeToolbar()
         setGroupImage()
-        dummyLayout()
+        loadModules()
+    }
+
+    private fun saveGroup() {
+        mGroupManager.save(group)
+    }
+
+    private fun connectAdapter() {
+        act_group_rv_modules.adapter = adapter
+        act_group_rv_modules.layoutManager =
+            StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL)
     }
 
     private fun placeToolbar() {
@@ -100,6 +89,25 @@ class GroupActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
         toolbar_tv_root_title.text = group.name
+    }
+
+    private fun setGroupImage() {
+        actGroupIvImage.layoutParams.height = PixelCalculator.calculateHeightForFullHD()
+        var uri = group.groupImage.url
+        //if(group.croppedImage != null)
+        //    uri = group.croppedImage!!.url
+        Picasso.get()
+            .load(uri)
+            .fit()
+            .centerCrop()
+            .into(actGroupIvImage)
+    }
+
+    private fun loadModules() {
+        for(m in group.modules) {
+            m.fetchIfNeeded<Module>()
+            adapter.add(ModuleItem(Module(m.name)))
+        }
     }
 
     fun dummyLayout(){
@@ -117,12 +125,12 @@ class GroupActivity : AppCompatActivity() {
 
         //Log.d("CUSTOMDEBUG", "GroupActivity - blaList: ${bla.size}; modulesList: ${group.modules.size}")
 
-        try {
-            //group.saveEventually()
-            Log.d("CUSTOMDEBUG", "GroupActivity - ${group.objectId}")
-        }
-        catch(e: Exception) {
-            Log.d("CUSTOMDEBUG", "GroupActivity - ${e.message}")
+        group.saveEventually {
+            if(it == null)
+                Log.d("CUSTOMDEBUG", "$simpleClassName - success on group.saveEventually")
+
+            else Log.d("CUSTOMDEBUG", "$simpleClassName - ${it.message}")
+
         }
 
         adapter.setOnItemClickListener { item, view ->
@@ -141,17 +149,5 @@ class GroupActivity : AppCompatActivity() {
                 }
             }
         }
-    }
-
-    private fun setGroupImage() {
-        actGroupIvImage.layoutParams.height = PixelCalculator.calculateHeightForFullHD()
-        var uri = group.groupImage.url
-        //if(group.croppedImage != null)
-        //    uri = group.croppedImage!!.url
-        Picasso.get()
-            .load(uri)
-            .fit()
-            .centerCrop()
-            .into(actGroupIvImage)
     }
 }

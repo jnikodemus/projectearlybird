@@ -26,7 +26,6 @@ import de.ntbit.projectearlybird.model.User
 import kotlinx.android.synthetic.main.activity_create_group.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.Dispatchers.Main
 
 
 class CreateGroupActivity : AppCompatActivity() {
@@ -34,6 +33,8 @@ class CreateGroupActivity : AppCompatActivity() {
     companion object {
         val GROUP_KEY = "GROUP"
     }
+
+    private val simpleClassName = this.javaClass.simpleName
 
     private val mGroupManager: GroupManager = ManagerFactory.getGroupManager()
     private val mUserManager: UserManager = ManagerFactory.getUserManager()
@@ -75,6 +76,20 @@ class CreateGroupActivity : AppCompatActivity() {
         supportActionBar!!.title = "Create a new Group"
     }
 
+    private fun saveGroupAndOpen() {
+        val saveGroupInBackground: Job = CoroutineScope(IO).launch {
+            openGroupActivity()
+        }
+    }
+
+    private fun openGroupActivity() {
+        Log.d("CUSTOMDEBUG", "$simpleClassName - openGroupActivity() GroupId: ${createdGroup.objectId}")
+        createdGroup.saveEventually()
+        val intent = Intent(this, GroupActivity::class.java)
+        intent.putExtra("GROUP", createdGroup)
+        startActivity(intent)
+    }
+
     private fun setClickListeners() {
 
         adapter.setOnItemClickListener { item, view ->
@@ -89,21 +104,24 @@ class CreateGroupActivity : AppCompatActivity() {
                 createdGroup.name = act_create_group_et_name.text.toString()
                 createdGroup.updateACL()
 
-                CoroutineScope(IO).launch {
+                //saveGroupAndOpen()
+
+                /*
+                val test: Job = CoroutineScope(IO).launch {
                     createdGroup.save()
-                    val groupId: Deferred<String> = async {
-                        createdGroup.objectId
-                    }
-                    //doMainContext(groupId.await())
+                    Log.d("CUSTOMDEBUG", "CreateGroupActivity - Job save() done.")
                 }
+                 */
+
+
                 //Log.d("CUSTOMDEBUG", "CreateGroupActivity - after CoroutineScope() ObjectId: ${createdGroup.objectId}")
                 // wait for Async and start next Activity
-                //val intent = Intent(this, GroupActivity::class.java)
+                val intent = Intent(this, GroupActivity::class.java)
                 //intent.putExtra(GROUP_KEY, createdGroup.objectId)
-                //intent.putExtra(GROUP_KEY, createdGroup)
+                intent.putExtra(GROUP_KEY, createdGroup)
                     //Log.d("CUSTOMDEBUG", "CreateGroupActivity - ObjectId: ${createdGroup.objectId}")
-                //startActivity(intent)
-                //finish()
+                startActivity(intent)
+                finish()
             }
         }
 
@@ -192,16 +210,3 @@ class CreateGroupActivity : AppCompatActivity() {
             .into(crt_group_iv_avatar)
     }
 }
-
-/*
-class CheckedContactItem: Item<GroupieViewHolder>() {
-    override fun bind(viewHolder: GroupieViewHolder, position: Int) {
-
-    }
-
-    override fun getLayout(): Int {
-        return R.layout.row_crt_group_contact
-    }
-
-}
-*/
