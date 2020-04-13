@@ -1,6 +1,7 @@
 package de.ntbit.projectearlybird.ui.activity
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.os.Parcelable
 import android.util.Log
@@ -106,7 +107,8 @@ class GroupActivity : AppCompatActivity() {
     private fun loadModules() {
         for(m in group.modules) {
             m.fetchIfNeeded<Module>()
-            adapter.add(ModuleItem(Module(m.name)))
+            Log.d("CUSTOMDEBUG", "$simpleClassName - ${m.name}, ${m.description}")
+            adapter.add(ModuleItem(Module(m)))
         }
     }
 

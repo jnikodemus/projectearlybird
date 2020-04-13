@@ -14,7 +14,8 @@ class ModuleChecklist: Module {
     internal constructor() : super()
 
     internal constructor(itemList: ArrayList<ModuleChecklistItem>) {
-        this.name = "Checklist"
+        this.name = super.name
+        this.description = super.description
         this.items = itemList
     }
 
