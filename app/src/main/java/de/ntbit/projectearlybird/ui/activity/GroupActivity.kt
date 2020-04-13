@@ -17,6 +17,7 @@ import com.xwray.groupie.GroupieViewHolder
 import de.ntbit.projectearlybird.R
 import de.ntbit.projectearlybird.adapter.item.ModuleChecklistItem
 import de.ntbit.projectearlybird.adapter.item.ModuleItem
+import de.ntbit.projectearlybird.helper.ParcelContract
 import de.ntbit.projectearlybird.helper.PixelCalculator
 import de.ntbit.projectearlybird.manager.ManagerFactory
 import de.ntbit.projectearlybird.model.Group
@@ -66,12 +67,13 @@ class GroupActivity : AppCompatActivity() {
     }
 
     private fun initialize() {
-        group = intent.getParcelableExtra("GROUP")
+        group = intent.getParcelableExtra(ParcelContract.GROUP_KEY)
         saveGroup()
         connectAdapter()
         placeToolbar()
         setGroupImage()
         loadModules()
+        setClicklistener()
     }
 
     private fun saveGroup() {
@@ -112,6 +114,28 @@ class GroupActivity : AppCompatActivity() {
         }
     }
 
+    private fun setClicklistener() {
+        adapter.setOnItemClickListener { item, view ->
+            val moduleItem = item as ModuleItem
+            Log.d("CUSTOMDEBUG", "$simpleClassName - ${moduleItem.name}")
+            /*
+            val intent: Intent
+            when(moduleItem.name) {
+                "Checklist" -> {
+                    intent = Intent(this, ModuleChecklistActivity::class.java)
+                    lateinit var module: Module
+                    for(groupModule in group.modules) {
+                        if (groupModule.name == "Checklist")
+                            module = groupModule as ModuleChecklist
+                        intent.putExtra("MODULE", module)
+                        startActivity(intent)
+                    }
+                }
+            }
+             */
+        }
+    }
+
     fun dummyLayout(){
         //val bla = group.modules // Leere Liste mit Modules
         //Log.d("CUSTOMDEBUG", "GroupActivity - blaList: ${bla.size}; modulesList: ${group.modules.size}")
@@ -135,21 +159,6 @@ class GroupActivity : AppCompatActivity() {
 
         }
 
-        adapter.setOnItemClickListener { item, view ->
-            val moduleItem = item as ModuleItem
-            val intent: Intent
-            when(moduleItem.name) {
-                "Checklist" -> {
-                    intent = Intent(this, ModuleChecklistActivity::class.java)
-                    lateinit var module: Module
-                    for(groupModule in group.modules) {
-                        if (groupModule.name == "Checklist")
-                            module = groupModule as ModuleChecklist
-                        intent.putExtra("MODULE", module)
-                        startActivity(intent)
-                    }
-                }
-            }
-        }
+
     }
 }

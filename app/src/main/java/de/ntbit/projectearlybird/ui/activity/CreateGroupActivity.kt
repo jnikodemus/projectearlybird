@@ -17,6 +17,7 @@ import com.xwray.groupie.GroupieViewHolder
 import de.ntbit.projectearlybird.R
 import de.ntbit.projectearlybird.adapter.item.UserItem
 import de.ntbit.projectearlybird.helper.InputValidator
+import de.ntbit.projectearlybird.helper.ParcelContract
 import de.ntbit.projectearlybird.helper.PixelCalculator
 import de.ntbit.projectearlybird.manager.GroupManager
 import de.ntbit.projectearlybird.manager.ManagerFactory
@@ -86,7 +87,7 @@ class CreateGroupActivity : AppCompatActivity() {
         Log.d("CUSTOMDEBUG", "$simpleClassName - openGroupActivity() GroupId: ${createdGroup.objectId}")
         createdGroup.saveEventually()
         val intent = Intent(this, GroupActivity::class.java)
-        intent.putExtra("GROUP", createdGroup)
+        intent.putExtra(ParcelContract.GROUP_KEY, createdGroup)
         startActivity(intent)
     }
 
