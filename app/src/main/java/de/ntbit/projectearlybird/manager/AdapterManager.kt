@@ -8,13 +8,21 @@ import com.parse.livequery.ParseLiveQueryClient
 import com.parse.livequery.SubscriptionHandling
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
-//import de.ntbit.projectearlybird.adapter.ConversationsAdapter
 import de.ntbit.projectearlybird.adapter.item.UserItemLatestMessage
 import de.ntbit.projectearlybird.model.Message
 import de.ntbit.projectearlybird.model.User
 import java.net.URI
-import kotlin.collections.ArrayList
-import kotlin.collections.HashSet
+
+/**
+ * Provides adapter for the different Activities
+ * @property simpleClassName holds the actual simple classname
+ * @property parseLiveQueryClient holds an instance of [ParseLiveQueryClient]
+ * @property mUserManager holds an instance of [UserManager]
+ * @property conversationContacts holds a [HashSet]<[User]> of actual conversation contacts
+ * @property conversationsAdapter holds a [GroupAdapter]<[GroupieViewHolder]> with the
+ * actual conversations
+ * @property isInitialized true if the adapter is initialized
+ */
 
 class AdapterManager {
 
@@ -32,6 +40,12 @@ class AdapterManager {
 
     private var isInitialized = false
 
+    /**
+     * Returns [conversationsAdapter], calls [readExistingConversations] and
+     * [listenForNewConversation] if [isInitialized] is false. After that [isInitialized] is set
+     * to true.
+     * @return [GroupAdapter]<[GroupieViewHolder]>
+     */
     fun getConversationsAdapter(): GroupAdapter<GroupieViewHolder> {
         if (!isInitialized) {
             readExistingConversations()
@@ -41,6 +55,12 @@ class AdapterManager {
         return conversationsAdapter
     }
 
+    /**
+     * Reads the existing messages of ParseDatabase, transforms them to [UserItemLatestMessage]
+     * and adds these to [conversationsAdapter] and adds the corresponding [User]
+     * to [conversationContacts]. Afterwards notifies [conversationsAdapter] is notified for the
+     * changed dataset.
+     */
     private fun readExistingConversations() {
         Log.d("CUSTOMDEBUG", "$simpleClassName - readExistingConversations()")
         getUserQuery().orderByDescending("username").findInBackground {
@@ -64,6 +84,11 @@ class AdapterManager {
         }
     }
 
+    /**
+     * Subscribes to a [ParseQuery] listening for new [Message].
+     * Calls [processIncomingMessage] if a new [Message] came in.
+     *
+     */
     private fun listenForNewConversation() {
         Log.d("CUSTOMDEBUG", "$simpleClassName - listenForNewConversation()")
 
@@ -80,6 +105,11 @@ class AdapterManager {
         }
     }
 
+    /**
+     * Returns [ParseQuery] which filters all [User]s which sent to current user
+     * or received messages by current user.
+     * @return [ParseQuery]<[User]>
+     */
     private fun getUserQuery(): ParseQuery<User> {
         Log.d("CUSTOMDEBUG", "$simpleClassName - getUserQuery()")
         val messageQuery = ParseQuery
@@ -99,6 +129,9 @@ class AdapterManager {
         return ParseQuery.or(queries)
     }
 
+    /**
+     * NOT IMPLEMENTED YET
+     */
     fun processOutgoingMessage(message: Message) {
         // TODO: implement code
         Log.d("CUSTOMDEBUG", "$simpleClassName - Processing outgoing message (STILL TODO)... " +
@@ -107,12 +140,14 @@ class AdapterManager {
         //conversationsAdapter.notifyDataSetChanged()
     }
 
+    /**
+     * Adds a new [UserItemLatestMessage] to [conversationsAdapter] or
+     * updates the [UserItemLatestMessage] if the conversation is already present.
+     */
     private fun processIncomingMessage(message: Message) {
-        Log.d(
-            "CUSTOMDEBUG", "$simpleClassName - Processing incoming message... " +
-                    "From: ${message.recipient.username} - Body: \"${message.body}\""
-        )
-
+        //Log.d("CUSTOMDEBUG", "$simpleClassName - Processing incoming message... " +
+        //            "From: ${message.recipient.username} - Body: \"${message.body}\""
+        //)
         val latestContact =
             UserItemLatestMessage(message.sender)
         if (!conversationContacts.contains(latestContact.user))

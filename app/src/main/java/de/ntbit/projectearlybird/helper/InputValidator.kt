@@ -4,6 +4,12 @@ import android.text.TextUtils
 import android.widget.EditText
 import java.util.logging.Logger
 
+/**
+ * Provides static methods to validate userinput.
+ * @property EMAIL_NOT_VALID contains the string which is provided if the mailaddress is not valid
+ * @property ERROR_NOT_NULL_NOR_EMPTY contains the string which is provided if
+ * an input is null or empty
+ */
 class InputValidator {
     private val log = Logger.getLogger(this::class.java.simpleName)
 
@@ -13,7 +19,9 @@ class InputValidator {
         const val ERROR_NOT_NULL_NOR_EMPTY = "Must not be empty or blank"
 
         /**
-         * Gibt zurueck ob der übergebene String [email] valide ist.
+         * Returns whether the given [email] is valid or not
+         * using [android.util.Patterns.EMAIL_ADDRESS]
+         * @return [Boolean]
          */
         fun isValidEmail(email: String) : Boolean {
             if(email.isNotBlank()
@@ -23,6 +31,10 @@ class InputValidator {
             return false
         }
 
+        /**
+         * Returns whether the provided [editText] [isNullOrBlank] or [isNullOrEmpty]
+         * @return [Boolean]
+         */
         fun isValidInputNotNullNotEmpty(editText: EditText) : Boolean {
             if(editText.text.isNullOrBlank() || editText.text.isNullOrEmpty()) {
                 editText.error = ERROR_NOT_NULL_NOR_EMPTY
@@ -44,8 +56,10 @@ class InputValidator {
             "\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])"
 
     /**
-     * Gibt zurueck ob der Inhalt des uebergebenen [actRegisterEditTxtEmail] eine valide Email ist.
+     * Returns whether the given [email] is valid or not using [isValidEmail]
+     * @return [Boolean]
      */
+    @Deprecated("Use companion object!")
     fun isValidEmail(actRegisterEditTxtEmail: EditText) : Boolean {
         if(isValidEmail(actRegisterEditTxtEmail.text.toString()))
             return true
@@ -54,8 +68,9 @@ class InputValidator {
     }
 
     /**
-     * Gibt zurueck ob der Inhalt des uebergebenen [actRegisterEditTxtUsername] mehr als 3 Zeichen
-     * und nicht leer (blank) ist.
+     * Checks if the passed [actRegisterEditTxtUsername] has more than
+     * three chars and therefore is not null nor blank
+     * @return [Boolean]
      */
     fun isValidUsername(actRegisterEditTxtUsername: EditText) : Boolean {
         if(actRegisterEditTxtUsername.text.isNotBlank() && actRegisterEditTxtUsername.text.length >= 4)
@@ -65,8 +80,9 @@ class InputValidator {
     }
 
     /**
-     * Gibt zurueck ob der Inhalt des uebergebenen [actRegisterEditTxtPassword] dem [actRegisterEditTxtPasswordRetry]
-     * entspricht und nicht leer (blank) ist.
+     * Returns whether the content of the passed [actRegisterEditTxtPassword]
+     * corresponds to the [actRegisterEditTxtPasswordRetry] and is neither empty nor blank
+     * @return [Boolean]
      */
     fun isValidPassword(actRegisterEditTxtPassword: EditText, actRegisterEditTxtPasswordRetry: EditText) : Boolean {
         if(actRegisterEditTxtPassword.text.isNotBlank()

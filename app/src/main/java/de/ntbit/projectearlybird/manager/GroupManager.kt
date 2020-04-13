@@ -9,8 +9,7 @@ import com.parse.livequery.ParseLiveQueryClient
 import com.parse.livequery.SubscriptionHandling
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
-import de.ntbit.projectearlybird.R
-import de.ntbit.projectearlybird.R.*
+import de.ntbit.projectearlybird.R.string
 import de.ntbit.projectearlybird.adapter.item.GroupItem
 import de.ntbit.projectearlybird.helper.ApplicationContextProvider
 import de.ntbit.projectearlybird.helper.NotificationHelper
@@ -19,6 +18,14 @@ import de.ntbit.projectearlybird.model.User
 import de.ntbit.projectearlybird.ui.activity.GroupActivity
 import java.net.URI
 
+/**
+ * Provides an object of [GroupManager] which is used for interacting
+ * with objects of the [Group] model.
+ * @property parseLiveQueryClient holds instance of [ParseLiveQueryClient]
+ * @property mUserManager holds instance of [UserManager]
+ * @property adapter holds instance of [GroupAdapter]<[GroupieViewHolder]>
+ */
+
 class GroupManager {
 
     private val parseLiveQueryClient: ParseLiveQueryClient =
@@ -26,6 +33,11 @@ class GroupManager {
     private val mUserManager = ManagerFactory.getUserManager()
     private lateinit var adapter: GroupAdapter<GroupieViewHolder>
 
+    /**
+     * Returns [adapter]. If its not initialized, it will be initialized, [readGroups]
+     * and [listenForGroups] is called before return.
+     * @return [GroupAdapter]<[GroupieViewHolder]>
+     */
     fun getAdapter() : GroupAdapter<GroupieViewHolder> {
         if(!::adapter.isInitialized) {
             adapter = GroupAdapter()
@@ -35,9 +47,12 @@ class GroupManager {
         return adapter
     }
 
-    /*STOPPED HERE BECAUSE NO INTERNET*/
+    /**
+     * Reads all existing groups in the ParseDatabase, transforms them to [GroupItem] and adds
+     * them to [adapter].
+     */
     private fun readGroups() {
-        Log.d("CUSTOMDEBUG", "GroupManager - Fetching groups from database")
+        //Log.d("CUSTOMDEBUG", "GroupManager - Fetching groups from database")
         //val currentUserGroups = ArrayList<Group>()
         val query = ParseQuery.getQuery(Group::class.java)
         //query.whereEqualTo("owner", mUserManager.getCurrentUser())
@@ -52,6 +67,10 @@ class GroupManager {
             //Log.d("CUSTOMDEBUG", "Found $m")
     }
 
+    /**
+     * Subscribes to [ParseQuery] of [Group] which calls [processNewGroup]
+     * and [NotificationHelper.showNotification] if the current user is added to a group.
+     */
     private fun listenForGroups() {
         val parseQuery = ParseQuery.getQuery(Group::class.java)
         val subscriptionHandling: SubscriptionHandling<Group> = parseLiveQueryClient.subscribe(parseQuery)
@@ -70,13 +89,24 @@ class GroupManager {
         }
     }
 
+    /**
+     * Transforms provided [group] to [GroupItem] and adds it to the [adapter] notifying it for
+     * a changed dataset afterwards.
+     * @return [Group]
+     */
     private fun processNewGroup(group: Group) {
-        Log.d("CUSTOMDEBUG", "GroupManager - processing new Group")
+        //Log.d("CUSTOMDEBUG", "GroupManager - processing new Group")
         adapter.add(GroupItem(group))
         adapter.notifyDataSetChanged()
     }
 
 
+    /**
+     * Leaves the provided [group] by removing the current user from memberlist and adminlist.
+     * If the leaving user was the only admin, a member will be added to the adminlist.
+     * If the user was owner of the group, the next admin will be the new owner.
+     * @return [Boolean]
+     */
     // TODO: Check admin/owner leaving; implement size < 2
     fun leaveGroup(group: Group): Boolean {
         val currentUser = mUserManager.getCurrentUser()
@@ -107,6 +137,11 @@ class GroupManager {
         return false
     }
 
+    /**
+     * Adds the provided [user] to the memberlist of the provided [group] if not already member.
+     * Returns true if the adding was successful.
+     * @return [Boolean]
+     */
     fun addUser(user: User, group: Group): Boolean {
         val members = group.members
         if(!group.members.contains(user)) {
@@ -121,6 +156,10 @@ class GroupManager {
         }
     }
 
+    /**
+     * Returns the [Group] for provided [objectId] from pin.
+     */
+    @Deprecated("Should not be used anymore.")
     fun getGroupById(objectId: String): Group {
         val query = ParseQuery(Group::class.java)
         query.fromPin("group")
