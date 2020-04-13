@@ -32,6 +32,7 @@ class GroupActivity : AppCompatActivity() {
     private val simpleClassName = this.javaClass.simpleName
 
     private val mGroupManager = ManagerFactory.getGroupManager()
+    private val mModuleManager = ManagerFactory.getModuleManager()
     private lateinit var group: Group
     private val adapter = GroupAdapter<GroupieViewHolder>()
 
@@ -61,6 +62,12 @@ class GroupActivity : AppCompatActivity() {
                     return true
                 }
                 return false
+            }
+            R.id.group_context_menu_add_module -> {
+                Log.d("CUSTOMDEBUG", "$simpleClassName - AddModule clicked.")
+                for(module in mModuleManager.getModules())
+                    Log.d("CUSTOMDEBUG", "$simpleClassName - ${module.name}, ${module.description}")
+                return true
             }
             else -> return super.onOptionsItemSelected(item)
         }
@@ -118,6 +125,7 @@ class GroupActivity : AppCompatActivity() {
         adapter.setOnItemClickListener { item, view ->
             val moduleItem = item as ModuleItem
             Log.d("CUSTOMDEBUG", "$simpleClassName - ${moduleItem.name}")
+
             /*
             val intent: Intent
             when(moduleItem.name) {
