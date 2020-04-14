@@ -59,8 +59,6 @@ class UserManager {
      * Registers the user
      *
      * Needs a [username], a correct [email] address and hashed [uHashedPassword]
-     *
-     *
      * @return either true or false if the register fails or succeeds
      */
     fun registerUser(username: String, email: String, uHashedPassword: String, ctx: Context): Boolean {
@@ -86,8 +84,12 @@ class UserManager {
     }
 
     /**
+     * STOPPED HERE TRYING TO SLEEP Zzzz
+     *
      * Login the user with [username] and [password]
      *
+     * @param username of the current [User]
+     * @param password of the current [User]
      *
      */
     fun loginUser(username: String, password: String, activity: Activity) {

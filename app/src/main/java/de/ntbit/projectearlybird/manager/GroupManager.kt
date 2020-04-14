@@ -32,6 +32,9 @@ class GroupManager {
     private val mUserManager = ManagerFactory.getUserManager()
     private lateinit var adapter: GroupAdapter<GroupieViewHolder>
 
+    /**
+     * Creating a [GroupAdapter] for the [GroupsFragment] and fills it afterwards
+     */
     fun getAdapter() : GroupAdapter<GroupieViewHolder> {
         if(!::adapter.isInitialized) {
             adapter = GroupAdapter()
@@ -41,6 +44,9 @@ class GroupManager {
         return adapter
     }
 
+    /**
+     * Fetches all [Group] from the database and adds it to the adapter
+     */
     /*STOPPED HERE BECAUSE NO INTERNET*/
     private fun readGroups() {
         Log.d("CUSTOMDEBUG", "GroupManager - Fetching groups from database")
@@ -58,6 +64,9 @@ class GroupManager {
             //Log.d("CUSTOMDEBUG", "Found $m")
     }
 
+    /**
+     * The [ParseLiveQueryClient] listens for new [Group] when the current [User] was invited to a new [Group]
+     */
     private fun listenForGroups() {
         val parseQuery = ParseQuery.getQuery(Group::class.java)
         val subscriptionHandling: SubscriptionHandling<Group> = parseLiveQueryClient.subscribe(parseQuery)
@@ -76,6 +85,11 @@ class GroupManager {
         }
     }
 
+    /**
+     * Adds the new [Group] found in the [SubscriptionHandling] to the [adapter]
+     *
+     * @param group that was found by the [SubscriptionHandling] will be added to the adapter
+     */
     private fun processNewGroup(group: Group) {
         Log.d("CUSTOMDEBUG", "GroupManager - processing new Group")
         adapter.add(GroupItem(group))
@@ -83,6 +97,9 @@ class GroupManager {
     }
 
 
+    /**
+     * Function to leave a [Group]
+     */
     // TODO: Check admin/owner leaving; implement size < 2
     fun leaveGroup(group: Group): Boolean {
         val currentUser = mUserManager.getCurrentUser()
@@ -113,6 +130,9 @@ class GroupManager {
         return false
     }
 
+    /**
+     * Function to add a new [User] to a [Group]
+     */
     fun addUser(user: User, group: Group): Boolean {
         val members = group.members
         if(!group.members.contains(user)) {
@@ -127,6 +147,11 @@ class GroupManager {
         }
     }
 
+    /**
+     * Getting a [Group] by [objectId]
+     *
+     * @return [Group] that was found by the [objectId]
+     */
     fun getGroupById(objectId: String): Group {
         val query = ParseQuery(Group::class.java)
         query.fromPin("group")
