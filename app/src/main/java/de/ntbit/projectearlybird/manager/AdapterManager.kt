@@ -24,15 +24,6 @@ import java.net.URI
  * @property isInitialized true if the adapter is initialized
  */
 
-/**
- * Manager for controlling adapters from other views and to also get them in other activities
- * @property simpleClassName contains the classname
- * @property parseLiveQueryClient connection to the back4app livequery event
- * @property mUserManager global [UserManager]
- * @property conversationContacts collection for all conversation from the current [User]
- * @property conversationsAdapter ???
- * @property isInitialized ???
- */
 class AdapterManager {
 
     //val theRealConversationsAdapter = ConversationsAdapter()
