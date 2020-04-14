@@ -19,7 +19,7 @@ import java.util.*
  *
  * This class is the root class for the ChatActivity bubbles
  *
- * @property message content of the chat bubble.
+ * @param message content of the chat bubble.
  * @property userLocale displays the time in 24h
  * @property datePattern displays the date in HH:mm
  * @property format formats the timestamp

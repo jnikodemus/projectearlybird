@@ -19,6 +19,12 @@ import de.ntbit.projectearlybird.model.User
 import de.ntbit.projectearlybird.ui.activity.GroupActivity
 import java.net.URI
 
+/**
+ * Manager for controlling and managing [Group]
+ * @property parseLiveQueryClient connection to the back4app livequery event
+ * @property mUserManager global [UserManager]
+ * @property adapter ???
+ */
 class GroupManager {
 
     private val parseLiveQueryClient: ParseLiveQueryClient =

@@ -12,10 +12,11 @@ import de.ntbit.projectearlybird.model.Message
 import de.ntbit.projectearlybird.ui.activity.ChatActivity
 import de.ntbit.projectearlybird.ui.activity.NewMessageActivity
 
+/**
+ * Class for creating and manage notifications
+ */
 class NotificationHelper {
     companion object {
-
-
         fun showNotification(message: Message, context: Context) {
             val mNotificationManager: NotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
@@ -42,6 +43,13 @@ class NotificationHelper {
             mNotificationManager.notify(0, mBuilder.build())
         }
 
+        /**
+         * Sends a notification to the device of the partner
+         *
+         * @param contentTitle title of the notification
+         * @param contentText contains the actual content of the notification
+         * @param intent helps to open the needed activity after clicking on the notification
+         */
         fun showNotification(contentTitle: String, contentText: String, intent: Intent) {
             val context = ApplicationContextProvider.getApplicationContext()
             val mNotificationManager: NotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager

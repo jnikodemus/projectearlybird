@@ -4,6 +4,9 @@ import android.app.Application
 import android.content.Context
 import android.util.Log
 
+/**
+ * Class to create a global context
+ */
 class ApplicationContextProvider: Application() {
 
     override fun onCreate() {
