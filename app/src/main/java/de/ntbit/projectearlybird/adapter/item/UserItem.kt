@@ -13,6 +13,13 @@ import kotlinx.android.synthetic.main.row_latest_message.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
+/**
+ * A [UserItem] for displaying users/contacts in different activities
+ *
+ * @param user contains the information for this item
+ * @property mUserManager is the global [UserManager]
+ * @constructor ???
+ */
 open class UserItem(val user: User): Item<GroupieViewHolder>(){
     protected val mUserManager: UserManager = ManagerFactory.getUserManager()
 
@@ -53,6 +60,11 @@ class UserItemLatestMessage(user: User) : UserItem(user) {
         return R.layout.row_latest_message
     }
 
+    /**
+     * Converts the timestamp of sending in the correct format
+     *
+     * @param latestMessage contains the needed timestamp
+     */
     private fun getDateFormat(latestMessage: Message): SimpleDateFormat {
         val dayInMillis = 86400000
         val weekInMillis = 604800000

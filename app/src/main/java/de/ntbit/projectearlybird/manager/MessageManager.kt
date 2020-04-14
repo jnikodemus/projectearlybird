@@ -43,8 +43,9 @@ class MessageManager {
 
     /**
      * Sends a String as Message to [recipient] if [body] isNotEmpty() and [body] isNotBlank()
-     *
-     * @return [Boolean]
+     * @param body contains the text from a [Message]
+     * @param recipient which receives the [Message]
+     * @return [Message]: if the [Message] is not empty nor blank, [Unit] else
      */
     fun sendMessage(body: String, recipient: User) : Message? {
         if(body.isNotBlank() && body.isNotEmpty()) {
@@ -58,6 +59,8 @@ class MessageManager {
 
     /**
      * Listens for new messages for chat[partner] and adds it to [chatlog] as [ChatFromItem].
+     * @param partner which the current [User] subscribed to
+     * @param chatLog is a [RecyclerView] which is used for adding the new [Message] to it
      */
     fun subscribeToPartner(partner: User, chatLog: RecyclerView) {
         val adapter: GroupAdapter<GroupieViewHolder> = chatLog.adapter as GroupAdapter<GroupieViewHolder>
@@ -90,7 +93,8 @@ class MessageManager {
      * Builds and shows a systemnotification if the current user has received a new [Message].
      */
     private fun showNotification(message: Message, context: Context) {
-        val mNotificationManager: NotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val mNotificationManager: NotificationManager =
+            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             val channel = NotificationChannel("PEB_CHANNEL_ID",
                 "YOUR_CHANNEL_NAME",
@@ -116,7 +120,8 @@ class MessageManager {
     }
 
     /**
-     * Returns the latest message received from given [user]
+     * Getter for the latest [Message]
+     * @param user from whom we will get the latest [Message]
      * @return [Message]
      */
     fun getLatestMessage(user: User): Message {
