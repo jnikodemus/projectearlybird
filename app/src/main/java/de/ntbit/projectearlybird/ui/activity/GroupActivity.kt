@@ -1,5 +1,7 @@
 package de.ntbit.projectearlybird.ui.activity
 
+import android.app.Dialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -7,8 +9,10 @@ import android.os.Parcelable
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.parse.ParseFile
 import com.squareup.picasso.Picasso
@@ -65,6 +69,8 @@ class GroupActivity : AppCompatActivity() {
             }
             R.id.group_context_menu_add_module -> {
                 Log.d("CUSTOMDEBUG", "$simpleClassName - AddModule clicked.")
+                val dialog = AddModuleDialogFragment(group, adapter)
+                dialog.show(this.supportFragmentManager, "DIALOG_GROUP_ACTIVITY_ADD_MODULE")
                 for(module in mModuleManager.getModules())
                     Log.d("CUSTOMDEBUG", "$simpleClassName - ${module.name}, ${module.description}")
                 return true
@@ -169,4 +175,41 @@ class GroupActivity : AppCompatActivity() {
 
 
     }
+}
+
+class AddModuleDialogFragment(otherGroup: Group, adapter: GroupAdapter<GroupieViewHolder>) : DialogFragment() {
+
+    private val simpleClassName = this.javaClass.simpleName
+
+    private val moduleAdapter = adapter
+    private val group = otherGroup
+    private val mModuleManager = ManagerFactory.getModuleManager()
+    val array = arrayOf(mModuleManager.getModules())
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        return activity?.let {
+            val builder = AlertDialog.Builder(it)
+            builder.setTitle("Pick a module")
+                .setItems(R.array.group_modules,
+                    DialogInterface.OnClickListener { dialog, which ->
+                        Log.d("CUSTOMDEBUG", "$simpleClassName - User clicked $which")
+                        when(which) {
+                            0 -> {
+                                val module = ModuleChecklist(ArrayList<ModuleChecklistItem>())
+                                module.saveEventually()
+                                group.addModule(module)
+                                moduleAdapter.add(ModuleItem(Module(module)))
+                                moduleAdapter.notifyDataSetChanged()
+                                //group.addModule(ModuleChecklist())
+                                //moduleAdapter.add(ModuleItem(ModuleChecklist()))
+                                //moduleAdapter.notifyDataSetChanged()
+                            }
+                            else -> Log.d("CUSTOMDEBUG", "$simpleClassName - " +
+                                    "$which not implemented yet.")
+                        }
+                    })
+            builder.create()
+        } ?: throw IllegalStateException("Activity cannot be null")
+    }
+
 }

@@ -22,6 +22,7 @@ import java.net.URI
  * @property simpleClassName
  * @property moduleList holds a list of modules found in parse database
  */
+
 class ModuleManager {
     private val simpleClassName = this.javaClass.simpleName
 
@@ -32,7 +33,7 @@ class ModuleManager {
 
     init {
         getModulesFromParse()
-        listenForNewModules()
+        //listenForNewModules()
     }
 
     private fun getModulesFromParse() {

@@ -31,6 +31,10 @@
     <string name="group_context_menu_add_user">Add user</string>
     <string name="group_context_menu_remove">Remove user</string>
     <string name="group_context_menu_leave">Leave group</string>
+    <string-array name="group_modules">
+        <item>Checklist</item>
+        <!--<item>Murdergame</item>-->
+    </string-array>
 
     <string name="profile_first_name">First name</string>
     <string name="profile_last_name">Last name</string>

@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper
 import de.ntbit.projectearlybird.data.PebContract.UserEntry
 import de.ntbit.projectearlybird.model.User
 
+@Deprecated("Use parse local datastore instead.")
 class PebDbHelper(context: Context?) :
     SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
     override fun onCreate(db: SQLiteDatabase) {

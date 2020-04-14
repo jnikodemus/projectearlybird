@@ -2,6 +2,7 @@ package de.ntbit.projectearlybird.data
 
 import android.provider.BaseColumns
 
+@Deprecated("Use parse local datastore instead.")
 class PebContract {
 
     object UserEntry : BaseColumns {
