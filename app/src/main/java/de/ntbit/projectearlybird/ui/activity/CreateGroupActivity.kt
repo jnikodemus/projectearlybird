@@ -25,6 +25,7 @@ import de.ntbit.projectearlybird.manager.UserManager
 import de.ntbit.projectearlybird.model.Group
 import de.ntbit.projectearlybird.model.User
 import kotlinx.android.synthetic.main.activity_create_group.*
+import kotlinx.android.synthetic.main.toolbar.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 
@@ -74,7 +75,7 @@ class CreateGroupActivity : AppCompatActivity() {
         setSupportActionBar(toolbar as Toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
-        supportActionBar!!.title = "Create a new Group"
+        toolbar_tv_root_title.text = "Create group"
     }
 
     private fun saveGroupAndOpen() {

@@ -61,7 +61,6 @@ class ModuleChecklistItem() : Item<GroupieViewHolder>() {
 
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         this.viewHolder = viewHolder
-        this.viewHolder.itemView.square_group_module_cv.setCardBackgroundColor(Color.RED)
         this.viewHolder.itemView.row_module_checklist_tv_name.text = itemName
         setClicklistener()
     }
@@ -88,5 +87,11 @@ class ModuleChecklistItem() : Item<GroupieViewHolder>() {
 
         else
             viewHolder.itemView.row_module_checklist_tv_username.visibility = TextView.INVISIBLE
+    }
+
+    override fun toString(): String {
+        return "ChecklistItem [itemName: ${this.itemName}, " +
+                "isAssigned: ${this.isAssigned}, " +
+                "assignedUser: ${this.assignedUser?.objectId}]"
     }
 }

@@ -42,4 +42,11 @@ open class Module : ParseObject {
         protected set(description) {
             this.put("description", description)
         }
+
+    override fun equals(other: Any?): Boolean {
+        if(other is Module) {
+            return other.name == this.name
+        }
+        return false
+    }
 }

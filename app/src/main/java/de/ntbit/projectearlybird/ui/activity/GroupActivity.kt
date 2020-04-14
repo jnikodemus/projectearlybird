@@ -132,7 +132,6 @@ class GroupActivity : AppCompatActivity() {
             val moduleItem = item as ModuleItem
             Log.d("CUSTOMDEBUG", "$simpleClassName - ${moduleItem.name}")
 
-            /*
             val intent: Intent
             when(moduleItem.name) {
                 "Checklist" -> {
@@ -141,40 +140,15 @@ class GroupActivity : AppCompatActivity() {
                     for(groupModule in group.modules) {
                         if (groupModule.name == "Checklist")
                             module = groupModule as ModuleChecklist
-                        intent.putExtra("MODULE", module)
+                        intent.putExtra(ParcelContract.GROUP_KEY, group)
+                        intent.putExtra(ParcelContract.MODULE_KEY, module)
                         startActivity(intent)
                     }
                 }
             }
-             */
         }
     }
 
-    fun dummyLayout(){
-        //val bla = group.modules // Leere Liste mit Modules
-        //Log.d("CUSTOMDEBUG", "GroupActivity - blaList: ${bla.size}; modulesList: ${group.modules.size}")
-        //adapter.add(ModuleItem(Module("Checklist")))
-        //adapter.add(ModuleItem(Module("Chat")))
-
-
-        val itemsList = ArrayList<ModuleChecklistItem>()
-
-        val moduleChecklist = ModuleChecklist(itemsList)
-
-        group.addModule(moduleChecklist)
-
-        //Log.d("CUSTOMDEBUG", "GroupActivity - blaList: ${bla.size}; modulesList: ${group.modules.size}")
-
-        group.saveEventually {
-            if(it == null)
-                Log.d("CUSTOMDEBUG", "$simpleClassName - success on group.saveEventually")
-
-            else Log.d("CUSTOMDEBUG", "$simpleClassName - ${it.message}")
-
-        }
-
-
-    }
 }
 
 class AddModuleDialogFragment(otherGroup: Group, adapter: GroupAdapter<GroupieViewHolder>) : DialogFragment() {
@@ -190,24 +164,23 @@ class AddModuleDialogFragment(otherGroup: Group, adapter: GroupAdapter<GroupieVi
         return activity?.let {
             val builder = AlertDialog.Builder(it)
             builder.setTitle("Pick a module")
-                .setItems(R.array.group_modules,
-                    DialogInterface.OnClickListener { dialog, which ->
-                        Log.d("CUSTOMDEBUG", "$simpleClassName - User clicked $which")
-                        when(which) {
-                            0 -> {
-                                val module = ModuleChecklist(ArrayList<ModuleChecklistItem>())
-                                module.saveEventually()
+                .setItems(R.array.group_modules
+                ) { dialog, which ->
+                    Log.d("CUSTOMDEBUG", "$simpleClassName - User clicked $which")
+                    when(which) {
+                        0 -> {
+                            val module = ModuleChecklist(ArrayList())
+                            if(!group.modules.contains(module)) {
                                 group.addModule(module)
+                                group.saveEventually()
                                 moduleAdapter.add(ModuleItem(Module(module)))
                                 moduleAdapter.notifyDataSetChanged()
-                                //group.addModule(ModuleChecklist())
-                                //moduleAdapter.add(ModuleItem(ModuleChecklist()))
-                                //moduleAdapter.notifyDataSetChanged()
                             }
-                            else -> Log.d("CUSTOMDEBUG", "$simpleClassName - " +
-                                    "$which not implemented yet.")
                         }
-                    })
+                        else -> Log.d("CUSTOMDEBUG", "$simpleClassName - " +
+                                "$which not implemented yet.")
+                    }
+                }
             builder.create()
         } ?: throw IllegalStateException("Activity cannot be null")
     }
