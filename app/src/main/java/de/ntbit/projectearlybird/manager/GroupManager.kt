@@ -44,8 +44,8 @@ class GroupManager {
     private lateinit var adapter: GroupAdapter<GroupieViewHolder>
 
     /**
-     * Returns [adapter]. If its not initialized, it will be initialized, [readGroups]
-     * and [listenForGroups] is called before return.
+     * If the [adapter] is not initialized by calltime, it will be initialized and [readGroups]
+     * and [listenForGroups] are called before return.
      * @return [GroupAdapter]<[GroupieViewHolder]>
      */
     fun getAdapter() : GroupAdapter<GroupieViewHolder> {
@@ -102,7 +102,7 @@ class GroupManager {
     /**
      * Transforms provided [group] to [GroupItem] and adds it to the [adapter] notifying it for
      * a changed dataset afterwards.
-     * @return [Group]
+     * @param group that was found by the [SubscriptionHandling] will be added to the adapter
      */
     private fun processNewGroup(group: Group) {
         //Log.d("CUSTOMDEBUG", "GroupManager - processing new Group")
@@ -115,7 +115,7 @@ class GroupManager {
      * Leaves the provided [group] by removing the current user from memberlist and adminlist.
      * If the leaving user was the only admin, a member will be added to the adminlist.
      * If the user was owner of the group, the next admin will be the new owner.
-     * @return [Boolean]
+     * @return [Boolean]: true if user could leave, false else.
      */
     // TODO: Check admin/owner leaving; implement size < 2
     fun leaveGroup(group: Group): Boolean {

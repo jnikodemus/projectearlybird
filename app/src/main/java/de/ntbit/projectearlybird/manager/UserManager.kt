@@ -10,7 +10,6 @@ import android.widget.ImageView
 import android.widget.Toast
 import com.parse.*
 import com.squareup.picasso.Picasso
-import de.ntbit.projectearlybird.data.PebContract
 import de.ntbit.projectearlybird.model.Message
 import de.ntbit.projectearlybird.model.User
 import de.ntbit.projectearlybird.ui.activity.HomeActivity
@@ -56,8 +55,6 @@ class UserManager {
      * Registers the user
      *
      * Needs a [username], a correct [email] address and hashed [uHashedPassword]
-     *
-     *
      * @return either true or false if the register fails or succeeds
      */
     fun registerUser(username: String, email: String, uHashedPassword: String, ctx: Context): Boolean {
@@ -83,8 +80,12 @@ class UserManager {
     }
 
     /**
+     * STOPPED HERE TRYING TO SLEEP Zzzz
+     *
      * Login the user with [username] and [password]
      *
+     * @param username of the current [User]
+     * @param password of the current [User]
      *
      */
     fun loginUser(username: String, password: String, activity: Activity) {
@@ -110,13 +111,12 @@ class UserManager {
      */
     private fun updateLastLogin() {
         val mCurrentUser = getCurrentUser()
-        mCurrentUser.put(PebContract.UserEntry.COLUMN_USER_LASTLOGIN, Date(System.currentTimeMillis()))
+        //mCurrentUser.put(PebContract.UserEntry.COLUMN_USER_LASTLOGIN, Date(System.currentTimeMillis()))
         mCurrentUser.saveInBackground()
     }
 
     /**
      * Getter for the current [User]
-     *
      *
      * @return the [User] that is currently logged in on his own device
      */

@@ -7,10 +7,11 @@ import android.content.res.Resources
  */
 class PixelCalculator {
 
+
     companion object {
 
         /**
-         * Returns the calculated height for actual displaywidth.
+         * Calculates the height in relation to 1080p for the actual display width
          * @return [Int]
          */
         fun calculateHeightForFullHD() : Int {

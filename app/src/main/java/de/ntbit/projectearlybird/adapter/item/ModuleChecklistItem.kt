@@ -16,6 +16,17 @@ import kotlinx.android.synthetic.main.row_module_checklist.view.*
 import kotlinx.android.synthetic.main.square_group_module.view.*
 import org.json.JSONObject
 
+/**
+ * A [ModuleChecklistItem] for displaying the an item in the [ModuleChecklistActivity]
+ *
+ * @property mUserManager global [UserManager]
+ * @property user current [User]
+ * @property viewHolder viewholder from [ModuleChecklistActivity] activity
+ * @property itemName name of the row in the checklist
+ * @property isAssigned ???
+ * @property assignedUser ???
+ * @constructor ???
+ */
 class ModuleChecklistItem() : Item<GroupieViewHolder>() {
 
     companion object {
@@ -58,13 +69,17 @@ class ModuleChecklistItem() : Item<GroupieViewHolder>() {
     override fun getLayout(): Int {
         return R.layout.row_module_checklist
     }
-
+    /**
+     * Sets click listener to every [ModuleChecklistItem]
+     */
     private fun setClicklistener() {
         this.viewHolder.itemView.row_module_checklist_cb_checked.setOnClickListener {
             processItemClicked()
         }
     }
-
+    /**
+     * Applies the name of the user and a check to the item when it's clicked
+     */
     private fun processItemClicked() {
         if(viewHolder.itemView.row_module_checklist_cb_checked.isChecked) {
             viewHolder.itemView.row_module_checklist_tv_username.text = user.username

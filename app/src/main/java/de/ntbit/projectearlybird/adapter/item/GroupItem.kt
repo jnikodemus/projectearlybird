@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.row_group.view.*
  *
  * This class is a subclass of ChatItem
  *
- * @property group contains the image and the name
+ * @param group contains the image and the name
  * @constructor Creates an empty [GroupItem]
  */
 class GroupItem(val group: Group) : Item<GroupieViewHolder>(){

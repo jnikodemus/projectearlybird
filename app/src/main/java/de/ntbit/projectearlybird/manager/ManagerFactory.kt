@@ -8,10 +8,10 @@ import de.ntbit.projectearlybird.manager.ManagerFactory.Companion.mUserManager
 
 /**
  * Provides the different Managers for interacting with modelobjects.
- * @property mMessageManager holds an instance of [MessageManager]
- * @property mUserManager holds an instance of [UserManager]
- * @property mGroupManager holds an instance of [GroupManager]
- * @property mAdapterManager holds an instance of [AdapterManager]
+ * @property mMessageManager Manager for managing and controlling [Message]
+ * @property mUserManager Manager for managing and controlling [User]
+ * @property mGroupManager Manager for managing and controlling [Group]
+ * @property mAdapterManager Manager for managing and controlling adapter
  */
 class ManagerFactory {
     companion object {

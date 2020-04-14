@@ -14,6 +14,7 @@ import de.ntbit.projectearlybird.model.Message
 import de.ntbit.projectearlybird.model.User
 import java.net.URI
 
+
 class ConversationsAdapterTEST: GroupAdapter<GroupieViewHolder>() {
 
     private val simpleClassName = this.javaClass.simpleName

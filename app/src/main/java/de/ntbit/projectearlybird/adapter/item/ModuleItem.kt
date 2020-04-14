@@ -9,6 +9,12 @@ import de.ntbit.projectearlybird.R
 import de.ntbit.projectearlybird.model.Module
 import kotlinx.android.synthetic.main.square_group_module.view.*
 
+/**
+ * A [ModuleItem] for displaying the [Module] in the [GroupActivity]
+ *
+ * @property name name of the [ModuleItem]
+ * @constructor creates an empty [ModuleItem]
+ */
 class ModuleItem(val module: Module): Item<GroupieViewHolder>() {
     val name = module.name
     val description = module.description

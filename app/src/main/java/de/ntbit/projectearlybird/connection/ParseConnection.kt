@@ -8,12 +8,19 @@ import de.ntbit.projectearlybird.manager.ManagerFactory
 import de.ntbit.projectearlybird.model.*
 import java.util.logging.Logger
 
-
+/**
+ * Class for creating a connection to the parse server
+ *
+ * @property log for logging
+ * @constructor ???
+ */
 class ParseConnection {
 
     companion object {
         private val log = Logger.getLogger(this::class.java.simpleName)
-
+        /**
+         * Calls every function in this class in the correct order. The subclasses have to be registered before anything else. Also starts the [ManagerFactory]
+         */
         fun initialize(context: Context) {
             registerSubclasses()
 
@@ -40,7 +47,11 @@ class ParseConnection {
                     .build()
             )
         }
-
+        /**
+         * Initializes the ParseConnection
+         *
+         * @param context ???
+         */
         private fun initializeBack4App0(context: Context) {
             Parse.initialize(
                 Parse.Configuration.Builder(context)
@@ -62,7 +73,9 @@ class ParseConnection {
                     .build()
             )
         }
-
+        /**
+         * In this function every subclass in our app has to be registered here
+         */
         private fun registerSubclasses() {
             ParseUser.registerSubclass(User::class.java)
             ParseObject.registerSubclass(Message::class.java)

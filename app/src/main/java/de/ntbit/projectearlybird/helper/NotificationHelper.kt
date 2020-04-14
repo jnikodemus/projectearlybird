@@ -60,6 +60,9 @@ class NotificationHelper {
          * Builds and shows a systemnotification setting its title to provided [contentTitle] and
          * its text to provided [contentText]. If the notification is clicked by the user,
          * the provided [intent] is called.
+         * @param contentTitle title of the notification
+         * @param contentText contains the actual content of the notification
+         * @param intent helps to open the needed activity after clicking on the notification
          */
         fun showNotification(contentTitle: String, contentText: String, intent: Intent) {
             val context = ApplicationContextProvider.getApplicationContext()
