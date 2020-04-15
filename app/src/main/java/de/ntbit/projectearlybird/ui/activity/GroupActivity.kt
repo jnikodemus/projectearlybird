@@ -164,7 +164,7 @@ class AddModuleDialogFragment(otherGroup: Group, adapter: GroupAdapter<GroupieVi
                     Log.d("CUSTOMDEBUG", "$simpleClassName - User clicked $which")
                     when(which) {
                         0 -> {
-                            val module = ModuleChecklist(ArrayList())
+                            val module = ModuleChecklist(ArrayList(), group)
                             if(!group.modules.contains(module)) {
                                 group.addModule(module)
                                 group.saveEventually()
