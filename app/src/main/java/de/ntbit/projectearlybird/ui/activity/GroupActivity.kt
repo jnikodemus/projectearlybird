@@ -1,11 +1,8 @@
 package de.ntbit.projectearlybird.ui.activity
 
 import android.app.Dialog
-import android.content.DialogInterface
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
-import android.os.Parcelable
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -14,12 +11,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.parse.ParseFile
 import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import de.ntbit.projectearlybird.R
-import de.ntbit.projectearlybird.adapter.item.ModuleChecklistItem
 import de.ntbit.projectearlybird.adapter.item.ModuleItem
 import de.ntbit.projectearlybird.helper.ParcelContract
 import de.ntbit.projectearlybird.helper.PixelCalculator
@@ -169,7 +164,7 @@ class AddModuleDialogFragment(otherGroup: Group, adapter: GroupAdapter<GroupieVi
                     Log.d("CUSTOMDEBUG", "$simpleClassName - User clicked $which")
                     when(which) {
                         0 -> {
-                            val module = ModuleChecklist(ArrayList())
+                            val module = ModuleChecklist(ArrayList(), group)
                             if(!group.modules.contains(module)) {
                                 group.addModule(module)
                                 group.saveEventually()

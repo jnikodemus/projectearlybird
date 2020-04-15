@@ -52,23 +52,36 @@ class ModuleChecklistItem : ParseObject {
             }
         }
 
+    var associatedModule: ModuleChecklist
+        get() {
+            return getParseObject("associatedModule") as ModuleChecklist
+        }
+        set(value) {
+            put("associatedModule", value)
+        }
+
     internal constructor() : super()
 
-    internal constructor(name: String) : this(name, 1)
+    internal constructor(name: String, associatedModule: ModuleChecklist):
+            this(name, associatedModule, 0)
 
-    internal constructor(name: String, amount: Int) : super() {
+    internal constructor(name: String, associatedModule: ModuleChecklist, amount: Int) : super() {
         this.name = name
         this.amount = amount
         this.isAssigned = false
         this.user = null
+        this.associatedModule = associatedModule
+        this.timestamp = Date(System.currentTimeMillis())
     }
 
-    internal constructor(name: String, amount: Int, user: User) : super() {
+    internal constructor(name: String, associatedModule: ModuleChecklist, amount: Int, user: User):
+            super() {
         this.name = name
         this.amount = amount
-        this.timestamp = timestamp
         this.isAssigned = true
         this.user = user
+        this.associatedModule = associatedModule
+        this.timestamp = Date(System.currentTimeMillis())
     }
 
     fun assign(user: User) {

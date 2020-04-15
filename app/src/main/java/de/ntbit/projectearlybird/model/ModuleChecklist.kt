@@ -1,27 +1,24 @@
 package de.ntbit.projectearlybird.model
 
-import android.widget.Adapter
 import com.parse.ParseClassName
 import com.parse.ParseObject
-import com.xwray.groupie.GroupAdapter
-import com.xwray.groupie.GroupieViewHolder
-import de.ntbit.projectearlybird.adapter.item.ModuleChecklistItem
-import org.json.JSONObject
+import de.ntbit.projectearlybird.adapter.item.ChecklistItem
 
 /**
  * Model corresponding to table "ModuleChecklist" in Parse Database extends [ParseObject]
  *
- * @property items contains the items created in the checklsit ui
+ * @property items contains the items created in the checklist ui
  */
 @ParseClassName("ModuleChecklist")
 class ModuleChecklist: Module {
 
     internal constructor() : super()
 
-    internal constructor(itemList: ArrayList<ModuleChecklistItem>) {
+    internal constructor(itemList: ArrayList<ChecklistItem>, group: Group) {
         this.name = "Checklist"
         this.description = "A module to manage a checklist"
         this.colorInt = -65281
+        this.associatedGroup = group
         this.items = itemList
     }
 
@@ -29,14 +26,22 @@ class ModuleChecklist: Module {
         this.name = other.name
         this.description = other.description
         this.colorInt = other.colorInt
-        this.items = ArrayList<ModuleChecklistItem>()
+        this.items = ArrayList<ChecklistItem>()
         for(i in other.items)
             this.items.add(i)
     }
 
-    var items: ArrayList<ModuleChecklistItem>
+    var associatedGroup: Group
         get() {
-            val itemList = ArrayList<ModuleChecklistItem>()
+            return get("associatedGroup") as Group
+        }
+        set(value) {
+            put("associatedGroup", value)
+        }
+
+    var items: ArrayList<ChecklistItem>
+        get() {
+            val itemList = ArrayList<ChecklistItem>()
             //for(json in this.getList<JSONObject>("items")!!)
             //    itemList.add(ModuleChecklistItem(json))
             return itemList

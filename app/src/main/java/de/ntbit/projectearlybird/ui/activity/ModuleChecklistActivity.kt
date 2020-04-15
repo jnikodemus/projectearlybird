@@ -1,32 +1,33 @@
 package de.ntbit.projectearlybird.ui.activity
 
 import android.os.Bundle
-import android.app.Dialog
-import android.content.DialogInterface
 import android.util.Log
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
-import androidx.fragment.app.DialogFragment
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import de.ntbit.projectearlybird.R
-import de.ntbit.projectearlybird.adapter.item.ModuleChecklistItem
+import de.ntbit.projectearlybird.adapter.item.ChecklistItem
 import de.ntbit.projectearlybird.helper.ParcelContract
+import de.ntbit.projectearlybird.manager.ManagerFactory
 import de.ntbit.projectearlybird.model.Group
-import de.ntbit.projectearlybird.model.Module
+import de.ntbit.projectearlybird.model.ModuleChecklist
+import de.ntbit.projectearlybird.model.ModuleChecklistItem
 import kotlinx.android.synthetic.main.activity_module_checklist.*
-import kotlinx.android.synthetic.main.dialog_add_checklist_item.*
 import kotlinx.android.synthetic.main.toolbar.*
+import java.lang.Exception
 
 class ModuleChecklistActivity : AppCompatActivity() {
 
     private val simpleClassName = this.javaClass.simpleName
-    private val adapter = GroupAdapter<GroupieViewHolder>()
-    private val items = ArrayList<ModuleChecklistItem>()
+
+    private val mModuleChecklistManager = ManagerFactory.getModuleChecklistManager()
+
+    private lateinit var adapter: GroupAdapter<GroupieViewHolder>
     private lateinit var group: Group
-    private lateinit var module: Module
+    private lateinit var moduleChecklist: ModuleChecklist
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,11 +43,11 @@ class ModuleChecklistActivity : AppCompatActivity() {
 
     private fun initialize() {
         group = intent.getParcelableExtra(ParcelContract.GROUP_KEY)
-        module = intent.getParcelableExtra(ParcelContract.MODULE_KEY)
+        moduleChecklist = intent.getParcelableExtra(ParcelContract.MODULE_KEY)
+        adapter = mModuleChecklistManager.getAdapterByGroup(group)
         act_module_checklist_rv_log.adapter = adapter
         placeToolbar()
         setClicklisteners()
-        buildTestLayout()
         //adapter.addAll(module.items)
     }
 
@@ -55,7 +56,7 @@ class ModuleChecklistActivity : AppCompatActivity() {
         setSupportActionBar(toolbar as Toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
-        toolbar_tv_root_title.text = module.name
+        toolbar_tv_root_title.text = moduleChecklist.name
     }
 
     private fun setClicklisteners() {
@@ -64,19 +65,10 @@ class ModuleChecklistActivity : AppCompatActivity() {
         }
     }
 
-/*
-    private fun addChecklistItem() {
-        val dialog = AddItemDialogFragment(adapter)
-        dialog.show(this.supportFragmentManager, "DIALOG_MODULE_CHECKLIST_ACTIVITY_ADD_ITEM")
-    }
-
-*/
-
-    private fun buildTestLayout() {
-        items.add(ModuleChecklistItem(de.ntbit.projectearlybird.model.ModuleChecklistItem("Bier")))
-        items.add(ModuleChecklistItem(de.ntbit.projectearlybird.model.ModuleChecklistItem("Klopapier")))
-        adapter.addAll(items)
-    }
+//    private fun addChecklistItem() {
+//        val dialog = AddItemDialogFragment(adapter)
+//        dialog.show(this.supportFragmentManager, "DIALOG_MODULE_CHECKLIST_ACTIVITY_ADD_ITEM")
+//   }
 
     private fun showCreateCategoryDialog() {
         val context = this
@@ -94,8 +86,8 @@ class ModuleChecklistActivity : AppCompatActivity() {
                 isValid = false
             }
             if (isValid) {
-                addItem(de.ntbit.projectearlybird.model.ModuleChecklistItem(
-                    categoryEditText.text.toString()))
+                addItem(ModuleChecklistItem(
+                    categoryEditText.text.toString(), moduleChecklist))
             }
             if (isValid) {
                 dialog.dismiss()
@@ -107,11 +99,13 @@ class ModuleChecklistActivity : AppCompatActivity() {
         builder.show()
     }
 
-    private fun addItem(item: de.ntbit.projectearlybird.model.ModuleChecklistItem) {
-        val checklistItem = ModuleChecklistItem(item)
-        items.add(checklistItem)
-        adapter.add(checklistItem)
-        adapter.notifyDataSetChanged()
+    private fun addItem(item: ModuleChecklistItem) {
+        try {
+            item.save()
+        }
+        catch(e: Exception) {
+            Log.d("CUSTOMDEBUG", "$simpleClassName - Error: ${e.message}")
+        }
     }
 }
 /*
