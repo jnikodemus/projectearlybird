@@ -9,17 +9,16 @@ import de.ntbit.projectearlybird.model.*
 import java.util.logging.Logger
 
 /**
- * Class for creating a connection to the parse server
- *
- * @property log for logging
- * @constructor ???
+ * Class for creating a connection to the parse backend.
  */
 class ParseConnection {
 
     companion object {
-        private val log = Logger.getLogger(this::class.java.simpleName)
         /**
-         * Calls every function in this class in the correct order. The subclasses have to be registered before anything else. Also starts the [ManagerFactory]
+         * Calls [registerSubclasses], [initializeBack4App0],
+         * [ParseInstallation.getCurrentInstallation], [ParseInstallation.saveInBackground],
+         * [ParsePush.subscribeInBackground] (for the channels "Warning" and "Develop") and
+         * [ManagerFactory.initialize].
          */
         fun initialize(context: Context) {
             registerSubclasses()
@@ -37,20 +36,24 @@ class ParseConnection {
             ManagerFactory.initialize()
         }
 
+        /**
+         * Initializes Parseconnection to a private hosting.
+         */
         private fun initializePrivateParse(context: Context) {
             Parse.initialize(
                 Parse.Configuration.Builder(context)
                     .applicationId("APPLICATION_EARLYBIRD_DEV_0")
-                    .clientKey("JH64864h3fd4g5k4h354oiu35l435d4jse354wa35g43554zh3e55LKBHbl843zbljhbKHBklbh834lhsjblkhbrlks87bzLKBZZBIzblkwezbrlw")
+                    .clientKey("JH64864h3fd4g5k4h354oiu35l435d4jse354wa35g43554z" +
+                            "h3e55LKBHbl843zbljhbKHBklbh834lhsjblkhbrlks87bzLKBZZBIzblkwezbrlw")
                     .server("http://217.5.174.224:1337")
                     .enableLocalDataStore()
                     .build()
             )
         }
         /**
-         * Initializes the ParseConnection
+         * Initializes the Parseconnection to Back4App hosting.
          *
-         * @param context ???
+         * @param context is needed to initialize [Parse.Configuration.Builder]
          */
         private fun initializeBack4App0(context: Context) {
             Parse.initialize(
@@ -63,6 +66,11 @@ class ParseConnection {
             )
         }
 
+        /**
+         * Initializes the Parseconnection to Back4App hosting.
+         *
+         * @param context is needed to initialize [Parse.Configuration.Builder]
+         */
         private fun initializeBack4App1(context: Context) {
             Parse.initialize(
                 Parse.Configuration.Builder(context)
@@ -74,7 +82,7 @@ class ParseConnection {
             )
         }
         /**
-         * In this function every subclass in our app has to be registered here
+         * Registers all ParseSubclasses that are used.
          */
         private fun registerSubclasses() {
             ParseUser.registerSubclass(User::class.java)
