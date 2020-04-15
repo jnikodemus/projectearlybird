@@ -64,20 +64,22 @@ class ModuleChecklistManager {
                 // Add to adapterMap
                 for(item in items)
                     pair.value.add(ChecklistItem(item))
-                listenForNewChecklistItem()
             }
         }
+        listenForNewChecklistItem()
     }
 
     //fun getChecklist() : Collection<ModuleChecklistItem>{ return checklist }
 
     private fun listenForNewChecklistItem() {
+        Log.d("CUSTOMDEBUG", "$simpleClassName - listening for new ChecklistItems")
         val parseQuery = ParseQuery.getQuery(ModuleChecklistItem::class.java)
         val subscriptionHandling: SubscriptionHandling<ModuleChecklistItem> = parseLiveQueryClient.subscribe(parseQuery)
 
         subscriptionHandling.handleEvent(SubscriptionHandling.Event.CREATE) { _, item ->
             val handler = Handler(Looper.getMainLooper())
             handler.post {
+                Log.d("CUSTOMDEBUG", "$simpleClassName - Got a new item")
                 processNewChecklistItem(item)
             }
         }

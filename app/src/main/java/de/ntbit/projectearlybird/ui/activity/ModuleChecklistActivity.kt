@@ -100,10 +100,6 @@ class ModuleChecklistActivity : AppCompatActivity() {
     }
 
     private fun addItem(item: ModuleChecklistItem) {
-        val checklistItem = ChecklistItem(item)
-        //items.add(checklistItem)
-        adapter.add(checklistItem)
-        adapter.notifyDataSetChanged()
         try {
             item.save()
         }
