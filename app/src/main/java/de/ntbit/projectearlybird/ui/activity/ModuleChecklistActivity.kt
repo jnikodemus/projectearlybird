@@ -14,6 +14,7 @@ import de.ntbit.projectearlybird.helper.ParcelContract
 import de.ntbit.projectearlybird.manager.ManagerFactory
 import de.ntbit.projectearlybird.model.Group
 import de.ntbit.projectearlybird.model.ModuleChecklist
+import de.ntbit.projectearlybird.model.ModuleChecklistItem
 import kotlinx.android.synthetic.main.activity_module_checklist.*
 import kotlinx.android.synthetic.main.toolbar.*
 import java.lang.Exception
@@ -64,13 +65,10 @@ class ModuleChecklistActivity : AppCompatActivity() {
         }
     }
 
-/*
-    private fun addChecklistItem() {
-        val dialog = AddItemDialogFragment(adapter)
-        dialog.show(this.supportFragmentManager, "DIALOG_MODULE_CHECKLIST_ACTIVITY_ADD_ITEM")
-    }
-
-*/
+//    private fun addChecklistItem() {
+//        val dialog = AddItemDialogFragment(adapter)
+//        dialog.show(this.supportFragmentManager, "DIALOG_MODULE_CHECKLIST_ACTIVITY_ADD_ITEM")
+//   }
 
     private fun showCreateCategoryDialog() {
         val context = this
@@ -88,7 +86,7 @@ class ModuleChecklistActivity : AppCompatActivity() {
                 isValid = false
             }
             if (isValid) {
-                addItem(de.ntbit.projectearlybird.model.ModuleChecklistItem(
+                addItem(ModuleChecklistItem(
                     categoryEditText.text.toString(), moduleChecklist))
             }
             if (isValid) {
@@ -101,7 +99,7 @@ class ModuleChecklistActivity : AppCompatActivity() {
         builder.show()
     }
 
-    private fun addItem(item: de.ntbit.projectearlybird.model.ModuleChecklistItem) {
+    private fun addItem(item: ModuleChecklistItem) {
         val checklistItem = ChecklistItem(item)
         //items.add(checklistItem)
         adapter.add(checklistItem)

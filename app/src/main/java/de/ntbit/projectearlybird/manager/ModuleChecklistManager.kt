@@ -64,13 +64,14 @@ class ModuleChecklistManager {
                 // Add to adapterMap
                 for(item in items)
                     pair.value.add(ChecklistItem(item))
+                listenForNewChecklistItem()
             }
         }
     }
 
     //fun getChecklist() : Collection<ModuleChecklistItem>{ return checklist }
 
-    fun listenForNewChecklistItem() {
+    private fun listenForNewChecklistItem() {
         val parseQuery = ParseQuery.getQuery(ModuleChecklistItem::class.java)
         val subscriptionHandling: SubscriptionHandling<ModuleChecklistItem> = parseLiveQueryClient.subscribe(parseQuery)
 
@@ -83,9 +84,10 @@ class ModuleChecklistManager {
     }
 
     private fun processNewChecklistItem(item: ModuleChecklistItem) {
-        //adapter.add(ChecklistItem(item))
-        //adapter.notifyDataSetChanged()
-        //checklist.add(item)
+        val group = item.associatedModule.associatedGroup
+        adapterMap[group]!!.add(ChecklistItem(item))
+        adapterMap[group]!!.notifyDataSetChanged()
+        checklistItemMap[group]!!.add(item)
     }
 
     fun getAdapterByGroup(group: Group): GroupAdapter<GroupieViewHolder> {
