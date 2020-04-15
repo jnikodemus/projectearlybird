@@ -61,12 +61,17 @@
     <string name="sample_email">f_the_t@oldschool.org</string>
     <string name="sample_first_name">Frank</string>
     <string name="sample_last_name">Ricard</string>
-    <string name="sample_timestamp">23:42</string>
+    <string name="sample_timestamp_hhmm">23:42</string>
+    <string name="sample_timestamp_full">15.04.2020 23:42</string>
     <string name="sample_message">Blue YOU\'RE MY BOY!!!"</string>
     <string name="sample_checklist_item_name">Beer</string>
     <string name="sample_group_name">OldSchool</string>
     <string name="sample_group_size">3</string>
     <string name="sample_group_last_modified_module">Checklist</string>
+
+    <string name="add_contact">Add contact</string>
+    <string name="add_item">Add item</string>
+
     <!--
     This string is used for square devices and overridden by hello_world in
     values-round/strings.xml for round devices.
