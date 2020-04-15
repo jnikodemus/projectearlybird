@@ -12,6 +12,12 @@ import java.util.logging.Logger
 
 /**
  * Model corresponding to table "Group" in Parse Database extends [ParseObject]
+ *
+ * @property name of the group
+ * @property groupImage banner of the group
+ * @property members contains all [User] that belong to the group
+ * @property admins contains all admins that belong to the group
+ * @property modules contains all [Module] that belong that the group
  */
 @ParseClassName("Group")
 class Group : ParseObject {

@@ -8,6 +8,11 @@ import com.xwray.groupie.GroupieViewHolder
 import de.ntbit.projectearlybird.adapter.item.ModuleChecklistItem
 import org.json.JSONObject
 
+/**
+ * Model corresponding to table "ModuleChecklist" in Parse Database extends [ParseObject]
+ *
+ * @property items contains the items created in the checklsit ui
+ */
 @ParseClassName("ModuleChecklist")
 class ModuleChecklist: Module {
 

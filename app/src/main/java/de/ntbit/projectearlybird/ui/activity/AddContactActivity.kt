@@ -17,12 +17,20 @@ import de.ntbit.projectearlybird.ui.fragment.ContactsFragment
 import kotlinx.android.synthetic.main.activity_add_contact.*
 import java.util.*
 
-
+/**
+ * Activity for adding a new contact to the [User]
+ *
+ * @property adapter contains the contact [User] for the recyclerview
+ * @property mUserManager private global [UserManager]
+ */
 class AddContactActivity : AppCompatActivity() {
 
     private val adapter = GroupAdapter<GroupieViewHolder>()
     private val mUserManager = ManagerFactory.getUserManager()
 
+    /**
+     * Calls [initialize]
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_contact)
@@ -30,6 +38,10 @@ class AddContactActivity : AppCompatActivity() {
         initialize()
     }
 
+    /**
+     * Initializes the Activity by calling [placeToolbar], [connectAdapter],
+     * [setClickListeners] and [initializeSearchFunction]
+     */
     private fun initialize() {
         placeToolbar()
         connectAdapter()
@@ -37,12 +49,19 @@ class AddContactActivity : AppCompatActivity() {
         initializeSearchFunction()
     }
 
+    /**
+     * Sets the "toolbar-backbutton" setting its behavior to [onBackPressed].
+     */
     override fun onSupportNavigateUp(): Boolean {
         super.onSupportNavigateUp()
         onBackPressed()
         return true
     }
 
+    /**
+     * Activates the toolbar for the activity, shows the backbutton
+     * and fills it with information like titletext.
+     */
     private fun placeToolbar() {
         val toolbar = act_add_contact_toolbar
         setSupportActionBar(toolbar as Toolbar)
@@ -51,10 +70,16 @@ class AddContactActivity : AppCompatActivity() {
         supportActionBar!!.title = "Add contact"
     }
 
+    /**
+     * Connects the [GroupAdapter] to the recyclerview.adapter.
+     */
     private fun connectAdapter() {
         add_new_contact_rv.adapter = adapter
     }
 
+    /**
+     * Sets an onItemClickListener on every item in the [adapter]
+     */
     private fun setClickListeners() {
         adapter.setOnItemClickListener { item, view ->
             val userItem = item as UserItem
@@ -66,6 +91,9 @@ class AddContactActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Controls the search bar behavior
+     */
     private fun initializeSearchFunction() {
         // TODO: Check why adapter callback comes later if input is already cleared
         actAddNewContactEditTextSearch.addTextChangedListener(object: TextWatcher{

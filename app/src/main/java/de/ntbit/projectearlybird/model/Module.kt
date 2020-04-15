@@ -4,6 +4,13 @@ import android.graphics.Color
 import com.parse.ParseClassName
 import com.parse.ParseObject
 
+/**
+ * Model corresponding to table "Module" in Parse Database extends [ParseObject]
+ *
+ * @property name of the module
+ * @property description small information about the module
+ * @property colorInt background color for the ui
+ */
 @ParseClassName("Module")
 open class Module : ParseObject {
 
