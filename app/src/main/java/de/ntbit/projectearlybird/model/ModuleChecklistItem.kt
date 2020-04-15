@@ -42,18 +42,33 @@ class ModuleChecklistItem : ParseObject {
             put("isAssigned", value)
         }
 
-    private var user: User
+    private var user: User?
         get() {
-            return getParseUser("user") as User
+            return getParseUser("user") as User?
         }
         set(value) {
-            put("user", value)
+            if (value != null) {
+                put("user", value)
+            }
         }
 
     internal constructor() : super()
 
-    internal constructor(name: String, isAssigned: Boolean, user: User) : super() {
+    internal constructor(name: String) : this(name, 1)
 
+    internal constructor(name: String, amount: Int) : super() {
+        this.name = name
+        this.amount = amount
+        this.isAssigned = false
+        this.user = null
+    }
+
+    internal constructor(name: String, amount: Int, user: User) : super() {
+        this.name = name
+        this.amount = amount
+        this.timestamp = timestamp
+        this.isAssigned = true
+        this.user = user
     }
 
     /**
