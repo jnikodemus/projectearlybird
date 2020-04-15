@@ -90,6 +90,7 @@ class ParseConnection {
             ParseObject.registerSubclass(Group::class.java)
             ParseObject.registerSubclass(Module::class.java)
             ParseObject.registerSubclass(ModuleChecklist::class.java)
+            ParseObject.registerSubclass(ModuleChecklistItem::class.java)
             ParseObject.registerSubclass(ModuleMurdergame::class.java)
         }
     }

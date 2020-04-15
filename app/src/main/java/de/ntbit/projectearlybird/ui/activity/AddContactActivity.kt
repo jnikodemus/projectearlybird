@@ -10,11 +10,13 @@ import com.parse.ParseQuery
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import de.ntbit.projectearlybird.R
+import de.ntbit.projectearlybird.R.*
 import de.ntbit.projectearlybird.adapter.item.UserItem
 import de.ntbit.projectearlybird.manager.ManagerFactory
 import de.ntbit.projectearlybird.model.User
 import de.ntbit.projectearlybird.ui.fragment.ContactsFragment
 import kotlinx.android.synthetic.main.activity_add_contact.*
+import kotlinx.android.synthetic.main.toolbar.*
 import java.util.*
 
 /**
@@ -33,7 +35,7 @@ class AddContactActivity : AppCompatActivity() {
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_contact)
+        setContentView(layout.activity_add_contact)
 
         initialize()
     }
@@ -67,7 +69,7 @@ class AddContactActivity : AppCompatActivity() {
         setSupportActionBar(toolbar as Toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
-        supportActionBar!!.title = "Add contact"
+        toolbar_tv_root_title.text = getString(string.add_contact)
     }
 
     /**

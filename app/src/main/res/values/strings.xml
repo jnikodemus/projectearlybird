@@ -67,6 +67,9 @@
     <string name="sample_group_name">OldSchool</string>
     <string name="sample_group_size">3</string>
     <string name="sample_group_last_modified_module">Checklist</string>
+
+    <string name="add_contact">Add contact</string>
+
     <!--
     This string is used for square devices and overridden by hello_world in
     values-round/strings.xml for round devices.
