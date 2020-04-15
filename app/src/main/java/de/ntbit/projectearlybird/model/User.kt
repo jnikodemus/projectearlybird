@@ -9,6 +9,20 @@ import org.json.JSONArray
 import java.util.Date
 import java.util.logging.Logger
 
+/**
+ * Model corresponding to table "Group" in Parse Database extends [ParseObject]
+ *
+ * @property emailVerified verification of a valid email
+ * @property firstname of the user
+ * @property lastName of the user
+ * @property birthday of the user
+ * @property gender 0 - MALE, 1 - FEMALE, 2 - DIVERSE
+ * @property lastLogin when was the last time the user was logged in
+ * @property isOnline is the current user online right now
+ * @property aboutMe small information the user can write
+ * @property avatar of the user
+ * @property contacts of the user
+ */
 @ParseClassName("_User")
 class User: ParseUser {
 
@@ -100,6 +114,11 @@ class User: ParseUser {
             put("contacts", contacts)
         }
 
+    /**
+     * Adds a new contact to [contacts] and saves it to the parse database
+     *
+     * @param contact that will be added to the [User] collection [contacts]
+     */
     fun addContact(contact: User) {
         addUnique("contacts", contact)
         saveEventually()

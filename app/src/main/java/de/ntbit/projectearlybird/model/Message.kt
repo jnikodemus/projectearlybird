@@ -6,6 +6,17 @@ import com.parse.ParseObject
 import com.parse.ParseUser
 import java.util.Date
 
+/**
+ * Model corresponding to table "Message" in Parse Database extends [ParseObject]
+ *
+ * @property sender as [User] of the message
+ * @property senderId objectid from the [sender]
+ * @property recipient as [User] of the message
+ * @property recipientId objectid of the [recipient]
+ * @property body contains the actual message
+ * @property timestamp when the message was created
+ * @property parseACL read and write controller
+ */
 @ParseClassName("Message")
 class Message : ParseObject {
 
@@ -88,10 +99,16 @@ class Message : ParseObject {
             this.put("ACL",parseACL)
         }
 
+    /**
+     * Generates the timestamp when the message was created
+     */
     private fun generateTimestamp() {
         this.timestamp = Date(System.currentTimeMillis())
     }
 
+    /**
+     * Generates the treadId for the message
+     */
     private fun generateThreadId() {
         /*
          * TODO: Change threadId to something more useful
@@ -99,6 +116,9 @@ class Message : ParseObject {
         this.threadId = sender.objectId + recipient.objectId
     }
 
+    /**
+     * Generates the read and write permissions for [sender] and [recipient]
+     */
     private fun generateACL() {
         val acl = ParseACL()
         acl.setReadAccess(recipient, true)
