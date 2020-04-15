@@ -50,10 +50,19 @@ open class Module : ParseObject {
             this.put("description", description)
         }
 
+    /**
+     * Checks this equals [other] by using the [name].
+     *
+     * @return true if [other] is [Module] and names are the same, false else.
+     */
     override fun equals(other: Any?): Boolean {
         if(other is Module) {
             return other.name == this.name
         }
         return false
+    }
+
+    override fun hashCode(): Int {
+        return javaClass.hashCode()
     }
 }

@@ -10,31 +10,40 @@ import com.parse.ParseQuery
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import de.ntbit.projectearlybird.R
+import de.ntbit.projectearlybird.R.*
 import de.ntbit.projectearlybird.adapter.item.UserItem
 import de.ntbit.projectearlybird.manager.ManagerFactory
 import de.ntbit.projectearlybird.model.User
 import de.ntbit.projectearlybird.ui.fragment.ContactsFragment
 import kotlinx.android.synthetic.main.activity_add_contact.*
+import kotlinx.android.synthetic.main.toolbar.*
 import java.util.*
 
 /**
  * Activity for adding a new contact to the [User]
  *
  * @property adapter contains the contact [User] for the recyclerview
- * @property mUserManager global [UserManager]
+ * @property mUserManager private global [UserManager]
  */
 class AddContactActivity : AppCompatActivity() {
 
     private val adapter = GroupAdapter<GroupieViewHolder>()
     private val mUserManager = ManagerFactory.getUserManager()
 
+    /**
+     * Calls [initialize]
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_contact)
+        setContentView(layout.activity_add_contact)
 
         initialize()
     }
 
+    /**
+     * Initializes the Activity by calling [placeToolbar], [connectAdapter],
+     * [setClickListeners] and [initializeSearchFunction]
+     */
     private fun initialize() {
         placeToolbar()
         connectAdapter()
@@ -43,7 +52,7 @@ class AddContactActivity : AppCompatActivity() {
     }
 
     /**
-     * ???
+     * Sets the "toolbar-backbutton" setting its behavior to [onBackPressed].
      */
     override fun onSupportNavigateUp(): Boolean {
         super.onSupportNavigateUp()
@@ -52,18 +61,19 @@ class AddContactActivity : AppCompatActivity() {
     }
 
     /**
-     * Sets the toolbar for the activity
+     * Activates the toolbar for the activity, shows the backbutton
+     * and fills it with information like titletext.
      */
     private fun placeToolbar() {
         val toolbar = act_add_contact_toolbar
         setSupportActionBar(toolbar as Toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
-        supportActionBar!!.title = "Add contact"
+        toolbar_tv_root_title.text = getString(string.add_contact)
     }
 
     /**
-     * Connects the recyclerview adapter to the [GroupAdapter]
+     * Connects the [GroupAdapter] to the recyclerview.adapter.
      */
     private fun connectAdapter() {
         add_new_contact_rv.adapter = adapter
@@ -84,7 +94,7 @@ class AddContactActivity : AppCompatActivity() {
     }
 
     /**
-     * Controlls the search bar behavior
+     * Controls the search bar behavior
      */
     private fun initializeSearchFunction() {
         // TODO: Check why adapter callback comes later if input is already cleared

@@ -124,19 +124,15 @@ class User: ParseUser {
         saveEventually()
     }
 
-    /*
+    override fun equals(other: Any?): Boolean {
+        if(other is User)
+            return this.objectId == other.objectId
+        return false
+    }
 
-    var contacts: JSONArray
-        get() = getJSONArray("contacts")!!
-        set(contacts) {
-            put("contacts", contacts)
-        }
+    override fun hashCode(): Int {
+        return javaClass.hashCode()
+    }
 
-    var groups: JSONArray
-        get() = getJSONArray("groups")!!
-        set(groups) {
-            put("groups", groups)
-        }
 
-     */
 }

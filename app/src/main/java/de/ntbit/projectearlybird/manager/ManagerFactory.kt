@@ -20,6 +20,7 @@ class ManagerFactory {
         private lateinit var mGroupManager: GroupManager
         private lateinit var mAdapterManager: AdapterManager
         private lateinit var mModuleManager: ModuleManager
+        private lateinit var mModuleChecklistManager: ModuleChecklistManager
 
         /**
          * Initializes all Managers.
@@ -31,6 +32,7 @@ class ManagerFactory {
             mGroupManager = GroupManager()
             mAdapterManager = AdapterManager()
             mModuleManager = ModuleManager()
+            mModuleChecklistManager = ModuleChecklistManager()
         }
 
         /**
@@ -91,6 +93,18 @@ class ManagerFactory {
                 mModuleManager = ModuleManager()
             }
             return mModuleManager
+        }
+
+        /**
+         * Returns the instance of [ModuleChecklistManager].
+         * @return [ModuleChecklistManager]
+         */
+        fun getModuleChecklistManager(): ModuleChecklistManager {
+            if(!::mModuleChecklistManager.isInitialized) {
+                Log.d("CUSTOMDEBUG", "ManagerFactory - initializing ModuleChecklistManager")
+                mModuleChecklistManager = ModuleChecklistManager()
+            }
+            return mModuleChecklistManager
         }
 
         /**
