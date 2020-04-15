@@ -10,7 +10,7 @@ import java.util.*
 @ParseClassName("ModuleChecklistItem")
 class ModuleChecklistItem : ParseObject {
 
-    private var name: String
+    var name: String
         get() {
             return getString("name")!!
         }
@@ -18,7 +18,7 @@ class ModuleChecklistItem : ParseObject {
             put("name", value)
         }
 
-    private var amount: Int
+    var amount: Int
         get() {
             return getInt("amount")
         }
@@ -26,7 +26,7 @@ class ModuleChecklistItem : ParseObject {
             put("amount", value)
         }
 
-    private var timestamp: Date
+    var timestamp: Date
         get() {
             return getDate("timestamp")!!
         }
@@ -34,7 +34,7 @@ class ModuleChecklistItem : ParseObject {
             put("timestamp", value)
         }
 
-    private var isAssigned: Boolean
+    var isAssigned: Boolean
         get() {
             return getBoolean("isAssigned")
         }
@@ -42,7 +42,7 @@ class ModuleChecklistItem : ParseObject {
             put("isAssigned", value)
         }
 
-    private var user: User?
+    var user: User?
         get() {
             return getParseUser("user") as User?
         }
@@ -71,6 +71,16 @@ class ModuleChecklistItem : ParseObject {
         this.user = user
     }
 
+    fun assign(user: User) {
+        this.user = user
+        this.isAssigned = true
+    }
+
+    fun unassign() {
+        this.user = null
+        this.isAssigned = false
+    }
+
     /**
      * Checks this equals [other] by using the objectId.
      *
@@ -83,5 +93,10 @@ class ModuleChecklistItem : ParseObject {
 
     override fun hashCode(): Int {
         return javaClass.hashCode()
+    }
+
+    override fun toString(): String {
+        return "ChecklistItem [{name: $name}, {amount: $amount}, {isAssigned: $isAssigned}, " +
+                "{user: $user}, {timestamp: $timestamp}]"
     }
 }

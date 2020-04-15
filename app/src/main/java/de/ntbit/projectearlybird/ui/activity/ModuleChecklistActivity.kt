@@ -46,7 +46,7 @@ class ModuleChecklistActivity : AppCompatActivity() {
         act_module_checklist_rv_log.adapter = adapter
         placeToolbar()
         setClicklisteners()
-        //buildTestLayout()
+        buildTestLayout()
         //adapter.addAll(module.items)
     }
 
@@ -55,7 +55,7 @@ class ModuleChecklistActivity : AppCompatActivity() {
         setSupportActionBar(toolbar as Toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
-        toolbar_tv_root_title.text = "${module.name}"
+        toolbar_tv_root_title.text = module.name
     }
 
     private fun setClicklisteners() {
@@ -73,24 +73,19 @@ class ModuleChecklistActivity : AppCompatActivity() {
 */
 
     private fun buildTestLayout() {
-        items.add(ModuleChecklistItem("Bier"))
-        items.add(ModuleChecklistItem("Klopapier"))
-        items.add(ModuleChecklistItem("Nudeln"))
-        items.add(ModuleChecklistItem("Mehl"))
-        items.add(ModuleChecklistItem("Linsen"))
-        items.add(ModuleChecklistItem("Eis"))
+        items.add(ModuleChecklistItem(de.ntbit.projectearlybird.model.ModuleChecklistItem("Bier")))
+        items.add(ModuleChecklistItem(de.ntbit.projectearlybird.model.ModuleChecklistItem("Klopapier")))
+        adapter.addAll(items)
     }
 
-    fun showCreateCategoryDialog() {
+    private fun showCreateCategoryDialog() {
         val context = this
         val builder = AlertDialog.Builder(context)
-        builder.setTitle("New Category")
         val view = layoutInflater.inflate(R.layout.dialog_add_checklist_item, null)
 
         val categoryEditText = view.findViewById(R.id.dialog_add_checklist_item_et_itemname) as EditText
 
         builder.setView(view)
-
         // set up the ok button
         builder.setPositiveButton(android.R.string.ok) { dialog, p1 ->
             val newCategory = categoryEditText.text
@@ -98,22 +93,25 @@ class ModuleChecklistActivity : AppCompatActivity() {
             if (newCategory.isBlank()) {
                 isValid = false
             }
-
             if (isValid) {
-                Log.d("CUSTOMDEBUG", "$simpleClassName - " +
-                        "User added ${categoryEditText.text}")
+                addItem(de.ntbit.projectearlybird.model.ModuleChecklistItem(
+                    categoryEditText.text.toString()))
             }
-
             if (isValid) {
                 dialog.dismiss()
             }
         }
-
         builder.setNegativeButton(android.R.string.cancel) { dialog, p1 ->
             dialog.cancel()
         }
-
         builder.show()
+    }
+
+    private fun addItem(item: de.ntbit.projectearlybird.model.ModuleChecklistItem) {
+        val checklistItem = ModuleChecklistItem(item)
+        items.add(checklistItem)
+        adapter.add(checklistItem)
+        adapter.notifyDataSetChanged()
     }
 }
 /*

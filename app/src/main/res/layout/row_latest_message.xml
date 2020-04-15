@@ -35,7 +35,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
-        android:text="@string/sample_timestamp"
+        android:text="@string/sample_timestamp_hhmm"
         app:layout_constraintBottom_toTopOf="@+id/latest_message_row_tv_message"
         app:layout_constraintEnd_toEndOf="parent" />
 
