@@ -59,8 +59,6 @@ class InputValidator {
         }
     }
 
-
-
     /**
      * Checks the input for a valid email, used in [RegisterActivity]
      * @param actRegisterEditTxtEmail email that should be checked

@@ -19,6 +19,7 @@ class ManagerFactory {
         private lateinit var mUserManager: UserManager
         private lateinit var mGroupManager: GroupManager
         private lateinit var mAdapterManager: AdapterManager
+        private lateinit var mModuleManager: ModuleManager
 
         /**
          * Initializes all Managers.
@@ -29,6 +30,7 @@ class ManagerFactory {
             mUserManager = UserManager()
             mGroupManager = GroupManager()
             mAdapterManager = AdapterManager()
+            mModuleManager = ModuleManager()
         }
 
         /**
@@ -77,6 +79,18 @@ class ManagerFactory {
                 mAdapterManager = AdapterManager()
             }
             return mAdapterManager
+        }
+
+        /**
+         * Returns the instance of [ModuleManager].
+         * @return [ModuleManager]
+         */
+        fun getModuleManager(): ModuleManager {
+            if(!::mModuleManager.isInitialized) {
+                Log.d("CUSTOMDEBUG", "ManagerFactory - initializing ModuleManager")
+                mModuleManager = ModuleManager()
+            }
+            return mModuleManager
         }
 
         /**

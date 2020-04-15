@@ -4,6 +4,13 @@ import android.graphics.Color
 import com.parse.ParseClassName
 import com.parse.ParseObject
 
+/**
+ * Model corresponding to table "Module" in Parse Database extends [ParseObject]
+ *
+ * @property name of the module
+ * @property description small information about the module
+ * @property colorInt background color for the ui
+ */
 @ParseClassName("Module")
 open class Module : ParseObject {
 
@@ -11,6 +18,12 @@ open class Module : ParseObject {
 
     internal constructor(name: String) {
         this.name = name
+    }
+
+    internal constructor(other: Module) {
+        this.name = other.name
+        this.description = other.description
+        this.colorInt = other.colorInt
     }
 
     var name: String
@@ -25,7 +38,7 @@ open class Module : ParseObject {
         get() {
             return this.getInt("colorInt")
         }
-        private set(colorInt) {
+        set(colorInt) {
             this.put("colorInt", colorInt)
         }
 
@@ -33,7 +46,14 @@ open class Module : ParseObject {
         get() {
             return this.getString("description")!!
         }
-        private set(description) {
+        protected set(description) {
             this.put("description", description)
         }
+
+    override fun equals(other: Any?): Boolean {
+        if(other is Module) {
+            return other.name == this.name
+        }
+        return false
+    }
 }

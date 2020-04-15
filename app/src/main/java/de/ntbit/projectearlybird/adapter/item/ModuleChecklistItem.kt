@@ -1,8 +1,11 @@
 package de.ntbit.projectearlybird.adapter.item
 
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.util.Log
 import android.widget.CheckBox
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import com.parse.ParseObject
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Item
@@ -10,6 +13,7 @@ import de.ntbit.projectearlybird.R
 import de.ntbit.projectearlybird.manager.ManagerFactory
 import de.ntbit.projectearlybird.model.User
 import kotlinx.android.synthetic.main.row_module_checklist.view.*
+import kotlinx.android.synthetic.main.square_group_module.view.*
 import org.json.JSONObject
 
 /**
@@ -83,5 +87,11 @@ class ModuleChecklistItem() : Item<GroupieViewHolder>() {
 
         else
             viewHolder.itemView.row_module_checklist_tv_username.visibility = TextView.INVISIBLE
+    }
+
+    override fun toString(): String {
+        return "ChecklistItem [itemName: ${this.itemName}, " +
+                "isAssigned: ${this.isAssigned}, " +
+                "assignedUser: ${this.assignedUser?.objectId}]"
     }
 }

@@ -17,7 +17,12 @@ import de.ntbit.projectearlybird.ui.fragment.ContactsFragment
 import kotlinx.android.synthetic.main.activity_add_contact.*
 import java.util.*
 
-
+/**
+ * Activity for adding a new contact to the [User]
+ *
+ * @property adapter contains the contact [User] for the recyclerview
+ * @property mUserManager global [UserManager]
+ */
 class AddContactActivity : AppCompatActivity() {
 
     private val adapter = GroupAdapter<GroupieViewHolder>()
@@ -37,12 +42,18 @@ class AddContactActivity : AppCompatActivity() {
         initializeSearchFunction()
     }
 
+    /**
+     * ???
+     */
     override fun onSupportNavigateUp(): Boolean {
         super.onSupportNavigateUp()
         onBackPressed()
         return true
     }
 
+    /**
+     * Sets the toolbar for the activity
+     */
     private fun placeToolbar() {
         val toolbar = act_add_contact_toolbar
         setSupportActionBar(toolbar as Toolbar)
@@ -51,10 +62,16 @@ class AddContactActivity : AppCompatActivity() {
         supportActionBar!!.title = "Add contact"
     }
 
+    /**
+     * Connects the recyclerview adapter to the [GroupAdapter]
+     */
     private fun connectAdapter() {
         add_new_contact_rv.adapter = adapter
     }
 
+    /**
+     * Sets an onItemClickListener on every item in the [adapter]
+     */
     private fun setClickListeners() {
         adapter.setOnItemClickListener { item, view ->
             val userItem = item as UserItem
@@ -66,6 +83,9 @@ class AddContactActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Controlls the search bar behavior
+     */
     private fun initializeSearchFunction() {
         // TODO: Check why adapter callback comes later if input is already cleared
         actAddNewContactEditTextSearch.addTextChangedListener(object: TextWatcher{

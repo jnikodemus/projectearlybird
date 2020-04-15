@@ -6,11 +6,18 @@ import android.net.Uri
 import android.provider.MediaStore
 import android.util.Log
 import com.parse.*
+import com.parse.coroutines.read.parse_object.fetch
 import java.io.ByteArrayOutputStream
 import java.util.logging.Logger
 
 /**
  * Model corresponding to table "Group" in Parse Database extends [ParseObject]
+ *
+ * @property name of the group
+ * @property groupImage banner of the group
+ * @property members contains all [User] that belong to the group
+ * @property admins contains all admins that belong to the group
+ * @property modules contains all [Module] that belong that the group
  */
 @ParseClassName("Group")
 class Group : ParseObject {
@@ -82,7 +89,8 @@ class Group : ParseObject {
             return this.getParseFile("groupImage")!!
         }
         set(groupImage) {
-            //groupImage.save()
+            // TODO: CHECK save()
+            groupImage.save()
             this.put("groupImage", groupImage)
         }
 
@@ -91,7 +99,8 @@ class Group : ParseObject {
             return this.getParseFile("croppedImage")
         }
         set(croppedImage) {
-            //croppedImage?.save()
+            // TODO: CHECK save()
+            croppedImage?.save()
             if (croppedImage != null) {
                 this.put("croppedImage", croppedImage)
             }
@@ -135,8 +144,7 @@ class Group : ParseObject {
      */
     fun addModule(module: Module) {
         addUnique("modules", module)
-        //module.saveEventually()
-        //saveEventually()
+        module.save()
     }
 
     /**
@@ -153,8 +161,10 @@ class Group : ParseObject {
      */
     fun getModuleNames(): String {
         var moduleList = ""
-        for(m in modules)
-            moduleList += " " + m.name
+        for(m in modules) {
+            m.fetchIfNeeded<Module>()
+            moduleList += m.name + " "
+        }
         return moduleList
     }
 

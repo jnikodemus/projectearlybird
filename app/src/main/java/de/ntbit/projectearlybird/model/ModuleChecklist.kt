@@ -8,6 +8,11 @@ import com.xwray.groupie.GroupieViewHolder
 import de.ntbit.projectearlybird.adapter.item.ModuleChecklistItem
 import org.json.JSONObject
 
+/**
+ * Model corresponding to table "ModuleChecklist" in Parse Database extends [ParseObject]
+ *
+ * @property items contains the items created in the checklsit ui
+ */
 @ParseClassName("ModuleChecklist")
 class ModuleChecklist: Module {
 
@@ -15,7 +20,18 @@ class ModuleChecklist: Module {
 
     internal constructor(itemList: ArrayList<ModuleChecklistItem>) {
         this.name = "Checklist"
+        this.description = "A module to manage a checklist"
+        this.colorInt = -65281
         this.items = itemList
+    }
+
+    internal constructor(other: ModuleChecklist) {
+        this.name = other.name
+        this.description = other.description
+        this.colorInt = other.colorInt
+        this.items = ArrayList<ModuleChecklistItem>()
+        for(i in other.items)
+            this.items.add(i)
     }
 
     var items: ArrayList<ModuleChecklistItem>
