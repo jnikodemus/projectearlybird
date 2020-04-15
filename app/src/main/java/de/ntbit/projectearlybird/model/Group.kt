@@ -17,7 +17,7 @@ import java.util.logging.Logger
  * @property groupImage banner of the group
  * @property members contains all [User] that belong to the group
  * @property admins contains all admins that belong to the group
- * @property modules contains all [Module] that belong that the group
+ * @property modules contains all [Module] that belong the group
  */
 @ParseClassName("Group")
 class Group : ParseObject {
@@ -189,5 +189,11 @@ class Group : ParseObject {
      */
     fun updateACL() {
         generateACL()
+    }
+
+    fun getModuleByName(moduleName: String): Module? {
+        for(module in modules)
+            if(module.name == moduleName) return module
+        return null
     }
 }

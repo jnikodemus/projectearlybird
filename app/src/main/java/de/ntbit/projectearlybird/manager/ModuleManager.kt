@@ -29,7 +29,7 @@ class ModuleManager {
     private val parseLiveQueryClient: ParseLiveQueryClient =
         ParseLiveQueryClient.Factory.getClient(URI("wss://projectearlybird.back4app.io/"))
     private lateinit var adapter: GroupAdapter<GroupieViewHolder>
-    private val moduleList= ArrayList<Module>()
+    private val moduleList = ArrayList<Module>()
 
     init {
         getModulesFromParse()

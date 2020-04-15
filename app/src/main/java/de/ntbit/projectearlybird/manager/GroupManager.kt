@@ -42,6 +42,7 @@ class GroupManager {
         ParseLiveQueryClient.Factory.getClient(URI("wss://projectearlybird.back4app.io/"))
     private val mUserManager = ManagerFactory.getUserManager()
     private lateinit var adapter: GroupAdapter<GroupieViewHolder>
+    private val groupSet = HashSet<Group>()
 
     /**
      * If the [adapter] is not initialized by calltime, it will be initialized and [readGroups]
@@ -68,6 +69,8 @@ class GroupManager {
         //query.whereEqualTo("owner", mUserManager.getCurrentUser())
         query.findInBackground { groups, e ->
             if (e == null) {
+                Log.d("CUSTOMDEBUG", "$simpleClassName - adding ${groups.size} groups.")
+                groupSet.addAll(groups)
                 for(group in groups)
                     adapter.add(GroupItem(group))
             }
@@ -108,6 +111,7 @@ class GroupManager {
         //Log.d("CUSTOMDEBUG", "GroupManager - processing new Group")
         adapter.add(GroupItem(group))
         adapter.notifyDataSetChanged()
+        groupSet.add(group)
     }
 
 
@@ -139,6 +143,7 @@ class GroupManager {
             group.save()
 
             // TODO: search for right Group in adapter
+            groupSet.remove(group)
             adapter.removeGroupAtAdapterPosition(posToDelete)
             adapter.notifyItemRemoved(posToDelete)
 
@@ -171,6 +176,11 @@ class GroupManager {
             if(it != null)
                 Log.d("CUSTOMDEBUG", "$simpleClassName - Error at save(): ${it.message}")
         }
+    }
+
+    fun getGroups() : HashSet<Group> {
+        Log.d("CUSTOMDEBUG", "$simpleClassName - returning ${groupSet.size} groups")
+        return groupSet
     }
 
     /**
