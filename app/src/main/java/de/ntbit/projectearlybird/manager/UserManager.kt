@@ -1,19 +1,15 @@
 package de.ntbit.projectearlybird.manager
 
 import android.app.Activity
-import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.util.Log
 import android.widget.ImageView
 import android.widget.Toast
 import com.parse.*
 import com.squareup.picasso.Picasso
-import de.ntbit.projectearlybird.data.PebContract
-import de.ntbit.projectearlybird.data.PebDbHelper
 import de.ntbit.projectearlybird.model.Message
 import de.ntbit.projectearlybird.model.User
 import de.ntbit.projectearlybird.ui.activity.HomeActivity
@@ -115,13 +111,12 @@ class UserManager {
      */
     private fun updateLastLogin() {
         val mCurrentUser = getCurrentUser()
-        mCurrentUser.put(PebContract.UserEntry.COLUMN_USER_LASTLOGIN, Date(System.currentTimeMillis()))
+        //mCurrentUser.put(PebContract.UserEntry.COLUMN_USER_LASTLOGIN, Date(System.currentTimeMillis()))
         mCurrentUser.saveInBackground()
     }
 
     /**
      * Getter for the current [User]
-     *
      *
      * @return the [User] that is currently logged in on his own device
      */

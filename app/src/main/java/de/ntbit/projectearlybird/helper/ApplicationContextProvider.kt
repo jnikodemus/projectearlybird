@@ -5,10 +5,13 @@ import android.content.Context
 import android.util.Log
 
 /**
- * Class to create a global context
+ * Provides an [Context] for non Activities
  */
 class ApplicationContextProvider: Application() {
 
+    /**
+     * Binds the return of [getApplicationContext] to the variable [context]
+     */
     override fun onCreate() {
         super.onCreate()
         Log.d("CUSTOMDEBUG", "ApplicationContextProvider - onCreate()")
@@ -18,6 +21,9 @@ class ApplicationContextProvider: Application() {
     companion object {
         lateinit var context: Context
 
+        /**
+         * Returns the in [onCreate] instantiated [context]
+         */
         fun getApplicationContext() : Context {
             return context
         }

@@ -13,6 +13,12 @@ open class Module : ParseObject {
         this.name = name
     }
 
+    internal constructor(other: Module) {
+        this.name = other.name
+        this.description = other.description
+        this.colorInt = other.colorInt
+    }
+
     var name: String
         get() {
             return this.getString("name")!!
@@ -25,7 +31,7 @@ open class Module : ParseObject {
         get() {
             return this.getInt("colorInt")
         }
-        private set(colorInt) {
+        set(colorInt) {
             this.put("colorInt", colorInt)
         }
 
@@ -33,7 +39,14 @@ open class Module : ParseObject {
         get() {
             return this.getString("description")!!
         }
-        private set(description) {
+        protected set(description) {
             this.put("description", description)
         }
+
+    override fun equals(other: Any?): Boolean {
+        if(other is Module) {
+            return other.name == this.name
+        }
+        return false
+    }
 }

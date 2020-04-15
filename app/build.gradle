@@ -26,7 +26,9 @@ android {
         // KDocs
         dokka {
             outputFormat = 'html'
-            outputDirectory = "$buildDir/javadoc"
+            outputDirectory = "$buildDir/htmldoc"
+            skipDeprecated = true
+            reportUndocumented = true
         }
     }
     buildTypes {
@@ -75,9 +77,9 @@ dependencies {
     api 'com.theartofdev.edmodo:android-image-cropper:2.8.+'
 
     implementation 'com.google.android.material:material:1.1.0'
-    implementation 'com.google.firebase:firebase-core:17.2.3'
-    implementation 'com.google.firebase:firebase-perf:19.0.5'
-    implementation 'com.google.firebase:firebase-messaging:20.1.2'
+    implementation 'com.google.firebase:firebase-core:17.3.0'
+    implementation 'com.google.firebase:firebase-perf:19.0.6'
+    implementation 'com.google.firebase:firebase-messaging:20.1.5'
 
     implementation "com.xwray:groupie:2.7.0"
     implementation 'com.squareup.picasso:picasso:2.71828'

@@ -13,6 +13,9 @@
     <string name="app_login">Login</string>
     <string name="app_register">Register</string>
     <string name="app_check_input">Check your input!</string>
+    <string name="app_save">Save</string>
+    <string name="app_cancel">Cancel</string>
+    <string name="app_add">Add</string>
 
     <string name="menu_groups">Groups</string>
     <string name="menu_contacts">Contacts</string>
@@ -31,6 +34,12 @@
     <string name="group_context_menu_add_user">Add user</string>
     <string name="group_context_menu_remove">Remove user</string>
     <string name="group_context_menu_leave">Leave group</string>
+    <string-array name="group_modules">
+        <item>Checklist</item>
+        <!--<item>Murdergame</item>-->
+    </string-array>
+
+    <string name="dialog_act_checklist_item_itemname">Itemname</string>
 
     <string name="profile_first_name">First name</string>
     <string name="profile_last_name">Last name</string>

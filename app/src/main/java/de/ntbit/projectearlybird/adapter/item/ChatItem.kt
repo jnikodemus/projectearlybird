@@ -17,10 +17,10 @@ import java.util.*
 /**
  * A [ChatItem] for the ChatActivity.
  *
- * This class is the root class for the ChatActivity bubbles
+ * Root class for the ChatActivity bubbles.
  *
  * @param message content of the chat bubble.
- * @property userLocale displays the time in 24h
+ * @property userLocale displays the time in userlocale. Currently set to 'de'
  * @property datePattern displays the date in HH:mm
  * @property format formats the timestamp
  * @constructor Creates an empty ChatItem.
@@ -44,9 +44,7 @@ open class ChatItem(val message: Message): Item<GroupieViewHolder>() {
 }
 
 /**
- * A ChatItem from the partner for the ChatActivity.
- *
- * This class is a subclass of [ChatItem]
+ * A [ChatItem] from partner to user for the ChatActivity.
  *
  */
 class ChatFromItem(message: Message, private val user: User): ChatItem(message) {
@@ -61,8 +59,6 @@ class ChatFromItem(message: Message, private val user: User): ChatItem(message) 
 }
 
 /**
- * A ChatItem from the partner for the ChatActivity.
- *
- * This class is a subclass of [ChatItem]
+ * A [ChatItem] from user to partner for the ChatActivity.
  */
 class ChatSelfItem(message: Message): ChatItem(message)

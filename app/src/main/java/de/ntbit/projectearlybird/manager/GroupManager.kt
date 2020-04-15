@@ -1,31 +1,42 @@
 package de.ntbit.projectearlybird.manager
 
+import android.content.Context
 import android.content.Intent
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import androidx.core.content.ContextCompat.startActivity
 import com.parse.ParseQuery
 import com.parse.livequery.ParseLiveQueryClient
 import com.parse.livequery.SubscriptionHandling
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
-import de.ntbit.projectearlybird.R
-import de.ntbit.projectearlybird.R.*
+import de.ntbit.projectearlybird.R.string
 import de.ntbit.projectearlybird.adapter.item.GroupItem
 import de.ntbit.projectearlybird.helper.ApplicationContextProvider
 import de.ntbit.projectearlybird.helper.NotificationHelper
 import de.ntbit.projectearlybird.model.Group
 import de.ntbit.projectearlybird.model.User
 import de.ntbit.projectearlybird.ui.activity.GroupActivity
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.net.URI
 
 /**
- * Manager for controlling and managing [Group]
- * @property parseLiveQueryClient connection to the back4app livequery event
- * @property mUserManager global [UserManager]
- * @property adapter ???
+ * Provides an object of [GroupManager] which is used for interacting
+ * with objects of the [Group] model.
+ * @property parseLiveQueryClient holds instance of [ParseLiveQueryClient]
+ * @property mUserManager holds instance of [UserManager]
+ * @property adapter holds instance of [GroupAdapter]<[GroupieViewHolder]>
  */
+
 class GroupManager {
+
+    private val simpleClassName = this.javaClass.simpleName
 
     private val parseLiveQueryClient: ParseLiveQueryClient =
         ParseLiveQueryClient.Factory.getClient(URI("wss://projectearlybird.back4app.io/"))
@@ -33,7 +44,9 @@ class GroupManager {
     private lateinit var adapter: GroupAdapter<GroupieViewHolder>
 
     /**
-     * Creating a [GroupAdapter] for the [GroupsFragment] and fills it afterwards
+     * If the [adapter] is not initialized by calltime, it will be initialized and [readGroups]
+     * and [listenForGroups] are called before return.
+     * @return [GroupAdapter]<[GroupieViewHolder]>
      */
     fun getAdapter() : GroupAdapter<GroupieViewHolder> {
         if(!::adapter.isInitialized) {
@@ -45,11 +58,11 @@ class GroupManager {
     }
 
     /**
-     * Fetches all [Group] from the database and adds it to the adapter
+     * Reads all existing groups in the ParseDatabase, transforms them to [GroupItem] and adds
+     * them to [adapter].
      */
-    /*STOPPED HERE BECAUSE NO INTERNET*/
     private fun readGroups() {
-        Log.d("CUSTOMDEBUG", "GroupManager - Fetching groups from database")
+        //Log.d("CUSTOMDEBUG", "GroupManager - Fetching groups from database")
         //val currentUserGroups = ArrayList<Group>()
         val query = ParseQuery.getQuery(Group::class.java)
         //query.whereEqualTo("owner", mUserManager.getCurrentUser())
@@ -65,7 +78,8 @@ class GroupManager {
     }
 
     /**
-     * The [ParseLiveQueryClient] listens for new [Group] when the current [User] was invited to a new [Group]
+     * Subscribes to [ParseQuery] of [Group] which calls [processNewGroup]
+     * and [NotificationHelper.showNotification] if the current user is added to a group.
      */
     private fun listenForGroups() {
         val parseQuery = ParseQuery.getQuery(Group::class.java)
@@ -86,19 +100,22 @@ class GroupManager {
     }
 
     /**
-     * Adds the new [Group] found in the [SubscriptionHandling] to the [adapter]
-     *
+     * Transforms provided [group] to [GroupItem] and adds it to the [adapter] notifying it for
+     * a changed dataset afterwards.
      * @param group that was found by the [SubscriptionHandling] will be added to the adapter
      */
     private fun processNewGroup(group: Group) {
-        Log.d("CUSTOMDEBUG", "GroupManager - processing new Group")
+        //Log.d("CUSTOMDEBUG", "GroupManager - processing new Group")
         adapter.add(GroupItem(group))
         adapter.notifyDataSetChanged()
     }
 
 
     /**
-     * Function to leave a [Group]
+     * Leaves the provided [group] by removing the current user from memberlist and adminlist.
+     * If the leaving user was the only admin, a member will be added to the adminlist.
+     * If the user was owner of the group, the next admin will be the new owner.
+     * @return [Boolean]: true if user could leave, false else.
      */
     // TODO: Check admin/owner leaving; implement size < 2
     fun leaveGroup(group: Group): Boolean {
@@ -131,7 +148,9 @@ class GroupManager {
     }
 
     /**
-     * Function to add a new [User] to a [Group]
+     * Adds the provided [user] to the memberlist of the provided [group] if not already member.
+     * Returns true if the adding was successful.
+     * @return [Boolean]
      */
     fun addUser(user: User, group: Group): Boolean {
         val members = group.members
@@ -147,11 +166,17 @@ class GroupManager {
         }
     }
 
+    fun save(group: Group) {
+        group.saveEventually {
+            if(it != null)
+                Log.d("CUSTOMDEBUG", "$simpleClassName - Error at save(): ${it.message}")
+        }
+    }
+
     /**
-     * Getting a [Group] by [objectId]
-     *
-     * @return [Group] that was found by the [objectId]
+     * Returns the [Group] for provided [objectId] from pin.
      */
+    @Deprecated("Should not be used anymore.")
     fun getGroupById(objectId: String): Group {
         val query = ParseQuery(Group::class.java)
         query.fromPin("group")

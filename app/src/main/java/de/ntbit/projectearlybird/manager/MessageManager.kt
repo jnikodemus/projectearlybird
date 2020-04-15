@@ -10,7 +10,8 @@ import android.os.Looper
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.parse.*
+import com.parse.ParseException
+import com.parse.ParseQuery
 import com.parse.livequery.ParseLiveQueryClient
 import com.parse.livequery.SubscriptionHandling
 import com.xwray.groupie.GroupAdapter
@@ -24,13 +25,13 @@ import de.ntbit.projectearlybird.ui.activity.ChatActivity
 import de.ntbit.projectearlybird.ui.activity.NewMessageActivity
 import java.net.URI
 
-
 /**
- * Manager for controlling [Message]
- * @property simpleClassName contains the classname
- * @property mUserManager global [UserManager]
- * @property mAdapterManager global [AdapterManager]
- * @property parseLiveQueryClient connection to the back4app livequery event
+ * [MessageManager] is used for interacting with [Message] objects.
+ *
+ * @property simpleClassName holds the simple name of this class
+ * @property mUserManager holds an instance of [UserManager]
+ * @property mAdapterManager holds an instance of [AdapterManager]
+ * @property parseLiveQueryClient holds an instance of [ParseLiveQueryClient]
  */
 class MessageManager {
 
@@ -41,11 +42,10 @@ class MessageManager {
         ParseLiveQueryClient.Factory.getClient(URI("wss://projectearlybird.back4app.io/"))
 
     /**
-     * Sends a [Message] to the [recipient]. Also checks if [body] is not empty nor blank
-     *
+     * Sends a String as Message to [recipient] if [body] isNotEmpty() and [body] isNotBlank()
      * @param body contains the text from a [Message]
      * @param recipient which receives the [Message]
-     * @return the [Message] object if the [Message] is not empty nor blank, false else
+     * @return [Message]: if the [Message] is not empty nor blank, [Unit] else
      */
     fun sendMessage(body: String, recipient: User) : Message? {
         if(body.isNotBlank() && body.isNotEmpty()) {
@@ -57,17 +57,8 @@ class MessageManager {
         return null
     }
 
-    @Deprecated("Not used anywhere")
-    private fun sendPushNotification(message: String, recipient: User) {
-        val parsePush = ParsePush()
-        parsePush.setMessage(message)
-        parsePush.setChannel(recipient.objectId)
-        parsePush.sendInBackground()
-    }
-
     /**
-     * Listens for new messages for [partner] and adds it to [chatlog]
-     *
+     * Listens for new messages for chat[partner] and adds it to [chatlog] as [ChatFromItem].
      * @param partner which the current [User] subscribed to
      * @param chatLog is a [RecyclerView] which is used for adding the new [Message] to it
      */
@@ -99,10 +90,11 @@ class MessageManager {
     }
 
     /**
-     * ???
+     * Builds and shows a systemnotification if the current user has received a new [Message].
      */
     private fun showNotification(message: Message, context: Context) {
-        val mNotificationManager: NotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val mNotificationManager: NotificationManager =
+            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             val channel = NotificationChannel("PEB_CHANNEL_ID",
                 "YOUR_CHANNEL_NAME",
@@ -129,9 +121,8 @@ class MessageManager {
 
     /**
      * Getter for the latest [Message]
-     *
      * @param user from whom we will get the latest [Message]
-     * @return the latest [Message]
+     * @return [Message]
      */
     fun getLatestMessage(user: User): Message {
         try {

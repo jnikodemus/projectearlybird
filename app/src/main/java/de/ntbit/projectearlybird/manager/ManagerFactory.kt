@@ -1,10 +1,13 @@
 package de.ntbit.projectearlybird.manager
 
 import android.util.Log
+import de.ntbit.projectearlybird.manager.ManagerFactory.Companion.mAdapterManager
+import de.ntbit.projectearlybird.manager.ManagerFactory.Companion.mGroupManager
+import de.ntbit.projectearlybird.manager.ManagerFactory.Companion.mMessageManager
+import de.ntbit.projectearlybird.manager.ManagerFactory.Companion.mUserManager
 
 /**
- * Factory for creating multiple Manager
- *
+ * Provides the different Managers for interacting with modelobjects.
  * @property mMessageManager Manager for managing and controlling [Message]
  * @property mUserManager Manager for managing and controlling [User]
  * @property mGroupManager Manager for managing and controlling [Group]
@@ -16,9 +19,10 @@ class ManagerFactory {
         private lateinit var mUserManager: UserManager
         private lateinit var mGroupManager: GroupManager
         private lateinit var mAdapterManager: AdapterManager
+        private lateinit var mModuleManager: ModuleManager
 
         /**
-         * Creates all Manager
+         * Initializes all Managers.
          */
         fun initialize() {
             Log.d("CUSTOMDEBUG", "ManagerFactory - initialize() executed")
@@ -26,12 +30,12 @@ class ManagerFactory {
             mUserManager = UserManager()
             mGroupManager = GroupManager()
             mAdapterManager = AdapterManager()
+            mModuleManager = ModuleManager()
         }
 
         /**
-         * Getter for the [MessageManager]
-         *
-         * @return [MessageManager] that can be used globally
+         * Returns the instance of [MessageManager].
+         * @return [MessageManager]
          */
         fun getMessageManager(): MessageManager {
             if(!::mMessageManager.isInitialized) {
@@ -42,9 +46,8 @@ class ManagerFactory {
         }
 
         /**
-         * Getter for the [UserManager]
-         *
-         * @return [UserManager] that can be used globally
+         * Returns the instance of [UserManager].
+         * @return [UserManager]
          */
         fun getUserManager(): UserManager {
             if(!::mUserManager.isInitialized) {
@@ -55,9 +58,8 @@ class ManagerFactory {
         }
 
         /**
-         * Getter for the [GroupManager]
-         *
-         * @return [GroupManager] that can be used globally
+         * Returns the instance of [GroupManager].
+         * @return [GroupManager]
          */
         fun getGroupManager(): GroupManager {
             if(!::mGroupManager.isInitialized) {
@@ -68,9 +70,8 @@ class ManagerFactory {
         }
 
         /**
-         * Getter for the [AdapterManager]
-         *
-         * @return [AdapterManager] that can be used globally
+         * Returns the instance of [AdapterManager].
+         * @return [AdapterManager]
          */
         fun getAdapterManager(): AdapterManager {
             if(!::mAdapterManager.isInitialized) {
@@ -81,7 +82,19 @@ class ManagerFactory {
         }
 
         /**
-         * initializes the adapter for the [ConversationsActivity]
+         * Returns the instance of [ModuleManager].
+         * @return [ModuleManager]
+         */
+        fun getModuleManager(): ModuleManager {
+            if(!::mModuleManager.isInitialized) {
+                Log.d("CUSTOMDEBUG", "ManagerFactory - initializing ModuleManager")
+                mModuleManager = ModuleManager()
+            }
+            return mModuleManager
+        }
+
+        /**
+         * Calls [AdapterManager.getConversationsAdapter]
          */
         fun initializeAdapter() {
             getAdapterManager().getConversationsAdapter()

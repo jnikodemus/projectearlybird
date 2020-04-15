@@ -34,7 +34,7 @@ class InputValidator {
         /**
          * Checks the input for a valid [email]
          * @param email email that should be checked
-         * @return false if [email] is not valid, true else
+         * @return [Boolean]: false if [email] is not valid, true else
          */
         fun isValidEmail(email: String) : Boolean {
             if(email.isNotBlank()
@@ -48,7 +48,7 @@ class InputValidator {
          * Checks the [edidtext] if the input is not null and not empty
          *
          * @param editText the edittext that should be checked
-         * @return false if the [editText] is null or empty, true else
+         * @return [Boolean]: false if the [editText] is null or empty, true else
          */
         fun isValidInputNotNullNotEmpty(editText: EditText) : Boolean {
             if(editText.text.isNullOrBlank() || editText.text.isNullOrEmpty()) {
@@ -59,13 +59,12 @@ class InputValidator {
         }
     }
 
-
-
     /**
      * Checks the input for a valid email, used in [RegisterActivity]
      * @param actRegisterEditTxtEmail email that should be checked
-     * @return false if [actRegisterEditTxtEmail] is not valid, true else
+     * @return [Boolean]: false if [actRegisterEditTxtEmail] is not valid, true else
      */
+    @Deprecated("Use companion object!")
     fun isValidEmail(actRegisterEditTxtEmail: EditText) : Boolean {
         if(isValidEmail(actRegisterEditTxtEmail.text.toString()))
             return true
@@ -74,9 +73,10 @@ class InputValidator {
     }
 
     /**
-     * Checks the input for a valid username
+     * Checks if the passed [actRegisterEditTxtUsername] has more than
+     * three chars and therefore is not null nor blank
      * @param actRegisterEditTxtUsername username that should be checked
-     * @return false if [actRegisterEditTxtUsername] is not valid, true else
+     * @return [Boolean]: false if [actRegisterEditTxtUsername] is not valid, true else
      */
     fun isValidUsername(actRegisterEditTxtUsername: EditText) : Boolean {
         if(actRegisterEditTxtUsername.text.isNotBlank() && actRegisterEditTxtUsername.text.length >= 4)
@@ -86,10 +86,12 @@ class InputValidator {
     }
 
     /**
-     * Checks if [actRegisterEditTxtPassword] matches [actRegisterEditTxtPasswordRetry]
+     * Returns whether the content of the passed [actRegisterEditTxtPassword]
+     * corresponds to the [actRegisterEditTxtPasswordRetry] and is neither empty nor blank
      * @param actRegisterEditTxtPassword contains the password
      * @param actRegisterEditTxtPasswordRetry contains the password in the retry field
-     * @return false if [actRegisterEditTxtPassword] does not match [actRegisterEditTxtPasswordRetry], true else
+     * @return [Boolean]: false if [actRegisterEditTxtPassword] does not match
+     * [actRegisterEditTxtPasswordRetry], true else
      */
     fun isValidPassword(actRegisterEditTxtPassword: EditText, actRegisterEditTxtPasswordRetry: EditText) : Boolean {
         if(actRegisterEditTxtPassword.text.isNotBlank()
