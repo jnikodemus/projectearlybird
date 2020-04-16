@@ -131,7 +131,8 @@ class ModuleChecklistItem : ParseObject {
     }
 
     override fun toString(): String {
-        return "ChecklistItem [{name: $name}, {amount: $amount}, {creator: ${creator.objectId}}, " +
-                "{isAssigned: $isAssigned}, {user: ${user?.objectId}}, {timestamp: $timestamp}]"
+        return "ChecklistItem [{objectId: $objectId}, {name: $name}, {amount: $amount}," +
+                "{creator: ${creator.objectId}}, {isAssigned: $isAssigned}, " +
+                "{user: ${user?.objectId}}, {timestamp: $timestamp}]"
     }
 }

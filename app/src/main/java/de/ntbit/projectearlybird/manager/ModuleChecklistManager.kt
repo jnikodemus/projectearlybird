@@ -90,6 +90,32 @@ class ModuleChecklistManager {
                 processNewChecklistItem(item)
             }
         }
+
+        subscriptionHandling.handleEvent(SubscriptionHandling.Event.UPDATE) {_, item ->
+            val handler = Handler(Looper.getMainLooper())
+            handler.post {
+                Log.d("CUSTOMDEBUG", "$simpleClassName - " +
+                        "CurrentUser: ${mUserManager.getCurrentUser().objectId}, " +
+                        "got update on item:\n$item")
+                processUpdateOnChecklistItem(item)
+            }
+        }
+
+    }
+
+    private fun processUpdateOnChecklistItem(item: ModuleChecklistItem) {
+        val group = item.associatedModule.associatedGroup
+        val index = checklistItemMap[group]!!.indexOf(item)
+        val oldItem = checklistItemMap[group]!![index]
+
+        checklistItemMap[group]!!.remove(oldItem)
+        checklistItemMap[group]!!.add(item)
+
+        //Log.d("CUSTOMDEBUG", "$simpleClassName - $item")
+        //Log.d("CUSTOMDEBUG", "$simpleClassName - $oldItem")
+
+        val pos = adapterMap[group]!!.getAdapterPosition(ChecklistItem(item))
+        adapterMap[group]!!.notifyItemChanged(pos)
     }
 
     private fun processNewChecklistItem(item: ModuleChecklistItem) {
