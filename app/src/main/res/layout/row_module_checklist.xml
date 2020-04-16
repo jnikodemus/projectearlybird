@@ -15,13 +15,26 @@
         android:padding="8dp">
 
         <TextView
+            android:id="@+id/row_module_checklist_tv_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/sample_checklist_item_amount"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:paddingEnd="4dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toStartOf="@+id/row_module_checklist_tv_name"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
             android:id="@+id/row_module_checklist_tv_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/sample_checklist_item_name"
             android:textSize="18sp"
             android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@id/row_module_checklist_tv_amount"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView

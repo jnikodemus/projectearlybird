@@ -64,6 +64,7 @@
     <string name="sample_timestamp_hhmm">23:42</string>
     <string name="sample_timestamp_full">15.04.2020 23:42</string>
     <string name="sample_message">Blue YOU\'RE MY BOY!!!"</string>
+    <string name="sample_checklist_item_amount">13</string>
     <string name="sample_checklist_item_name">Beer</string>
     <string name="sample_group_name">OldSchool</string>
     <string name="sample_group_size">3</string>
