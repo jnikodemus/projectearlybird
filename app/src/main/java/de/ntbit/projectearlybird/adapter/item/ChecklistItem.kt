@@ -20,6 +20,7 @@ import kotlinx.android.synthetic.main.row_module_checklist.view.*
 class ChecklistItem() : Item<GroupieViewHolder>() {
 
     private val mUserManager = ManagerFactory.getUserManager()
+    private val moduleChecklistManager = ManagerFactory.getModuleChecklistManager()
     private val user = mUserManager.getCurrentUser()
     private lateinit var viewHolder: GroupieViewHolder
 
@@ -35,8 +36,10 @@ class ChecklistItem() : Item<GroupieViewHolder>() {
         this.viewHolder.itemView.row_module_checklist_tv_name.text = item.name
         this.viewHolder.itemView.row_module_checklist_tv_timestamp.text = item.timestamp.toString()
         this.viewHolder.itemView.row_module_checklist_cb_checked.isChecked = item.isAssigned
-        if(item.isAssigned)
+        if(item.isAssigned) {
             this.viewHolder.itemView.row_module_checklist_tv_username.text = item.user!!.username
+            this.viewHolder.itemView.row_module_checklist_tv_username.visibility = TextView.VISIBLE
+        }
         setClicklistener()
     }
 
@@ -59,10 +62,12 @@ class ChecklistItem() : Item<GroupieViewHolder>() {
             item.assign(user)
             viewHolder.itemView.row_module_checklist_tv_username.text = item.user!!.username
             viewHolder.itemView.row_module_checklist_tv_username.visibility = TextView.VISIBLE
+            moduleChecklistManager.saveItemState(item)
         } else {
             if(item.user == user) {
                 item.unassign()
                 viewHolder.itemView.row_module_checklist_tv_username.visibility = TextView.INVISIBLE
+                moduleChecklistManager.saveItemState(item)
             }
         }
     }

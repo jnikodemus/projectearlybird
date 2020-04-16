@@ -24,6 +24,7 @@ class ModuleChecklistManager {
     private val simpleClassName = this.javaClass.simpleName
 
     private val mGroupManager = ManagerFactory.getGroupManager()
+    private val mUserManager = ManagerFactory.getUserManager()
 
     private val parseLiveQueryClient: ParseLiveQueryClient =
         ParseLiveQueryClient.Factory.getClient(URI("wss://projectearlybird.back4app.io/"))
@@ -74,15 +75,47 @@ class ModuleChecklistManager {
     private fun listenForNewChecklistItem() {
         Log.d("CUSTOMDEBUG", "$simpleClassName - listening for new ChecklistItems")
         val parseQuery = ParseQuery.getQuery(ModuleChecklistItem::class.java)
-        val subscriptionHandling: SubscriptionHandling<ModuleChecklistItem> = parseLiveQueryClient.subscribe(parseQuery)
+        parseQuery.whereNotEqualTo("creatorId", mUserManager.getCurrentUser().objectId)
+        val subscriptionHandling: SubscriptionHandling<ModuleChecklistItem> =
+            parseLiveQueryClient.subscribe(parseQuery)
 
         subscriptionHandling.handleEvent(SubscriptionHandling.Event.CREATE) { _, item ->
             val handler = Handler(Looper.getMainLooper())
             handler.post {
-                Log.d("CUSTOMDEBUG", "$simpleClassName - Got a new item")
+                Log.d(
+                    "CUSTOMDEBUG", "$simpleClassName - " +
+                            "CurrentUser: ${mUserManager.getCurrentUser().objectId}, " +
+                            "got a new item:\n$item"
+                )
                 processNewChecklistItem(item)
             }
         }
+
+        subscriptionHandling.handleEvent(SubscriptionHandling.Event.UPDATE) {_, item ->
+            val handler = Handler(Looper.getMainLooper())
+            handler.post {
+                Log.d("CUSTOMDEBUG", "$simpleClassName - " +
+                        "CurrentUser: ${mUserManager.getCurrentUser().objectId}, " +
+                        "got update on item:\n$item")
+                processUpdateOnChecklistItem(item)
+            }
+        }
+
+    }
+
+    private fun processUpdateOnChecklistItem(item: ModuleChecklistItem) {
+        val group = item.associatedModule.associatedGroup
+        val index = checklistItemMap[group]!!.indexOf(item)
+        val oldItem = checklistItemMap[group]!![index]
+
+        checklistItemMap[group]!!.remove(oldItem)
+        checklistItemMap[group]!!.add(item)
+
+        //Log.d("CUSTOMDEBUG", "$simpleClassName - $item")
+        //Log.d("CUSTOMDEBUG", "$simpleClassName - $oldItem")
+
+        val pos = adapterMap[group]!!.getAdapterPosition(ChecklistItem(item))
+        adapterMap[group]!!.notifyItemChanged(pos)
     }
 
     private fun processNewChecklistItem(item: ModuleChecklistItem) {
@@ -90,6 +123,15 @@ class ModuleChecklistManager {
         adapterMap[group]!!.add(ChecklistItem(item))
         adapterMap[group]!!.notifyDataSetChanged()
         checklistItemMap[group]!!.add(item)
+    }
+
+    fun addItem(item: ModuleChecklistItem) {
+        processNewChecklistItem(item)
+        saveItemState(item)
+    }
+
+    fun saveItemState(item: ModuleChecklistItem) {
+        item.saveEventually()
     }
 
     fun getAdapterByGroup(group: Group): GroupAdapter<GroupieViewHolder> {

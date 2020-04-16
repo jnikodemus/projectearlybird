@@ -24,6 +24,7 @@ class ModuleChecklistActivity : AppCompatActivity() {
     private val simpleClassName = this.javaClass.simpleName
 
     private val mModuleChecklistManager = ManagerFactory.getModuleChecklistManager()
+    private val mUserManager = ManagerFactory.getUserManager()
 
     private lateinit var adapter: GroupAdapter<GroupieViewHolder>
     private lateinit var group: Group
@@ -86,8 +87,10 @@ class ModuleChecklistActivity : AppCompatActivity() {
                 isValid = false
             }
             if (isValid) {
-                addItem(ModuleChecklistItem(
-                    categoryEditText.text.toString(), moduleChecklist))
+                mModuleChecklistManager.addItem(ModuleChecklistItem(
+                    categoryEditText.text.toString(),
+                    mUserManager.getCurrentUser(),
+                    moduleChecklist))
             }
             if (isValid) {
                 dialog.dismiss()
@@ -97,15 +100,6 @@ class ModuleChecklistActivity : AppCompatActivity() {
             dialog.cancel()
         }
         builder.show()
-    }
-
-    private fun addItem(item: ModuleChecklistItem) {
-        try {
-            item.save()
-        }
-        catch(e: Exception) {
-            Log.d("CUSTOMDEBUG", "$simpleClassName - Error: ${e.message}")
-        }
     }
 }
 /*
