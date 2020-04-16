@@ -114,8 +114,7 @@ class ModuleChecklistManager {
         //Log.d("CUSTOMDEBUG", "$simpleClassName - $item")
         //Log.d("CUSTOMDEBUG", "$simpleClassName - $oldItem")
 
-        val pos = adapterMap[group]!!.getAdapterPosition(ChecklistItem(item))
-        adapterMap[group]!!.notifyItemChanged(pos)
+        adapterMap[group]!!.notifyDataSetChanged()
     }
 
     private fun processNewChecklistItem(item: ModuleChecklistItem) {

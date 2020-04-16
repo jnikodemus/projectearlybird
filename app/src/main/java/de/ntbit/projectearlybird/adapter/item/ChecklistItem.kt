@@ -1,5 +1,6 @@
 package de.ntbit.projectearlybird.adapter.item
 
+import android.util.Log
 import android.widget.TextView
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Item
@@ -19,6 +20,8 @@ import kotlinx.android.synthetic.main.row_module_checklist.view.*
  */
 class ChecklistItem() : Item<GroupieViewHolder>() {
 
+    private val simpleClassName = this.javaClass.simpleName
+
     private val mUserManager = ManagerFactory.getUserManager()
     private val moduleChecklistManager = ManagerFactory.getModuleChecklistManager()
     private val user = mUserManager.getCurrentUser()
@@ -31,6 +34,7 @@ class ChecklistItem() : Item<GroupieViewHolder>() {
     }
 
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
+        Log.d("CUSTOMDEBUG", "$simpleClassName - bind()")
         this.viewHolder = viewHolder
         //this.viewHolder.itemView.row_module_checklist_tv_name.text = itemName
         this.viewHolder.itemView.row_module_checklist_tv_name.text = item.name
