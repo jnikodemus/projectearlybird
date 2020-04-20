@@ -1,5 +1,6 @@
 package de.ntbit.projectearlybird.adapter.item
 
+import android.util.Log
 import android.widget.TextView
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Item
@@ -19,6 +20,8 @@ import kotlinx.android.synthetic.main.row_module_checklist.view.*
  */
 class ChecklistItem() : Item<GroupieViewHolder>() {
 
+    private val simpleClassName = this.javaClass.simpleName
+
     private val mUserManager = ManagerFactory.getUserManager()
     private val moduleChecklistManager = ManagerFactory.getModuleChecklistManager()
     private val user = mUserManager.getCurrentUser()
@@ -31,15 +34,23 @@ class ChecklistItem() : Item<GroupieViewHolder>() {
     }
 
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
+        Log.d("CUSTOMDEBUG", "$simpleClassName - bind()")
         this.viewHolder = viewHolder
         //this.viewHolder.itemView.row_module_checklist_tv_name.text = itemName
         this.viewHolder.itemView.row_module_checklist_tv_name.text = item.name
         this.viewHolder.itemView.row_module_checklist_tv_timestamp.text = item.timestamp.toString()
-        this.viewHolder.itemView.row_module_checklist_cb_checked.isChecked = item.isAssigned
+        this.viewHolder.itemView.row_module_checklist_cb_assigned.isChecked = item.isAssigned
+
         if(item.isAssigned) {
             this.viewHolder.itemView.row_module_checklist_tv_username.text = item.user!!.username
             this.viewHolder.itemView.row_module_checklist_tv_username.visibility = TextView.VISIBLE
+            if(item.user != mUserManager.getCurrentUser()) {
+                viewHolder.itemView.row_module_checklist_cb_assigned.isEnabled = false
+                Log.d("CUSTOMDEBUG", "$simpleClassName - isEnabled = false")
+
+            }
         }
+        else viewHolder.itemView.row_module_checklist_cb_assigned.isEnabled = true
         setClicklistener()
     }
 
@@ -50,7 +61,7 @@ class ChecklistItem() : Item<GroupieViewHolder>() {
      * Sets click listener to every [ChecklistItem]
      */
     private fun setClicklistener() {
-        this.viewHolder.itemView.row_module_checklist_cb_checked.setOnClickListener {
+        this.viewHolder.itemView.row_module_checklist_cb_assigned.setOnClickListener {
             processItemClicked()
         }
     }
@@ -58,7 +69,7 @@ class ChecklistItem() : Item<GroupieViewHolder>() {
      * Applies the name of the user and a check to the item when it's clicked
      */
     private fun processItemClicked() {
-        if (viewHolder.itemView.row_module_checklist_cb_checked.isChecked) {
+        if (viewHolder.itemView.row_module_checklist_cb_assigned.isChecked) {
             item.assign(user)
             viewHolder.itemView.row_module_checklist_tv_username.text = item.user!!.username
             viewHolder.itemView.row_module_checklist_tv_username.visibility = TextView.VISIBLE
