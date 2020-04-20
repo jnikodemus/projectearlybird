@@ -6,6 +6,7 @@ import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Item
 import de.ntbit.projectearlybird.R
 import de.ntbit.projectearlybird.manager.ManagerFactory
+import de.ntbit.projectearlybird.model.Module
 import de.ntbit.projectearlybird.model.ModuleChecklistItem
 import de.ntbit.projectearlybird.model.User
 import kotlinx.android.synthetic.main.row_module_checklist.view.*
@@ -86,6 +87,10 @@ class ChecklistItem() : Item<GroupieViewHolder>() {
                 moduleChecklistManager.saveItemState(item)
             }
         }
+    }
+
+    fun getModuleChecklistItem(): ModuleChecklistItem {
+        return item
     }
 
     override fun toString(): String {
