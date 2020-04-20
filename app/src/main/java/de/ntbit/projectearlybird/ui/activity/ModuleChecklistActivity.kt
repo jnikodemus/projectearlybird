@@ -1,23 +1,25 @@
 package de.ntbit.projectearlybird.ui.activity
 
 import android.os.Bundle
-import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.EditText
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.recyclerview.widget.ItemTouchHelper
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import de.ntbit.projectearlybird.R
-import de.ntbit.projectearlybird.adapter.item.ChecklistItem
 import de.ntbit.projectearlybird.helper.ParcelContract
+import de.ntbit.projectearlybird.helper.SwipeToDeleteHelper
 import de.ntbit.projectearlybird.manager.ManagerFactory
 import de.ntbit.projectearlybird.model.Group
 import de.ntbit.projectearlybird.model.ModuleChecklist
 import de.ntbit.projectearlybird.model.ModuleChecklistItem
 import kotlinx.android.synthetic.main.activity_module_checklist.*
 import kotlinx.android.synthetic.main.toolbar.*
-import java.lang.Exception
+
 
 class ModuleChecklistActivity : AppCompatActivity() {
 
@@ -42,13 +44,30 @@ class ModuleChecklistActivity : AppCompatActivity() {
         return true
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_plus_sign, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.frgmt_contacts_add -> {
+                showCreateItemDialog()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
     private fun initialize() {
         group = intent.getParcelableExtra(ParcelContract.GROUP_KEY)
         moduleChecklist = intent.getParcelableExtra(ParcelContract.MODULE_KEY)
         adapter = mModuleChecklistManager.getAdapterByGroup(group)
+        val itemTouchHelper = ItemTouchHelper(SwipeToDeleteHelper(adapter))
+        itemTouchHelper.attachToRecyclerView(act_module_checklist_rv_log)
         act_module_checklist_rv_log.adapter = adapter
         placeToolbar()
-        setClicklisteners()
+        //setClicklisteners()
         //adapter.addAll(module.items)
     }
 
@@ -61,9 +80,9 @@ class ModuleChecklistActivity : AppCompatActivity() {
     }
 
     private fun setClicklisteners() {
-        act_module_checklist_fab.setOnClickListener {
-            showCreateCategoryDialog()
-        }
+        //act_module_checklist_fab.setOnClickListener {
+        //    showCreateItemDialog()
+        //}
     }
 
 //    private fun addChecklistItem() {
@@ -71,24 +90,24 @@ class ModuleChecklistActivity : AppCompatActivity() {
 //        dialog.show(this.supportFragmentManager, "DIALOG_MODULE_CHECKLIST_ACTIVITY_ADD_ITEM")
 //   }
 
-    private fun showCreateCategoryDialog() {
+    private fun showCreateItemDialog() {
         val context = this
         val builder = AlertDialog.Builder(context)
         val view = layoutInflater.inflate(R.layout.dialog_add_checklist_item, null)
 
-        val categoryEditText = view.findViewById(R.id.dialog_add_checklist_item_et_itemname) as EditText
+        val itemEditText = view.findViewById(R.id.dialog_add_checklist_item_et_itemname) as EditText
 
         builder.setView(view)
         // set up the ok button
         builder.setPositiveButton(android.R.string.ok) { dialog, p1 ->
-            val newCategory = categoryEditText.text
+            val newCategory = itemEditText.text
             var isValid = true
             if (newCategory.isBlank()) {
                 isValid = false
             }
             if (isValid) {
                 mModuleChecklistManager.addItem(ModuleChecklistItem(
-                    categoryEditText.text.toString(),
+                    itemEditText.text.toString(),
                     mUserManager.getCurrentUser(),
                     moduleChecklist))
             }

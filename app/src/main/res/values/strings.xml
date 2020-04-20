@@ -16,6 +16,7 @@
     <string name="app_save">Save</string>
     <string name="app_cancel">Cancel</string>
     <string name="app_add">Add</string>
+    <string name="app_plus_sign">+</string>
 
     <string name="menu_groups">Groups</string>
     <string name="menu_contacts">Contacts</string>

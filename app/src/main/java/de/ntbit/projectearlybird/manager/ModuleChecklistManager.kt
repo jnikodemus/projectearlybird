@@ -2,7 +2,6 @@ package de.ntbit.projectearlybird.manager
 
 import android.os.Handler
 import android.os.Looper
-import android.provider.ContactsContract
 import android.util.Log
 import com.parse.ParseQuery
 import com.parse.livequery.ParseLiveQueryClient
@@ -11,7 +10,6 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import de.ntbit.projectearlybird.adapter.item.ChecklistItem
 import de.ntbit.projectearlybird.model.Group
-import de.ntbit.projectearlybird.model.Module
 import de.ntbit.projectearlybird.model.ModuleChecklist
 import de.ntbit.projectearlybird.model.ModuleChecklistItem
 import java.net.URI
@@ -68,6 +66,7 @@ class ModuleChecklistManager {
             }
         }
         listenForNewChecklistItem()
+        listenForUpdateChecklistItem()
     }
 
     //fun getChecklist() : Collection<ModuleChecklistItem>{ return checklist }
@@ -90,7 +89,12 @@ class ModuleChecklistManager {
                 processNewChecklistItem(item)
             }
         }
+    }
 
+    private fun listenForUpdateChecklistItem() {
+        val parseQuery = ParseQuery.getQuery(ModuleChecklistItem::class.java)
+        val subscriptionHandling: SubscriptionHandling<ModuleChecklistItem> =
+            parseLiveQueryClient.subscribe(parseQuery)
         subscriptionHandling.handleEvent(SubscriptionHandling.Event.UPDATE) {_, item ->
             val handler = Handler(Looper.getMainLooper())
             handler.post {
@@ -100,8 +104,8 @@ class ModuleChecklistManager {
                 processUpdateOnChecklistItem(item)
             }
         }
-
     }
+
 
     private fun processUpdateOnChecklistItem(item: ModuleChecklistItem) {
         val group = item.associatedModule.associatedGroup
@@ -131,6 +135,20 @@ class ModuleChecklistManager {
 
     fun saveItemState(item: ModuleChecklistItem) {
         item.saveEventually()
+    }
+
+    fun deleteChecklistItem(checklistItem: ChecklistItem) {
+        val item = checklistItem.getModuleChecklistItem()
+        val group = item.associatedModule.associatedGroup
+        val position = adapterMap[group]!!.getAdapterPosition(checklistItem)
+        adapterMap[group]!!.notifyItemRemoved(position)
+        adapterMap[group]!!.remove(checklistItem)
+        checklistItemMap[group]!!.remove(item)
+        deleteItemOnDatabase(item)
+    }
+
+    private fun deleteItemOnDatabase(item: ModuleChecklistItem) {
+        item.deleteEventually()
     }
 
     fun getAdapterByGroup(group: Group): GroupAdapter<GroupieViewHolder> {

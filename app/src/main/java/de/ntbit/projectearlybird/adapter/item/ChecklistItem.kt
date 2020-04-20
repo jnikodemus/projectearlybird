@@ -6,6 +6,8 @@ import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Item
 import de.ntbit.projectearlybird.R
 import de.ntbit.projectearlybird.manager.ManagerFactory
+import de.ntbit.projectearlybird.model.Module
+import de.ntbit.projectearlybird.model.ModuleChecklistItem
 import de.ntbit.projectearlybird.model.User
 import kotlinx.android.synthetic.main.row_module_checklist.view.*
 
@@ -15,7 +17,7 @@ import kotlinx.android.synthetic.main.row_module_checklist.view.*
  * @property mUserManager global [UserManager]
  * @property user current [User]
  * @property viewHolder viewholder from [ModuleChecklistActivity] activity
- * @param item holds an instance of [de.ntbit.projectearlybird.model.ModuleChecklistItem]
+ * @param item holds an instance of [ModuleChecklistItem]
  * @constructor sets provided [item] to property [item]
  */
 class ChecklistItem() : Item<GroupieViewHolder>() {
@@ -27,14 +29,14 @@ class ChecklistItem() : Item<GroupieViewHolder>() {
     private val user = mUserManager.getCurrentUser()
     private lateinit var viewHolder: GroupieViewHolder
 
-    private lateinit var item: de.ntbit.projectearlybird.model.ModuleChecklistItem
+    private lateinit var item: ModuleChecklistItem
 
-    internal constructor(item: de.ntbit.projectearlybird.model.ModuleChecklistItem) : this() {
+    internal constructor(item: ModuleChecklistItem) : this() {
             this.item = item
     }
 
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
-        Log.d("CUSTOMDEBUG", "$simpleClassName - bind()")
+        //Log.d("CUSTOMDEBUG", "$simpleClassName - bind()")
         this.viewHolder = viewHolder
         //this.viewHolder.itemView.row_module_checklist_tv_name.text = itemName
         this.viewHolder.itemView.row_module_checklist_tv_name.text = item.name
@@ -50,7 +52,11 @@ class ChecklistItem() : Item<GroupieViewHolder>() {
 
             }
         }
-        else viewHolder.itemView.row_module_checklist_cb_assigned.isEnabled = true
+        else {
+            viewHolder.itemView.row_module_checklist_tv_username.visibility = TextView.GONE
+            viewHolder.itemView.row_module_checklist_cb_assigned.isEnabled = true
+        }
+        Log.d("CUSTOMDEBUG","$simpleClassName - $item")
         setClicklistener()
     }
 
@@ -77,10 +83,14 @@ class ChecklistItem() : Item<GroupieViewHolder>() {
         } else {
             if(item.user == user) {
                 item.unassign()
-                viewHolder.itemView.row_module_checklist_tv_username.visibility = TextView.INVISIBLE
+                viewHolder.itemView.row_module_checklist_tv_username.visibility = TextView.GONE
                 moduleChecklistManager.saveItemState(item)
             }
         }
+    }
+
+    fun getModuleChecklistItem(): ModuleChecklistItem {
+        return item
     }
 
     override fun toString(): String {
