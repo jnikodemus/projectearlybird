@@ -21,6 +21,10 @@ import kotlinx.android.synthetic.main.row_module_checklist.view.*
  * @constructor sets provided [item] to property [item]
  */
 class ChecklistItem() : Item<GroupieViewHolder>() {
+    override fun unbind(viewHolder: GroupieViewHolder) {
+        super.unbind(viewHolder)
+        Log.d("CUSTOMDEBUG", "$simpleClassName - unbind()")
+    }
 
     private val simpleClassName = this.javaClass.simpleName
 

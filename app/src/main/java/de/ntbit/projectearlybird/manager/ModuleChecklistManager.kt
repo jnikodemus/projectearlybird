@@ -106,6 +106,23 @@ class ModuleChecklistManager {
         }
     }
 
+    /*
+    private fun listenForDeleteChecklistItem() {
+        val parseQuery = ParseQuery.getQuery(ModuleChecklistItem::class.java)
+        val subscriptionHandling: SubscriptionHandling<ModuleChecklistItem> =
+            parseLiveQueryClient.subscribe(parseQuery)
+        subscriptionHandling.handleEvent(SubscriptionHandling.Event.DELETE) {_, item ->
+            val handler = Handler(Looper.getMainLooper())
+            handler.post {
+                Log.d("CUSTOMDEBUG", "$simpleClassName - " +
+                        "CurrentUser: ${mUserManager.getCurrentUser().objectId}, " +
+                        "got update on item:\n$item")
+                processUpdateOnChecklistItem(item)
+            }
+        }
+    }
+    */
+
 
     private fun processUpdateOnChecklistItem(item: ModuleChecklistItem) {
         val group = item.associatedModule.associatedGroup
@@ -141,10 +158,13 @@ class ModuleChecklistManager {
         val item = checklistItem.getModuleChecklistItem()
         val group = item.associatedModule.associatedGroup
         val position = adapterMap[group]!!.getAdapterPosition(checklistItem)
-        adapterMap[group]!!.notifyItemRemoved(position)
         adapterMap[group]!!.remove(checklistItem)
+        adapterMap[group]!!.notifyItemRangeChanged(position, adapterMap[group]!!.itemCount -1)
+        //adapterMap[group]!!.notifyItemRemoved(position)
         checklistItemMap[group]!!.remove(item)
         deleteItemOnDatabase(item)
+        Log.d("CUSTOMDEBUG", "$simpleClassName - Count: ${adapterMap[group]!!.itemCount} " +
+                "after deleting on Position $position")
     }
 
     private fun deleteItemOnDatabase(item: ModuleChecklistItem) {
