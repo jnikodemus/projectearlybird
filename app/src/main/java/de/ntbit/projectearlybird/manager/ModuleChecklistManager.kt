@@ -68,6 +68,7 @@ class ModuleChecklistManager {
             }
         }
         listenForNewChecklistItem()
+        listenForUpdateChecklistItem()
     }
 
     //fun getChecklist() : Collection<ModuleChecklistItem>{ return checklist }
@@ -90,7 +91,12 @@ class ModuleChecklistManager {
                 processNewChecklistItem(item)
             }
         }
+    }
 
+    private fun listenForUpdateChecklistItem() {
+        val parseQuery = ParseQuery.getQuery(ModuleChecklistItem::class.java)
+        val subscriptionHandling: SubscriptionHandling<ModuleChecklistItem> =
+            parseLiveQueryClient.subscribe(parseQuery)
         subscriptionHandling.handleEvent(SubscriptionHandling.Event.UPDATE) {_, item ->
             val handler = Handler(Looper.getMainLooper())
             handler.post {
@@ -100,8 +106,8 @@ class ModuleChecklistManager {
                 processUpdateOnChecklistItem(item)
             }
         }
-
     }
+
 
     private fun processUpdateOnChecklistItem(item: ModuleChecklistItem) {
         val group = item.associatedModule.associatedGroup
