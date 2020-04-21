@@ -56,6 +56,10 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 "LocalModules: $numLocalModules ")
     }
 
+    /**
+     * Calls [placeToolbar], [buildNavigation], [placeUserInformation], [placeAppInformation]
+     * and [selectMenuItem] for itemIndex 0.
+     */
     private fun initialize() {
         /* Set toolbar */
         placeToolbar()

@@ -22,6 +22,7 @@ import de.ntbit.projectearlybird.R
 import de.ntbit.projectearlybird.manager.ManagerFactory
 import kotlinx.android.synthetic.main.activity_chat.*
 import kotlinx.android.synthetic.main.activity_profile.*
+import kotlinx.android.synthetic.main.toolbar.*
 
 class ProfileActivity : AppCompatActivity() {
 
@@ -68,7 +69,7 @@ class ProfileActivity : AppCompatActivity() {
         setSupportActionBar(thisToolbar as Toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
-        supportActionBar?.title = "Profile"
+        toolbar_tv_root_title.text = "Profile"
     }
 
     private fun placeUserProfile() {

@@ -39,8 +39,8 @@ class SwipeToDeleteHelper : ItemTouchHelper.SimpleCallback {
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
         val position = viewHolder.adapterPosition
-        val test = this.adapter.getGroup(position) as ChecklistItem
-        mModuleChecklistManager.deleteChecklistItem(test)
+        val checklistItemToDelete = this.adapter.getGroup(position) as ChecklistItem
+        mModuleChecklistManager.deleteChecklistItem(checklistItemToDelete, true)
     }
 
     override fun onChildDraw(

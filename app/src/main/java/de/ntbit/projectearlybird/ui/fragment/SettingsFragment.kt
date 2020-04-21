@@ -12,6 +12,7 @@ import de.ntbit.projectearlybird.R
 import de.ntbit.projectearlybird.manager.ManagerFactory
 import de.ntbit.projectearlybird.ui.activity.ProfileActivity
 import kotlinx.android.synthetic.main.fragment_settings.*
+import kotlinx.android.synthetic.main.toolbar.*
 
 
 class SettingsFragment : Fragment() {
