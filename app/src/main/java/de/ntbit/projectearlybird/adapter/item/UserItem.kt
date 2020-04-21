@@ -4,6 +4,7 @@ import android.util.Log
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Item
 import de.ntbit.projectearlybird.R
+import de.ntbit.projectearlybird.helper.DateFormatter
 import de.ntbit.projectearlybird.manager.ManagerFactory
 import de.ntbit.projectearlybird.manager.UserManager
 import de.ntbit.projectearlybird.model.Message
@@ -18,7 +19,6 @@ import java.util.*
  *
  * @param user contains the information for this item
  * @property mUserManager is the global [UserManager]
- * @constructor ???
  */
 open class UserItem(val user: User): Item<GroupieViewHolder>(){
     protected val mUserManager: UserManager = ManagerFactory.getUserManager()
@@ -38,13 +38,8 @@ open class UserItem(val user: User): Item<GroupieViewHolder>(){
 class UserItemLatestMessage(user: User) : UserItem(user) {
     private val mMessageManager = ManagerFactory.getMessageManager()
 
-    /* TODO: CHANGE TO getCurrentLocale */
-    private val userLocale = Locale("de")
-
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         val latestMessage: Message = mMessageManager.getLatestMessage(user)
-
-        Log.d("CUSTOMDEBUG", "UserItem - User: ${user.username} at position: $position viewHolder: $viewHolder")
 
         mUserManager.loadAvatar(viewHolder.itemView.latest_message_row_iv_avatar, user)
         viewHolder.itemView.latest_message_row_tv_username.text = user.username
@@ -52,24 +47,11 @@ class UserItemLatestMessage(user: User) : UserItem(user) {
             if(latestMessage.body.length > 73)
                 latestMessage.body.subSequence(0,70).toString() + "..."
             else latestMessage.body
-        viewHolder.itemView.latest_message_row_tv_timestamp.text = getDateFormat(latestMessage)
-            .format(latestMessage.timestamp)
+        viewHolder.itemView.latest_message_row_tv_timestamp.text = DateFormatter
+            .formatDate(latestMessage)
     }
 
     override fun getLayout(): Int {
         return R.layout.row_latest_message
-    }
-
-    /**
-     * Converts the timestamp of sending in the correct format
-     *
-     * @param latestMessage contains the needed timestamp
-     */
-    private fun getDateFormat(latestMessage: Message): SimpleDateFormat {
-        val dayInMillis = 86400000
-        val weekInMillis = 604800000
-        if(System.currentTimeMillis() - latestMessage.timestamp.time > dayInMillis)
-            return SimpleDateFormat("dd.MM.yyyy",userLocale)
-        return SimpleDateFormat("HH:mm",userLocale)
     }
 }
