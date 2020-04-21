@@ -1,7 +1,9 @@
 package de.ntbit.projectearlybird.helper
 
+import android.content.res.Resources
 import android.text.TextUtils
 import android.widget.EditText
+import de.ntbit.projectearlybird.R
 import java.util.logging.Logger
 
 /**
@@ -9,27 +11,17 @@ import java.util.logging.Logger
  *
  * @property log for logging
  * @property errorText contains an error text
- * @property emailRegex format how an email should look like
  * @property EMAIL_NOT_VALID contains a text for displaying if the email is not valid
  * @property ERROR_NOT_NULL_NOR_EMPTY contains a text for displaying if the text field is not empty nor blank
  */
 class InputValidator {
     private val log = Logger.getLogger(this::class.java.simpleName)
-    // TODO: Change from fix String to R.string
-    //private val errorText = Resources.getSystem().getString(R.string.app_check_input)
-    private val errorText = "Check your Input!"
-    private val emailRegex : String = "(?:[a-z0-9!#\$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#\$%&'*+/=" +
-            "?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]" +
-            "|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])" +
-            "?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|" +
-            "[1-9]?[0-9]))\\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*" +
-            "[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-" +
-            "\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])"
+    private val errorText = Resources.getSystem().getString(R.string.app_check_input)
 
     companion object {
 
-        const val EMAIL_NOT_VALID = "Please provide a valid email"
-        const val ERROR_NOT_NULL_NOR_EMPTY = "Must not be empty nor blank"
+        val EMAIL_NOT_VALID: String = Resources.getSystem().getString(R.string.error_invalid_email)
+        val ERROR_NOT_NULL_NOR_EMPTY: String = Resources.getSystem().getString(R.string.error_null_or_empty)
 
         /**
          * Checks the input for a valid [email]
