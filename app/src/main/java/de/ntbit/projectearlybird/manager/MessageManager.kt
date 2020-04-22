@@ -48,8 +48,8 @@ class MessageManager {
      * @param recipient which receives the [Message]
      * @return [Message]: if the [Message] is not empty nor blank, [Unit] else
      */
-    fun sendMessage(body: String, recipient: User) : Message? {
-        if(body.isNotBlank() && body.isNotEmpty()) {
+    fun sendMessage(body: String, recipient: User): Message? {
+        if (body.isNotBlank() && body.isNotEmpty()) {
             val message = Message(mUserManager.getCurrentUser(), recipient, body)
             message.saveEventually()
             mAdapterManager.processOutgoingMessage(message)
@@ -64,13 +64,15 @@ class MessageManager {
      * @param chatLog is a [RecyclerView] which is used for adding the new [Message] to it
      */
     fun subscribeToPartner(partner: User, chatLog: RecyclerView) {
-        val adapter: GroupAdapter<GroupieViewHolder> = chatLog.adapter as GroupAdapter<GroupieViewHolder>
+        val adapter: GroupAdapter<GroupieViewHolder> =
+            chatLog.adapter as GroupAdapter<GroupieViewHolder>
         val mutableList: MutableList<Message> = ArrayList()
         val parseQuery = ParseQuery.getQuery(Message::class.java)
         parseQuery.whereContains("threadId", partner.objectId)
         parseQuery.whereEqualTo("senderId", partner.objectId)
         parseQuery.orderByAscending("timestamp")
-        val subscriptionHandling: SubscriptionHandling<Message> = parseLiveQueryClient.subscribe(parseQuery)
+        val subscriptionHandling: SubscriptionHandling<Message> =
+            parseLiveQueryClient.subscribe(parseQuery)
 
         subscriptionHandling.handleEvent(SubscriptionHandling.Event.CREATE) { _, message ->
             val handler = Handler(Looper.getMainLooper())
@@ -98,9 +100,11 @@ class MessageManager {
         val mNotificationManager: NotificationManager =
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            val channel = NotificationChannel("PEB_CHANNEL_ID",
+            val channel = NotificationChannel(
+                "PEB_CHANNEL_ID",
                 "YOUR_CHANNEL_NAME",
-                NotificationManager.IMPORTANCE_DEFAULT)
+                NotificationManager.IMPORTANCE_DEFAULT
+            )
             channel.description = "YOUR_NOTIFICATION_CHANNEL_DESCRIPTION"
             channel.enableVibration(true)
             channel.lockscreenVisibility = NotificationCompat.VISIBILITY_PUBLIC
@@ -112,7 +116,7 @@ class MessageManager {
             .setContentText(message.body) // message for notification
             .setAutoCancel(true) // clear notification after click
             .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setVibrate(longArrayOf(100,200,300,400,500))
+            .setVibrate(longArrayOf(100, 200, 300, 400, 500))
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
         val intent = Intent(context, ChatActivity::class.java)
         intent.putExtra(ParcelContract.USER_KEY, message.sender)
@@ -134,8 +138,7 @@ class MessageManager {
             query.limit = 1
             query.orderByDescending("timestamp")
             return query.first
-        }
-        catch (e: ParseException) {
+        } catch (e: ParseException) {
             Log.d("EXCEPTION", e.localizedMessage)
         }
         return Message()
@@ -146,7 +149,8 @@ class MessageManager {
      */
     @Suppress("UNCHECKED_CAST")
     fun getMessagesByPartner(partner: User, chatLog: RecyclerView) {
-        val adapter: GroupAdapter<GroupieViewHolder> = chatLog.adapter as GroupAdapter<GroupieViewHolder>
+        val adapter: GroupAdapter<GroupieViewHolder> =
+            chatLog.adapter as GroupAdapter<GroupieViewHolder>
         val mutableList: MutableList<Message> = ArrayList()
         val query = ParseQuery.getQuery(Message::class.java)
         query.whereContains("threadId", partner.objectId)
@@ -154,11 +158,13 @@ class MessageManager {
         //query.fromLocalDatastore()
         query.findInBackground { messages, e ->
             if (e == null) {
-                Log.d("CUSTOMDEBUG", "$simpleClassName - Got ${messages.size} " +
-                        "messages in conversation with ${partner.username}.")
+                Log.d(
+                    "CUSTOMDEBUG", "$simpleClassName - Got ${messages.size} " +
+                            "messages in conversation with ${partner.username}."
+                )
                 mutableList.addAll(messages)
                 //ParseObject.pinAllInBackground(messages)
-                for(message in mutableList) {
+                for (message in mutableList) {
                     if (message.sender.objectId == partner.objectId)
                         adapter.add(
                             ChatFromItem(

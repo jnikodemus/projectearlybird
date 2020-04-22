@@ -7,6 +7,7 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import de.ntbit.projectearlybird.R
 import de.ntbit.projectearlybird.adapter.item.UserItem
+import de.ntbit.projectearlybird.helper.ParcelContract
 import de.ntbit.projectearlybird.manager.ManagerFactory
 import de.ntbit.projectearlybird.manager.UserManager
 import kotlinx.android.synthetic.main.activity_new_message.*
@@ -16,10 +17,6 @@ class NewMessageActivity : AppCompatActivity() {
 
     private val mUserManager: UserManager = ManagerFactory.getUserManager()
     private val adapter = GroupAdapter<GroupieViewHolder>()
-
-    companion object{
-        val USER_KEY = "USER_KEY"
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,7 +54,7 @@ class NewMessageActivity : AppCompatActivity() {
             val userItem = item as UserItem
             //userItem.user.pin()
             val intent = Intent(view.context, ChatActivity::class.java)
-            intent.putExtra(USER_KEY, userItem.user)
+            intent.putExtra(ParcelContract.USER_KEY, userItem.user)
             startActivity(intent)
             finish()
         }

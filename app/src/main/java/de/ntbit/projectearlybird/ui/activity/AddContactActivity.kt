@@ -12,6 +12,7 @@ import com.xwray.groupie.GroupieViewHolder
 import de.ntbit.projectearlybird.R
 import de.ntbit.projectearlybird.R.*
 import de.ntbit.projectearlybird.adapter.item.UserItem
+import de.ntbit.projectearlybird.helper.ParcelContract
 import de.ntbit.projectearlybird.manager.ManagerFactory
 import de.ntbit.projectearlybird.model.User
 import de.ntbit.projectearlybird.ui.fragment.ContactsFragment
@@ -87,7 +88,7 @@ class AddContactActivity : AppCompatActivity() {
             val userItem = item as UserItem
             mUserManager.addContact(item.user)
             val intent = Intent(view.context, ChatActivity::class.java)
-            intent.putExtra(ContactsFragment.USER_KEY, userItem.user)
+            intent.putExtra(ParcelContract.USER_KEY, userItem.user)
             startActivity(intent)
             finish()
         }
