@@ -63,15 +63,15 @@ class AdapterManager {
      */
     private fun readExistingConversations() {
         Log.d("CUSTOMDEBUG", "$simpleClassName - readExistingConversations()")
+
         getUserQuery().orderByDescending("username").findInBackground {
                 convContacts, e ->
             if(e == null) {
                 convContacts.remove(mUserManager.getCurrentUser())
+                Log.d("CUSTOMDEBUG", "$simpleClassName - got ${convContacts.size} conversations.")
                 for(contact in convContacts) {
                     val latestContact =
-                        UserItemLatestMessage(
-                            contact
-                        )
+                        UserItemLatestMessage(contact)
                     conversationsAdapter.add(0, latestContact)
                     conversationContacts.add(contact)
                     //conversationObjects.put(latestContact.user,latestContact)
@@ -101,6 +101,7 @@ class AdapterManager {
             val handler = Handler(Looper.getMainLooper())
             handler.post {
                 processIncomingMessage(message)
+                Log.d("CUSTOMDEBUG", "$simpleClassName - got new conversation with ${message.sender.username}")
             }
         }
     }

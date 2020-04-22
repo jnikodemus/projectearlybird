@@ -74,6 +74,7 @@ class GroupManager {
                 for(group in groups)
                     adapter.add(GroupItem(group))
             }
+            else Log.d("CUSTOMDEBUG", "$simpleClassName - ERROR -> ${e.message}")
         }
         //Log.d("CUSTOMDEBUG", "GOT " + currentUserGroups.size + " groups")
         //for (m in currentUserGroups)

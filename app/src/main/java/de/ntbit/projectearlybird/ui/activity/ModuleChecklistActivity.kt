@@ -67,8 +67,6 @@ class ModuleChecklistActivity : AppCompatActivity() {
         itemTouchHelper.attachToRecyclerView(act_module_checklist_rv_log)
         act_module_checklist_rv_log.adapter = adapter
         placeToolbar()
-        //setClicklisteners()
-        //adapter.addAll(module.items)
     }
 
     private fun placeToolbar() {
@@ -80,15 +78,7 @@ class ModuleChecklistActivity : AppCompatActivity() {
     }
 
     private fun setClicklisteners() {
-        //act_module_checklist_fab.setOnClickListener {
-        //    showCreateItemDialog()
-        //}
     }
-
-//    private fun addChecklistItem() {
-//        val dialog = AddItemDialogFragment(adapter)
-//        dialog.show(this.supportFragmentManager, "DIALOG_MODULE_CHECKLIST_ACTIVITY_ADD_ITEM")
-//   }
 
     private fun showCreateItemDialog() {
         val context = this

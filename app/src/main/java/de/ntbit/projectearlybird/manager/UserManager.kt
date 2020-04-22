@@ -68,7 +68,6 @@ class UserManager {
 
         user.signUpInBackground { e ->
             if (e == null) {
-                //saveUserLocal(getCurrentUser(), ctx)
                 showToast("Registration successful. Please verify your Email")
                 // TODO activate automatic login after successful registration
             } else {
@@ -80,6 +79,7 @@ class UserManager {
     }
 
     /**
+     * TODO: Remove personal information
      * STOPPED HERE TRYING TO SLEEP Zzzz
      *
      * Login the user with [username] and [password]
@@ -111,7 +111,6 @@ class UserManager {
      */
     private fun updateLastLogin() {
         val mCurrentUser = getCurrentUser()
-        //mCurrentUser.put(PebContract.UserEntry.COLUMN_USER_LASTLOGIN, Date(System.currentTimeMillis()))
         mCurrentUser.saveInBackground()
     }
 
@@ -234,7 +233,7 @@ class UserManager {
         return ParseUser.getCurrentUser() != null
     }
 
-    // TODO: Delete ActivityStack? and del all pinned objects
+    // TODO: Delete ActivityStack and everything else what is userspecific!
     /**
      * Deletes the content of the local datastore and logout the [User]
      *

@@ -106,6 +106,17 @@ class ModuleChecklistManager {
         }
     }
 
+    private fun listenForDeleteChecklistItem() {
+        val parseQuery = ParseQuery.getQuery(ModuleChecklistItem::class.java)
+        val subscriptionHandling: SubscriptionHandling<ModuleChecklistItem> =
+            parseLiveQueryClient.subscribe(parseQuery)
+        subscriptionHandling.handleEvent(SubscriptionHandling.Event.DELETE) {_, item ->
+            val handler = Handler(Looper.getMainLooper())
+            handler.post {
+                deleteChecklistItem(ChecklistItem(item), false)
+            }
+        }
+    }
 
     private fun processUpdateOnChecklistItem(item: ModuleChecklistItem) {
         val group = item.associatedModule.associatedGroup
@@ -137,14 +148,15 @@ class ModuleChecklistManager {
         item.saveEventually()
     }
 
-    fun deleteChecklistItem(checklistItem: ChecklistItem) {
+    fun deleteChecklistItem(checklistItem: ChecklistItem, deleteFromDatabase: Boolean) {
         val item = checklistItem.getModuleChecklistItem()
         val group = item.associatedModule.associatedGroup
         val position = adapterMap[group]!!.getAdapterPosition(checklistItem)
-        adapterMap[group]!!.notifyItemRemoved(position)
         adapterMap[group]!!.remove(checklistItem)
+        adapterMap[group]!!.notifyItemRangeChanged(position, adapterMap[group]!!.itemCount -1)
+        //adapterMap[group]!!.notifyItemRemoved(position)
         checklistItemMap[group]!!.remove(item)
-        deleteItemOnDatabase(item)
+        if(deleteFromDatabase) deleteItemOnDatabase(item)
     }
 
     private fun deleteItemOnDatabase(item: ModuleChecklistItem) {

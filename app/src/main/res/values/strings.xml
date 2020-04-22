@@ -18,6 +18,9 @@
     <string name="app_add">Add</string>
     <string name="app_plus_sign">+</string>
 
+    <string name="error_invalid_email">Provided email is not valid</string>
+    <string name="error_null_or_empty">Must not be empty nor blank</string>
+
     <string name="menu_groups">Groups</string>
     <string name="menu_contacts">Contacts</string>
     <string name="menu_conversations">Conversations</string>
