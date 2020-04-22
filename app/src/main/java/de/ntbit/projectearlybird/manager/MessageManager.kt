@@ -19,6 +19,7 @@ import com.xwray.groupie.GroupieViewHolder
 import de.ntbit.projectearlybird.R
 import de.ntbit.projectearlybird.adapter.item.ChatFromItem
 import de.ntbit.projectearlybird.adapter.item.ChatSelfItem
+import de.ntbit.projectearlybird.helper.ParcelContract
 import de.ntbit.projectearlybird.model.Message
 import de.ntbit.projectearlybird.model.User
 import de.ntbit.projectearlybird.ui.activity.ChatActivity
@@ -84,7 +85,7 @@ class MessageManager {
                 adapter.notifyDataSetChanged()
                 chatLog.smoothScrollToPosition(adapter.itemCount - 1)
                 //message.pinInBackground()
-                showNotification(message, chatLog.context)
+                //showNotification(message, chatLog.context)
             }
         }
     }
@@ -92,6 +93,7 @@ class MessageManager {
     /**
      * Builds and shows a systemnotification if the current user has received a new [Message].
      */
+    @Deprecated("Use NotificationHelper.showNotification()")
     private fun showNotification(message: Message, context: Context) {
         val mNotificationManager: NotificationManager =
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -113,7 +115,7 @@ class MessageManager {
             .setVibrate(longArrayOf(100,200,300,400,500))
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
         val intent = Intent(context, ChatActivity::class.java)
-        intent.putExtra(NewMessageActivity.USER_KEY, message.sender)
+        intent.putExtra(ParcelContract.USER_KEY, message.sender)
         val pi = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
         mBuilder.setContentIntent(pi)
         mNotificationManager.notify(0, mBuilder.build())

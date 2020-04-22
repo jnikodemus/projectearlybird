@@ -24,6 +24,11 @@ class NotificationHelper {
         val CHANNEL_NAME = "YOUR_CHANNEL_ID"
         val CHANNEL_DESCRIPTION = "YOUR_NOTIFICATION_DESCRIPTION"
 
+
+        fun showNotification(message: Message) {
+            showNotification(message, ApplicationContextProvider.context)
+        }
+
         /**
          * Builds and sends a Systemnotification using the passed [message] and [context]
          */

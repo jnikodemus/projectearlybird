@@ -9,6 +9,8 @@ import com.parse.livequery.SubscriptionHandling
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import de.ntbit.projectearlybird.adapter.item.UserItemLatestMessage
+import de.ntbit.projectearlybird.helper.ApplicationContextProvider
+import de.ntbit.projectearlybird.helper.NotificationHelper
 import de.ntbit.projectearlybird.model.Message
 import de.ntbit.projectearlybird.model.User
 import java.net.URI
@@ -42,14 +44,14 @@ class AdapterManager {
 
     /**
      * Returns [conversationsAdapter], calls [readExistingConversations] and
-     * [listenForNewConversation] if [isInitialized] is false. After that [isInitialized] is set
+     * [listenForNewMessage] if [isInitialized] is false. After that [isInitialized] is set
      * to true.
      * @return [GroupAdapter]<[GroupieViewHolder]>
      */
     fun getConversationsAdapter(): GroupAdapter<GroupieViewHolder> {
         if (!isInitialized) {
             readExistingConversations()
-            listenForNewConversation()
+            listenForNewMessage()
             isInitialized = true
         }
         return conversationsAdapter
@@ -89,7 +91,7 @@ class AdapterManager {
      * Calls [processIncomingMessage] if a new [Message] came in.
      *
      */
-    private fun listenForNewConversation() {
+    private fun listenForNewMessage() {
         Log.d("CUSTOMDEBUG", "$simpleClassName - listenForNewConversation()")
 
         val parseQuery = ParseQuery.getQuery(Message::class.java)
@@ -151,9 +153,12 @@ class AdapterManager {
         //)
         val latestContact =
             UserItemLatestMessage(message.sender)
-        if (!conversationContacts.contains(latestContact.user))
+        if (!conversationContacts.contains(latestContact.user)) {
+            conversationContacts.add(latestContact.user)
             conversationsAdapter.add(0, latestContact)
+        }
         conversationsAdapter.notifyDataSetChanged()
+        NotificationHelper.showNotification(message)
         // TODO: Implement notifyItemChanged()
         /*
         conversationsAdapter.notifyDataSetChanged()
