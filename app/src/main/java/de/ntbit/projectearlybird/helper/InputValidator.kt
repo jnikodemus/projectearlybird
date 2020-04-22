@@ -14,14 +14,18 @@ import java.util.logging.Logger
  * @property EMAIL_NOT_VALID contains a text for displaying if the email is not valid
  * @property ERROR_NOT_NULL_NOR_EMPTY contains a text for displaying if the text field is not empty nor blank
  */
+
+// TODO: Get ErrorStrings from strings.xml
 class InputValidator {
     private val log = Logger.getLogger(this::class.java.simpleName)
-    private val errorText = Resources.getSystem().getString(R.string.app_check_input)
+    private val errorText = "Check your input!"
 
     companion object {
 
-        val EMAIL_NOT_VALID: String = Resources.getSystem().getString(R.string.error_invalid_email)
-        val ERROR_NOT_NULL_NOR_EMPTY: String = Resources.getSystem().getString(R.string.error_null_or_empty)
+        //val EMAIL_NOT_VALID: String = Resources.getSystem().getString(R.string.error_invalid_email)
+        val EMAIL_NOT_VALID: String = "Provided email is not valid"
+        //val ERROR_NOT_NULL_NOR_EMPTY: String = Resources.getSystem().getString(R.string.error_null_or_empty)
+        val ERROR_NOT_NULL_NOR_EMPTY: String = "Must not be empty nor blank"
 
         /**
          * Checks the input for a valid [email]

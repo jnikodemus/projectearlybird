@@ -1,28 +1,23 @@
 package de.ntbit.projectearlybird.ui.activity
 
+import android.app.ActivityManager
 import android.app.Dialog
-import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.Editable
 import android.text.SpannableStringBuilder
-import android.util.AttributeSet
 import android.util.Log
-import android.view.Gravity
-import android.view.View
-import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.app.ActivityCompat.finishAffinity
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.DialogFragment
 import de.ntbit.projectearlybird.R
 import de.ntbit.projectearlybird.manager.ManagerFactory
-import kotlinx.android.synthetic.main.activity_chat.*
 import kotlinx.android.synthetic.main.activity_profile.*
 import kotlinx.android.synthetic.main.toolbar.*
+
 
 class ProfileActivity : AppCompatActivity() {
 
@@ -115,7 +110,8 @@ class ProfileActivity : AppCompatActivity() {
         val dialog = LogoutDialogFragment(
             "If you proceed, all your data will be cleared from this device.",
             "logout",
-            "cancel"
+            "cancel",
+            this
         )
         dialog.show(this.supportFragmentManager, "DIALOG_PROFILE_FRAGMENT_LOGOUT")
     }
@@ -126,8 +122,10 @@ class ProfileActivity : AppCompatActivity() {
 }
 
 class LogoutDialogFragment(
-    private var message: String, private var positiveButtonText: String,
-    private var negativeButtonText: String
+    private var message: String,
+    private var positiveButtonText: String,
+    private var negativeButtonText: String,
+    private var callingActivity: ProfileActivity
 ) : DialogFragment() {
 
     val mUserManager = ManagerFactory.getUserManager()
@@ -141,8 +139,8 @@ class LogoutDialogFragment(
                 .setPositiveButton(positiveButtonText
                 ) { dialog, id ->
                     mUserManager.logOut()
-                    val intent = Intent(this.context, LoginActivity::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    val intent = Intent(this.context, LoadingActivity::class.java)
+                    finishAffinity(callingActivity)
                     startActivity(intent)
                 }
                 .setNegativeButton(negativeButtonText

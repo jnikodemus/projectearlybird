@@ -39,6 +39,7 @@ class UserItemLatestMessage(user: User) : UserItem(user) {
     private val mMessageManager = ManagerFactory.getMessageManager()
 
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
+        Log.d("CUSTOMDEBUG", "UserItemLatesMessage - trying to get latestMessage for ${user.username}")
         val latestMessage: Message = mMessageManager.getLatestMessage(user)
 
         mUserManager.loadAvatar(viewHolder.itemView.latest_message_row_iv_avatar, user)

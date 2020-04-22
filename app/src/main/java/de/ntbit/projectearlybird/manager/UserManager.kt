@@ -233,7 +233,7 @@ class UserManager {
         return ParseUser.getCurrentUser() != null
     }
 
-    // TODO: Delete ActivityStack? and del all pinned objects
+    // TODO: Delete ActivityStack and everything else what is userspecific!
     /**
      * Deletes the content of the local datastore and logout the [User]
      *
