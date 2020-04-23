@@ -12,6 +12,7 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import de.ntbit.projectearlybird.R
 import de.ntbit.projectearlybird.adapter.item.ChatSelfItem
+import de.ntbit.projectearlybird.helper.ParcelContract
 import de.ntbit.projectearlybird.manager.ManagerFactory
 import de.ntbit.projectearlybird.manager.MessageManager
 import de.ntbit.projectearlybird.manager.UserManager
@@ -22,7 +23,7 @@ import kotlinx.android.synthetic.main.toolbar.*
 
 class ChatActivity : AppCompatActivity() {
 
-    companion object{
+    companion object {
         val TAG = "Chatlog"
     }
 
@@ -56,7 +57,7 @@ class ChatActivity : AppCompatActivity() {
     }
 
     private fun initialize() {
-        chatPartner = intent.getParcelableExtra(NewMessageActivity.USER_KEY)
+        chatPartner = intent.getParcelableExtra(ParcelContract.USER_KEY)
         placeToolbar()
 
         act_chat_rv_log.adapter = adapter
@@ -98,11 +99,11 @@ class ChatActivity : AppCompatActivity() {
     }
 
     private fun listenForMessage(partner: User) {
-       /* CoroutineScope(IO).launch{
-            val messages = async{
-                mMessageManager.getMessagesByPartner(partner, act_chat_rv_log)
-            }.await()
-        }*/
+        /* CoroutineScope(IO).launch{
+             val messages = async{
+                 mMessageManager.getMessagesByPartner(partner, act_chat_rv_log)
+             }.await()
+         }*/
         mMessageManager.getMessagesByPartner(partner, act_chat_rv_log)
         mMessageManager.subscribeToPartner(partner, act_chat_rv_log)
     }
@@ -111,7 +112,7 @@ class ChatActivity : AppCompatActivity() {
     private fun sendMessage() {
         val text = act_chat_et_message.text.toString()
         val message = mMessageManager.sendMessage(text, chatPartner)
-        if(message != null) {
+        if (message != null) {
             adapter.add(
                 ChatSelfItem(
                     message

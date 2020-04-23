@@ -8,6 +8,7 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import de.ntbit.projectearlybird.R
 import de.ntbit.projectearlybird.adapter.item.UserItem
+import de.ntbit.projectearlybird.helper.ParcelContract
 import de.ntbit.projectearlybird.manager.ManagerFactory
 import de.ntbit.projectearlybird.manager.UserManager
 import de.ntbit.projectearlybird.ui.activity.AddContactActivity
@@ -17,10 +18,6 @@ import kotlinx.android.synthetic.main.fragment_contacts.*
 import kotlinx.android.synthetic.main.toolbar.*
 
 class ContactsFragment : Fragment() {
-
-    companion object{
-        val USER_KEY = "USER_KEY"
-    }
 
     private val mUserManager: UserManager = ManagerFactory.getUserManager()
     private val adapter = GroupAdapter<GroupieViewHolder>()
@@ -81,7 +78,7 @@ class ContactsFragment : Fragment() {
             val userItem = item as UserItem
             //userItem.user.pin()
             val intent = Intent(view.context, ChatActivity::class.java)
-            intent.putExtra(USER_KEY, userItem.user)
+            intent.putExtra(ParcelContract.USER_KEY, userItem.user)
             startActivity(intent)
         }
         frgmt_contacts_fab.setOnClickListener {
