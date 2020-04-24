@@ -153,6 +153,7 @@ class MessageManager {
             chatLog.adapter as GroupAdapter<GroupieViewHolder>
         val mutableList: MutableList<Message> = ArrayList()
         val query = ParseQuery.getQuery(Message::class.java)
+        query.limit = 1000
         query.whereContains("threadId", partner.objectId)
         query.orderByAscending("timestamp")
         //query.fromLocalDatastore()

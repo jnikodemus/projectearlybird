@@ -7,9 +7,11 @@ import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
 import de.ntbit.projectearlybird.R
+import de.ntbit.projectearlybird.helper.NotificationHelper.Companion.CHANNEL_DESCRIPTION
+import de.ntbit.projectearlybird.helper.NotificationHelper.Companion.CHANNEL_ID
+import de.ntbit.projectearlybird.helper.NotificationHelper.Companion.CHANNEL_NAME
 import de.ntbit.projectearlybird.model.Message
 import de.ntbit.projectearlybird.ui.activity.ChatActivity
-import de.ntbit.projectearlybird.ui.activity.NewMessageActivity
 
 /**
  * Builds and sends Systemnotifications to the user using [NotificationManager]
@@ -55,7 +57,6 @@ class NotificationHelper {
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
             val intent = Intent(context, ChatActivity::class.java)
             intent.putExtra(ParcelContract.USER_KEY, message.sender)
-            //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
             val pi = PendingIntent
                 .getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
             mBuilder.setContentIntent(pi)

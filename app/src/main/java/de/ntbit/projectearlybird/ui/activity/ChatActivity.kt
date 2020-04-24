@@ -1,6 +1,8 @@
 package de.ntbit.projectearlybird.ui.activity
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.widget.ImageView
 import android.widget.TextView
@@ -23,9 +25,7 @@ import kotlinx.android.synthetic.main.toolbar.*
 
 class ChatActivity : AppCompatActivity() {
 
-    companion object {
-        val TAG = "Chatlog"
-    }
+    private val simpleClassName = this.javaClass.simpleName
 
     private val adapter = GroupAdapter<GroupieViewHolder>()
     private val mMessageManager: MessageManager = ManagerFactory.getMessageManager()
@@ -57,7 +57,9 @@ class ChatActivity : AppCompatActivity() {
     }
 
     private fun initialize() {
+        Log.d("CUSTOMDEBUG", "$simpleClassName - initialize()")
         chatPartner = intent.getParcelableExtra(ParcelContract.USER_KEY)
+        Log.d("CUSTOMDEBUG", "$simpleClassName - initialize(${chatPartner.username})")
         placeToolbar()
 
         act_chat_rv_log.adapter = adapter
@@ -67,6 +69,28 @@ class ChatActivity : AppCompatActivity() {
         setClickListener()
 
         listenForMessage(chatPartner)
+    }
+
+    // TODO: Check if this workaround is ok
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        if(intent != null) {
+            startActivity(intent)
+            finish()
+        }
+        //refresh(intent)
+    }
+
+    private fun refresh(intent: Intent?) {
+        if(intent != null) {
+            chatPartner = intent.getParcelableExtra(ParcelContract.USER_KEY)
+            Log.d("CUSTOMDEBUG", "$simpleClassName - refresh(${chatPartner.username})")
+            placeToolbar()
+            act_chat_rv_log.adapter = adapter
+            (act_chat_rv_log.layoutManager as LinearLayoutManager).stackFromEnd = true
+            setClickListener()
+            listenForMessage(chatPartner)
+        }
     }
 
     private fun setClickListener() {

@@ -46,7 +46,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.activity.CreateGroupActivity" />
-        <activity android:name=".ui.activity.ChatActivity" />
+        <activity android:name=".ui.activity.ChatActivity"
+            android:launchMode="singleTop"/>
         <activity android:name=".ui.activity.NewMessageActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
