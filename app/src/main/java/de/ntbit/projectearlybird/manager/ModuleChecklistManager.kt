@@ -163,10 +163,11 @@ class ModuleChecklistManager {
         item.deleteEventually()
     }
 
+    // TODO: implement isInitialized again
     fun getAdapterByGroup(group: Group): GroupAdapter<GroupieViewHolder> {
         if(!isInitialized) {
             getAllChecklists()
-            isInitialized = true
+            //isInitialized = true
         }
         return adapterMap[group]!!
     }

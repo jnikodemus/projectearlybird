@@ -144,6 +144,7 @@ class Group : ParseObject {
      */
     fun addModule(module: Module) {
         addUnique("modules", module)
+        module.acl = parseACL
         module.save()
     }
 
@@ -192,8 +193,9 @@ class Group : ParseObject {
     }
 
     fun getModuleByName(moduleName: String): Module? {
-        for(module in modules)
-            if(module.name == moduleName) return module
+        for(module in modules) {
+            if (module.name == moduleName) return module
+        }
         return null
     }
 }

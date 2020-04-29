@@ -91,6 +91,7 @@ class ModuleChecklistItem : ParseObject {
         this.user = null
         this.creator = creator
         this.associatedModule = associatedModule
+        this.acl = associatedModule.acl
         this.timestamp = Date(System.currentTimeMillis())
     }
 

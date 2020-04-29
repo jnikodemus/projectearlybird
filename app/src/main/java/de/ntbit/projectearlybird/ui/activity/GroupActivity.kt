@@ -24,6 +24,7 @@ import de.ntbit.projectearlybird.model.Module
 import de.ntbit.projectearlybird.model.ModuleChecklist
 import kotlinx.android.synthetic.main.activity_group.*
 import kotlinx.android.synthetic.main.toolbar.*
+import java.lang.Exception
 
 
 class GroupActivity : AppCompatActivity() {
@@ -164,8 +165,13 @@ class AddModuleDialogFragment(otherGroup: Group, adapter: GroupAdapter<GroupieVi
                     Log.d("CUSTOMDEBUG", "$simpleClassName - User clicked $which")
                     when(which) {
                         0 -> {
+                            Log.d(
+                                "CUSTOMDEBUG",
+                                "$simpleClassName - associatedGroup: " + group.name
+                            )
                             val module = ModuleChecklist(ArrayList(), group)
-                            if(!group.modules.contains(module)) {
+                            if (!group.modules.contains(module)) {
+                                module.saveEventually()
                                 group.addModule(module)
                                 group.saveEventually()
                                 moduleAdapter.add(ModuleItem(Module(module)))
