@@ -144,6 +144,7 @@ class Group : ParseObject {
      */
     fun addModule(module: Module) {
         addUnique("modules", module)
+        module.acl = parseACL
         module.save()
     }
 
