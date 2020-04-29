@@ -148,20 +148,17 @@ class GroupManager {
             group.admins = admins
             group.updateACL()
             group.save()
-
-            try {
-                // TODO: search for right Group in adapter
-                groupSet.remove(group)
-                adapter.removeGroupAtAdapterPosition(positionToDelete)
-                //adapter.notifyItemRemoved(posToDelete)
-                adapter.notifyDataSetChanged()
-                return true
-            } catch (e: Exception) {
-                Log.d("CUSTOMDEBUG", "$simpleClassName - ERROR -> ${e.localizedMessage}")
-            }
+        }
+        else {
+            group.deleteEventually()
         }
 
-        return false
+        groupSet.remove(group)
+        adapter.removeGroupAtAdapterPosition(positionToDelete)
+        //adapter.notifyItemRemoved(posToDelete)
+        adapter.notifyDataSetChanged()
+
+        return true
     }
 
     /**
