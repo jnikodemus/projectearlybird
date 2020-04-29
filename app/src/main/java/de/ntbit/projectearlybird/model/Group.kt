@@ -183,6 +183,12 @@ class Group : ParseObject {
             acl.setWriteAccess(user, true)
         }
         this.parseACL = acl
+        //updateModuleACL()
+    }
+
+    private fun updateModuleACL() {
+        for(module in modules)
+            module.acl = this.parseACL
     }
 
     /**
