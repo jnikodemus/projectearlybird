@@ -1,5 +1,6 @@
 package de.ntbit.projectearlybird.model
 
+import android.util.Log
 import com.parse.ParseClassName
 import com.parse.ParseObject
 import de.ntbit.projectearlybird.adapter.item.ChecklistItem
@@ -20,13 +21,14 @@ class ModuleChecklist: Module {
         this.colorInt = -65281
         this.associatedGroup = group
         this.items = itemList
+        Log.d("CUSTOMDEBUG", "ModuleChecklist - $this")
     }
 
     internal constructor(other: ModuleChecklist) {
         this.name = other.name
         this.description = other.description
         this.colorInt = other.colorInt
-        this.items = ArrayList<ChecklistItem>()
+        this.items = ArrayList()
         for(i in other.items)
             this.items.add(i)
     }
@@ -55,4 +57,10 @@ class ModuleChecklist: Module {
             //}
             this.put("items", stringArr)
         }
+
+    override fun toString(): String {
+        val stringifiedModule = "$name, $description, colorInt: $colorInt, " +
+                "${associatedGroup.name}, items: ${items.size}"
+        return stringifiedModule
+    }
 }
