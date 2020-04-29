@@ -22,6 +22,7 @@ import de.ntbit.projectearlybird.adapter.item.GroupItem
 import de.ntbit.projectearlybird.adapter.item.UserItem
 import de.ntbit.projectearlybird.helper.ApplicationContextProvider
 import de.ntbit.projectearlybird.helper.InputValidator
+import de.ntbit.projectearlybird.helper.ParcelContract
 import de.ntbit.projectearlybird.manager.ManagerFactory
 import de.ntbit.projectearlybird.model.Group
 import de.ntbit.projectearlybird.ui.activity.ChatActivity
@@ -36,10 +37,6 @@ import java.net.URI
 
 
 class GroupsFragment : Fragment() {
-
-    companion object {
-        val GROUP_KEY = "GROUP"
-    }
 
     private val mGroupManager = ManagerFactory.getGroupManager()
     private val adapter = mGroupManager.getAdapter()
@@ -74,7 +71,8 @@ class GroupsFragment : Fragment() {
         adapter.setOnItemClickListener { item, view ->
             val groupItem = item as GroupItem
             val intent = Intent(view.context, GroupActivity::class.java)
-            intent.putExtra(GROUP_KEY, groupItem.group)
+            intent.putExtra(ParcelContract.GROUP_KEY, groupItem.group)
+            intent.putExtra(ParcelContract.GROUP_ADAPTER_POSITION_KEY, adapter.getAdapterPosition(groupItem))
             startActivity(intent)
         }
     }

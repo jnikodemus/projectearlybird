@@ -57,7 +57,7 @@ class GroupActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId) {
             R.id.group_context_menu_leave -> {
-                if(mGroupManager.leaveGroup(group)) {
+                if(mGroupManager.leaveGroup(group, intent.getIntExtra(ParcelContract.GROUP_ADAPTER_POSITION_KEY, -1))) {
                     finish()
                     return true
                 }
