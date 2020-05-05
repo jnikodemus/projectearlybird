@@ -65,12 +65,7 @@ class ModuleChecklistActivity : AppCompatActivity() {
         group = intent.getParcelableExtra(ParcelContract.GROUP_KEY)
         moduleChecklist = intent.getParcelableExtra(ParcelContract.MODULE_KEY)
         Log.d("CUSTOMDEBUG", "$simpleClassName.initialize() - Parcel got: ${group.name} and ${moduleChecklist.name}")
-        try {
-            adapter = mModuleChecklistManager.getAdapterByGroup(group)
-        }
-        catch (e: Exception) {
-            Log.d("CUSTOMDEBUG", "$simpleClassName.initialize() - Catched Exception: ${e.message}")
-        }
+        adapter = mModuleChecklistManager.getAdapterByGroup(group)
         Log.d("CUSTOMDEBUG", "$simpleClassName.initialize() - Adaptersize: ${adapter.groupCount}")
         val itemTouchHelper = ItemTouchHelper(SwipeToDeleteHelper(adapter))
         itemTouchHelper.attachToRecyclerView(act_module_checklist_rv_log)
@@ -84,9 +79,6 @@ class ModuleChecklistActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
         toolbar_tv_root_title.text = moduleChecklist.name
-    }
-
-    private fun setClicklisteners() {
     }
 
     private fun showCreateItemDialog() {
