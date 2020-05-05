@@ -118,7 +118,7 @@ class GroupActivity : AppCompatActivity() {
     private fun loadModules() {
         for(m in group.modules) {
             m.fetchIfNeeded<Module>()
-            Log.d("CUSTOMDEBUG", "$simpleClassName - ${m.name}, ${m.description}")
+            Log.d("CUSTOMDEBUG", "$simpleClassName.loadModules() - ${m.name}, ${m.description}")
             adapter.add(ModuleItem(Module(m)))
         }
     }
@@ -126,16 +126,19 @@ class GroupActivity : AppCompatActivity() {
     private fun setClicklistener() {
         adapter.setOnItemClickListener { item, view ->
             val moduleItem = item as ModuleItem
-            Log.d("CUSTOMDEBUG", "$simpleClassName - ${moduleItem.name}")
+            Log.d("CUSTOMDEBUG", "$simpleClassName.OnClickListener() - ${moduleItem.name}")
 
             val intent: Intent
             when(moduleItem.name) {
                 "Checklist" -> {
                     intent = Intent(this, ModuleChecklistActivity::class.java)
                     lateinit var module: Module
+                    Log.d("CUSTOMDEBUG", "$simpleClassName.switch(Checklist) - before cast")
                     for(groupModule in group.modules) {
-                        if (groupModule.name == "Checklist")
+                        if (groupModule.name == "Checklist") {
+                            Log.d("CUSTOMDEBUG", "$simpleClassName.OnClickListener() - trying cast to ModuleChecklist")
                             module = groupModule as ModuleChecklist
+                        }
                         intent.putExtra(ParcelContract.GROUP_KEY, group)
                         intent.putExtra(ParcelContract.MODULE_KEY, module)
                         startActivity(intent)

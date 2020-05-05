@@ -199,9 +199,12 @@ class Group : ParseObject {
     }
 
     fun getModuleByName(moduleName: String): Module? {
+        Log.d("CUSTOMDEBUG", "Group - $name got ${modules.size} modules")
         for(module in modules) {
-            if (module.name == moduleName) return module
+            Log.d("CUSTOMDEBUG", "Group - foreachLoop trying ${module.name}")
+            if(module.name == moduleName) return module
         }
+        Log.d("CUSTOMDEBUG", "Group - couldnt find $moduleName -> returning null")
         return null
     }
 }
