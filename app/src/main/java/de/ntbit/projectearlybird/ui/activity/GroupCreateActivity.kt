@@ -24,13 +24,13 @@ import de.ntbit.projectearlybird.manager.ManagerFactory
 import de.ntbit.projectearlybird.manager.UserManager
 import de.ntbit.projectearlybird.model.Group
 import de.ntbit.projectearlybird.model.User
-import kotlinx.android.synthetic.main.activity_create_group.*
+import kotlinx.android.synthetic.main.activity_group_create.*
 import kotlinx.android.synthetic.main.toolbar.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 
 
-class CreateGroupActivity : AppCompatActivity() {
+class GroupCreateActivity : AppCompatActivity() {
 
     companion object {
         val GROUP_KEY = "GROUP"
@@ -50,7 +50,7 @@ class CreateGroupActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_create_group)
+        setContentView(R.layout.activity_group_create)
 
         initialize()
     }
@@ -111,17 +111,17 @@ class CreateGroupActivity : AppCompatActivity() {
                 /*
                 val test: Job = CoroutineScope(IO).launch {
                     createdGroup.save()
-                    Log.d("CUSTOMDEBUG", "CreateGroupActivity - Job save() done.")
+                    Log.d("CUSTOMDEBUG", "GroupCreateActivity - Job save() done.")
                 }
                  */
 
 
-                //Log.d("CUSTOMDEBUG", "CreateGroupActivity - after CoroutineScope() ObjectId: ${createdGroup.objectId}")
+                //Log.d("CUSTOMDEBUG", "GroupCreateActivity - after CoroutineScope() ObjectId: ${createdGroup.objectId}")
                 // wait for Async and start next Activity
                 val intent = Intent(this, GroupActivity::class.java)
                 //intent.putExtra(GROUP_KEY, createdGroup.objectId)
                 intent.putExtra(GROUP_KEY, createdGroup)
-                    //Log.d("CUSTOMDEBUG", "CreateGroupActivity - ObjectId: ${createdGroup.objectId}")
+                    //Log.d("CUSTOMDEBUG", "GroupCreateActivity - ObjectId: ${createdGroup.objectId}")
                 startActivity(intent)
                 finish()
             }

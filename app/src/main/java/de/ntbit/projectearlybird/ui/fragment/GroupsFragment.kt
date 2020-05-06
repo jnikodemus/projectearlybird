@@ -1,39 +1,18 @@
 package de.ntbit.projectearlybird.ui
 
 import android.animation.Animator
-import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.util.Log
 import android.util.TypedValue
 import android.view.*
-import androidx.appcompat.app.AlertDialog
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
-import com.parse.ParseQuery
-import com.parse.livequery.ParseLiveQueryClient
-import com.parse.livequery.SubscriptionHandling
-import com.xwray.groupie.GroupAdapter
-import com.xwray.groupie.GroupieViewHolder
 import de.ntbit.projectearlybird.R
 import de.ntbit.projectearlybird.adapter.item.GroupItem
-import de.ntbit.projectearlybird.adapter.item.UserItem
-import de.ntbit.projectearlybird.helper.ApplicationContextProvider
-import de.ntbit.projectearlybird.helper.InputValidator
 import de.ntbit.projectearlybird.helper.ParcelContract
 import de.ntbit.projectearlybird.manager.ManagerFactory
-import de.ntbit.projectearlybird.model.Group
-import de.ntbit.projectearlybird.ui.activity.ChatActivity
-import de.ntbit.projectearlybird.ui.activity.CreateGroupActivity
+import de.ntbit.projectearlybird.ui.activity.GroupCreateActivity
 import de.ntbit.projectearlybird.ui.activity.GroupActivity
-import de.ntbit.projectearlybird.ui.activity.LoginActivity
-import de.ntbit.projectearlybird.ui.fragment.ContactsFragment
-import kotlinx.android.synthetic.main.activity_create_group.*
 import kotlinx.android.synthetic.main.fragment_groups.*
-import kotlinx.android.synthetic.main.row_group.*
-import java.net.URI
 
 
 class GroupsFragment : Fragment() {
@@ -64,7 +43,7 @@ class GroupsFragment : Fragment() {
     private fun setClicklistener() {
         frgmt_groups_fab.setOnClickListener {
             //val animator: Animator = ViewAnimationUtils.createCircularReveal(this.view,0,0,0,0)
-            val intent = Intent(this.context, CreateGroupActivity::class.java)
+            val intent = Intent(this.context, GroupCreateActivity::class.java)
             //circularRevealActivity()
             startActivity(intent)
         }
@@ -97,6 +76,5 @@ class GroupsFragment : Fragment() {
         val resources = this.resources
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dps.toFloat(), resources.displayMetrics).toInt()
     }
-
 
 }

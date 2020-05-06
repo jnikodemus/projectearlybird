@@ -21,7 +21,7 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
+        <activity android:name=".ui.activity.GroupSettingsActivity"></activity>
         <activity android:name=".ui.activity.ProfileActivity" />
         <activity android:name=".ui.activity.ModuleChecklistActivity" />
         <activity android:name=".ui.activity.GroupActivity" />
@@ -45,9 +45,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.activity.CreateGroupActivity" />
-        <activity android:name=".ui.activity.ChatActivity"
-            android:launchMode="singleTop"/>
+        <activity android:name=".ui.activity.GroupCreateActivity" />
+        <activity
+            android:name=".ui.activity.ChatActivity"
+            android:launchMode="singleTop" />
         <activity android:name=".ui.activity.NewMessageActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

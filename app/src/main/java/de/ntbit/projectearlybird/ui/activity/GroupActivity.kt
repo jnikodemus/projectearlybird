@@ -124,6 +124,12 @@ class GroupActivity : AppCompatActivity() {
     }
 
     private fun setClicklistener() {
+        toolbar_tv_root_title.setOnClickListener {
+            val intent = Intent(this, GroupSettingsActivity::class.java)
+            intent.putExtra(ParcelContract.GROUP_KEY, group)
+            startActivity(intent)
+        }
+
         adapter.setOnItemClickListener { item, view ->
             val moduleItem = item as ModuleItem
             Log.d("CUSTOMDEBUG", "$simpleClassName.OnClickListener() - ${moduleItem.name}")
@@ -147,7 +153,6 @@ class GroupActivity : AppCompatActivity() {
             }
         }
     }
-
 }
 
 class AddModuleDialogFragment(otherGroup: Group, adapter: GroupAdapter<GroupieViewHolder>) : DialogFragment() {

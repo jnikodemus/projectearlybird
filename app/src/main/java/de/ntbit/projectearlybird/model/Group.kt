@@ -157,6 +157,14 @@ class Group : ParseObject {
     }
 
     /**
+     * Returns number of modules in actual [Group]
+     * @return [Int]
+     */
+    fun getModuleCount(): Int {
+        return this.modules.size
+    }
+
+    /**
      * Writes all module names to a [String] and returns it.
      * @return [String]
      */
