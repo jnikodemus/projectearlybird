@@ -32,6 +32,8 @@
     <string name="navigation_icon_description">Menu icon</string>
     <string name="navigation_avatar">Avatar</string>
 
+    <string name="group_members_number">Members</string>
+    <string name="group_modules_number">Modules</string>
     <string name="group_added_to_new">You have been added to the group GROUPNAME!</string>
     <string name="group_context_menu_change_image">Change image</string>
     <string name="group_context_menu_add_module">Add module</string>
@@ -72,6 +74,7 @@
     <string name="sample_checklist_item_name">Beer</string>
     <string name="sample_group_name">OldSchool</string>
     <string name="sample_group_size">3</string>
+    <string name="sample_modules_count">1</string>
     <string name="sample_group_last_modified_module">Checklist</string>
 
     <string name="add_contact">Add contact</string>

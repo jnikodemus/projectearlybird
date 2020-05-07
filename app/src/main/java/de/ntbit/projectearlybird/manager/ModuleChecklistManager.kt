@@ -54,17 +54,28 @@ class ModuleChecklistManager {
 
     private fun getChecklistItemsFromParse() {
         val query = ParseQuery.getQuery(ModuleChecklistItem::class.java)
-        for(pair in adapterMap) {
-            val checklist = pair.key.getModuleByName("Checklist") as ModuleChecklist
-            query.whereEqualTo("associatedModule", checklist)
-            query.findInBackground { items, e ->
-                // Add to checklistItemMap
-                checklistItemMap[pair.key]!!.addAll(items)
-                // Add to adapterMap
-                for(item in items)
-                    pair.value.add(ChecklistItem(item))
+        Log.d("CUSTOMDEBUG", "$simpleClassName - got ${adapterMap.size} modules in adapterMap")
+
+        /*
+         * groupAdapter: all indizes in adapterMap
+         * key: group
+         * value: GroupAdapter<GroupieViewHolder>
+         */
+        for(groupAdapter in adapterMap) {
+            Log.d("CUSTOMDEBUG", "$simpleClassName - trying to get modules of ${groupAdapter.key.name}")
+            if(groupAdapter.key.getModuleByName("Checklist") != null) {
+                val checklist = groupAdapter.key.getModuleByName("Checklist") as ModuleChecklist
+                query.whereEqualTo("associatedModule", checklist)
+                query.findInBackground { items, e ->
+                    // Add to checklistItemMap
+                    checklistItemMap[groupAdapter.key]!!.addAll(items)
+                    // Add to adapterMap
+                    for (item in items)
+                        groupAdapter.value.add(ChecklistItem(item))
+                }
             }
         }
+
         listenForNewChecklistItem()
         listenForUpdateChecklistItem()
     }
@@ -165,10 +176,11 @@ class ModuleChecklistManager {
 
     // TODO: implement isInitialized again
     fun getAdapterByGroup(group: Group): GroupAdapter<GroupieViewHolder> {
-        if(!isInitialized) {
+        //if(!isInitialized) {
             getAllChecklists()
             //isInitialized = true
-        }
+        //}
+        Log.d("CUSTOMDEBUG", "$simpleClassName.getAdapaterByGroup() - returning now")
         return adapterMap[group]!!
     }
 }

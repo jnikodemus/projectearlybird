@@ -157,6 +157,14 @@ class Group : ParseObject {
     }
 
     /**
+     * Returns number of modules in actual [Group]
+     * @return [Int]
+     */
+    fun getModuleCount(): Int {
+        return this.modules.size
+    }
+
+    /**
      * Writes all module names to a [String] and returns it.
      * @return [String]
      */
@@ -183,6 +191,12 @@ class Group : ParseObject {
             acl.setWriteAccess(user, true)
         }
         this.parseACL = acl
+        //updateModuleACL()
+    }
+
+    private fun updateModuleACL() {
+        for(module in modules)
+            module.acl = this.parseACL
     }
 
     /**
@@ -193,9 +207,12 @@ class Group : ParseObject {
     }
 
     fun getModuleByName(moduleName: String): Module? {
+        Log.d("CUSTOMDEBUG", "Group - $name got ${modules.size} modules")
         for(module in modules) {
-            if (module.name == moduleName) return module
+            Log.d("CUSTOMDEBUG", "Group - foreachLoop trying ${module.name}")
+            if(module.name == moduleName) return module
         }
+        Log.d("CUSTOMDEBUG", "Group - couldnt find $moduleName -> returning null")
         return null
     }
 }

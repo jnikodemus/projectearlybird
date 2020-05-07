@@ -1,6 +1,7 @@
 package de.ntbit.projectearlybird.ui.activity
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.EditText
@@ -60,9 +61,12 @@ class ModuleChecklistActivity : AppCompatActivity() {
     }
 
     private fun initialize() {
+        Log.d("CUSTOMDEBUG", "$simpleClassName.initialize()")
         group = intent.getParcelableExtra(ParcelContract.GROUP_KEY)
         moduleChecklist = intent.getParcelableExtra(ParcelContract.MODULE_KEY)
+        Log.d("CUSTOMDEBUG", "$simpleClassName.initialize() - Parcel got: ${group.name} and ${moduleChecklist.name}")
         adapter = mModuleChecklistManager.getAdapterByGroup(group)
+        Log.d("CUSTOMDEBUG", "$simpleClassName.initialize() - Adaptersize: ${adapter.groupCount}")
         val itemTouchHelper = ItemTouchHelper(SwipeToDeleteHelper(adapter))
         itemTouchHelper.attachToRecyclerView(act_module_checklist_rv_log)
         act_module_checklist_rv_log.adapter = adapter
@@ -75,9 +79,6 @@ class ModuleChecklistActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
         toolbar_tv_root_title.text = moduleChecklist.name
-    }
-
-    private fun setClicklisteners() {
     }
 
     private fun showCreateItemDialog() {
