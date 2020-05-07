@@ -194,6 +194,10 @@ class GroupManager {
         return groupSet
     }
 
+    fun isAdmin(group: Group): Boolean {
+        return group.admins.contains(mUserManager.getCurrentUser())
+    }
+
     /**
      * Returns the [Group] for provided [objectId] from pin.
      */
