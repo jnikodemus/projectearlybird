@@ -204,10 +204,12 @@ class Group : ParseObject {
      */
     fun updateACL() {
         generateACL()
+        updateModuleACL()
     }
 
     fun getModuleByName(moduleName: String): Module? {
-        Log.d("CUSTOMDEBUG", "Group - $name got ${modules.size} modules")
+        Log.d("CUSTOMDEBUG", "Group - trying group $name")
+        Log.d("CUSTOMDEBUG", "Group - got ${modules.size} modules")
         for(module in modules) {
             Log.d("CUSTOMDEBUG", "Group - foreachLoop trying ${module.name}")
             if(module.name == moduleName) return module

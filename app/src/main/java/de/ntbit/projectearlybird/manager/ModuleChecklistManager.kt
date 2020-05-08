@@ -62,7 +62,9 @@ class ModuleChecklistManager {
          * value: GroupAdapter<GroupieViewHolder>
          */
         for(groupAdapter in adapterMap) {
+            //TODO: process only currentGroup to prevent crash for notloaded Groups/Modules
             Log.d("CUSTOMDEBUG", "$simpleClassName - trying to get modules of ${groupAdapter.key.name}")
+            Log.d("CUSTOMDEBUG", "$simpleClassName - groupAdapter.key = ${groupAdapter.key}")
             if(groupAdapter.key.getModuleByName("Checklist") != null) {
                 val checklist = groupAdapter.key.getModuleByName("Checklist") as ModuleChecklist
                 query.whereEqualTo("associatedModule", checklist)
@@ -176,6 +178,7 @@ class ModuleChecklistManager {
 
     // TODO: implement isInitialized again
     fun getAdapterByGroup(group: Group): GroupAdapter<GroupieViewHolder> {
+        adapterMap[group]?.clear()
         //if(!isInitialized) {
             getAllChecklists()
             //isInitialized = true
