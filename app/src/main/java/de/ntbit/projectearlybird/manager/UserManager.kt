@@ -270,7 +270,7 @@ class UserManager {
         val userAvatar: ParseFile? = user.getParseFile("avatar")
         if(userAvatar != null) {
             imageUri = Uri.parse(userAvatar.url)
-            Log.d("CUSTOMDEBUG", "UserManager - ${userAvatar.url}")
+            //Log.d("CUSTOMDEBUG", "UserManager - ${userAvatar.url}")
         }
         Picasso.get()
             .load(imageUri)

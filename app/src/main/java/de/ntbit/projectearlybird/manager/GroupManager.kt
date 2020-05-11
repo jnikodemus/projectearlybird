@@ -127,22 +127,28 @@ class GroupManager {
      * If the user was owner of the group, the next admin will be the new owner.
      * @return [Boolean]: true if user could leave, false else.
      */
-    // TODO: Check admin/owner leaving; implement size < 2
+    fun leaveGroup(user: User, group: Group): Boolean {
+        return leaveGroup(user, group, -1)
+    }
+
     fun leaveGroup(group: Group, positionToDelete: Int): Boolean {
-        val currentUser = mUserManager.getCurrentUser()
+        return leaveGroup(mUserManager.getCurrentUser(), group, positionToDelete)
+    }
+
+    fun leaveGroup(user: User, group: Group, positionToDelete: Int): Boolean {
         val members = group.members
         val admins = group.admins
 
         Log.d("CUSTOMDEBUG", "$simpleClassName - $positionToDelete; ${adapter.itemCount}")
 
         if (group.getSize() > 1) {
-            members.remove(currentUser)
-            if (group.owner == currentUser) {
+            members.remove(user)
+            if (group.owner == user) {
                 group.owner = members[0]
             }
             if (!admins.contains(group.owner))
                 admins.add(group.owner)
-            admins.remove(currentUser)
+            admins.remove(user)
 
             group.members = members
             group.admins = admins
@@ -154,9 +160,10 @@ class GroupManager {
         }
 
         groupSet.remove(group)
-        adapter.removeGroupAtAdapterPosition(positionToDelete)
-        //adapter.notifyItemRemoved(posToDelete)
-        adapter.notifyDataSetChanged()
+        if(positionToDelete != -1) {
+            adapter.removeGroupAtAdapterPosition(positionToDelete)
+            adapter.notifyDataSetChanged()
+        }
 
         return true
     }
@@ -196,6 +203,15 @@ class GroupManager {
 
     fun isAdmin(group: Group): Boolean {
         return group.admins.contains(mUserManager.getCurrentUser())
+    }
+
+    fun promote(user: User, group: Group) {
+        Log.d("CUSTOMDEBUG", "$simpleClassName - promoted ${user.username}")
+    }
+
+    fun removeUser(user: User, group: Group): Boolean {
+        Log.d("CUSTOMDEBUG", "$simpleClassName - removing ${user.username}")
+        return leaveGroup(user, group)
     }
 
     /**
