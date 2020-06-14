@@ -65,4 +65,8 @@ open class Module : ParseObject {
     override fun hashCode(): Int {
         return javaClass.hashCode()
     }
+
+    override fun toString(): String {
+        return "$name ($description)"
+    }
 }
