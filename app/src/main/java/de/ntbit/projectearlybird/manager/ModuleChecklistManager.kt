@@ -41,6 +41,12 @@ class ModuleChecklistManager {
         //listenForNewChecklistItem()
     }
 
+    private fun getAllChecklists(group: Group) {
+            adapterMap[group] = GroupAdapter()
+            checklistItemMap[group] = ArrayList()
+        getChecklistItemsFromParse(group)
+    }
+
     private fun getAllChecklists() {
         val groups = mGroupManager.getGroups()
         Log.d("CUSTOMDEBUG","$simpleClassName - got ${groups.size} groups")
@@ -49,7 +55,28 @@ class ModuleChecklistManager {
             adapterMap[group] = GroupAdapter()
             checklistItemMap[group] = ArrayList()
         }
+        Log.d("CUSTOMDEBUG","$simpleClassName - adapterMap: ${adapterMap.size}")
+        Log.d("CUSTOMDEBUG","$simpleClassName - checklistItemMap: ${checklistItemMap.size}")
         getChecklistItemsFromParse()
+    }
+
+    private fun getChecklistItemsFromParse(group: Group) {
+        val query = ParseQuery.getQuery(ModuleChecklistItem::class.java)
+        val checklist = group.getModuleByName("Checklist")
+        if(checklist != null) {
+            checklist as ModuleChecklist
+            query.whereEqualTo("associatedModule", checklist)
+            query.findInBackground { items, _ ->
+                // Add to checklistItemMap
+                checklistItemMap[group]?.addAll(items)
+                Log.d("CUSTOMDEBUG", "$simpleClassName - added ${items.size}")
+                // Add to adapterMap
+                for (item in items) {
+                    adapterMap[group]?.add(ChecklistItem(item))
+                    Log.d("CUSTOMDEBUG", "$simpleClassName - added ${item.name}")
+                }
+            }
+        }
     }
 
     private fun getChecklistItemsFromParse() {
@@ -65,15 +92,19 @@ class ModuleChecklistManager {
             //TODO: process only currentGroup to prevent crash for notloaded Groups/Modules
             Log.d("CUSTOMDEBUG", "$simpleClassName - trying to get modules of ${groupAdapter.key.name}")
             Log.d("CUSTOMDEBUG", "$simpleClassName - groupAdapter.key = ${groupAdapter.key}")
-            if(groupAdapter.key.getModuleByName("Checklist") != null) {
-                val checklist = groupAdapter.key.getModuleByName("Checklist") as ModuleChecklist
+            val checklist = groupAdapter.key.getModuleByName("Checklist")
+            if(checklist != null) {
+                checklist as ModuleChecklist
                 query.whereEqualTo("associatedModule", checklist)
-                query.findInBackground { items, e ->
+                query.findInBackground { items, _ ->
                     // Add to checklistItemMap
-                    checklistItemMap[groupAdapter.key]!!.addAll(items)
+                    checklistItemMap[groupAdapter.key]?.addAll(items)
+                    Log.d("CUSTOMDEBUG", "$simpleClassName - added ${items.size}")
                     // Add to adapterMap
-                    for (item in items)
+                    for (item in items) {
                         groupAdapter.value.add(ChecklistItem(item))
+                        Log.d("CUSTOMDEBUG", "$simpleClassName - added ${item.name}")
+                    }
                 }
             }
         }
@@ -177,13 +208,13 @@ class ModuleChecklistManager {
     }
 
     // TODO: implement isInitialized again
-    fun getAdapterByGroup(group: Group): GroupAdapter<GroupieViewHolder> {
-        adapterMap[group]?.clear()
+    fun getAdapterByGroup(group: Group): GroupAdapter<GroupieViewHolder>? {
+        //adapterMap[group]?.clear()
         //if(!isInitialized) {
-            getAllChecklists()
+            getAllChecklists(group)
             //isInitialized = true
         //}
-        Log.d("CUSTOMDEBUG", "$simpleClassName.getAdapaterByGroup() - returning now")
-        return adapterMap[group]!!
+        Log.d("CUSTOMDEBUG", "$simpleClassName.getAdapaterByGroup() - returning ${adapterMap[group]?.itemCount} now")
+        return adapterMap[group]
     }
 }

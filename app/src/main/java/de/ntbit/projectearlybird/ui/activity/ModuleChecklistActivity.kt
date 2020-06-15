@@ -65,7 +65,7 @@ class ModuleChecklistActivity : AppCompatActivity() {
         group = intent.getParcelableExtra(ParcelContract.GROUP_KEY)
         moduleChecklist = intent.getParcelableExtra(ParcelContract.MODULE_KEY)
         Log.d("CUSTOMDEBUG", "$simpleClassName.initialize() - Parcel got: ${group.name} and ${moduleChecklist.name}")
-        adapter = mModuleChecklistManager.getAdapterByGroup(group)
+        adapter = mModuleChecklistManager.getAdapterByGroup(group) ?: GroupAdapter<GroupieViewHolder>()
         Log.d("CUSTOMDEBUG", "$simpleClassName.initialize() - Adaptersize: ${adapter.groupCount}")
         val itemTouchHelper = ItemTouchHelper(SwipeToDeleteHelper(adapter))
         itemTouchHelper.attachToRecyclerView(act_module_checklist_rv_log)

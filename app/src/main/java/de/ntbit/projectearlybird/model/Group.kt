@@ -132,7 +132,12 @@ class Group : ParseObject {
 
     var modules: ArrayList<Module>
         get() {
-            return this.getList<Module>("modules") as ArrayList<Module>
+            val modules = this.getList<Module>("modules") as ArrayList<Module>
+            Log.d("CUSTOMDEBUG", "Group - $name Modules:${modules.size}")
+            //for(module in modules) {
+            //    Log.d("CUSTOMDEBUG", "Group - ${module}")
+            //}
+            return modules
         }
         set(modules) {
             Log.d("CUSTOMDEBUG", "Group - setting modules with size ${modules.size}")
@@ -211,8 +216,12 @@ class Group : ParseObject {
         Log.d("CUSTOMDEBUG", "Group - trying group $name")
         Log.d("CUSTOMDEBUG", "Group - got ${modules.size} modules")
         for(module in modules) {
+            //module.fetchIfNeeded<Module>()
             Log.d("CUSTOMDEBUG", "Group - foreachLoop trying ${module.name}")
-            if(module.name == moduleName) return module
+            if(module.name == moduleName) {
+                Log.d("CUSTOMDEBUG", "Group - found $moduleName! Returning...")
+                return module
+            }
         }
         Log.d("CUSTOMDEBUG", "Group - couldnt find $moduleName -> returning null")
         return null

@@ -81,7 +81,7 @@ class GroupActivity : AppCompatActivity() {
         connectAdapter()
         placeToolbar()
         setGroupImage()
-        loadModules()
+        loadModules() // <- Crash after "19975-19975/de.ntbit.projectearlybird D/CUSTOMDEBUG: Group - BikiniBottom Modules:1"
         setClicklistener()
     }
 
@@ -116,10 +116,13 @@ class GroupActivity : AppCompatActivity() {
     }
 
     private fun loadModules() {
+        // TODO: 20200614
         for(m in group.modules) {
-            m.fetchIfNeeded<Module>()
-            Log.d("CUSTOMDEBUG", "$simpleClassName.loadModules() - ${m.name}, ${m.description}")
-            adapter.add(ModuleItem(Module(m)))
+            //m.fetchIfNeeded<Module>() // <- Crash
+            Log.d("CUSTOMDEBUG", "$simpleClassName.loadModules() - Barrier0")
+            //Log.d("CUSTOMDEBUG", "$simpleClassName.loadModules() - ${m.name}, ${m.description}")
+            adapter.add(ModuleItem(Module(m.fetchIfNeeded<Module>()))) // fetchIfNeeded crashs
+            Log.d("CUSTOMDEBUG", "$simpleClassName.loadModules() - Barrier1")
         }
     }
 
