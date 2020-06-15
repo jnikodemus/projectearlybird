@@ -119,9 +119,19 @@ class GroupActivity : AppCompatActivity() {
         // TODO: 20200614
         for(m in group.modules) {
             //m.fetchIfNeeded<Module>() // <- Crash
-            Log.d("CUSTOMDEBUG", "$simpleClassName.loadModules() - Barrier0")
+            Log.d("CUSTOMDEBUG", "$simpleClassName.loadModules() - Barrier0: hasFetched: ${group.objectId} ${m.objectId}")
             //Log.d("CUSTOMDEBUG", "$simpleClassName.loadModules() - ${m.name}, ${m.description}")
-            adapter.add(ModuleItem(Module(m.fetchIfNeeded<Module>()))) // fetchIfNeeded crashs
+            //try {
+            //   Log.d("CUSTOMDEBUG", "$simpleClassName.loadModules() - trying to fetch ${group.modules.size} modules")
+                //m.fetchIfNeeded<Module>()
+                //adapter.add(ModuleItem(Module(m.fetchIfNeeded<Module>())))
+            //}
+            //catch (e: Exception) {
+             //   Log.e("CUSTOMDEBUG",
+             //       "$simpleClassName.loadModules() - fetchIfNeeded<Module>() crashed: " +
+             //               "${e.printStackTrace()}")
+            //}
+            adapter.add(ModuleItem(Module(m.fetch<Module>())))
             Log.d("CUSTOMDEBUG", "$simpleClassName.loadModules() - Barrier1")
         }
     }

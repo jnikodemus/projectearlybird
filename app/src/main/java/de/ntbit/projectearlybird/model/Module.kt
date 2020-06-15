@@ -3,6 +3,7 @@ package de.ntbit.projectearlybird.model
 import android.graphics.Color
 import com.parse.ParseClassName
 import com.parse.ParseObject
+import com.parse.coroutines.read.parse_object.fetch
 
 /**
  * Model corresponding to table "Module" in Parse Database extends [ParseObject]
