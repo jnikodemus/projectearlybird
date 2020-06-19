@@ -1,8 +1,10 @@
 package de.ntbit.projectearlybird.model
 
 import android.graphics.Color
+import android.util.Log
 import com.parse.ParseClassName
 import com.parse.ParseObject
+import com.parse.coroutines.read.parse_object.fetch
 
 /**
  * Model corresponding to table "Module" in Parse Database extends [ParseObject]
@@ -20,18 +22,27 @@ open class Module : ParseObject {
         this.name = name
     }
 
+    internal constructor(name: String, colorInt: Int, description: String) {
+        this.name = name
+        this.description = description
+        this.colorInt = colorInt
+    }
+
     internal constructor(other: Module) {
         this.name = other.name
         this.description = other.description
         this.colorInt = other.colorInt
     }
 
-    var name: String
+    var name: String?
         get() {
-            return this.getString("name")!!
+            return this.getString("name")
         }
         protected set(name) {
-            this.put("name", name)
+            if (name != null) {
+                this.put("name", name)
+            }
+            else this.put("name", "anonymousGroup")
         }
 
     var colorInt: Int
@@ -56,8 +67,9 @@ open class Module : ParseObject {
      * @return true if [other] is [Module] and names are the same, false else.
      */
     override fun equals(other: Any?): Boolean {
+        Log.d("CUSTOMDEBUG", "Module.kt - equals() called.")
         if(other is Module) {
-            return other.name == this.name
+            return this.objectId == other.objectId
         }
         return false
     }

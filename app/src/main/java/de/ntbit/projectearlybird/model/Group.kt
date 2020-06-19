@@ -176,7 +176,6 @@ class Group : ParseObject {
     fun getModuleNames(): String {
         var moduleList = ""
         for(m in modules) {
-            m.fetchIfNeeded<Module>()
             moduleList += m.name + " "
         }
         return moduleList
