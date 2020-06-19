@@ -2,15 +2,24 @@
     <string name="app_major_version">0</string>
     <string name="app_sub_version">1</string>
     <string name="app_version">Version</string>
-    <string name="app_name">ProjectEarlyBird</string>
+    <string name="app_version_template">Version MAJOR.SUB</string>
+    <string name="app_name">CrewSync</string>
     <string name="app_welcome">Welcome</string>
     <string name="app_email">Email</string>
     <string name="app_username">Username</string>
     <string name="app_password">Password</string>
     <string name="app_passwordRetry">Retype Password</string>
+    <string name="app_logo">Application Logo</string>
     <string name="app_login">Login</string>
     <string name="app_register">Register</string>
     <string name="app_check_input">Check your input!</string>
+    <string name="app_save">Save</string>
+    <string name="app_cancel">Cancel</string>
+    <string name="app_add">Add</string>
+    <string name="app_plus_sign">+</string>
+
+    <string name="error_invalid_email">Provided email is not valid</string>
+    <string name="error_null_or_empty">Must not be empty nor blank</string>
 
     <string name="menu_groups">Groups</string>
     <string name="menu_contacts">Contacts</string>
@@ -21,11 +30,60 @@
     <string name="menu_drawer_open">Open navigation drawer</string>
     <string name="menu_drawer_close">Close navigation drawer</string>
     <string name="navigation_icon_description">Menu icon</string>
+    <string name="navigation_avatar">Avatar</string>
+
+    <string name="group_members_number">Members</string>
+    <string name="group_modules_number">Modules</string>
+    <string name="group_added_to_new">You have been added to the group GROUPNAME!</string>
+    <string name="group_context_menu_change_image">Change image</string>
+    <string name="group_context_menu_add_module">Add module</string>
+    <string name="group_context_menu_add_user">Add user</string>
+    <string name="group_context_menu_remove">Remove user</string>
+    <string name="group_context_menu_leave">Leave group</string>
+    <string-array name="group_modules">
+        <item>Checklist</item>
+        <!--<item>Murdergame</item>-->
+    </string-array>
+
+    <string name="dialog_act_checklist_item_itemname">Itemname</string>
 
     <string name="profile_first_name">First name</string>
     <string name="profile_last_name">Last name</string>
     <string name="profile_birthday">Birthday</string>
+    <string name="profile_about_me">About me</string>
     <string name="profile_logout">Logout</string>
     <string name="profile_delete_account">Delete Account</string>
-    <string name="navigation_avatar">Avatar</string>
+
+    <string name="settings_interface_header">Interface</string>
+    <string name="settings_interface_theme">Theme</string>
+
+    <string name="chat_hint_message">Message</string>
+    <string name="search_hint"> SearchHint</string>
+
+    <string name="username">Username</string>
+    <string name="title_activity_loading">LoadingActivity</string>
+
+    <string name="sample_username">frank_the_tank</string>
+    <string name="sample_email">f_the_t@oldschool.org</string>
+    <string name="sample_first_name">Frank</string>
+    <string name="sample_last_name">Ricard</string>
+    <string name="sample_timestamp_hhmm">23:42</string>
+    <string name="sample_timestamp_full">15.04.2020 23:42</string>
+    <string name="sample_message">Blue YOU\'RE MY BOY!!!"</string>
+    <string name="sample_checklist_item_amount">13</string>
+    <string name="sample_checklist_item_name">Beer</string>
+    <string name="sample_group_name">OldSchool</string>
+    <string name="sample_group_size">3</string>
+    <string name="sample_modules_count">1</string>
+    <string name="sample_group_last_modified_module">Checklist</string>
+
+    <string name="add_contact">Add contact</string>
+    <string name="add_item">Add item</string>
+
+    <!--
+    This string is used for square devices and overridden by hello_world in
+    values-round/strings.xml for round devices.
+    -->
+    <string name="hello_world">Hello Square World!</string>
+    <string name="send">Send</string>
 </resources>

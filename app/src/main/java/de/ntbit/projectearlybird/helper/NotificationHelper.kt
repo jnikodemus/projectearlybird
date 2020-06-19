@@ -1,0 +1,103 @@
+package de.ntbit.projectearlybird.helper
+
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
+import androidx.core.app.NotificationCompat
+import de.ntbit.projectearlybird.R
+import de.ntbit.projectearlybird.helper.NotificationHelper.Companion.CHANNEL_DESCRIPTION
+import de.ntbit.projectearlybird.helper.NotificationHelper.Companion.CHANNEL_ID
+import de.ntbit.projectearlybird.helper.NotificationHelper.Companion.CHANNEL_NAME
+import de.ntbit.projectearlybird.model.Message
+import de.ntbit.projectearlybird.ui.activity.ChatActivity
+
+/**
+ * Builds and sends Systemnotifications to the user using [NotificationManager]
+ * @property CHANNEL_ID contains the channel Id
+ * @property CHANNEL_NAME contains the channel name
+ * @property CHANNEL_DESCRIPTION contains the channel description
+ */
+class NotificationHelper {
+    companion object {
+
+        val CHANNEL_ID = "PEB_CHANNEL_ID"
+        val CHANNEL_NAME = "YOUR_CHANNEL_ID"
+        val CHANNEL_DESCRIPTION = "YOUR_NOTIFICATION_DESCRIPTION"
+
+
+        fun showNotification(message: Message) {
+            showNotification(message, ApplicationContextProvider.context)
+        }
+
+        /**
+         * Builds and sends a Systemnotification using the passed [message] and [context]
+         */
+        fun showNotification(message: Message, context: Context) {
+            val mNotificationManager: NotificationManager = context.
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                val channel = NotificationChannel(
+                    CHANNEL_ID,
+                    CHANNEL_NAME,
+                    NotificationManager.IMPORTANCE_DEFAULT)
+                channel.description = CHANNEL_DESCRIPTION
+                channel.enableVibration(true)
+                channel.lockscreenVisibility = NotificationCompat.VISIBILITY_PUBLIC
+                mNotificationManager.createNotificationChannel(channel)
+            }
+            val mBuilder = NotificationCompat.Builder(context, CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_info_black) // notification icon
+                .setContentTitle(message.sender.username) // title for notification
+                .setContentText(message.body) // message for notification
+                .setAutoCancel(true) // clear notification after click
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setVibrate(longArrayOf(100,200,300,400,500))
+                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+            val intent = Intent(context, ChatActivity::class.java)
+            intent.putExtra(ParcelContract.USER_KEY, message.sender)
+            val pi = PendingIntent
+                .getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+            mBuilder.setContentIntent(pi)
+            mNotificationManager.notify(0, mBuilder.build())
+        }
+
+        /**
+         * Builds and shows a systemnotification setting its title to provided [contentTitle] and
+         * its text to provided [contentText]. If the notification is clicked by the user,
+         * the provided [intent] is called.
+         * @param contentTitle title of the notification
+         * @param contentText contains the actual content of the notification
+         * @param intent helps to open the needed activity after clicking on the notification
+         */
+        fun showNotification(contentTitle: String, contentText: String, intent: Intent) {
+            val context = ApplicationContextProvider.getApplicationContext()
+            val mNotificationManager: NotificationManager = context
+                .getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                val channel = NotificationChannel(
+                    CHANNEL_ID,
+                    CHANNEL_NAME,
+                    NotificationManager.IMPORTANCE_DEFAULT)
+                channel.description = CHANNEL_DESCRIPTION
+                channel.enableVibration(true)
+                channel.lockscreenVisibility = NotificationCompat.VISIBILITY_PUBLIC
+                mNotificationManager.createNotificationChannel(channel)
+            }
+            val mBuilder = NotificationCompat.Builder(context, CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_info_black) // notification icon
+                .setContentTitle(contentTitle) // title for notification
+                .setContentText(contentText) // message for notification
+                .setAutoCancel(true) // clear notification after click
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setVibrate(longArrayOf(100,200,300,400,500))
+                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+            val pi = PendingIntent
+                .getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+            mBuilder.setContentIntent(pi)
+            mNotificationManager.notify(0, mBuilder.build())
+        }
+    }
+}

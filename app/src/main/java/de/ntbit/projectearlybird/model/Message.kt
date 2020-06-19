@@ -6,12 +6,25 @@ import com.parse.ParseObject
 import com.parse.ParseUser
 import java.util.Date
 
+/**
+ * Model corresponding to table "Message" in Parse Database extends [ParseObject]
+ *
+ * @property sender as [User] of the message
+ * @property senderId objectid from the [sender]
+ * @property recipient as [User] of the message
+ * @property recipientId objectid of the [recipient]
+ * @property body contains the actual message
+ * @property timestamp when the message was created
+ * @property parseACL read and write controller
+ */
 @ParseClassName("Message")
 class Message : ParseObject {
 
     internal constructor() : super()
 
-    internal constructor(sender: ParseUser, recipient: ParseUser, body: String) : super() {
+    internal constructor(sender: User,
+                         recipient: User,
+                         body: String) : super() {
         this.sender = sender
         this.senderId = sender.objectId
         this.recipient = recipient
@@ -23,9 +36,9 @@ class Message : ParseObject {
         generateACL()
     }
 
-    var sender: ParseUser
+    var sender: User
         get() {
-            return this.getParseUser("sender")!!
+            return this.getParseUser("sender")!! as User
         }
         set(sender) {
             this.put("sender", sender)
@@ -38,9 +51,9 @@ class Message : ParseObject {
             this.put("senderId",senderId)
         }
 
-    var recipient: ParseUser
+    var recipient: User
         get() {
-            return this.getParseUser("recipient")!!
+            return this.getParseUser("recipient")!! as User
         }
         set(recipient) {
             this.put("recipient", recipient)
@@ -86,16 +99,26 @@ class Message : ParseObject {
             this.put("ACL",parseACL)
         }
 
+    /**
+     * Generates the timestamp when the message was created
+     */
     private fun generateTimestamp() {
         this.timestamp = Date(System.currentTimeMillis())
     }
 
+    /**
+     * Generates the treadId for the message
+     */
     private fun generateThreadId() {
         /*
          * TODO: Change threadId to something more useful
          */
         this.threadId = sender.objectId + recipient.objectId
     }
+
+    /**
+     * Generates the read and write permissions for [sender] and [recipient]
+     */
     private fun generateACL() {
         val acl = ParseACL()
         acl.setReadAccess(recipient, true)

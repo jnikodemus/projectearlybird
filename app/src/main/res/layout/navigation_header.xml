@@ -6,8 +6,7 @@
     android:layout_height="176dp"
     android:background="@color/colorPrimaryDark"
     android:gravity="bottom"
-    android:padding="16dp"
-    android:theme="@style/ThemeOverlay.AppCompat.Dark">
+    android:padding="16dp">
 
     <ImageView
         android:id="@+id/navigation_avatar"
@@ -20,13 +19,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="8dp"
-        android:text="@string/app_username"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+        android:text="@string/sample_username"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/navigation_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/app_email" />
+        android:text="@string/sample_email" />
 
 </LinearLayout>

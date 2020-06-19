@@ -4,50 +4,51 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.ChatActivity"
-    android:background="@android:color/white">
+    tools:context=".ui.activity.ChatActivity">
 
     <include
-        android:id="@+id/include"
+        android:id="@+id/act_chat_toolbar"
         layout="@layout/toolbar" />
 
     <EditText
-        android:id="@+id/et_chat_enterMessage"
+        android:id="@+id/act_chat_et_message"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:background="@android:color/white"
+        android:background="@drawable/rounded_text"
+        android:backgroundTint="@android:color/white"
         android:ems="10"
-        android:hint="Enter Message"
-        android:inputType="textPersonName"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:hint="@string/chat_hint_message"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/bt_chat_send"
+        app:layout_constraintEnd_toStartOf="@+id/act_chat_btn_send"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/bt_chat_send"
+        android:id="@+id/act_chat_btn_send"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:background="@drawable/rounded_button"
-        android:text="Send"
+        android:text="@string/send"
         android:textColor="@android:color/white"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_chat_log"
+        android:id="@+id/act_chat_rv_log"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="8dp"
-        android:background="@android:color/holo_blue_light"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintBottom_toTopOf="@+id/et_chat_enterMessage"
+        app:layout_constraintBottom_toTopOf="@+id/act_chat_et_message"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include" />
+        app:layout_constraintTop_toBottomOf="@+id/act_chat_toolbar" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

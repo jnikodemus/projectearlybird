@@ -5,8 +5,8 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
 import de.ntbit.projectearlybird.data.PebContract.UserEntry
-import de.ntbit.projectearlybird.model.User
 
+@Deprecated("Use the local Datastore of Parse instead")
 class PebDbHelper(context: Context?) :
     SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
     override fun onCreate(db: SQLiteDatabase) {
@@ -33,12 +33,10 @@ class PebDbHelper(context: Context?) :
             "CREATE TABLE " + UserEntry.TABLE_NAME + " (" +
                     UserEntry._ID + SQL_TEXT_TYPE + SQL_PRIMARY_KEY + SQL_COMMA_SEP +
                     UserEntry.COLUMN_USER_EMAIL_VERIFIED + SQL_INTEGER_TYPE + SQL_NOT_NULL + " DEFAULT 0" + SQL_COMMA_SEP +
-                    // TODO: MAKE ACL NOT NULL
                     UserEntry.COLUMN_USER_ACL + SQL_TEXT_TYPE + SQL_COMMA_SEP +
                     UserEntry.COLUMN_USER_UPDATED_AT + SQL_INTEGER_TYPE + SQL_COMMA_SEP +
                     UserEntry.COLUMN_USER_AUTHDATA + SQL_BLOB_TYPE + SQL_COMMA_SEP +
                     UserEntry.COLUMN_USER_USERNAME + SQL_TEXT_TYPE + SQL_NOT_NULL + SQL_COMMA_SEP +
-                    // TODO: MAKE CREATED_AT NOT NULL
                     UserEntry.COLUMN_USER_CREATED_AT + SQL_INTEGER_TYPE + SQL_COMMA_SEP +
                     UserEntry.COLUMN_USER_PASSWORD + SQL_TEXT_TYPE + SQL_COMMA_SEP +
                     UserEntry.COLUMN_USER_EMAIL + SQL_TEXT_TYPE + SQL_NOT_NULL + SQL_COMMA_SEP +

@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.NewMessageActivity">
+    tools:context=".ui.activity.NewMessageActivity">
 
     <include
-        android:id="@+id/include2"
+        android:id="@+id/act_new_message_toolbar"
         layout="@layout/toolbar" />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -18,5 +18,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include2" />
+        app:layout_constraintTop_toBottomOf="@+id/act_new_message_toolbar" />
 </androidx.constraintlayout.widget.ConstraintLayout>

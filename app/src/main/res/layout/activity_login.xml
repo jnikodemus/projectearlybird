@@ -4,35 +4,50 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.LoginActivity">
+    tools:context=".ui.activity.LoginActivity"
+    android:background="@drawable/background_color_gradient">
 
-    <include layout="@layout/toolbar"/>
+    <ImageView
+        android:id="@+id/act_login_iv_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/logo_app_01_small"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <EditText
         android:id="@+id/actLoginEditTextUsername"
-        android:layout_width="0dp"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="70dp"
-        android:layout_marginEnd="70dp"
-        android:layout_marginTop="60dp"
+        android:alpha="0.9"
+        android:background="@drawable/rounded_text"
+        android:backgroundTint="@android:color/white"
         android:ems="15"
         android:hint="@string/app_username"
-        android:inputType="textEmailAddress"
+        android:inputType="text"
+        android:minHeight="40dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.021"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+        app:layout_constraintTop_toBottomOf="@+id/act_login_iv_logo" />
 
     <EditText
         android:id="@+id/actLoginEditTextPassword"
-        android:layout_width="0dp"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
+        android:background="@drawable/rounded_text"
+        android:backgroundTint="@android:color/white"
         android:ems="15"
+        android:alpha="0.9"
         android:hint="@string/app_password"
         android:inputType="textPassword"
+        android:minHeight="40dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
         app:layout_constraintEnd_toEndOf="@+id/actLoginEditTextUsername"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/actLoginEditTextUsername"
         app:layout_constraintTop_toBottomOf="@+id/actLoginEditTextUsername" />
 
@@ -41,17 +56,25 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="45dp"
+        android:width="250dp"
+        android:background="@drawable/rounded_button"
         android:text="@string/app_login"
+        android:textColor="@android:color/white"
         app:layout_constraintEnd_toEndOf="@+id/actLoginEditTextPassword"
+        app:layout_constraintStart_toStartOf="@+id/actLoginEditTextPassword"
         app:layout_constraintTop_toBottomOf="@+id/actLoginEditTextPassword" />
 
     <Button
         android:id="@+id/actLoginBtnRegister"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="45dp"
+        android:layout_marginTop="25dp"
+        android:width="250dp"
+        android:background="@drawable/rounded_button"
         android:text="@string/app_register"
-        app:layout_constraintStart_toStartOf="@+id/actLoginEditTextPassword"
-        app:layout_constraintTop_toBottomOf="@+id/actLoginEditTextPassword" />
+        android:textColor="@android:color/white"
+        app:layout_constraintEnd_toEndOf="@+id/actLoginBtnLogin"
+        app:layout_constraintStart_toStartOf="@+id/actLoginBtnLogin"
+        app:layout_constraintTop_toBottomOf="@+id/actLoginBtnLogin" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

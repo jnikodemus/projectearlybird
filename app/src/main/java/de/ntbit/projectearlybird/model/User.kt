@@ -1,37 +1,61 @@
 package de.ntbit.projectearlybird.model
 
-import android.os.Parcelable
 import com.parse.ParseClassName
 import com.parse.ParseFile
+import com.parse.ParseObject
 import com.parse.ParseUser
-import kotlinx.android.parcel.Parcelize
+import org.json.JSONArray
 
 import java.util.Date
 import java.util.logging.Logger
 
-/* TODO change to extend ParseObject as in
-    https://guides.codepath.com/android/Building-Data-driven-Apps-with-Parse
+/**
+ * Model corresponding to table "Group" in Parse Database extends [ParseObject]
+ *
+ * @property emailVerified verification of a valid email
+ * @property firstname of the user
+ * @property lastName of the user
+ * @property birthday of the user
+ * @property gender 0 - MALE, 1 - FEMALE, 2 - DIVERSE
+ * @property lastLogin when was the last time the user was logged in
+ * @property isOnline is the current user online right now
+ * @property aboutMe small information the user can write
+ * @property avatar of the user
+ * @property contacts of the user
  */
+@ParseClassName("_User")
+class User: ParseUser {
 
-@Parcelize
-@ParseClassName("User")
-class User : ParseUser(), Parcelable {
+    companion object {
+        const val MALE = 0
+        const val FEMALE = 1
+        const val UNKNOWN = 2
+    }
 
-    private val log = Logger.getLogger(this::class.java.simpleName)
+    internal constructor() : super()
 
-    var firstName: String?
-        get() = getString("firstName")
-        set(firstName) {
-            if (firstName != null) {
-                put("firstName", firstName)
-            }
-        }
+    internal constructor(username: String, email: String) {
+        this.username = username
+        this.email = email
+        contacts = ArrayList()
+        emailVerified = false
+        isOnline = false
+        gender = UNKNOWN
+    }
 
     var emailVerified: Boolean?
         get() = getBoolean("emailVerified")
         set(emailVerified) {
             if (emailVerified != null) {
                 put("emailVerified", emailVerified)
+            }
+        }
+
+    var firstName: String?
+        get() = getString("firstName")
+        set(firstName) {
+            if (firstName != null) {
+                put("firstName", firstName)
             }
         }
 
@@ -42,6 +66,7 @@ class User : ParseUser(), Parcelable {
                 put("lastName", lastName)
             }
         }
+
     var birthday: Date?
         get() = getDate("birthday")
         set(birthday) {
@@ -49,46 +74,65 @@ class User : ParseUser(), Parcelable {
                 put("birthday", birthday)
             }
         }
+
     var gender: Int
         get() = getInt("gender")
         set(gender) {
             put("gender", gender)
         }
+
     var lastLogin: Date
         get() = getDate("lastLogin")!!
         set(lastLogin) {
             put("lastLogin", lastLogin)
         }
 
+    var isOnline: Boolean
+        get() = getBoolean("isOnline")
+        set(isOnline) {
+            put("isOnline", isOnline)
+        }
+
+    var aboutMe: String?
+        get() = getString("aboutMe")
+        set(aboutMe) {
+            if (aboutMe != null) {
+                put("aboutMe", aboutMe)
+            }
+        }
+
     var avatar: ParseFile
         get() = getParseFile("avatar")!!
         set(avatar) {
-                put("avatar", avatar)
+            avatar.save()
+            put("avatar", avatar)
         }
 
-    /* TODO add groups
-    var groups: Collection<Group> = ArrayList()
-        private set
+    var contacts: ArrayList<User>
+        get() = getList<User>("contacts")!! as ArrayList<User>
+        set(contacts) {
+            put("contacts", contacts)
+        }
+
+    /**
+     * Adds a new contact to [contacts] and saves it to the parse database
+     *
+     * @param contact that will be added to the [User] collection [contacts]
      */
-
-    fun fillUnset() {
-        this.firstName = "unset"
-        this.lastName = "unset"
-        this.birthday = Date(0)
-        this.gender = 2
-        //this.messages = ArrayList()
-        this.lastLogin = Date(System.currentTimeMillis())
-        //this.avatar = ParseFile(File(R.drawable.ic_launcher_foreground.toString()))
+    fun addContact(contact: User) {
+        addUnique("contacts", contact)
+        saveEventually()
     }
 
-    /* TODO fetchIfNeeded()
-    override fun toString(): String {
-        return ("ID: " + this.objectId
-                + "\nName: " + this.firstName + " " + this.lastName
-                + "\nDay of birth: " + this.birthday
-                + "\nGender: " + this.gender
-                + "\nLast login: " + this.lastLogin.toString())
-        //+ "\nGroups: " + this.groups)
+    override fun equals(other: Any?): Boolean {
+        if(other is User)
+            return this.objectId == other.objectId
+        return false
     }
-    */
+
+    override fun hashCode(): Int {
+        return javaClass.hashCode()
+    }
+
+
 }

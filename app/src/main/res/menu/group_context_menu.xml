@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/group_context_menu_change_image"
+        android:title="@string/group_context_menu_change_image" />
+
+    <item
+        android:id="@+id/group_context_menu_add_user"
+        android:title="@string/group_context_menu_add_user" />
+
+    <item
+        android:id="@+id/group_context_menu_add_module"
+        android:title="@string/group_context_menu_add_module" />
+
+    <item
+        android:id="@+id/group_context_menu_leave"
+        android:title="@string/group_context_menu_leave"/>
+
+</menu>
