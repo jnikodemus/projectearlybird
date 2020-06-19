@@ -30,6 +30,7 @@ class ModuleChecklistManager {
     private val checklistItemMap = HashMap<Group, ArrayList<ModuleChecklistItem>>()
     private val adapterMap = HashMap<Group, GroupAdapter<GroupieViewHolder>>()
 
+    // TODO: Implement isInitialized logic to initialize/fetch only groups that are not in the maps yet!
     private var isInitialized = false
     //private lateinit var adapter: GroupAdapter<GroupieViewHolder>
     //private val checklist = ArrayList<ModuleChecklistItem>()
@@ -42,8 +43,12 @@ class ModuleChecklistManager {
     }
 
     private fun getAllChecklists(group: Group) {
-            adapterMap[group] = GroupAdapter()
-            checklistItemMap[group] = ArrayList()
+        Log.d("CUSTOMDEBUG", "$simpleClassName.getAllChecklists() - adapterMap: ${adapterMap.size}")
+        Log.d("CUSTOMDEBUG", "$simpleClassName.getAllChecklists() - checklistItemMap: ${checklistItemMap.size}")
+        adapterMap[group] = GroupAdapter()
+        checklistItemMap[group] = ArrayList()
+        //Log.d("CUSTOMDEBUG", "$simpleClassName.getAllChecklists() - adapterMapContains ${group.name}: ${adapterMap.containsKey(group)}")
+        //Log.d("CUSTOMDEBUG", "$simpleClassName.getAllChecklists() - checklistItemMapContains ${group.name}: ${checklistItemMap.contains(group)}")
         getChecklistItemsFromParse(group)
     }
 
@@ -211,7 +216,8 @@ class ModuleChecklistManager {
     fun getAdapterByGroup(group: Group): GroupAdapter<GroupieViewHolder>? {
         //adapterMap[group]?.clear()
         //if(!isInitialized) {
-            getAllChecklists(group)
+        Log.d("CUSTOMDEBUG", "$simpleClassName.getAdapaterByGroup() - ${group.name}(${group.objectId})")
+        getAllChecklists()
             //isInitialized = true
         //}
         Log.d("CUSTOMDEBUG", "$simpleClassName.getAdapaterByGroup() - returning ${adapterMap[group]?.itemCount} now")

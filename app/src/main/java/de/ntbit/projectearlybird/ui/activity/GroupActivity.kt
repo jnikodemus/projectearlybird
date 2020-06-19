@@ -24,7 +24,6 @@ import de.ntbit.projectearlybird.model.Module
 import de.ntbit.projectearlybird.model.ModuleChecklist
 import kotlinx.android.synthetic.main.activity_group.*
 import kotlinx.android.synthetic.main.toolbar.*
-import java.lang.Exception
 
 
 class GroupActivity : AppCompatActivity() {
@@ -116,23 +115,12 @@ class GroupActivity : AppCompatActivity() {
     }
 
     private fun loadModules() {
-        // TODO: 20200614
         for(m in group.modules) {
-            //m.fetchIfNeeded<Module>() // <- Crash
-            Log.d("CUSTOMDEBUG", "$simpleClassName.loadModules() - Barrier0: hasFetched: ${group.objectId} ${m.objectId}")
-            //Log.d("CUSTOMDEBUG", "$simpleClassName.loadModules() - ${m.name}, ${m.description}")
-            //try {
-            //   Log.d("CUSTOMDEBUG", "$simpleClassName.loadModules() - trying to fetch ${group.modules.size} modules")
-                //m.fetchIfNeeded<Module>()
-                //adapter.add(ModuleItem(Module(m.fetchIfNeeded<Module>())))
-            //}
-            //catch (e: Exception) {
-             //   Log.e("CUSTOMDEBUG",
-             //       "$simpleClassName.loadModules() - fetchIfNeeded<Module>() crashed: " +
-             //               "${e.printStackTrace()}")
-            //}
-            adapter.add(ModuleItem(Module(m.fetch<Module>())))
-            Log.d("CUSTOMDEBUG", "$simpleClassName.loadModules() - Barrier1")
+            Log.d("CUSTOMDEBUG", "$simpleClassName.loadModules() - Barrier0: " +
+                    "isDirty:${m.isDirty} " +
+                    "isDataAvailable:${m.isDataAvailable} - " +
+                    "${group.objectId} ${m.objectId}")
+            adapter.add(ModuleItem(Module(m.fetchIfNeeded<Module>())))
         }
     }
 
