@@ -86,6 +86,9 @@ class GroupManager {
      */
     private fun listenForGroups() {
         val parseQuery = ParseQuery.getQuery(Group::class.java)
+        //val parseQueryContainsOwner = ParseQuery.getQuery(Group::class.java)
+        //    .whereContains("owner", mUserManager.getCurrentUser().objectId)
+        //parseQuery.whereMatchesQuery("owner", parseQueryContainsOwner)
         val subscriptionHandling: SubscriptionHandling<Group> =
             parseLiveQueryClient.subscribe(parseQuery)
 
@@ -167,6 +170,8 @@ class GroupManager {
 
         return true
     }
+
+
 
     /**
      * Adds the provided [user] to the memberlist of the provided [group] if not already member.
