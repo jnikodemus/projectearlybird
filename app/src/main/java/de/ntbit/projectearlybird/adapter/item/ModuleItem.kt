@@ -22,9 +22,9 @@ class ModuleItem(val module: Module): Item<GroupieViewHolder>() {
 
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         //viewHolder.itemView.square_group_module_cv.background.setTint(module.colorInt)
-        viewHolder.itemView.square_group_module_cv.setCardBackgroundColor(color)
+        //viewHolder.itemView.square_group_module_cv.setCardBackgroundColor(color)
         viewHolder.itemView.square_group_module_tv_information_title.text = name
-        viewHolder.itemView.square_group_module_tv_information_body.text = description
+        //viewHolder.itemView.square_group_module_tv_information_body.text = description
     }
 
     override fun getLayout(): Int {
