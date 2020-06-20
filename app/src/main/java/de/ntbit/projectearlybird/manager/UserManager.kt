@@ -8,11 +8,13 @@ import android.net.Uri
 import android.util.Log
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.core.view.isVisible
 import com.parse.*
 import com.squareup.picasso.Picasso
 import de.ntbit.projectearlybird.model.Message
 import de.ntbit.projectearlybird.model.User
 import de.ntbit.projectearlybird.ui.activity.HomeActivity
+import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
@@ -79,9 +81,6 @@ class UserManager {
     }
 
     /**
-     * TODO: Remove personal information
-     * STOPPED HERE TRYING TO SLEEP Zzzz
-     *
      * Login the user with [username] and [password]
      *
      * @param username of the current [User]
@@ -89,22 +88,38 @@ class UserManager {
      *
      */
     fun loginUser(username: String, password: String, activity: Activity) {
-        ParseUser.logInInBackground(username, password) { user, e ->
-            if (user != null) {
-                updateLastLogin()
-                //setUserOnline(user.username, activity.applicationContext)
-                //deleteLocalUsers(username, activity.applicationContext)
-                //syncLocalUser(username, activity.applicationContext)
-                ManagerFactory.initializeAdapter()
-                val intent = Intent(activity.applicationContext, HomeActivity::class.java)
-                activity.startActivity(intent)
-                //user.pinInBackground()
-                initAllUsers()
-            } else {
-                showToast("Invalid username/password")
+        val checkedUser = isActive(username)
+        if(checkedUser != null && !checkedUser.isActive)
+            showToast("Account has been disabled")
+        else {
+            ParseUser.logInInBackground(username, password) { user, _ ->
+                if (user != null) {
+                    clearAndHideLoginResources(activity)
+                    updateLastLogin()
+                    //setUserOnline(user.username, activity.applicationContext)
+                    //deleteLocalUsers(username, activity.applicationContext)
+                    //syncLocalUser(username, activity.applicationContext)
+                    ManagerFactory.initializeAdapter()
+                    val intent = Intent(activity.applicationContext, HomeActivity::class.java)
+                    activity.startActivity(intent)
+                    //user.pinInBackground()
+                    initAllUsers()
+                } else {
+                    showToast("Invalid username/password")
+                }
             }
         }
     }
+
+    private fun clearAndHideLoginResources(activity: Activity) {
+        activity.actLoginEditTextUsername.isVisible = false
+        activity.actLoginEditTextUsername.text.clear()
+        activity.actLoginEditTextPassword.isVisible = false
+        activity.actLoginEditTextPassword.text.clear()
+        activity.actLoginBtnLogin.isVisible = false
+        activity.actLoginBtnRegister.isVisible = false
+    }
+
     /**
      * Updates the last login of the current user to the database
      *
@@ -233,6 +248,20 @@ class UserManager {
         return ParseUser.getCurrentUser() != null
     }
 
+    fun isActive(username: String): User? {
+        val userQuery = ParseQuery.getQuery(User::class.java).whereEqualTo("username", username)
+        var suspiciousUser: User? = null
+        try {
+            suspiciousUser = userQuery.first
+        }
+        catch (e: ParseException) {
+            Log.d("EXCEPTIONDEBUG", e.message)
+        }
+        finally {
+            return suspiciousUser
+        }
+    }
+
     // TODO: Delete ActivityStack and everything else what is userspecific!
     /**
      * Deletes the content of the local datastore and logout the [User]
@@ -285,6 +314,33 @@ class UserManager {
             message,
             Toast.LENGTH_SHORT
         ).show()
+    }
+
+    /**
+     * Sets isActive of currentUser to false and calls saveEventually()
+     */
+    private fun disableAccount() {
+        getCurrentUser().isActive = false
+        getCurrentUser().saveEventually()
+    }
+
+    // TODO: check how to delete the avatar file
+
+    /**
+     * Deletes avatar of currentUser and calls saveEventually()
+     */
+    private fun clearAccount() {
+        getCurrentUser().avatar?.file?.delete()
+        getCurrentUser().saveEventually()
+    }
+
+    /**
+     * Calls disableAccount(), clearAccount() and logout() in this sequence
+     */
+    fun deleteUserAccount() {
+        disableAccount()
+        clearAccount()
+        logOut()
     }
 
     /*

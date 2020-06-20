@@ -40,6 +40,7 @@ class User: ParseUser {
         contacts = ArrayList()
         emailVerified = false
         isOnline = false
+        isActive = true
         gender = UNKNOWN
     }
 
@@ -101,11 +102,19 @@ class User: ParseUser {
             }
         }
 
-    var avatar: ParseFile
-        get() = getParseFile("avatar")!!
+    var isActive: Boolean
+        get() = getBoolean("isActive")
+        set(isActive) {
+            put("isActive", isActive)
+        }
+
+    var avatar: ParseFile?
+        get() = getParseFile("avatar")
         set(avatar) {
-            avatar.save()
-            put("avatar", avatar)
+            avatar?.save()
+            if (avatar != null) {
+                put("avatar", avatar)
+            }
         }
 
     var contacts: ArrayList<User>
@@ -132,6 +141,11 @@ class User: ParseUser {
 
     override fun hashCode(): Int {
         return javaClass.hashCode()
+    }
+
+    override fun getUsername(): String {
+        return if(isActive) super.getUsername()
+        else "disabledAccount"
     }
 
 
