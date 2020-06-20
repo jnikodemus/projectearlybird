@@ -121,14 +121,16 @@ class GroupActivity : AppCompatActivity() {
 
     private fun setGroupImage() {
         act_group_iv_image.layoutParams.height = PixelCalculator.calculateHeightForFullHD()
-        var uri = group.groupImage.url
-        //if(group.croppedImage != null)
-        //    uri = group.croppedImage!!.url
-        Picasso.get()
-            .load(uri)
-            .fit()
-            .centerCrop()
-            .into(act_group_iv_image)
+        if(group.groupImage != null) {
+            val uri = group.groupImage?.url
+            //if(group.croppedImage != null)
+            //    uri = group.croppedImage!!.url
+            Picasso.get()
+                .load(uri)
+                .fit()
+                .centerCrop()
+                .into(act_group_iv_image)
+        }
     }
 
     private fun loadModules() {

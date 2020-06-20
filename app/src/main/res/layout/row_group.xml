@@ -22,7 +22,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@android:drawable/ic_menu_compass" />
+            app:srcCompat="@drawable/logo_app_01_small" />
 
         <TextView
             android:id="@+id/frgmt_groups_tv_name"

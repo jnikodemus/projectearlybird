@@ -84,14 +84,15 @@ class Group : ParseObject {
             this.put("owner", owner)
         }
 
-    var groupImage: ParseFile
+    var groupImage: ParseFile?
         get() {
-            return this.getParseFile("groupImage")!!
+            return this.getParseFile("groupImage")
         }
         set(groupImage) {
             // TODO: CHECK save()
-            groupImage.save()
-            this.put("groupImage", groupImage)
+            groupImage?.save()
+            if(groupImage != null)
+                this.put("groupImage", groupImage)
         }
 
     var croppedImage: ParseFile?

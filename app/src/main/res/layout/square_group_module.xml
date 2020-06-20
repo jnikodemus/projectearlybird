@@ -5,12 +5,12 @@
     android:id="@+id/square_group_module_cl"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_margin="5dp">
+    android:layout_margin="10dp">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/square_group_module_cv"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         app:cardCornerRadius="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -22,7 +22,7 @@
             android:scaleType="centerCrop"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/logo_app_01_small" />
+            app:srcCompat="@drawable/icon_default_module_checklist" />
 
     </androidx.cardview.widget.CardView>
 
