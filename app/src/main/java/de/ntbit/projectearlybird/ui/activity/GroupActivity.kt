@@ -27,6 +27,7 @@ import de.ntbit.projectearlybird.manager.ManagerFactory
 import de.ntbit.projectearlybird.model.Group
 import de.ntbit.projectearlybird.model.Module
 import de.ntbit.projectearlybird.model.ModuleChecklist
+import de.ntbit.projectearlybird.model.User
 import kotlinx.android.synthetic.main.activity_group.*
 import kotlinx.android.synthetic.main.toolbar.*
 
@@ -223,6 +224,27 @@ class GroupActivity : AppCompatActivity() {
     }
 
 }
+
+/*
+class AddUserDialogFragment(group: Group) : DialogFragment() {
+    private val simpleClassName = this.javaClass.simpleName
+
+    private val mUserManager = ManagerFactory.getUserManager()
+    val contacts = arrayOf(mUserManager.getMyContacts())
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        return activity?.let {
+            val builder = AlertDialog.Builder(it)
+            builder
+                .setTitle("Pick a module")
+                .setItems(contacts) { dialog, which ->
+                    Log.d("CUSTOMDEBUG", "$simpleClassName - User clicked $which")
+                }
+            builder.create()
+        } ?: throw java.lang.IllegalStateException("Activity cannot be null")
+    }
+}
+*/
 
 class AddModuleDialogFragment(otherGroup: Group, adapter: GroupAdapter<GroupieViewHolder>) : DialogFragment() {
 
