@@ -217,7 +217,7 @@ class ModuleChecklistManager {
         //adapterMap[group]?.clear()
         //if(!isInitialized) {
         Log.d("CUSTOMDEBUG", "$simpleClassName.getAdapaterByGroup() - ${group.name}(${group.objectId})")
-        getAllChecklists()
+        getAllChecklists(group)
             //isInitialized = true
         //}
         Log.d("CUSTOMDEBUG", "$simpleClassName.getAdapaterByGroup() - returning ${adapterMap[group]?.itemCount} now")

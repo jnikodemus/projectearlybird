@@ -14,6 +14,7 @@ import androidx.core.app.ActivityCompat.finishAffinity
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.DialogFragment
 import de.ntbit.projectearlybird.R
+import de.ntbit.projectearlybird.helper.PixelCalculator
 import de.ntbit.projectearlybird.manager.ManagerFactory
 import kotlinx.android.synthetic.main.activity_profile.*
 import kotlinx.android.synthetic.main.toolbar.*
@@ -68,6 +69,7 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private fun placeUserProfile() {
+        act_profile_iv_avatar.layoutParams.height = PixelCalculator.calculateHeightForFullHD()
         act_profile_et_username.text = currentUser.username
         act_profile_et_email.text = currentUser.email
         if(currentUser.firstName != null)
@@ -117,7 +119,11 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private fun deleteAccount() {
-        Toast.makeText(this,"Not available", Toast.LENGTH_SHORT).show()
+        mUserManager.deleteUserAccount()
+        val intent = Intent(this, LoadingActivity::class.java)
+        finishAffinity(this)
+        startActivity(intent)
+        Toast.makeText(this,"Your account has been disabled.", Toast.LENGTH_SHORT).show()
     }
 }
 

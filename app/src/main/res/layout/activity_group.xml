@@ -7,10 +7,11 @@
     tools:context=".ui.activity.GroupActivity">
 
     <ImageView
-        android:id="@+id/actGroupIvImage"
+        android:id="@+id/act_group_iv_image"
         android:layout_width="match_parent"
         android:layout_height="120dp"
         android:transitionName="groupAvatarTrans"
+        app:srcCompat="@drawable/logo_app_00"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -29,6 +30,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/actGroupIvImage" />
+        app:layout_constraintTop_toBottomOf="@+id/act_group_iv_image" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
