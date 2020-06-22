@@ -22,31 +22,6 @@ import java.util.logging.Logger
 @ParseClassName("Group")
 class Group : ParseObject {
 
-    companion object {
-
-        /**
-         * Static method to convert a [Bitmap] to [ParseFile] expecting [contentResolver] and [uri].
-         * Calls [convertBitmapToParseFile] for compression and at long last convert.
-         * @return [ParseFile]
-         */
-        fun convertBitmapToParseFileByUri(contentResolver: ContentResolver, uri: Uri) : ParseFile{
-            val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, uri)
-            return convertBitmapToParseFile(bitmap)
-        }
-
-        /**
-         * Static method to convert a [Bitmap] to [ParseFile] expecting only the [Bitmap].
-         * The provided Bitmap is compressed to [Bitmap.CompressFormat.PNG] in 100% quality.
-         * @return [ParseFile]
-         */
-        fun convertBitmapToParseFile(bitmap: Bitmap) : ParseFile {
-            val stream = ByteArrayOutputStream()
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
-            val image: ByteArray = stream.toByteArray()
-            return ParseFile(image)
-        }
-    }
-
     internal constructor() : super()
 
     internal constructor(name: String,

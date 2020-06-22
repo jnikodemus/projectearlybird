@@ -21,6 +21,7 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import de.ntbit.projectearlybird.R
 import de.ntbit.projectearlybird.adapter.item.ModuleItem
+import de.ntbit.projectearlybird.helper.Converter
 import de.ntbit.projectearlybird.helper.ParcelContract
 import de.ntbit.projectearlybird.helper.PixelCalculator
 import de.ntbit.projectearlybird.manager.ManagerFactory
@@ -190,7 +191,7 @@ class GroupActivity : AppCompatActivity() {
                 if(resultCode == Activity.RESULT_OK){
                     data?.data?.let { uri ->
                         launchImageCrop(uri)
-                        group.groupImage = Group.convertBitmapToParseFileByUri(this.contentResolver, uri)
+                        group.groupImage = Converter.convertBitmapToParseFileByUri(this.contentResolver, uri)
                     }
                 }
             }
@@ -203,7 +204,7 @@ class GroupActivity : AppCompatActivity() {
                             .fit()
                             .centerCrop()
                             .into(act_group_iv_image)
-                        group.croppedImage = Group.convertBitmapToParseFileByUri(this.contentResolver, it)
+                        group.croppedImage = Converter.convertBitmapToParseFileByUri(this.contentResolver, it)
                         mGroupManager.getAdapter().notifyDataSetChanged()
                     }
                 }

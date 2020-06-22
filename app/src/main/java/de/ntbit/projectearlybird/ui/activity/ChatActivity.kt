@@ -108,18 +108,6 @@ class ChatActivity : AppCompatActivity() {
         mUserManager.loadAvatar(toolbar_iv_image, chatPartner)
         toolbar_iv_image.visibility = ImageView.VISIBLE
         toolbar_tv_title.text = chatPartner.username
-        /*
-        supportActionBar?.displayOptions = (supportActionBar?.displayOptions?.or(ActionBar.DISPLAY_SHOW_CUSTOM)!!)
-        val imageView = ImageView(supportActionBar!!.themedContext)
-        imageView.scaleType = ImageView.ScaleType.CENTER
-        mUserManager.loadAvatar(imageView, chatPartner)
-        val layoutParams: ActionBar.LayoutParams = ActionBar.LayoutParams(
-            ActionBar.LayoutParams.WRAP_CONTENT,
-            ActionBar.LayoutParams.WRAP_CONTENT, Gravity.END
-        )
-        imageView.layoutParams = layoutParams
-        supportActionBar?.customView = imageView
-         */
     }
 
     private fun listenForMessage(partner: User) {

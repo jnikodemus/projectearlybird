@@ -143,8 +143,8 @@ class AdapterManager {
             "CUSTOMDEBUG", "$simpleClassName - Processing outgoing message (STILL TODO)... " +
                     "Recipient: ${message.recipient.username} - Body: \"${message.body}\""
         )
-        //conversationsAdapter.add(UserItemLatestMessage(message.recipient))
-        //conversationsAdapter.notifyDataSetChanged()
+        conversationsAdapter.add(UserItemLatestMessage(message.recipient))
+        conversationsAdapter.notifyDataSetChanged()
     }
 
     /**
