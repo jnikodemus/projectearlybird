@@ -11,6 +11,8 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import com.parse.*
 import com.squareup.picasso.Picasso
+import de.ntbit.projectearlybird.helper.ApplicationContextProvider
+import de.ntbit.projectearlybird.helper.Converter
 import de.ntbit.projectearlybird.model.Message
 import de.ntbit.projectearlybird.model.User
 import de.ntbit.projectearlybird.ui.activity.HomeActivity
@@ -330,7 +332,10 @@ class UserManager {
      * Deletes avatar of currentUser and calls saveEventually()
      */
     private fun clearAccount() {
-        getCurrentUser().avatar?.file?.delete()
+        getCurrentUser().avatar = Converter
+            .convertBitmapToParseFileByUri(ApplicationContextProvider
+                .context
+                .contentResolver, Uri.parse(IMAGE_USER_DEFAULT_URI))
         getCurrentUser().saveEventually()
     }
 
@@ -342,59 +347,4 @@ class UserManager {
         clearAccount()
         logOut()
     }
-
-    /*
-    @Deprecated("Use Parse LocalDatastore")
-    private fun setUserOnline(username: String, ctx: Context) {
-        val mDbHelper = PebDbHelper(ctx)
-        val userDatabase = mDbHelper.writableDatabase
-        val valuesToInsert = ContentValues()
-        valuesToInsert.put(PebContract.UserEntry.COLUMN_USER_IS_ONLINE, PebContract.UserEntry.IS_ONLINE)
-        userDatabase.update(
-            PebContract.UserEntry.TABLE_NAME, valuesToInsert,
-            "username=?", arrayOf(username))
-        userDatabase.close()
-    }
-
-    @Deprecated("Use Parse LocalDatastore")
-    private fun saveUserLocal(user: ParseUser, ctx: Context) {
-        val mDbHelper = PebDbHelper(ctx)
-        val userDatabase = mDbHelper.writableDatabase
-        val valuesToInsert = ContentValues()
-        valuesToInsert.put(PebContract.UserEntry._ID, user.objectId)
-        valuesToInsert.put(PebContract.UserEntry.COLUMN_USER_EMAIL_VERIFIED, 0)
-        //valuesToInsert.put(PebContract.UserEntry.COLUMN_USER_ACL, user.acl)
-        //valuesToInsert.put(PebContract.UserEntry.COLUMN_USER_UPDATED_AT, user.updatedAt)
-        //valuesToInsert.put(PebContract.UserEntry.COLUMN_USER_AUTHDATA, user.auth)
-        valuesToInsert.put(PebContract.UserEntry.COLUMN_USER_USERNAME, user.username)
-        //valuesToInsert.put(PebContract.UserEntry.COLUMN_USER_CREATED_AT, user.createdAt)
-        //valuesToInsert.put(PebContract.UserEntry.COLUMN_USER_PASSWORD, user.password)
-        valuesToInsert.put(PebContract.UserEntry.COLUMN_USER_EMAIL, user.email)
-        valuesToInsert.put(PebContract.UserEntry.COLUMN_USER_FIRSTNAME, user.getString("firstName"))
-        valuesToInsert.put(PebContract.UserEntry.COLUMN_USER_LASTNAME, user.getString("lastName"))
-        valuesToInsert.put(PebContract.UserEntry.COLUMN_USER_GENDER, PebContract.UserEntry.GENDER_UNKNOWN)
-        //valuesToInsert.put(PebContract.UserEntry.COLUMN_USER_LASTLOGIN, user.getInt("lastLogin"))
-        //valuesToInsert.put(PebContract.UserEntry.COLUMN_USER_BIRTHDAY, null)
-        valuesToInsert.put(PebContract.UserEntry.COLUMN_USER_AVATAR, user.getBytes("avatar"))
-        valuesToInsert.put(PebContract.UserEntry.COLUMN_USER_IS_ONLINE, PebContract.UserEntry.IS_OFFLINE)
-        userDatabase.insert(PebContract.UserEntry.TABLE_NAME, null, valuesToInsert)
-        userDatabase.close()
-    }
-
-    @Deprecated("Use Parse LocalDatastore")
-    private fun syncLocalUser(username: String, ctx: Context) {
-        saveUserLocal(ParseUser.getCurrentUser(), ctx)
-    }
-
-    @Deprecated("Use Parse LocalDatastore")
-    private fun deleteLocalUsers(username: String, ctx: Context) {
-        val mDbHelper = PebDbHelper(ctx)
-        val userDatabase = mDbHelper.writableDatabase
-        val whereClause = PebContract.UserEntry.COLUMN_USER_USERNAME + "!=?"
-        val whereArgs = arrayOf("0")
-        userDatabase.delete(PebContract.UserEntry.TABLE_NAME, whereClause, whereArgs)
-        userDatabase.close()
-    }
-
- */
 }

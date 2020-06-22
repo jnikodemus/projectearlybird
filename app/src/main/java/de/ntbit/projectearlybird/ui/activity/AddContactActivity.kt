@@ -115,6 +115,7 @@ class AddContactActivity : AppCompatActivity() {
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 if(!p0.isNullOrBlank() && p0.isNotEmpty()) {
                     val query = ParseQuery.getQuery(User::class.java)
+                    query.whereEqualTo("isActive", true)
                     query.whereStartsWith("username", p0.toString().toLowerCase(Locale.ROOT))
                     query.findInBackground { users, e ->
                         adapter.clear()

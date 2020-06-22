@@ -46,23 +46,6 @@ class ContactsFragment : Fragment() {
         fetchAllParseUser()
     }
 
-    /*
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.frgmt_contacts_add, menu)
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.frgmt_contacts_add -> {
-                val intent = Intent(this.context, AddContactActivity::class.java)
-                startActivity(intent)
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
-     */
-
     private fun initialize() {
         connectAdapter()
         fetchAllParseUser()
