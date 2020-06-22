@@ -7,13 +7,13 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
-import android.view.Menu
-import android.view.MenuItem
+import android.view.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.squareup.picasso.Picasso
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
@@ -21,6 +21,7 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import de.ntbit.projectearlybird.R
 import de.ntbit.projectearlybird.adapter.item.ModuleItem
+import de.ntbit.projectearlybird.adapter.item.UserItem
 import de.ntbit.projectearlybird.helper.Converter
 import de.ntbit.projectearlybird.helper.ParcelContract
 import de.ntbit.projectearlybird.helper.PixelCalculator
@@ -30,6 +31,8 @@ import de.ntbit.projectearlybird.model.Module
 import de.ntbit.projectearlybird.model.ModuleChecklist
 import de.ntbit.projectearlybird.model.User
 import kotlinx.android.synthetic.main.activity_group.*
+import kotlinx.android.synthetic.main.bottom_sheet_dialog.*
+import kotlinx.android.synthetic.main.fragment_contacts.*
 import kotlinx.android.synthetic.main.toolbar.*
 
 
@@ -223,7 +226,8 @@ class GroupActivity : AppCompatActivity() {
     }
 
     private fun displayContacts() {
-
+        val diag = BottomDialog(this.group)
+        diag.show(supportFragmentManager, "AddUser")
     }
 
 }
@@ -286,6 +290,54 @@ class AddModuleDialogFragment(otherGroup: Group, adapter: GroupAdapter<GroupieVi
                 }
             builder.create()
         } ?: throw IllegalStateException("Activity cannot be null")
+    }
+}
+
+class BottomDialog(group: Group) : BottomSheetDialogFragment() {
+
+    val mUserManager = ManagerFactory.getUserManager()
+    val mGroupManager = ManagerFactory.getGroupManager()
+    private val adapter = GroupAdapter<GroupieViewHolder>()
+    private var group = group
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        super.onCreateView(inflater, container, savedInstanceState)
+        return inflater.inflate(R.layout.bottom_sheet_dialog, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        init()
+    }
+
+    private fun init() {
+        frgmt_group_rv_contacts_list.adapter = adapter
+        fetchAllParseUser()
+        setClickListener()
+    }
+
+    private fun fetchAllParseUser() {
+        adapter.clear()
+        for(contact in mUserManager.getMyContacts()) {
+            if(!group.members.contains(contact)) adapter.add(UserItem(contact))
+        }
+        adapter.notifyDataSetChanged()
+    }
+
+    private fun setClickListener() {
+        adapter.setOnItemClickListener { item, view ->
+            val userItem = item as UserItem
+            //userItem.user.pin()
+            if(!group.members.contains(userItem.user)) {
+                mGroupManager.addUser(userItem.user, group)
+
+            }
+            dismiss()
+        }
     }
 
 }

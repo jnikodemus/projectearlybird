@@ -8,6 +8,7 @@ import com.parse.livequery.ParseLiveQueryClient
 import com.parse.livequery.SubscriptionHandling
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
+import de.ntbit.projectearlybird.adapter.item.UserItem
 import de.ntbit.projectearlybird.adapter.item.UserItemLatestMessage
 import de.ntbit.projectearlybird.helper.ApplicationContextProvider
 import de.ntbit.projectearlybird.helper.NotificationHelper
@@ -94,14 +95,16 @@ class AdapterManager {
 
         val parseQuery = ParseQuery.getQuery(Message::class.java)
         parseQuery.whereContains("threadId", mUserManager.getCurrentUser().objectId)
-        parseQuery.whereNotEqualTo("senderId", mUserManager.getCurrentUser().objectId)
+        //parseQuery.whereNotEqualTo("senderId", mUserManager.getCurrentUser().objectId)
         val subscriptionHandling: SubscriptionHandling<Message> =
             parseLiveQueryClient.subscribe(parseQuery)
 
         subscriptionHandling.handleEvent(SubscriptionHandling.Event.CREATE) { _, message ->
             val handler = Handler(Looper.getMainLooper())
             handler.post {
-                processIncomingMessage(message)
+                if(message.sender != mUserManager.getCurrentUser())
+                    processIncomingMessage(message)
+                else processOutgoingMessage(message)
                 Log.d(
                     "CUSTOMDEBUG",
                     "$simpleClassName - got new conversation with ${message.sender.username}"
@@ -138,12 +141,16 @@ class AdapterManager {
      * NOT IMPLEMENTED YET
      */
     fun processOutgoingMessage(message: Message) {
-        // TODO: implement code
         Log.d(
-            "CUSTOMDEBUG", "$simpleClassName - Processing outgoing message (STILL TODO)... " +
+            "CUSTOMDEBUG", "$simpleClassName - Processing outgoing message " +
                     "Recipient: ${message.recipient.username} - Body: \"${message.body}\""
         )
-        conversationsAdapter.add(UserItemLatestMessage(message.recipient))
+
+        val latestContact = UserItemLatestMessage(message.recipient)
+        if(!conversationContacts.contains(latestContact.user)) {
+            conversationContacts.add(latestContact.user)
+            conversationsAdapter.add(0, latestContact)
+        }
         conversationsAdapter.notifyDataSetChanged()
     }
 
