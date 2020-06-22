@@ -112,6 +112,25 @@ class GroupManager {
                     )
             }
         }
+        subscriptionHandling.handleEvent(SubscriptionHandling.Event.UPDATE) {_, group ->
+            val handler = Handler(Looper.getMainLooper())
+            handler.post {
+                processNewGroup(group)
+                // TODO: remove following if() and use parseQueryOwnGroups instead!
+                if(group.owner != mUserManager.getCurrentUser())
+                    NotificationHelper.showNotification(
+                        group.name,
+                        ApplicationContextProvider.getApplicationContext()
+                            .getString(string.group_added_to_new)
+                            .replace("GROUPNAME", group.name),
+                        Intent(
+                            ApplicationContextProvider.getApplicationContext(),
+                            GroupActivity::class.java
+                        )
+                            .putExtra(ParcelContract.GROUP_KEY, group)
+                    )
+            }
+        }
     }
 
     /**
@@ -183,17 +202,18 @@ class GroupManager {
      */
     fun addUser(user: User, group: Group): Boolean {
         val members = group.members
-        if (!group.members.contains(user)) {
+        return if (!group.members.contains(user)) {
             members.add(user)
             group.members = members
             group.updateACL()
-            return true
+            group.saveEventually()
+            true
         } else {
             Log.d(
                 "CUSTOMDEBUG",
                 "GroupManager - Did not add ${user.username}. Maybe already member?"
             )
-            return false
+            false
         }
     }
 

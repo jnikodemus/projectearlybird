@@ -171,7 +171,7 @@ class UserManager {
     private fun initMyContacts() {
         val mQuery = ParseQuery.getQuery(Message::class.java)
             .whereContains("threadId", getCurrentUser().objectId)
-        val query = ParseQuery.getQuery(User::class.java)
+        val query = ParseQuery.getQuery(User::class.java).whereEqualTo("isActive", true)
         query.whereMatchesKeyInQuery("objectId", "senderId", mQuery)
         query.findInBackground { ownContacts, e ->
             if(e == null) {
