@@ -16,6 +16,7 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import de.ntbit.projectearlybird.R
 import de.ntbit.projectearlybird.adapter.item.UserItem
+import de.ntbit.projectearlybird.helper.Converter
 import de.ntbit.projectearlybird.helper.InputValidator
 import de.ntbit.projectearlybird.helper.ParcelContract
 import de.ntbit.projectearlybird.helper.PixelCalculator
@@ -133,7 +134,7 @@ class GroupCreateActivity : AppCompatActivity() {
     }
 
     private fun createInitialGroup() {
-        val initialGroupImage = Group.convertBitmapToParseFileByUri(contentResolver, Uri.parse(IMAGE_GROUP_DEFAULT_URI))
+        val initialGroupImage = Converter.convertBitmapToParseFileByUri(contentResolver, Uri.parse(IMAGE_GROUP_DEFAULT_URI))
         createdGroup = Group("anonGroup", mUserManager.getCurrentUser(), ArrayList(), initialGroupImage)
         createdGroup.name += createdGroup.objectId
     }
@@ -164,7 +165,7 @@ class GroupCreateActivity : AppCompatActivity() {
                 if(resultCode == Activity.RESULT_OK){
                     data?.data?.let { uri ->
                         launchImageCrop(uri)
-                        createdGroup.groupImage = Group.convertBitmapToParseFileByUri(this.contentResolver, uri)
+                        createdGroup.groupImage = Converter.convertBitmapToParseFileByUri(this.contentResolver, uri)
                     }
                 }
             }
@@ -177,7 +178,7 @@ class GroupCreateActivity : AppCompatActivity() {
                             .fit()
                             .centerCrop()
                             .into(crt_group_iv_avatar)
-                        createdGroup.croppedImage = Group.convertBitmapToParseFileByUri(this.contentResolver, it)
+                        createdGroup.croppedImage = Converter.convertBitmapToParseFileByUri(this.contentResolver, it)
                     }
                 }
             }
