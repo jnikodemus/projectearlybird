@@ -15,6 +15,7 @@ import de.ntbit.projectearlybird.R.string
 import de.ntbit.projectearlybird.adapter.item.GroupItem
 import de.ntbit.projectearlybird.helper.ApplicationContextProvider
 import de.ntbit.projectearlybird.helper.NotificationHelper
+import de.ntbit.projectearlybird.helper.ParcelContract
 import de.ntbit.projectearlybird.model.Group
 import de.ntbit.projectearlybird.model.User
 import de.ntbit.projectearlybird.ui.activity.GroupActivity
@@ -75,9 +76,6 @@ class GroupManager {
                     adapter.add(GroupItem(group))
             } else Log.d("CUSTOMDEBUG", "$simpleClassName - ERROR -> ${e.message}")
         }
-        //Log.d("CUSTOMDEBUG", "GOT " + currentUserGroups.size + " groups")
-        //for (m in currentUserGroups)
-        //Log.d("CUSTOMDEBUG", "Found $m")
     }
 
     /**
@@ -85,7 +83,10 @@ class GroupManager {
      * and [NotificationHelper.showNotification] if the current user is added to a group.
      */
     private fun listenForGroups() {
+        val parseQueryOwnGroups = ParseQuery.getQuery(Group::class.java)
+            .whereContains("owner", mUserManager.getCurrentUser().objectId)
         val parseQuery = ParseQuery.getQuery(Group::class.java)
+            //.whereDoesNotMatchKeyInQuery("objectId","objectId", parseQueryOwnGroups)
         val subscriptionHandling: SubscriptionHandling<Group> =
             parseLiveQueryClient.subscribe(parseQuery)
 
@@ -93,17 +94,19 @@ class GroupManager {
             val handler = Handler(Looper.getMainLooper())
             handler.post {
                 processNewGroup(group)
-                NotificationHelper.showNotification(
-                    group.name,
-                    ApplicationContextProvider.getApplicationContext()
-                        .getString(string.group_added_to_new)
-                        .replace("GROUPNAME", group.name),
-                    Intent(
-                        ApplicationContextProvider.getApplicationContext(),
-                        GroupActivity::class.java
+                // TODO: remove following if() and use parseQueryOwnGroups instead!
+                if(group.owner != mUserManager.getCurrentUser())
+                    NotificationHelper.showNotification(
+                        group.name,
+                        ApplicationContextProvider.getApplicationContext()
+                            .getString(string.group_added_to_new)
+                            .replace("GROUPNAME", group.name),
+                        Intent(
+                            ApplicationContextProvider.getApplicationContext(),
+                            GroupActivity::class.java
+                        )
+                            .putExtra(ParcelContract.GROUP_KEY, group)
                     )
-                        .putExtra("GROUP", group)
-                )
             }
         }
     }
@@ -168,6 +171,8 @@ class GroupManager {
         return true
     }
 
+
+
     /**
      * Adds the provided [user] to the memberlist of the provided [group] if not already member.
      * Returns true if the adding was successful.
@@ -175,17 +180,18 @@ class GroupManager {
      */
     fun addUser(user: User, group: Group): Boolean {
         val members = group.members
-        if (!group.members.contains(user)) {
+        return if (!group.members.contains(user)) {
             members.add(user)
             group.members = members
             group.updateACL()
-            return true
+            group.saveEventually()
+            true
         } else {
             Log.d(
                 "CUSTOMDEBUG",
                 "GroupManager - Did not add ${user.username}. Maybe already member?"
             )
-            return false
+            false
         }
     }
 

@@ -8,11 +8,15 @@ import android.net.Uri
 import android.util.Log
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.core.view.isVisible
 import com.parse.*
 import com.squareup.picasso.Picasso
+import de.ntbit.projectearlybird.helper.ApplicationContextProvider
+import de.ntbit.projectearlybird.helper.Converter
 import de.ntbit.projectearlybird.model.Message
 import de.ntbit.projectearlybird.model.User
 import de.ntbit.projectearlybird.ui.activity.HomeActivity
+import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
@@ -79,9 +83,6 @@ class UserManager {
     }
 
     /**
-     * TODO: Remove personal information
-     * STOPPED HERE TRYING TO SLEEP Zzzz
-     *
      * Login the user with [username] and [password]
      *
      * @param username of the current [User]
@@ -89,22 +90,38 @@ class UserManager {
      *
      */
     fun loginUser(username: String, password: String, activity: Activity) {
-        ParseUser.logInInBackground(username, password) { user, e ->
-            if (user != null) {
-                updateLastLogin()
-                //setUserOnline(user.username, activity.applicationContext)
-                //deleteLocalUsers(username, activity.applicationContext)
-                //syncLocalUser(username, activity.applicationContext)
-                ManagerFactory.initializeAdapter()
-                val intent = Intent(activity.applicationContext, HomeActivity::class.java)
-                activity.startActivity(intent)
-                //user.pinInBackground()
-                initAllUsers()
-            } else {
-                showToast("Invalid username/password")
+        val checkedUser = isActive(username)
+        if(checkedUser != null && !checkedUser.isActive)
+            showToast("Account has been disabled")
+        else {
+            ParseUser.logInInBackground(username, password) { user, _ ->
+                if (user != null) {
+                    clearAndHideLoginResources(activity)
+                    updateLastLogin()
+                    //setUserOnline(user.username, activity.applicationContext)
+                    //deleteLocalUsers(username, activity.applicationContext)
+                    //syncLocalUser(username, activity.applicationContext)
+                    ManagerFactory.initializeAdapter()
+                    val intent = Intent(activity.applicationContext, HomeActivity::class.java)
+                    activity.startActivity(intent)
+                    //user.pinInBackground()
+                    initAllUsers()
+                } else {
+                    showToast("Invalid username/password")
+                }
             }
         }
     }
+
+    private fun clearAndHideLoginResources(activity: Activity) {
+        activity.actLoginEditTextUsername.isVisible = false
+        activity.actLoginEditTextUsername.text.clear()
+        activity.actLoginEditTextPassword.isVisible = false
+        activity.actLoginEditTextPassword.text.clear()
+        activity.actLoginBtnLogin.isVisible = false
+        activity.actLoginBtnRegister.isVisible = false
+    }
+
     /**
      * Updates the last login of the current user to the database
      *
@@ -156,7 +173,7 @@ class UserManager {
     private fun initMyContacts() {
         val mQuery = ParseQuery.getQuery(Message::class.java)
             .whereContains("threadId", getCurrentUser().objectId)
-        val query = ParseQuery.getQuery(User::class.java)
+        val query = ParseQuery.getQuery(User::class.java).whereEqualTo("isActive", true)
         query.whereMatchesKeyInQuery("objectId", "senderId", mQuery)
         query.findInBackground { ownContacts, e ->
             if(e == null) {
@@ -233,6 +250,20 @@ class UserManager {
         return ParseUser.getCurrentUser() != null
     }
 
+    fun isActive(username: String): User? {
+        val userQuery = ParseQuery.getQuery(User::class.java).whereEqualTo("username", username)
+        var suspiciousUser: User? = null
+        try {
+            suspiciousUser = userQuery.first
+        }
+        catch (e: ParseException) {
+            Log.d("EXCEPTIONDEBUG", e.message)
+        }
+        finally {
+            return suspiciousUser
+        }
+    }
+
     // TODO: Delete ActivityStack and everything else what is userspecific!
     /**
      * Deletes the content of the local datastore and logout the [User]
@@ -287,58 +318,33 @@ class UserManager {
         ).show()
     }
 
-    /*
-    @Deprecated("Use Parse LocalDatastore")
-    private fun setUserOnline(username: String, ctx: Context) {
-        val mDbHelper = PebDbHelper(ctx)
-        val userDatabase = mDbHelper.writableDatabase
-        val valuesToInsert = ContentValues()
-        valuesToInsert.put(PebContract.UserEntry.COLUMN_USER_IS_ONLINE, PebContract.UserEntry.IS_ONLINE)
-        userDatabase.update(
-            PebContract.UserEntry.TABLE_NAME, valuesToInsert,
-            "username=?", arrayOf(username))
-        userDatabase.close()
+    /**
+     * Sets isActive of currentUser to false and calls saveEventually()
+     */
+    private fun disableAccount() {
+        getCurrentUser().isActive = false
+        getCurrentUser().saveEventually()
     }
 
-    @Deprecated("Use Parse LocalDatastore")
-    private fun saveUserLocal(user: ParseUser, ctx: Context) {
-        val mDbHelper = PebDbHelper(ctx)
-        val userDatabase = mDbHelper.writableDatabase
-        val valuesToInsert = ContentValues()
-        valuesToInsert.put(PebContract.UserEntry._ID, user.objectId)
-        valuesToInsert.put(PebContract.UserEntry.COLUMN_USER_EMAIL_VERIFIED, 0)
-        //valuesToInsert.put(PebContract.UserEntry.COLUMN_USER_ACL, user.acl)
-        //valuesToInsert.put(PebContract.UserEntry.COLUMN_USER_UPDATED_AT, user.updatedAt)
-        //valuesToInsert.put(PebContract.UserEntry.COLUMN_USER_AUTHDATA, user.auth)
-        valuesToInsert.put(PebContract.UserEntry.COLUMN_USER_USERNAME, user.username)
-        //valuesToInsert.put(PebContract.UserEntry.COLUMN_USER_CREATED_AT, user.createdAt)
-        //valuesToInsert.put(PebContract.UserEntry.COLUMN_USER_PASSWORD, user.password)
-        valuesToInsert.put(PebContract.UserEntry.COLUMN_USER_EMAIL, user.email)
-        valuesToInsert.put(PebContract.UserEntry.COLUMN_USER_FIRSTNAME, user.getString("firstName"))
-        valuesToInsert.put(PebContract.UserEntry.COLUMN_USER_LASTNAME, user.getString("lastName"))
-        valuesToInsert.put(PebContract.UserEntry.COLUMN_USER_GENDER, PebContract.UserEntry.GENDER_UNKNOWN)
-        //valuesToInsert.put(PebContract.UserEntry.COLUMN_USER_LASTLOGIN, user.getInt("lastLogin"))
-        //valuesToInsert.put(PebContract.UserEntry.COLUMN_USER_BIRTHDAY, null)
-        valuesToInsert.put(PebContract.UserEntry.COLUMN_USER_AVATAR, user.getBytes("avatar"))
-        valuesToInsert.put(PebContract.UserEntry.COLUMN_USER_IS_ONLINE, PebContract.UserEntry.IS_OFFLINE)
-        userDatabase.insert(PebContract.UserEntry.TABLE_NAME, null, valuesToInsert)
-        userDatabase.close()
+    // TODO: check how to delete the avatar file
+
+    /**
+     * Deletes avatar of currentUser and calls saveEventually()
+     */
+    private fun clearAccount() {
+        getCurrentUser().avatar = Converter
+            .convertBitmapToParseFileByUri(ApplicationContextProvider
+                .context
+                .contentResolver, Uri.parse(IMAGE_USER_DEFAULT_URI))
+        getCurrentUser().saveEventually()
     }
 
-    @Deprecated("Use Parse LocalDatastore")
-    private fun syncLocalUser(username: String, ctx: Context) {
-        saveUserLocal(ParseUser.getCurrentUser(), ctx)
+    /**
+     * Calls disableAccount(), clearAccount() and logout() in this sequence
+     */
+    fun deleteUserAccount() {
+        disableAccount()
+        clearAccount()
+        logOut()
     }
-
-    @Deprecated("Use Parse LocalDatastore")
-    private fun deleteLocalUsers(username: String, ctx: Context) {
-        val mDbHelper = PebDbHelper(ctx)
-        val userDatabase = mDbHelper.writableDatabase
-        val whereClause = PebContract.UserEntry.COLUMN_USER_USERNAME + "!=?"
-        val whereArgs = arrayOf("0")
-        userDatabase.delete(PebContract.UserEntry.TABLE_NAME, whereClause, whereArgs)
-        userDatabase.close()
-    }
-
- */
 }

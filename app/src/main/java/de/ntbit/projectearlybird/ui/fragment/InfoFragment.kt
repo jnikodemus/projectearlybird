@@ -25,6 +25,6 @@ class InfoFragment : Fragment() {
         val versionTemplate = context?.getString(R.string.app_version_template)
         versionTemplate?.replace("MAJOR", majorVersion.toString())
         versionTemplate?.replace("SUB", subVersion.toString())
-        frgmt_info_tv_version.text = "Version $majorVersion.$subVersion"
+        //frgmt_info_tv_version.text = "Version $majorVersion.$subVersion"
     }
 }

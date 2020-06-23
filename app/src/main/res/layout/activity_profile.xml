@@ -22,13 +22,14 @@
             tools:context=".ui.activity.ProfileActivity">
 
             <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="wrap_content"
+                android:id="@+id/act_profile_iv_avatar"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:scaleType="centerInside"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/image_default_group" />
+                app:srcCompat="@drawable/logo_app_00" />
 
             <TextView
                 android:id="@+id/act_profile_et_username"
@@ -40,7 +41,7 @@
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView" />
+                app:layout_constraintTop_toBottomOf="@+id/act_profile_iv_avatar" />
 
             <TextView
                 android:id="@+id/act_profile_et_email"

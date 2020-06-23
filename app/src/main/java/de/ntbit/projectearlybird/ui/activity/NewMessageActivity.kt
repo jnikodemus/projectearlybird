@@ -67,15 +67,4 @@ class NewMessageActivity : AppCompatActivity() {
     }
 }
 
-/*class UserItem(val user: ParseUser): Item<GroupieViewHolder>(){
-    override fun bind(viewHolder: GroupieViewHolder, position: Int) {
-        viewHolder.itemView.textView_new_message.text = user.username
-        /*Bilder zu den usernames*/
-    }
-
-    override fun getLayout(): Int {
-        return R.layout.row_new_message_user
-    }
-}*/
-
 

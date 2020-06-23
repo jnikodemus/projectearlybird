@@ -43,8 +43,6 @@ class LoginActivity : AppCompatActivity() {
                 actLoginEditTextUsername.text.toString(),
                 actLoginEditTextPassword.text.toString(), this)
             (getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(view.windowToken, 0)
-            actLoginEditTextUsername.text.clear()
-            actLoginEditTextPassword.text.clear()
         }
     }
 }

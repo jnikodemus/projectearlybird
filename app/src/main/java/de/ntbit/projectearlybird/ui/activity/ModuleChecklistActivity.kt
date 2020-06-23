@@ -90,7 +90,7 @@ class ModuleChecklistActivity : AppCompatActivity() {
 
         builder.setView(view)
         // set up the ok button
-        builder.setPositiveButton(android.R.string.ok) { dialog, p1 ->
+        builder.setPositiveButton(android.R.string.ok) { dialog, _ ->
             val newCategory = itemEditText.text
             var isValid = true
             if (newCategory.isBlank()) {
@@ -106,7 +106,7 @@ class ModuleChecklistActivity : AppCompatActivity() {
                 dialog.dismiss()
             }
         }
-        builder.setNegativeButton(android.R.string.cancel) { dialog, p1 ->
+        builder.setNegativeButton(android.R.string.cancel) { dialog, _ ->
             dialog.cancel()
         }
         builder.show()
