@@ -4,10 +4,10 @@ import com.parse.ParseClassName
 import com.parse.ParseFile
 import com.parse.ParseObject
 import com.parse.ParseUser
-import org.json.JSONArray
+import de.ntbit.projectearlybird.R
+import de.ntbit.projectearlybird.helper.Converter
 
 import java.util.Date
-import java.util.logging.Logger
 
 /**
  * Model corresponding to table "Group" in Parse Database extends [ParseObject]

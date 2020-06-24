@@ -79,20 +79,6 @@ class GroupCreateActivity : AppCompatActivity() {
         toolbar_tv_root_title.text = "Create group"
     }
 
-    private fun saveGroupAndOpen() {
-        val saveGroupInBackground: Job = CoroutineScope(IO).launch {
-            openGroupActivity()
-        }
-    }
-
-    private fun openGroupActivity() {
-        Log.d("CUSTOMDEBUG", "$simpleClassName - openGroupActivity() GroupId: ${createdGroup.objectId}")
-        createdGroup.saveEventually()
-        val intent = Intent(this, GroupActivity::class.java)
-        intent.putExtra(ParcelContract.GROUP_KEY, createdGroup)
-        startActivity(intent)
-    }
-
     private fun setClickListeners() {
 
         adapter.setOnItemClickListener { item, view ->
@@ -106,23 +92,8 @@ class GroupCreateActivity : AppCompatActivity() {
             if(InputValidator.isValidInputNotNullNotEmpty(act_create_group_et_name)) {
                 createdGroup.name = act_create_group_et_name.text.toString()
                 createdGroup.updateACL()
-
-                //saveGroupAndOpen()
-
-                /*
-                val test: Job = CoroutineScope(IO).launch {
-                    createdGroup.save()
-                    Log.d("CUSTOMDEBUG", "GroupCreateActivity - Job save() done.")
-                }
-                 */
-
-
-                //Log.d("CUSTOMDEBUG", "GroupCreateActivity - after CoroutineScope() ObjectId: ${createdGroup.objectId}")
-                // wait for Async and start next Activity
                 val intent = Intent(this, GroupActivity::class.java)
-                //intent.putExtra(GROUP_KEY, createdGroup.objectId)
                 intent.putExtra(GROUP_KEY, createdGroup)
-                    //Log.d("CUSTOMDEBUG", "GroupCreateActivity - ObjectId: ${createdGroup.objectId}")
                 startActivity(intent)
                 finish()
             }

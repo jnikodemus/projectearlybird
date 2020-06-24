@@ -82,6 +82,8 @@ class ModuleChecklistManager {
                 }
             }
         }
+        listenForNewChecklistItem()
+        listenForUpdateChecklistItem()
     }
 
     private fun getChecklistItemsFromParse() {

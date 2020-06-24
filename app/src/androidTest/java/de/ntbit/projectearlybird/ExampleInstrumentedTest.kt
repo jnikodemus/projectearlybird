@@ -2,6 +2,7 @@ package de.ntbit.projectearlybird
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
+import de.ntbit.projectearlybird.helper.InputValidator
 
 import org.junit.Test
 import org.junit.runner.RunWith

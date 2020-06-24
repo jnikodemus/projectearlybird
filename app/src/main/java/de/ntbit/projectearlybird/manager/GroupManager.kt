@@ -76,9 +76,6 @@ class GroupManager {
                     adapter.add(GroupItem(group))
             } else Log.d("CUSTOMDEBUG", "$simpleClassName - ERROR -> ${e.message}")
         }
-        //Log.d("CUSTOMDEBUG", "GOT " + currentUserGroups.size + " groups")
-        //for (m in currentUserGroups)
-        //Log.d("CUSTOMDEBUG", "Found $m")
     }
 
     /**
@@ -94,25 +91,6 @@ class GroupManager {
             parseLiveQueryClient.subscribe(parseQuery)
 
         subscriptionHandling.handleEvent(SubscriptionHandling.Event.CREATE) { _, group ->
-            val handler = Handler(Looper.getMainLooper())
-            handler.post {
-                processNewGroup(group)
-                // TODO: remove following if() and use parseQueryOwnGroups instead!
-                if(group.owner != mUserManager.getCurrentUser())
-                    NotificationHelper.showNotification(
-                        group.name,
-                        ApplicationContextProvider.getApplicationContext()
-                            .getString(string.group_added_to_new)
-                            .replace("GROUPNAME", group.name),
-                        Intent(
-                            ApplicationContextProvider.getApplicationContext(),
-                            GroupActivity::class.java
-                        )
-                            .putExtra(ParcelContract.GROUP_KEY, group)
-                    )
-            }
-        }
-        subscriptionHandling.handleEvent(SubscriptionHandling.Event.UPDATE) {_, group ->
             val handler = Handler(Looper.getMainLooper())
             handler.post {
                 processNewGroup(group)
