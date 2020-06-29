@@ -128,7 +128,7 @@ class ModuleChecklistItem : ParseObject {
     }
 
     override fun hashCode(): Int {
-        return javaClass.hashCode()
+       return javaClass.hashCode()
     }
 
     override fun toString(): String {
