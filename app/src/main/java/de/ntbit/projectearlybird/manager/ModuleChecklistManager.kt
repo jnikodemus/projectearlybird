@@ -173,23 +173,22 @@ class ModuleChecklistManager {
     private fun processUpdateOnChecklistItem(item: ModuleChecklistItem) {
         val group = item.associatedModule.associatedGroup
         val index = checklistItemMap[group]?.indexOf(item)
-        Log.d("CUSTOMDEBUG", "$simpleClassName - $index")
+
         val oldItem = checklistItemMap[group]!![index!!]
+
+        Log.d("CUSTOMDEBUG", "$simpleClassName - oldItem: $oldItem")
+        Log.d("CUSTOMDEBUG", "$simpleClassName - item: $item")
 
         // TODO: check for notifyItemChanged
         //checklistItemMap[group]?.remove(oldItem)
         checklistItemMap[group]?.set(index, item)
         //adapterMap[group]?.remove(ChecklistItem(oldItem))
         val indexChecklistItem = adapterMap[group]?.getAdapterPosition(ChecklistItem(oldItem))
-        adapterMap[group]?.notifyItemChanged(indexChecklistItem!!, ChecklistItem(item))
+        adapterMap[group]?.notifyItemChanged(indexChecklistItem!!)
         //checklistItemMap[group]?.add(item)
         //adapterMap[group]?.add(ChecklistItem(item))
 
-        Log.d("CUSTOMDEBUG", "$simpleClassName - oldItem: $oldItem")
-        Log.d("CUSTOMDEBUG", "$simpleClassName - item: $item")
-        Log.d("CUSTOMDEBUG", "$simpleClassName - item equals oldItem: ${item.equals(oldItem)}")
-
-        //adapterMap[group]?.notifyDataSetChanged()
+        adapterMap[group]?.notifyDataSetChanged()
     }
 
     private fun processNewChecklistItem(item: ModuleChecklistItem) {
