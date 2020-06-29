@@ -84,6 +84,7 @@ class ModuleChecklistManager {
         }
         listenForNewChecklistItem()
         listenForUpdateChecklistItem()
+        listenForDeleteChecklistItem()
     }
 
     private fun getChecklistItemsFromParse() {
@@ -201,12 +202,17 @@ class ModuleChecklistManager {
 
     fun deleteChecklistItem(checklistItem: ChecklistItem, deleteFromDatabase: Boolean) {
         val item = checklistItem.getModuleChecklistItem()
+        Log.d("CUSTOMDEBUG", "${item.objectId}, ${item.name}")
         val group = item.associatedModule.associatedGroup
-        val position = adapterMap[group]!!.getAdapterPosition(checklistItem)
-        adapterMap[group]!!.remove(checklistItem)
-        adapterMap[group]!!.notifyItemRangeChanged(position, adapterMap[group]!!.itemCount -1)
+        val position = adapterMap[group]?.getAdapterPosition(checklistItem)
+        // TODO: check why Codes crashes on next line
+        adapterMap[group]?.remove(checklistItem)
+        if (position != null) {
+            //adapterMap[group]?.notifyItemRangeChanged(position, adapterMap[group]!!.itemCount -1)
+            adapterMap[group]?.notifyDataSetChanged()
+        }
         //adapterMap[group]!!.notifyItemRemoved(position)
-        checklistItemMap[group]!!.remove(item)
+        checklistItemMap[group]?.remove(item)
         if(deleteFromDatabase) deleteItemOnDatabase(item)
     }
 
