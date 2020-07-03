@@ -189,23 +189,17 @@ class ModuleChecklistManager {
     fun deleteChecklistItem(checklistItem: ChecklistItem, deleteFromDatabase: Boolean) {
         val item = checklistItem.getModuleChecklistItem()
         val group = item.associatedModule.associatedGroup
-        /*
-        val position = adapterMap[group]?.getAdapterPosition(checklistItem)
-        // TODO: check why Codes crashes on next line
-        adapterMap[group]?.remove(checklistItem)
-        if (position != null) {
-            //adapterMap[group]?.notifyItemRangeChanged(position, adapterMap[group]!!.itemCount -1)
-            adapterMap[group]?.notifyDataSetChanged()
-        }
-        //adapterMap[group]!!.notifyItemRemoved(position)
-        checklistItemMap[group]?.remove(item)
-         */
         if(deleteFromDatabase) {
             adapterMap[group]?.remove(checklistItem)
             deleteItemOnDatabase(item)
         }
         else {
-            adapterMap[group]?.notifyDataSetChanged()
+            val indexOfDeletedItem = adapterMap[group]?.getAdapterPosition(checklistItem)
+            if (indexOfDeletedItem != null) {
+                if (indexOfDeletedItem >= 0) {
+                    adapterMap[group]?.remove(checklistItem)
+                }
+            }
         }
     }
 
