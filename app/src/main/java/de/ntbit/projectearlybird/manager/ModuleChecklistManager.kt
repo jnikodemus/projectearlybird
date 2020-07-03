@@ -27,7 +27,7 @@ class ModuleChecklistManager {
     private val parseLiveQueryClient: ParseLiveQueryClient =
         ParseLiveQueryClient.Factory.getClient(URI("wss://projectearlybird.back4app.io/"))
 
-    private val checklistItemMap = HashMap<Group, ArrayList<ModuleChecklistItem>>()
+//    private val checklistItemMap = HashMap<Group, ArrayList<ModuleChecklistItem>>()
     private val adapterMap = HashMap<Group, GroupAdapter<GroupieViewHolder>>()
 
     // TODO: Implement isInitialized logic to initialize/fetch only groups that are not in the maps yet!
@@ -44,9 +44,9 @@ class ModuleChecklistManager {
 
     private fun getAllChecklists(group: Group) {
         Log.d("CUSTOMDEBUG", "$simpleClassName.getAllChecklists() - adapterMap: ${adapterMap.size}")
-        Log.d("CUSTOMDEBUG", "$simpleClassName.getAllChecklists() - checklistItemMap: ${checklistItemMap.size}")
+//        Log.d("CUSTOMDEBUG", "$simpleClassName.getAllChecklists() - checklistItemMap: ${checklistItemMap.size}")
         adapterMap[group] = GroupAdapter()
-        checklistItemMap[group] = ArrayList()
+//        checklistItemMap[group] = ArrayList()
         //Log.d("CUSTOMDEBUG", "$simpleClassName.getAllChecklists() - adapterMapContains ${group.name}: ${adapterMap.containsKey(group)}")
         //Log.d("CUSTOMDEBUG", "$simpleClassName.getAllChecklists() - checklistItemMapContains ${group.name}: ${checklistItemMap.contains(group)}")
         getChecklistItemsFromParse(group)
@@ -58,10 +58,10 @@ class ModuleChecklistManager {
         for(group in groups) {
             Log.d("CUSTOMDEBUG","$simpleClassName - found ${group.name}")
             adapterMap[group] = GroupAdapter()
-            checklistItemMap[group] = ArrayList()
+//            checklistItemMap[group] = ArrayList()
         }
         Log.d("CUSTOMDEBUG","$simpleClassName - adapterMap: ${adapterMap.size}")
-        Log.d("CUSTOMDEBUG","$simpleClassName - checklistItemMap: ${checklistItemMap.size}")
+//      Log.d("CUSTOMDEBUG","$simpleClassName - checklistItemMap: ${checklistItemMap.size}")
         getChecklistItemsFromParse()
     }
 
@@ -73,12 +73,12 @@ class ModuleChecklistManager {
             query.whereEqualTo("associatedModule", checklist)
             query.findInBackground { items, _ ->
                 // Add to checklistItemMap
-                checklistItemMap[group]?.addAll(items)
+//                checklistItemMap[group]?.addAll(items)
                 Log.d("CUSTOMDEBUG", "$simpleClassName - added ${items.size}")
                 // Add to adapterMap
                 for (item in items) {
                     adapterMap[group]?.add(ChecklistItem(item))
-                    Log.d("CUSTOMDEBUG", "$simpleClassName - added ${item.name}")
+                    Log.d("CUSTOMDEBUG", "$simpleClassName - added $item")
                 }
             }
         }
@@ -87,26 +87,22 @@ class ModuleChecklistManager {
         listenForDeleteChecklistItem()
     }
 
+    /*
+     * groupAdapter: all indizes in adapterMap
+     * key: group
+     * value: GroupAdapter<GroupieViewHolder>
+     */
+    @Deprecated("Use getChecklistItemsFromParse(Group)")
     private fun getChecklistItemsFromParse() {
         val query = ParseQuery.getQuery(ModuleChecklistItem::class.java)
-        Log.d("CUSTOMDEBUG", "$simpleClassName - got ${adapterMap.size} modules in adapterMap")
-
-        /*
-         * groupAdapter: all indizes in adapterMap
-         * key: group
-         * value: GroupAdapter<GroupieViewHolder>
-         */
         for(groupAdapter in adapterMap) {
-            //TODO: process only currentGroup to prevent crash for notloaded Groups/Modules
-            Log.d("CUSTOMDEBUG", "$simpleClassName - trying to get modules of ${groupAdapter.key.name}")
-            Log.d("CUSTOMDEBUG", "$simpleClassName - groupAdapter.key = ${groupAdapter.key}")
             val checklist = groupAdapter.key.getModuleByName("Checklist")
             if(checklist != null) {
                 checklist as ModuleChecklist
                 query.whereEqualTo("associatedModule", checklist)
                 query.findInBackground { items, _ ->
                     // Add to checklistItemMap
-                    checklistItemMap[groupAdapter.key]?.addAll(items)
+//                    checklistItemMap[groupAdapter.key]?.addAll(items)
                     Log.d("CUSTOMDEBUG", "$simpleClassName - added ${items.size}")
                     // Add to adapterMap
                     for (item in items) {
@@ -124,9 +120,8 @@ class ModuleChecklistManager {
     //fun getChecklist() : Collection<ModuleChecklistItem>{ return checklist }
 
     private fun listenForNewChecklistItem() {
-        Log.d("CUSTOMDEBUG", "$simpleClassName - listening for new ChecklistItems")
         val parseQuery = ParseQuery.getQuery(ModuleChecklistItem::class.java)
-        parseQuery.whereNotEqualTo("creatorId", mUserManager.getCurrentUser().objectId)
+        //parseQuery.whereNotEqualTo("creatorId", mUserManager.getCurrentUser().objectId)
         val subscriptionHandling: SubscriptionHandling<ModuleChecklistItem> =
             parseLiveQueryClient.subscribe(parseQuery)
 
@@ -172,22 +167,6 @@ class ModuleChecklistManager {
 
     private fun processUpdateOnChecklistItem(item: ModuleChecklistItem) {
         val group = item.associatedModule.associatedGroup
-        val index = checklistItemMap[group]?.indexOf(item)
-
-        val oldItem = checklistItemMap[group]!![index!!]
-
-        Log.d("CUSTOMDEBUG", "$simpleClassName - oldItem: $oldItem")
-        Log.d("CUSTOMDEBUG", "$simpleClassName - item: $item")
-
-        // TODO: check for notifyItemChanged
-        //checklistItemMap[group]?.remove(oldItem)
-        checklistItemMap[group]?.set(index, item)
-        //adapterMap[group]?.remove(ChecklistItem(oldItem))
-        val indexChecklistItem = adapterMap[group]?.getAdapterPosition(ChecklistItem(oldItem))
-        adapterMap[group]?.notifyItemChanged(indexChecklistItem!!)
-        //checklistItemMap[group]?.add(item)
-        //adapterMap[group]?.add(ChecklistItem(item))
-
         adapterMap[group]?.notifyDataSetChanged()
     }
 
@@ -195,11 +174,11 @@ class ModuleChecklistManager {
         val group = item.associatedModule.associatedGroup
         adapterMap[group]!!.add(ChecklistItem(item))
         adapterMap[group]!!.notifyDataSetChanged()
-        checklistItemMap[group]!!.add(item)
+//        checklistItemMap[group]!!.add(item)
     }
 
     fun addItem(item: ModuleChecklistItem) {
-        processNewChecklistItem(item)
+        //processNewChecklistItem(item)
         saveItemState(item)
     }
 
@@ -209,8 +188,8 @@ class ModuleChecklistManager {
 
     fun deleteChecklistItem(checklistItem: ChecklistItem, deleteFromDatabase: Boolean) {
         val item = checklistItem.getModuleChecklistItem()
-        Log.d("CUSTOMDEBUG", "${item.objectId}, ${item.name}")
         val group = item.associatedModule.associatedGroup
+        /*
         val position = adapterMap[group]?.getAdapterPosition(checklistItem)
         // TODO: check why Codes crashes on next line
         adapterMap[group]?.remove(checklistItem)
@@ -220,7 +199,14 @@ class ModuleChecklistManager {
         }
         //adapterMap[group]!!.notifyItemRemoved(position)
         checklistItemMap[group]?.remove(item)
-        if(deleteFromDatabase) deleteItemOnDatabase(item)
+         */
+        if(deleteFromDatabase) {
+            adapterMap[group]?.remove(checklistItem)
+            deleteItemOnDatabase(item)
+        }
+        else {
+            adapterMap[group]?.notifyDataSetChanged()
+        }
     }
 
     private fun deleteItemOnDatabase(item: ModuleChecklistItem) {

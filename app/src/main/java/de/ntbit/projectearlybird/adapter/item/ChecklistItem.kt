@@ -36,13 +36,10 @@ class ChecklistItem() : Item<GroupieViewHolder>() {
     }
 
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
-        //Log.d("CUSTOMDEBUG", "$simpleClassName - bind()")
         this.viewHolder = viewHolder
-        //this.viewHolder.itemView.row_module_checklist_tv_name.text = itemName
         this.viewHolder.itemView.row_module_checklist_tv_name.text = item.name
         this.viewHolder.itemView.row_module_checklist_tv_timestamp.text = DateFormatter.formatDate(item)
         this.viewHolder.itemView.row_module_checklist_cb_assigned.isChecked = item.isAssigned
-        Log.d("CUSTOMDEBUG", "$simpleClassName - $item")
 
         if(item.isAssigned) {
             this.viewHolder.itemView.row_module_checklist_tv_username.text = item.user!!.username
@@ -92,7 +89,8 @@ class ChecklistItem() : Item<GroupieViewHolder>() {
     }
 
     override fun hashCode(): Int {
-        return javaClass.hashCode()
+        return super.hashCode()
+        //return javaClass.hashCode()
     }
 
     fun getModuleChecklistItem(): ModuleChecklistItem {
