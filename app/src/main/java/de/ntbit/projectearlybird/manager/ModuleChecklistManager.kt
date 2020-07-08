@@ -49,6 +49,9 @@ class ModuleChecklistManager {
         //Log.d("CUSTOMDEBUG", "$simpleClassName.getAllChecklists() - adapterMapContains ${group.name}: ${adapterMap.containsKey(group)}")
         //Log.d("CUSTOMDEBUG", "$simpleClassName.getAllChecklists() - checklistItemMapContains ${group.name}: ${checklistItemMap.contains(group)}")
         getChecklistItemsFromParse(group)
+        listenForNewChecklistItem()
+        listenForUpdateChecklistItem()
+        listenForDeleteChecklistItem()
     }
 
     private fun getAllChecklists() {
@@ -76,15 +79,22 @@ class ModuleChecklistManager {
 //                checklistItemMap[group]?.addAll(items)
                 Log.d("CUSTOMDEBUG", "$simpleClassName - added ${items.size}")
                 // Add to adapterMap
+                /*
+                TODO: Remove Workaround
+                Workaround for mulitple new Items if User navigates back and forth at checklistModule
+                 */
+                adapterMap[group]?.clear()
                 for (item in items) {
                     adapterMap[group]?.add(ChecklistItem(item))
                     Log.d("CUSTOMDEBUG", "$simpleClassName - added $item")
                 }
             }
         }
+        /*
         listenForNewChecklistItem()
         listenForUpdateChecklistItem()
         listenForDeleteChecklistItem()
+         */
     }
 
     /*
@@ -118,7 +128,7 @@ class ModuleChecklistManager {
     }
 
     private fun listenForNewChecklistItem() {
-        Log.d("CUSTOMDEBUG", "ModuleChecklistManager - listenForNewChecklistItem()")
+        //Log.d("CUSTOMDEBUG", "ModuleChecklistManager - listenForNewChecklistItem()")
         val newItemHandling = ParseConnection.getModuleChecklistItemNewHandling()
         newItemHandling?.handleEvent(SubscriptionHandling.Event.CREATE) { _, item ->
             val handler = Handler(Looper.getMainLooper())
@@ -128,7 +138,8 @@ class ModuleChecklistManager {
                             "CurrentUser: ${mUserManager.getCurrentUser().objectId}, " +
                             "got a new item:\n$item"
                 )
-                processNewChecklistItem(item)
+                //processNewChecklistItem(item)
+                getChecklistItemsFromParse(item.associatedModule.associatedGroup)
             }
         }
     }
@@ -209,11 +220,13 @@ class ModuleChecklistManager {
     fun getAdapterByGroup(group: Group): GroupAdapter<GroupieViewHolder>? {
         //adapterMap[group]?.clear()
         //if(!isInitialized) {
-        Log.d("CUSTOMDEBUG", "$simpleClassName.getAdapaterByGroup() - ${group.name}(${group.objectId})")
+        Log.d("CUSTOMDEBUG", "$simpleClassName.getAdapaterByGroup() - " +
+                "${group.name}(${group.objectId})")
         getAllChecklists(group)
             //isInitialized = true
         //}
-        Log.d("CUSTOMDEBUG", "$simpleClassName.getAdapaterByGroup() - returning ${adapterMap[group]?.itemCount} now")
+        Log.d("CUSTOMDEBUG", "$simpleClassName.getAdapaterByGroup() - " +
+                "returning ${adapterMap[group]?.itemCount} now")
         return adapterMap[group]
     }
 }
