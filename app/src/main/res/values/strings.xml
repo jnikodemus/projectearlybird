@@ -1,7 +1,7 @@
 <resources>
     <string name="app_major_version">0</string>
     <string name="app_sub_version">1</string>
-    <string name="app_rev_version">2</string>
+    <string name="app_rev_version">3</string>
     <string name="app_version">Version</string>
     <string name="app_version_template">Version MAJOR.SUB.REV</string>
     <string name="app_name">CrewSync</string>

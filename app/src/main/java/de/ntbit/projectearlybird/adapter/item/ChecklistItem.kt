@@ -1,5 +1,6 @@
 package de.ntbit.projectearlybird.adapter.item
 
+import android.util.Log
 import android.widget.TextView
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Item
@@ -35,9 +36,7 @@ class ChecklistItem() : Item<GroupieViewHolder>() {
     }
 
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
-        //Log.d("CUSTOMDEBUG", "$simpleClassName - bind()")
         this.viewHolder = viewHolder
-        //this.viewHolder.itemView.row_module_checklist_tv_name.text = itemName
         this.viewHolder.itemView.row_module_checklist_tv_name.text = item.name
         this.viewHolder.itemView.row_module_checklist_tv_timestamp.text = DateFormatter.formatDate(item)
         this.viewHolder.itemView.row_module_checklist_cb_assigned.isChecked = item.isAssigned
@@ -82,6 +81,16 @@ class ChecklistItem() : Item<GroupieViewHolder>() {
                 moduleChecklistManager.saveItemState(item)
             }
         }
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if(other is ChecklistItem) return this.item == other.item
+        return false
+    }
+
+    override fun hashCode(): Int {
+        return super.hashCode()
+        //return javaClass.hashCode()
     }
 
     fun getModuleChecklistItem(): ModuleChecklistItem {

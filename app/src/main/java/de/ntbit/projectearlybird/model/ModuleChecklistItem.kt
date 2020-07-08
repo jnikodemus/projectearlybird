@@ -128,12 +128,13 @@ class ModuleChecklistItem : ParseObject {
     }
 
     override fun hashCode(): Int {
-        return javaClass.hashCode()
+        return super.hashCode()
+        //return javaClass.hashCode()
     }
 
     override fun toString(): String {
         return "ChecklistItem [{objectId: $objectId}, {name: $name}, {amount: $amount}," +
                 "{creator: ${creator.username}}, {isAssigned: $isAssigned}, " +
-                "{user: ${user?.username}}, {timestamp: $timestamp}]"
+                "{user: ${user?.username}}, {timestamp: $timestamp}, {updated: $updatedAt}]"
     }
 }

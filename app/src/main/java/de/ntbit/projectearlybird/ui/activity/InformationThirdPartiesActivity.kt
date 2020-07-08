@@ -30,6 +30,6 @@ class InformationThirdPartiesActivity : AppCompatActivity() {
         setSupportActionBar(toolbar as Toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
-        toolbar_tv_root_title.text = "Third Parties"
+        toolbar_tv_root_title.text = "Open Source Libraries"
     }
 }
