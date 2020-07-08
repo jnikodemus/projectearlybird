@@ -9,6 +9,7 @@ import com.parse.livequery.SubscriptionHandling
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import de.ntbit.projectearlybird.adapter.item.ChecklistItem
+import de.ntbit.projectearlybird.connection.ParseConnection
 import de.ntbit.projectearlybird.model.Group
 import de.ntbit.projectearlybird.model.ModuleChecklist
 import de.ntbit.projectearlybird.model.ModuleChecklistItem
@@ -24,8 +25,6 @@ class ModuleChecklistManager {
     private val mGroupManager = ManagerFactory.getGroupManager()
     private val mUserManager = ManagerFactory.getUserManager()
 
-    private val parseLiveQueryClient: ParseLiveQueryClient =
-        ParseLiveQueryClient.Factory.getClient(URI("wss://projectearlybird.back4app.io/"))
 
 //    private val checklistItemMap = HashMap<Group, ArrayList<ModuleChecklistItem>>()
     private val adapterMap = HashMap<Group, GroupAdapter<GroupieViewHolder>>()
@@ -66,12 +65,13 @@ class ModuleChecklistManager {
     }
 
     private fun getChecklistItemsFromParse(group: Group) {
-        val query = ParseQuery.getQuery(ModuleChecklistItem::class.java)
+        val moduleChecklistItemQuery = ParseConnection.getModuleChecklistItemQuery()
         val checklist = group.getModuleByName("Checklist")
         if(checklist != null) {
             checklist as ModuleChecklist
-            query.whereEqualTo("associatedModule", checklist)
-            query.findInBackground { items, _ ->
+            ParseConnection.getModuleChecklistItemQuery()
+            moduleChecklistItemQuery?.whereEqualTo("associatedModule", checklist)
+            moduleChecklistItemQuery?.findInBackground { items, _ ->
                 // Add to checklistItemMap
 //                checklistItemMap[group]?.addAll(items)
                 Log.d("CUSTOMDEBUG", "$simpleClassName - added ${items.size}")
@@ -93,14 +93,14 @@ class ModuleChecklistManager {
      * value: GroupAdapter<GroupieViewHolder>
      */
     @Deprecated("Use getChecklistItemsFromParse(Group)")
+    val moduleChecklistItemQuery = ParseConnection.getModuleChecklistItemQuery()
     private fun getChecklistItemsFromParse() {
-        val query = ParseQuery.getQuery(ModuleChecklistItem::class.java)
         for(groupAdapter in adapterMap) {
             val checklist = groupAdapter.key.getModuleByName("Checklist")
             if(checklist != null) {
                 checklist as ModuleChecklist
-                query.whereEqualTo("associatedModule", checklist)
-                query.findInBackground { items, _ ->
+                moduleChecklistItemQuery?.whereEqualTo("associatedModule", checklist)
+                moduleChecklistItemQuery?.findInBackground { items, _ ->
                     // Add to checklistItemMap
 //                    checklistItemMap[groupAdapter.key]?.addAll(items)
                     Log.d("CUSTOMDEBUG", "$simpleClassName - added ${items.size}")
@@ -113,19 +113,14 @@ class ModuleChecklistManager {
             }
         }
 
-        listenForNewChecklistItem()
+        //listenForNewChecklistItem()
         listenForUpdateChecklistItem()
     }
 
-    //fun getChecklist() : Collection<ModuleChecklistItem>{ return checklist }
-
     private fun listenForNewChecklistItem() {
-        val parseQuery = ParseQuery.getQuery(ModuleChecklistItem::class.java)
-        //parseQuery.whereNotEqualTo("creatorId", mUserManager.getCurrentUser().objectId)
-        val subscriptionHandling: SubscriptionHandling<ModuleChecklistItem> =
-            parseLiveQueryClient.subscribe(parseQuery)
-
-        subscriptionHandling.handleEvent(SubscriptionHandling.Event.CREATE) { _, item ->
+        Log.d("CUSTOMDEBUG", "ModuleChecklistManager - listenForNewChecklistItem()")
+        val newItemHandling = ParseConnection.getModuleChecklistItemNewHandling()
+        newItemHandling?.handleEvent(SubscriptionHandling.Event.CREATE) { _, item ->
             val handler = Handler(Looper.getMainLooper())
             handler.post {
                 Log.d(
@@ -139,10 +134,8 @@ class ModuleChecklistManager {
     }
 
     private fun listenForUpdateChecklistItem() {
-        val parseQuery = ParseQuery.getQuery(ModuleChecklistItem::class.java)
-        val subscriptionHandling: SubscriptionHandling<ModuleChecklistItem> =
-            parseLiveQueryClient.subscribe(parseQuery)
-        subscriptionHandling.handleEvent(SubscriptionHandling.Event.UPDATE) {_, item ->
+        val updateItemHandling = ParseConnection.getModuleChecklistItemUpdateHandling()
+        updateItemHandling?.handleEvent(SubscriptionHandling.Event.UPDATE) {_, item ->
             val handler = Handler(Looper.getMainLooper())
             handler.post {
                 Log.d("CUSTOMDEBUG", "$simpleClassName - " +
@@ -154,10 +147,8 @@ class ModuleChecklistManager {
     }
 
     private fun listenForDeleteChecklistItem() {
-        val parseQuery = ParseQuery.getQuery(ModuleChecklistItem::class.java)
-        val subscriptionHandling: SubscriptionHandling<ModuleChecklistItem> =
-            parseLiveQueryClient.subscribe(parseQuery)
-        subscriptionHandling.handleEvent(SubscriptionHandling.Event.DELETE) {_, item ->
+        val deleteItemHandling = ParseConnection.getModuleChecklistItemDeleteHandling()
+        deleteItemHandling?.handleEvent(SubscriptionHandling.Event.DELETE) {_, item ->
             val handler = Handler(Looper.getMainLooper())
             handler.post {
                 deleteChecklistItem(ChecklistItem(item), false)
@@ -194,12 +185,19 @@ class ModuleChecklistManager {
             deleteItemOnDatabase(item)
         }
         else {
+            adapterMap[group]?.notifyDataSetChanged()
+            Log.d("CUSTOMDEBUG", "${this.simpleClassName} deleted: $item")
+            /*
             val indexOfDeletedItem = adapterMap[group]?.getAdapterPosition(checklistItem)
+            Log.d("CUSTOMDEBUG", "${this.simpleClassName} deleted: $item; indexOfDeletedItem: $indexOfDeletedItem")
             if (indexOfDeletedItem != null) {
                 if (indexOfDeletedItem >= 0) {
                     adapterMap[group]?.remove(checklistItem)
                 }
+                adapterMap[group]?.notifyDataSetChanged()
             }
+
+             */
         }
     }
 
