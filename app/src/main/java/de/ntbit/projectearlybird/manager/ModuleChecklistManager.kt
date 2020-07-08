@@ -52,19 +52,6 @@ class ModuleChecklistManager {
         getChecklistItemsFromParse(group)
     }
 
-    private fun getAllChecklists() {
-        val groups = mGroupManager.getGroups()
-        Log.d("CUSTOMDEBUG","$simpleClassName - got ${groups.size} groups")
-        for(group in groups) {
-            Log.d("CUSTOMDEBUG","$simpleClassName - found ${group.name}")
-            adapterMap[group] = GroupAdapter()
-//            checklistItemMap[group] = ArrayList()
-        }
-        Log.d("CUSTOMDEBUG","$simpleClassName - adapterMap: ${adapterMap.size}")
-//      Log.d("CUSTOMDEBUG","$simpleClassName - checklistItemMap: ${checklistItemMap.size}")
-        getChecklistItemsFromParse()
-    }
-
     private fun getChecklistItemsFromParse(group: Group) {
         val query = ParseQuery.getQuery(ModuleChecklistItem::class.java)
         val checklist = group.getModuleByName("Checklist")
@@ -76,6 +63,7 @@ class ModuleChecklistManager {
 //                checklistItemMap[group]?.addAll(items)
                 Log.d("CUSTOMDEBUG", "$simpleClassName - added ${items.size}")
                 // Add to adapterMap
+                adapterMap[group]?.clear()
                 for (item in items) {
                     adapterMap[group]?.add(ChecklistItem(item))
                     Log.d("CUSTOMDEBUG", "$simpleClassName - added $item")
@@ -85,36 +73,6 @@ class ModuleChecklistManager {
         //listenForNewChecklistItem()
         //listenForUpdateChecklistItem()
         //listenForDeleteChecklistItem()
-    }
-
-    /*
-     * groupAdapter: all indizes in adapterMap
-     * key: group
-     * value: GroupAdapter<GroupieViewHolder>
-     */
-    @Deprecated("Use getChecklistItemsFromParse(Group)")
-    private fun getChecklistItemsFromParse() {
-        val query = ParseQuery.getQuery(ModuleChecklistItem::class.java)
-        for(groupAdapter in adapterMap) {
-            val checklist = groupAdapter.key.getModuleByName("Checklist")
-            if(checklist != null) {
-                checklist as ModuleChecklist
-                query.whereEqualTo("associatedModule", checklist)
-                query.findInBackground { items, _ ->
-                    // Add to checklistItemMap
-//                    checklistItemMap[groupAdapter.key]?.addAll(items)
-                    Log.d("CUSTOMDEBUG", "$simpleClassName - added ${items.size}")
-                    // Add to adapterMap
-                    for (item in items) {
-                        groupAdapter.value.add(ChecklistItem(item))
-                        Log.d("CUSTOMDEBUG", "$simpleClassName - added ${item.name}")
-                    }
-                }
-            }
-        }
-
-        listenForNewChecklistItem()
-        listenForUpdateChecklistItem()
     }
 
     //fun getChecklist() : Collection<ModuleChecklistItem>{ return checklist }
