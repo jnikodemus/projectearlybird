@@ -123,14 +123,16 @@ class ParseConnection {
         }
 
         private fun initializeQueryClient() {
-            parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient(URI("wss://projectearlybird.back4app.io/"))
+            Log.d("CUSTOMDEBUG","ParseConnection - initializeQueryClient()")
+            parseLiveQueryClient = ParseLiveQueryClient.Factory
+                .getClient(URI("wss://projectearlybird.back4app.io/"))
             moduleChecklistItemQuery = ParseQuery.getQuery(ModuleChecklistItem::class.java)
             newItemHandling =
-                ParseConnection.parseLiveQueryClient?.subscribe(moduleChecklistItemQuery)
+                parseLiveQueryClient?.subscribe(moduleChecklistItemQuery)
             updateItemHandling =
-                ParseConnection.parseLiveQueryClient?.subscribe(moduleChecklistItemQuery)
+                parseLiveQueryClient?.subscribe(moduleChecklistItemQuery)
             deleteItemHandling =
-                ParseConnection.parseLiveQueryClient?.subscribe(moduleChecklistItemQuery)
+                parseLiveQueryClient?.subscribe(moduleChecklistItemQuery)
         }
     }
 }

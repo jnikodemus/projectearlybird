@@ -113,13 +113,12 @@ class ModuleChecklistManager {
             }
         }
 
-        listenForNewChecklistItem()
+        //listenForNewChecklistItem()
         listenForUpdateChecklistItem()
     }
 
-    //fun getChecklist() : Collection<ModuleChecklistItem>{ return checklist }
-
     private fun listenForNewChecklistItem() {
+        Log.d("CUSTOMDEBUG", "ModuleChecklistManager - listenForNewChecklistItem()")
         val newItemHandling = ParseConnection.getModuleChecklistItemNewHandling()
         newItemHandling?.handleEvent(SubscriptionHandling.Event.CREATE) { _, item ->
             val handler = Handler(Looper.getMainLooper())
