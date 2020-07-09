@@ -12,6 +12,7 @@ import com.xwray.groupie.GroupieViewHolder
 import de.ntbit.projectearlybird.R
 import de.ntbit.projectearlybird.R.*
 import de.ntbit.projectearlybird.adapter.item.UserItem
+import de.ntbit.projectearlybird.helper.ParcelContract
 import de.ntbit.projectearlybird.manager.ManagerFactory
 import de.ntbit.projectearlybird.model.User
 import de.ntbit.projectearlybird.ui.fragment.ContactsFragment
@@ -87,7 +88,7 @@ class AddContactActivity : AppCompatActivity() {
             val userItem = item as UserItem
             mUserManager.addContact(item.user)
             val intent = Intent(view.context, ChatActivity::class.java)
-            intent.putExtra(ContactsFragment.USER_KEY, userItem.user)
+            intent.putExtra(ParcelContract.USER_KEY, userItem.user)
             startActivity(intent)
             finish()
         }
@@ -114,6 +115,7 @@ class AddContactActivity : AppCompatActivity() {
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 if(!p0.isNullOrBlank() && p0.isNotEmpty()) {
                     val query = ParseQuery.getQuery(User::class.java)
+                    query.whereEqualTo("isActive", true)
                     query.whereStartsWith("username", p0.toString().toLowerCase(Locale.ROOT))
                     query.findInBackground { users, e ->
                         adapter.clear()

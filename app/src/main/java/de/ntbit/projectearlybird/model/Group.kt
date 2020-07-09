@@ -22,31 +22,6 @@ import java.util.logging.Logger
 @ParseClassName("Group")
 class Group : ParseObject {
 
-    companion object {
-
-        /**
-         * Static method to convert a [Bitmap] to [ParseFile] expecting [contentResolver] and [uri].
-         * Calls [convertBitmapToParseFile] for compression and at long last convert.
-         * @return [ParseFile]
-         */
-        fun convertBitmapToParseFileByUri(contentResolver: ContentResolver, uri: Uri) : ParseFile{
-            val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, uri)
-            return convertBitmapToParseFile(bitmap)
-        }
-
-        /**
-         * Static method to convert a [Bitmap] to [ParseFile] expecting only the [Bitmap].
-         * The provided Bitmap is compressed to [Bitmap.CompressFormat.PNG] in 100% quality.
-         * @return [ParseFile]
-         */
-        fun convertBitmapToParseFile(bitmap: Bitmap) : ParseFile {
-            val stream = ByteArrayOutputStream()
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
-            val image: ByteArray = stream.toByteArray()
-            return ParseFile(image)
-        }
-    }
-
     internal constructor() : super()
 
     internal constructor(name: String,
@@ -84,14 +59,15 @@ class Group : ParseObject {
             this.put("owner", owner)
         }
 
-    var groupImage: ParseFile
+    var groupImage: ParseFile?
         get() {
-            return this.getParseFile("groupImage")!!
+            return this.getParseFile("groupImage")
         }
         set(groupImage) {
             // TODO: CHECK save()
-            groupImage.save()
-            this.put("groupImage", groupImage)
+            groupImage?.save()
+            if(groupImage != null)
+                this.put("groupImage", groupImage)
         }
 
     var croppedImage: ParseFile?
@@ -132,7 +108,12 @@ class Group : ParseObject {
 
     var modules: ArrayList<Module>
         get() {
-            return this.getList<Module>("modules") as ArrayList<Module>
+            val modules = this.getList<Module>("modules") as ArrayList<Module>
+            Log.d("CUSTOMDEBUG", "Group - $name Modules:${modules.size}")
+            //for(module in modules) {
+            //    Log.d("CUSTOMDEBUG", "Group - ${module}")
+            //}
+            return modules
         }
         set(modules) {
             Log.d("CUSTOMDEBUG", "Group - setting modules with size ${modules.size}")
@@ -144,6 +125,7 @@ class Group : ParseObject {
      */
     fun addModule(module: Module) {
         addUnique("modules", module)
+        module.acl = parseACL
         module.save()
     }
 
@@ -156,13 +138,20 @@ class Group : ParseObject {
     }
 
     /**
+     * Returns number of modules in actual [Group]
+     * @return [Int]
+     */
+    fun getModuleCount(): Int {
+        return this.modules.size
+    }
+
+    /**
      * Writes all module names to a [String] and returns it.
      * @return [String]
      */
     fun getModuleNames(): String {
         var moduleList = ""
         for(m in modules) {
-            m.fetchIfNeeded<Module>()
             moduleList += m.name + " "
         }
         return moduleList
@@ -182,6 +171,12 @@ class Group : ParseObject {
             acl.setWriteAccess(user, true)
         }
         this.parseACL = acl
+        //updateModuleACL()
+    }
+
+    private fun updateModuleACL() {
+        for(module in modules)
+            module.acl = this.parseACL
     }
 
     /**
@@ -189,11 +184,21 @@ class Group : ParseObject {
      */
     fun updateACL() {
         generateACL()
+        updateModuleACL()
     }
 
     fun getModuleByName(moduleName: String): Module? {
-        for(module in modules)
-            if(module.name == moduleName) return module
+        Log.d("CUSTOMDEBUG", "Group - trying group $name")
+        Log.d("CUSTOMDEBUG", "Group - got ${modules.size} modules")
+        for(module in modules) {
+            //module.fetchIfNeeded<Module>()
+            Log.d("CUSTOMDEBUG", "Group - foreachLoop trying ${module.name}")
+            if(module.name == moduleName) {
+                Log.d("CUSTOMDEBUG", "Group - found $moduleName! Returning...")
+                return module
+            }
+        }
+        Log.d("CUSTOMDEBUG", "Group - couldnt find $moduleName -> returning null")
         return null
     }
 }

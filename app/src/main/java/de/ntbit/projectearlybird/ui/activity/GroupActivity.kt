@@ -1,28 +1,38 @@
 package de.ntbit.projectearlybird.ui.activity
 
+import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
-import android.view.Menu
-import android.view.MenuItem
+import android.view.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.squareup.picasso.Picasso
+import com.theartofdev.edmodo.cropper.CropImage
+import com.theartofdev.edmodo.cropper.CropImageView
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import de.ntbit.projectearlybird.R
 import de.ntbit.projectearlybird.adapter.item.ModuleItem
+import de.ntbit.projectearlybird.adapter.item.UserItem
+import de.ntbit.projectearlybird.helper.Converter
 import de.ntbit.projectearlybird.helper.ParcelContract
 import de.ntbit.projectearlybird.helper.PixelCalculator
 import de.ntbit.projectearlybird.manager.ManagerFactory
 import de.ntbit.projectearlybird.model.Group
 import de.ntbit.projectearlybird.model.Module
 import de.ntbit.projectearlybird.model.ModuleChecklist
+import de.ntbit.projectearlybird.model.User
 import kotlinx.android.synthetic.main.activity_group.*
+import kotlinx.android.synthetic.main.bottom_sheet_dialog.*
+import kotlinx.android.synthetic.main.fragment_contacts.*
 import kotlinx.android.synthetic.main.toolbar.*
 
 
@@ -34,6 +44,7 @@ class GroupActivity : AppCompatActivity() {
     private val mModuleManager = ManagerFactory.getModuleManager()
     private lateinit var group: Group
     private val adapter = GroupAdapter<GroupieViewHolder>()
+    val GALLERY_REQUEST_CODE = 1234
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,8 +66,18 @@ class GroupActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId) {
+            R.id.group_context_menu_add_user -> {
+                displayContacts()
+                return false
+            }
+
+            R.id.group_context_menu_change_image -> {
+                pickFromGallery()
+                return true
+            }
+
             R.id.group_context_menu_leave -> {
-                if(mGroupManager.leaveGroup(group)) {
+                if(mGroupManager.leaveGroup(group, intent.getIntExtra(ParcelContract.GROUP_ADAPTER_POSITION_KEY, -1))) {
                     finish()
                     return true
                 }
@@ -103,38 +124,51 @@ class GroupActivity : AppCompatActivity() {
     }
 
     private fun setGroupImage() {
-        actGroupIvImage.layoutParams.height = PixelCalculator.calculateHeightForFullHD()
-        var uri = group.groupImage.url
-        //if(group.croppedImage != null)
-        //    uri = group.croppedImage!!.url
-        Picasso.get()
-            .load(uri)
-            .fit()
-            .centerCrop()
-            .into(actGroupIvImage)
+        act_group_iv_image.layoutParams.height = PixelCalculator.calculateHeightForFullHD()
+        if(group.groupImage != null) {
+            val uri = group.groupImage?.url
+            //if(group.croppedImage != null)
+            //    uri = group.croppedImage!!.url
+            Picasso.get()
+                .load(uri)
+                .fit()
+                .centerCrop()
+                .into(act_group_iv_image)
+        }
     }
 
     private fun loadModules() {
         for(m in group.modules) {
-            m.fetchIfNeeded<Module>()
-            Log.d("CUSTOMDEBUG", "$simpleClassName - ${m.name}, ${m.description}")
-            adapter.add(ModuleItem(Module(m)))
+            Log.d("CUSTOMDEBUG", "$simpleClassName.loadModules() - Barrier0: " +
+                    "isDirty:${m.isDirty} " +
+                    "isDataAvailable:${m.isDataAvailable} - " +
+                    "${group.objectId} ${m.objectId}")
+            adapter.add(ModuleItem(Module(m.fetchIfNeeded<Module>())))
         }
     }
 
     private fun setClicklistener() {
+        toolbar_tv_root_title.setOnClickListener {
+            val intent = Intent(this, GroupSettingsActivity::class.java)
+            intent.putExtra(ParcelContract.GROUP_KEY, group)
+            startActivity(intent)
+        }
+
         adapter.setOnItemClickListener { item, view ->
             val moduleItem = item as ModuleItem
-            Log.d("CUSTOMDEBUG", "$simpleClassName - ${moduleItem.name}")
+            Log.d("CUSTOMDEBUG", "$simpleClassName.OnClickListener() - ${moduleItem.name}")
 
             val intent: Intent
             when(moduleItem.name) {
                 "Checklist" -> {
                     intent = Intent(this, ModuleChecklistActivity::class.java)
                     lateinit var module: Module
+                    Log.d("CUSTOMDEBUG", "$simpleClassName.switch(Checklist) - before cast")
                     for(groupModule in group.modules) {
-                        if (groupModule.name == "Checklist")
+                        if (groupModule.name == "Checklist") {
+                            Log.d("CUSTOMDEBUG", "$simpleClassName.OnClickListener() - trying cast to ModuleChecklist")
                             module = groupModule as ModuleChecklist
+                        }
                         intent.putExtra(ParcelContract.GROUP_KEY, group)
                         intent.putExtra(ParcelContract.MODULE_KEY, module)
                         startActivity(intent)
@@ -144,7 +178,80 @@ class GroupActivity : AppCompatActivity() {
         }
     }
 
+    private fun pickFromGallery(){
+        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        intent.type = "image/*"
+        val mimeTypes = arrayOf("image/jpeg", "image/png", "image/jpg")
+        intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes)
+        intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+        startActivityForResult(intent, GALLERY_REQUEST_CODE)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when(requestCode){
+            GALLERY_REQUEST_CODE -> {
+                if(resultCode == Activity.RESULT_OK){
+                    data?.data?.let { uri ->
+                        launchImageCrop(uri)
+                        group.groupImage = Converter.convertBitmapToParseFileByUri(this.contentResolver, uri)
+                    }
+                }
+            }
+            CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE -> {
+                val result = CropImage.getActivityResult(data)
+                if(resultCode == Activity.RESULT_OK){
+                    result.uri?.let {
+                        Picasso.get()
+                            .load(it)
+                            .fit()
+                            .centerCrop()
+                            .into(act_group_iv_image)
+                        group.croppedImage = Converter.convertBitmapToParseFileByUri(this.contentResolver, it)
+                        mGroupManager.getAdapter().notifyDataSetChanged()
+                    }
+                }
+            }
+            CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE -> {
+                Log.d("DEBUG", "Error ${CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE} occured.")
+            }
+        }
+    }
+
+
+    private fun launchImageCrop(uri: Uri) {
+        CropImage.activity(uri).setGuidelines(CropImageView.Guidelines.ON)
+            .setAspectRatio(1920, 1080)
+            .start(this)
+    }
+
+    private fun displayContacts() {
+        val diag = BottomDialog(this.group)
+        diag.show(supportFragmentManager, "AddUser")
+    }
+
 }
+
+/*
+class AddUserDialogFragment(group: Group) : DialogFragment() {
+    private val simpleClassName = this.javaClass.simpleName
+
+    private val mUserManager = ManagerFactory.getUserManager()
+    val contacts = arrayOf(mUserManager.getMyContacts())
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        return activity?.let {
+            val builder = AlertDialog.Builder(it)
+            builder
+                .setTitle("Pick a module")
+                .setItems(contacts) { dialog, which ->
+                    Log.d("CUSTOMDEBUG", "$simpleClassName - User clicked $which")
+                }
+            builder.create()
+        } ?: throw java.lang.IllegalStateException("Activity cannot be null")
+    }
+}
+*/
 
 class AddModuleDialogFragment(otherGroup: Group, adapter: GroupAdapter<GroupieViewHolder>) : DialogFragment() {
 
@@ -164,8 +271,13 @@ class AddModuleDialogFragment(otherGroup: Group, adapter: GroupAdapter<GroupieVi
                     Log.d("CUSTOMDEBUG", "$simpleClassName - User clicked $which")
                     when(which) {
                         0 -> {
+                            Log.d(
+                                "CUSTOMDEBUG",
+                                "$simpleClassName - associatedGroup: " + group.name
+                            )
                             val module = ModuleChecklist(ArrayList(), group)
-                            if(!group.modules.contains(module)) {
+                            if (!group.modules.contains(module)) {
+                                module.saveEventually()
                                 group.addModule(module)
                                 group.saveEventually()
                                 moduleAdapter.add(ModuleItem(Module(module)))
@@ -178,6 +290,54 @@ class AddModuleDialogFragment(otherGroup: Group, adapter: GroupAdapter<GroupieVi
                 }
             builder.create()
         } ?: throw IllegalStateException("Activity cannot be null")
+    }
+}
+
+class BottomDialog(group: Group) : BottomSheetDialogFragment() {
+
+    val mUserManager = ManagerFactory.getUserManager()
+    val mGroupManager = ManagerFactory.getGroupManager()
+    private val adapter = GroupAdapter<GroupieViewHolder>()
+    private var group = group
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        super.onCreateView(inflater, container, savedInstanceState)
+        return inflater.inflate(R.layout.bottom_sheet_dialog, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        init()
+    }
+
+    private fun init() {
+        frgmt_group_rv_contacts_list.adapter = adapter
+        fetchAllParseUser()
+        setClickListener()
+    }
+
+    private fun fetchAllParseUser() {
+        adapter.clear()
+        for(contact in mUserManager.getMyContacts()) {
+            if(!group.members.contains(contact)) adapter.add(UserItem(contact))
+        }
+        adapter.notifyDataSetChanged()
+    }
+
+    private fun setClickListener() {
+        adapter.setOnItemClickListener { item, view ->
+            val userItem = item as UserItem
+            //userItem.user.pin()
+            if(!group.members.contains(userItem.user)) {
+                mGroupManager.addUser(userItem.user, group)
+
+            }
+            dismiss()
+        }
     }
 
 }

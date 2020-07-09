@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import de.ntbit.projectearlybird.R
 import de.ntbit.projectearlybird.adapter.item.UserItem
+import de.ntbit.projectearlybird.helper.ParcelContract
 import de.ntbit.projectearlybird.manager.AdapterManager
 import de.ntbit.projectearlybird.manager.ManagerFactory
 import de.ntbit.projectearlybird.manager.MessageManager
@@ -49,7 +50,7 @@ class ConversationsFragment : Fragment() {
         adapter.setOnItemClickListener { item, view ->
             val userItem = item as UserItem
             val intent = Intent(view.context, ChatActivity::class.java)
-            intent.putExtra(ContactsFragment.USER_KEY, userItem.user)
+            intent.putExtra(ParcelContract.USER_KEY, userItem.user)
             startActivity(intent)
         }
     }

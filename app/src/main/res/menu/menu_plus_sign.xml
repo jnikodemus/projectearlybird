@@ -2,8 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item android:id="@+id/frgmt_contacts_add"
-        android:title="Add"
-        app:showAsAction="ifRoom"/>
+        android:icon="@drawable/ic_add_black_24dp"
+        app:showAsAction="ifRoom"
+        android:title="@string/add_item" />
 
 
 </menu>

@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.activity.LoadingActivity"
-    android:background="@drawable/background_color_gradient">
+    android:background="@drawable/background_color_gradient"
+    tools:context=".ui.activity.LoadingActivity">
 
     <ProgressBar
         android:id="@+id/actLoadingProgressBar"
@@ -17,4 +17,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/actLoadingProgressBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/logo_app_01_small"
+        android:contentDescription="@string/app_logo" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

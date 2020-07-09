@@ -40,6 +40,7 @@ class RegisterActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
+        toolbar_tv_root_title.text = "Register"
     }
 
     private fun setClickListener() {

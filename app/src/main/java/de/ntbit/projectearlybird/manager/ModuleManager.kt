@@ -38,7 +38,7 @@ class ModuleManager {
 
     private fun getModulesFromParse() {
         val query = ParseQuery.getQuery(Module::class.java)
-        query.findInBackground { modules, e ->
+        query.findInBackground { modules, _ ->
             moduleList.addAll(modules)
         }
     }

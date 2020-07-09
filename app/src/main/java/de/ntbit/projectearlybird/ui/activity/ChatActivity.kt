@@ -1,6 +1,8 @@
 package de.ntbit.projectearlybird.ui.activity
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.widget.ImageView
 import android.widget.TextView
@@ -12,6 +14,7 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import de.ntbit.projectearlybird.R
 import de.ntbit.projectearlybird.adapter.item.ChatSelfItem
+import de.ntbit.projectearlybird.helper.ParcelContract
 import de.ntbit.projectearlybird.manager.ManagerFactory
 import de.ntbit.projectearlybird.manager.MessageManager
 import de.ntbit.projectearlybird.manager.UserManager
@@ -22,9 +25,7 @@ import kotlinx.android.synthetic.main.toolbar.*
 
 class ChatActivity : AppCompatActivity() {
 
-    companion object{
-        val TAG = "Chatlog"
-    }
+    private val simpleClassName = this.javaClass.simpleName
 
     private val adapter = GroupAdapter<GroupieViewHolder>()
     private val mMessageManager: MessageManager = ManagerFactory.getMessageManager()
@@ -56,7 +57,9 @@ class ChatActivity : AppCompatActivity() {
     }
 
     private fun initialize() {
-        chatPartner = intent.getParcelableExtra(NewMessageActivity.USER_KEY)
+        Log.d("CUSTOMDEBUG", "$simpleClassName - initialize()")
+        chatPartner = intent.getParcelableExtra(ParcelContract.USER_KEY)
+        Log.d("CUSTOMDEBUG", "$simpleClassName - initialize(${chatPartner.username})")
         placeToolbar()
 
         act_chat_rv_log.adapter = adapter
@@ -66,6 +69,28 @@ class ChatActivity : AppCompatActivity() {
         setClickListener()
 
         listenForMessage(chatPartner)
+    }
+
+    // TODO: Check if this workaround is ok
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        if(intent != null) {
+            startActivity(intent)
+            finish()
+        }
+        //refresh(intent)
+    }
+
+    private fun refresh(intent: Intent?) {
+        if(intent != null) {
+            chatPartner = intent.getParcelableExtra(ParcelContract.USER_KEY)
+            Log.d("CUSTOMDEBUG", "$simpleClassName - refresh(${chatPartner.username})")
+            placeToolbar()
+            act_chat_rv_log.adapter = adapter
+            (act_chat_rv_log.layoutManager as LinearLayoutManager).stackFromEnd = true
+            setClickListener()
+            listenForMessage(chatPartner)
+        }
     }
 
     private fun setClickListener() {
@@ -83,26 +108,14 @@ class ChatActivity : AppCompatActivity() {
         mUserManager.loadAvatar(toolbar_iv_image, chatPartner)
         toolbar_iv_image.visibility = ImageView.VISIBLE
         toolbar_tv_title.text = chatPartner.username
-        /*
-        supportActionBar?.displayOptions = (supportActionBar?.displayOptions?.or(ActionBar.DISPLAY_SHOW_CUSTOM)!!)
-        val imageView = ImageView(supportActionBar!!.themedContext)
-        imageView.scaleType = ImageView.ScaleType.CENTER
-        mUserManager.loadAvatar(imageView, chatPartner)
-        val layoutParams: ActionBar.LayoutParams = ActionBar.LayoutParams(
-            ActionBar.LayoutParams.WRAP_CONTENT,
-            ActionBar.LayoutParams.WRAP_CONTENT, Gravity.END
-        )
-        imageView.layoutParams = layoutParams
-        supportActionBar?.customView = imageView
-         */
     }
 
     private fun listenForMessage(partner: User) {
-       /* CoroutineScope(IO).launch{
-            val messages = async{
-                mMessageManager.getMessagesByPartner(partner, act_chat_rv_log)
-            }.await()
-        }*/
+        /* CoroutineScope(IO).launch{
+             val messages = async{
+                 mMessageManager.getMessagesByPartner(partner, act_chat_rv_log)
+             }.await()
+         }*/
         mMessageManager.getMessagesByPartner(partner, act_chat_rv_log)
         mMessageManager.subscribeToPartner(partner, act_chat_rv_log)
     }
@@ -111,7 +124,7 @@ class ChatActivity : AppCompatActivity() {
     private fun sendMessage() {
         val text = act_chat_et_message.text.toString()
         val message = mMessageManager.sendMessage(text, chatPartner)
-        if(message != null) {
+        if (message != null) {
             adapter.add(
                 ChatSelfItem(
                     message

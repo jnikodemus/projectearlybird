@@ -7,9 +7,11 @@ import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
 import de.ntbit.projectearlybird.R
+import de.ntbit.projectearlybird.helper.NotificationHelper.Companion.CHANNEL_DESCRIPTION
+import de.ntbit.projectearlybird.helper.NotificationHelper.Companion.CHANNEL_ID
+import de.ntbit.projectearlybird.helper.NotificationHelper.Companion.CHANNEL_NAME
 import de.ntbit.projectearlybird.model.Message
 import de.ntbit.projectearlybird.ui.activity.ChatActivity
-import de.ntbit.projectearlybird.ui.activity.NewMessageActivity
 
 /**
  * Builds and sends Systemnotifications to the user using [NotificationManager]
@@ -23,6 +25,11 @@ class NotificationHelper {
         val CHANNEL_ID = "PEB_CHANNEL_ID"
         val CHANNEL_NAME = "YOUR_CHANNEL_ID"
         val CHANNEL_DESCRIPTION = "YOUR_NOTIFICATION_DESCRIPTION"
+
+
+        fun showNotification(message: Message) {
+            showNotification(message, ApplicationContextProvider.context)
+        }
 
         /**
          * Builds and sends a Systemnotification using the passed [message] and [context]
@@ -49,7 +56,8 @@ class NotificationHelper {
                 .setVibrate(longArrayOf(100,200,300,400,500))
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
             val intent = Intent(context, ChatActivity::class.java)
-            intent.putExtra(NewMessageActivity.USER_KEY, message.sender)
+            intent.putExtra(ParcelContract.USER_KEY, message.sender)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP
             val pi = PendingIntent
                 .getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
             mBuilder.setContentIntent(pi)

@@ -50,6 +50,24 @@ class ModuleChecklistItem : ParseObject {
             if (value != null) {
                 put("user", value)
             }
+            else remove("user")
+        }
+
+    var creator: User
+        get() {
+            return getParseUser("creator") as User
+        }
+        set(value) {
+            put("creator", value)
+            creatorId = value.objectId
+        }
+
+    var creatorId: String
+        get() {
+            return getString("creatorId")!!
+        }
+        private set(value) {
+            put("creatorId", value)
         }
 
     var associatedModule: ModuleChecklist
@@ -62,24 +80,29 @@ class ModuleChecklistItem : ParseObject {
 
     internal constructor() : super()
 
-    internal constructor(name: String, associatedModule: ModuleChecklist):
-            this(name, associatedModule, 0)
+    internal constructor(name: String, creator: User, associatedModule: ModuleChecklist):
+            this(name, creator, associatedModule, 0)
 
-    internal constructor(name: String, associatedModule: ModuleChecklist, amount: Int) : super() {
+    internal constructor(name: String, creator: User,
+                         associatedModule: ModuleChecklist, amount: Int) : super() {
         this.name = name
         this.amount = amount
         this.isAssigned = false
         this.user = null
+        this.creator = creator
         this.associatedModule = associatedModule
+        this.acl = associatedModule.acl
         this.timestamp = Date(System.currentTimeMillis())
     }
 
-    internal constructor(name: String, associatedModule: ModuleChecklist, amount: Int, user: User):
+    internal constructor(name: String, creator: User,
+                         associatedModule: ModuleChecklist, amount: Int, user: User):
             super() {
         this.name = name
         this.amount = amount
         this.isAssigned = true
         this.user = user
+        this.creator = creator
         this.associatedModule = associatedModule
         this.timestamp = Date(System.currentTimeMillis())
     }
@@ -105,11 +128,13 @@ class ModuleChecklistItem : ParseObject {
     }
 
     override fun hashCode(): Int {
-        return javaClass.hashCode()
+        return super.hashCode()
+        //return javaClass.hashCode()
     }
 
     override fun toString(): String {
-        return "ChecklistItem [{name: $name}, {amount: $amount}, {isAssigned: $isAssigned}, " +
-                "{user: $user}, {timestamp: $timestamp}]"
+        return "ChecklistItem [{objectId: $objectId}, {name: $name}, {amount: $amount}," +
+                "{creator: ${creator.username}}, {isAssigned: $isAssigned}, " +
+                "{user: ${user?.username}}, {timestamp: $timestamp}, {updated: $updatedAt}]"
     }
 }
