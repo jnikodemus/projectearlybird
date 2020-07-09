@@ -42,6 +42,10 @@ class ModuleChecklistManager {
         //listenForNewChecklistItem()
     }
 
+    /**
+     * Creates a new [GroupAdatper] and maps it to the local [adapterMap][group].
+     * Afterwards calls [getChecklistItemsFromParse](group).
+     */
     private fun getAllChecklists(group: Group) {
         Log.d("CUSTOMDEBUG", "$simpleClassName.getAllChecklists() - adapterMap: ${adapterMap.size}")
 //        Log.d("CUSTOMDEBUG", "$simpleClassName.getAllChecklists() - checklistItemMap: ${checklistItemMap.size}")
@@ -52,6 +56,10 @@ class ModuleChecklistManager {
         getChecklistItemsFromParse(group)
     }
 
+    /**
+     * Reads all [ChecklistItem]s from Parse and adds them to the Adapter
+     * of the local [adapterMap][group].
+     */
     private fun getChecklistItemsFromParse(group: Group) {
         val query = ParseQuery.getQuery(ModuleChecklistItem::class.java)
         val checklist = group.getModuleByName("Checklist")
@@ -77,6 +85,12 @@ class ModuleChecklistManager {
 
     //fun getChecklist() : Collection<ModuleChecklistItem>{ return checklist }
 
+    /**
+     * Creates a [SubscriptionHanding] and subscribes to the [ParseQuery]
+     * of ModuleChecklistItem::class.java which will listen
+     * for events of[SubscriptionHandling.Event.CREATE].
+     * Everytime a new item comes in, the method [getChecklistItemsFromParse] will be called.
+     */
     private fun listenForNewChecklistItem() {
         val parseQuery = ParseQuery.getQuery(ModuleChecklistItem::class.java)
         //parseQuery.whereNotEqualTo("creatorId", mUserManager.getCurrentUser().objectId)
@@ -97,6 +111,12 @@ class ModuleChecklistManager {
         }
     }
 
+    /**
+     * Creates a [SubscriptionHanding] and subscribes to the [ParseQuery]
+     * of ModuleChecklistItem::class.java which will listen
+     * for events of[SubscriptionHandling.Event.UPDATE].
+     * Everytime an item update comes in, the method [processUpdateOnChecklistItem] will be called.
+     */
     private fun listenForUpdateChecklistItem() {
         val parseQuery = ParseQuery.getQuery(ModuleChecklistItem::class.java)
         val subscriptionHandling: SubscriptionHandling<ModuleChecklistItem> =
@@ -112,6 +132,12 @@ class ModuleChecklistManager {
         }
     }
 
+    /**
+     * Creates a [SubscriptionHanding] and subscribes to the [ParseQuery]
+     * of ModuleChecklistItem::class.java which will listen
+     * for events of[SubscriptionHandling.Event.DELETE].
+     * Everytime an item is deleted, the method [deleteChecklistItem] will be called.
+     */
     private fun listenForDeleteChecklistItem() {
         val parseQuery = ParseQuery.getQuery(ModuleChecklistItem::class.java)
         val subscriptionHandling: SubscriptionHandling<ModuleChecklistItem> =
@@ -124,6 +150,9 @@ class ModuleChecklistManager {
         }
     }
 
+    /**
+     * Reloads the adapter of the associated group of [item] by calling [notifyDataSetChanged].
+     */
     private fun processUpdateOnChecklistItem(item: ModuleChecklistItem) {
         val group = item.associatedModule.associatedGroup
         adapterMap[group]?.notifyDataSetChanged()
@@ -136,16 +165,26 @@ class ModuleChecklistManager {
 //        checklistItemMap[group]!!.add(item)
     }
 
+    /**
+     * Calls [saveItemState] and adds the [item] to the adapter.
+     */
     fun addItem(item: ModuleChecklistItem) {
         //processNewChecklistItem(item)
         saveItemState(item)
         adapterMap[item.associatedModule.associatedGroup]?.add(ChecklistItem(item))
     }
 
+    /**
+     * Calls [ParseObject.saveEventually].
+     */
     fun saveItemState(item: ModuleChecklistItem) {
         item.saveEventually()
     }
 
+    /**
+     * Removes provided [checklistItem] from adapter and tries to delete
+     * it from database if [deleteFromDatabase].
+     */
     fun deleteChecklistItem(checklistItem: ChecklistItem, deleteFromDatabase: Boolean) {
         val item = checklistItem.getModuleChecklistItem()
         val group = item.associatedModule.associatedGroup
@@ -163,11 +202,18 @@ class ModuleChecklistManager {
         }
     }
 
+    /**
+     * Calls [item].[deleteEventually].
+     */
     private fun deleteItemOnDatabase(item: ModuleChecklistItem) {
         item.deleteEventually()
     }
 
     // TODO: implement isInitialized again
+    /**
+     * Builds, initializes, subscribes to events
+     * and returns the [GroupAdapter]<[GroupieViewHolder]> of [group].
+     */
     fun getAdapterByGroup(group: Group): GroupAdapter<GroupieViewHolder>? {
         //adapterMap[group]?.clear()
         //if(!isInitialized) {

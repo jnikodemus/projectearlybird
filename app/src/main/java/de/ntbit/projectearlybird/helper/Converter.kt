@@ -20,9 +20,14 @@ class Converter {
             return convertBitmapToParseFileByUri(contentResolver, uri, 100)
         }
 
+        /**
+         * Takes [contentResolver], [uri] and [quality], converts it to a bitmap using
+         * [MediaStore.Images.Media.getBitmap] and afterwards
+         * calls [convertBitmapToParseFile](bitmap, quality).
+         */
         fun convertBitmapToParseFileByUri(contentResolver: ContentResolver, uri: Uri, quality: Int) : ParseFile {
             val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, uri)
-            return convertBitmapToParseFile(bitmap)
+            return convertBitmapToParseFile(bitmap, quality)
         }
 
         /**
@@ -34,6 +39,11 @@ class Converter {
             return convertBitmapToParseFile(bitmap, 100)
         }
 
+        /**
+         * Converts a provided [bitmap] to a ParseFile in provided [quality].
+         * Method is checking provided quality which has to be a value between 1 and 100.
+         * (Invalid [quality] will be healed to be minimum 1 and maximum 100.)
+         */
         fun convertBitmapToParseFile(bitmap: Bitmap, quality: Int) : ParseFile {
             var checkedQuality = quality
             if(checkedQuality > 100)

@@ -36,6 +36,9 @@ class ModuleManager {
         //listenForNewModules()
     }
 
+    /**
+     * Reads all Modules from Parse and adds them to [moduleList].
+     */
     private fun getModulesFromParse() {
         val query = ParseQuery.getQuery(Module::class.java)
         query.findInBackground { modules, _ ->
@@ -43,6 +46,9 @@ class ModuleManager {
         }
     }
 
+    /**
+     * Returns [moduleList].
+     */
     fun getModules() : Collection<Module>{ return moduleList }
 
     fun listenForNewModules() {
@@ -57,6 +63,9 @@ class ModuleManager {
         }
     }
 
+    /**
+     * Adds [module] to the [moduleList].
+     */
     private fun processNewModule(module: Module) {
         moduleList.add(module)
     }
