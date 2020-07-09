@@ -4,11 +4,8 @@ import android.content.Context
 import android.util.Log
 import com.parse.*
 import com.parse.Parse.isLocalDatastoreEnabled
-import com.parse.livequery.ParseLiveQueryClient
-import com.parse.livequery.SubscriptionHandling
 import de.ntbit.projectearlybird.manager.ManagerFactory
 import de.ntbit.projectearlybird.model.*
-import java.net.URI
 import java.util.logging.Logger
 
 /**
@@ -17,13 +14,6 @@ import java.util.logging.Logger
 class ParseConnection {
 
     companion object {
-
-        private var parseLiveQueryClient: ParseLiveQueryClient? = null
-        private var moduleChecklistItemQuery: ParseQuery<ModuleChecklistItem>? = null
-        private var newItemHandling: SubscriptionHandling<ModuleChecklistItem>? = null
-        private var updateItemHandling: SubscriptionHandling<ModuleChecklistItem>? = null
-        private var deleteItemHandling: SubscriptionHandling<ModuleChecklistItem>? = null
-
         /**
          * Calls [registerSubclasses], [initializeBack4App0],
          * [ParseInstallation.getCurrentInstallation], [ParseInstallation.saveInBackground],
@@ -44,24 +34,6 @@ class ParseConnection {
             ParsePush.subscribeInBackground("Develop")
 
             ManagerFactory.initialize()
-
-            initializeQueryClient()
-        }
-
-        fun getModuleChecklistItemQuery(): ParseQuery<ModuleChecklistItem>? {
-            return moduleChecklistItemQuery
-        }
-
-        fun getModuleChecklistItemUpdateHandling(): SubscriptionHandling<ModuleChecklistItem>? {
-            return updateItemHandling
-        }
-
-        fun getModuleChecklistItemNewHandling(): SubscriptionHandling<ModuleChecklistItem>? {
-            return newItemHandling
-        }
-
-        fun getModuleChecklistItemDeleteHandling(): SubscriptionHandling<ModuleChecklistItem>? {
-            return deleteItemHandling
         }
 
         /**
@@ -120,19 +92,6 @@ class ParseConnection {
             ParseObject.registerSubclass(ModuleChecklist::class.java)
             ParseObject.registerSubclass(ModuleChecklistItem::class.java)
             ParseObject.registerSubclass(ModuleMurdergame::class.java)
-        }
-
-        private fun initializeQueryClient() {
-            Log.d("CUSTOMDEBUG","ParseConnection - initializeQueryClient()")
-            parseLiveQueryClient = ParseLiveQueryClient.Factory
-                .getClient(URI("wss://projectearlybird.back4app.io/"))
-            moduleChecklistItemQuery = ParseQuery.getQuery(ModuleChecklistItem::class.java)
-            newItemHandling =
-                parseLiveQueryClient?.subscribe(moduleChecklistItemQuery)
-            updateItemHandling =
-                parseLiveQueryClient?.subscribe(moduleChecklistItemQuery)
-            deleteItemHandling =
-                parseLiveQueryClient?.subscribe(moduleChecklistItemQuery)
         }
     }
 }
