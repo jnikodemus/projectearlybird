@@ -145,7 +145,8 @@ class ModuleChecklistManager {
         subscriptionHandling.handleEvent(SubscriptionHandling.Event.DELETE) {_, item ->
             val handler = Handler(Looper.getMainLooper())
             handler.post {
-                deleteChecklistItem(ChecklistItem(item), false)
+                //deleteChecklistItem(ChecklistItem(item), false)
+                getChecklistItemsFromParse(item.associatedModule.associatedGroup)
             }
         }
     }

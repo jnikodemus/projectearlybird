@@ -179,7 +179,8 @@ class GroupManager {
             adapter.removeGroupAtAdapterPosition(positionToDelete)
             adapter.notifyDataSetChanged()
         }
-
+        adapter.clear()
+        readGroups()
         return true
     }
 
