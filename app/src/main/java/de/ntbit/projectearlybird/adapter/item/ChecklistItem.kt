@@ -35,6 +35,9 @@ class ChecklistItem() : Item<GroupieViewHolder>() {
             this.item = item
     }
 
+    /**
+     * Fills [viewHolder] with provided data of [item] and processes assignment of the items.
+     */
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         this.viewHolder = viewHolder
         this.viewHolder.itemView.row_module_checklist_tv_name.text = item.name
@@ -42,7 +45,7 @@ class ChecklistItem() : Item<GroupieViewHolder>() {
         this.viewHolder.itemView.row_module_checklist_cb_assigned.isChecked = item.isAssigned
 
         if(item.isAssigned) {
-            this.viewHolder.itemView.row_module_checklist_tv_username.text = item.user!!.username
+            this.viewHolder.itemView.row_module_checklist_tv_username.text = item.user?.username
             this.viewHolder.itemView.row_module_checklist_tv_username.visibility = TextView.VISIBLE
             if(item.user != mUserManager.getCurrentUser())
                 viewHolder.itemView.row_module_checklist_cb_assigned.isEnabled = false
@@ -71,7 +74,7 @@ class ChecklistItem() : Item<GroupieViewHolder>() {
     private fun processItemClicked() {
         if (viewHolder.itemView.row_module_checklist_cb_assigned.isChecked) {
             item.assign(user)
-            viewHolder.itemView.row_module_checklist_tv_username.text = item.user!!.username
+            viewHolder.itemView.row_module_checklist_tv_username.text = item.user?.username
             viewHolder.itemView.row_module_checklist_tv_username.visibility = TextView.VISIBLE
             moduleChecklistManager.saveItemState(item)
         } else {
