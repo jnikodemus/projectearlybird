@@ -134,10 +134,22 @@ class GroupManager {
         return leaveGroup(user, group, -1)
     }
 
+    /**
+     * Leaves the provided [group] by removing the current user from memberlist and adminlist.
+     * If the leaving user was the only admin, a member will be added to the adminlist.
+     * If the user was owner of the group, the next admin will be the new owner.
+     * @return [Boolean]: true if user could leave, false else.
+     */
     fun leaveGroup(group: Group, positionToDelete: Int): Boolean {
         return leaveGroup(mUserManager.getCurrentUser(), group, positionToDelete)
     }
 
+    /**
+     * Leaves the provided [group] by removing the current user from memberlist and adminlist.
+     * If the leaving user was the only admin, a member will be added to the adminlist.
+     * If the user was owner of the group, the next admin will be the new owner.
+     * @return [Boolean]: true if user could leave, false else.
+     */
     fun leaveGroup(user: User, group: Group, positionToDelete: Int): Boolean {
         val members = group.members
         val admins = group.admins
@@ -167,7 +179,8 @@ class GroupManager {
             adapter.removeGroupAtAdapterPosition(positionToDelete)
             adapter.notifyDataSetChanged()
         }
-
+        adapter.clear()
+        readGroups()
         return true
     }
 
@@ -195,6 +208,11 @@ class GroupManager {
         }
     }
 
+    /**
+     * Saves provided [group] using ParseObject.saveEventually resulting in an operation which will
+     * be executed if there is an internet connection. Otherwise the operation will be tried again
+     * whenever the device has a valid internet connection.
+     */
     fun save(group: Group) {
         group.saveEventually {
             if (it != null)
@@ -202,16 +220,27 @@ class GroupManager {
         }
     }
 
+    /**
+     * Returns [groupSet].
+     */
     fun getGroups(): HashSet<Group> {
         Log.d("CUSTOMDEBUG", "$simpleClassName - returning ${groupSet.size} groups")
         return groupSet
     }
 
+    /**
+     * Returns if the current user is admin of the provided [group].
+     */
     fun isAdmin(group: Group): Boolean {
         return group.admins.contains(mUserManager.getCurrentUser())
     }
 
+    /**
+     *  Promotes the [user] to be an admin of the [group].
+     *  Warning: Not implemented yet!
+     */
     fun promote(user: User, group: Group) {
+        // TODO: Implement.
         Log.d("CUSTOMDEBUG", "$simpleClassName - promoted ${user.username}")
     }
 

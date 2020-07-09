@@ -250,6 +250,10 @@ class UserManager {
         return ParseUser.getCurrentUser() != null
     }
 
+    /**
+     * Checks whether the [username] is present on parse and if so,
+     * if the associated account is active.
+     */
     fun isActive(username: String): User? {
         val userQuery = ParseQuery.getQuery(User::class.java).whereEqualTo("username", username)
         var suspiciousUser: User? = null
